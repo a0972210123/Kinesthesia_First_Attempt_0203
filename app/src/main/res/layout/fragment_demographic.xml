@@ -38,6 +38,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/demographic_Page_picture" />
 
+
             <TextView
                 android:id="@+id/enter_subjectName"
                 android:layout_width="wrap_content"
@@ -49,7 +50,6 @@
                 android:textSize="24sp"
                 app:layout_constraintStart_toEndOf="@+id/demographic_Page_picture"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <EditText
                 android:id="@+id/subjName"

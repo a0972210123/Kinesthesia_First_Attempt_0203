@@ -1,13 +1,16 @@
 package com.example.kinesthesia_first_attempt
 
+import android.Manifest
 import android.app.DatePickerDialog
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -65,6 +68,24 @@ class DemographicFragment : Fragment() {
             //sendButton.setOnClickListener { sendOrder() }
             demographicFragment = this@DemographicFragment //使用listenser binding，用UI button 在xml中設定onclick
         }
+
+
+        //0804測試
+       //syntax    val imageView = requireView()!!.findViewById<View>(R.id.foo) as ImageView
+        //val editTextView = requireView()!!.findViewById<View>(R.id.birthDate) as EditText
+
+        val subjName = requireView()!!.findViewById<EditText>(R.id.subjName)
+        val subjCode = requireView()!!.findViewById<EditText>(R.id.subjCode)
+        val subjBirth = requireView()!!.findViewById<EditText>(R.id.birthDate)
+        val rg = requireView()!!.findViewById<RadioGroup>(R.id.GenderGroup)
+        val subjGrade = requireView()!!.findViewById<RadioGroup>(R.id.GradeGroup)
+        val subjHand = requireView()!!.findViewById<RadioGroup>(R.id.HandGroup)
+        val gender:String
+        val grade:String
+        val hand:String
+        //0804測試
+
+
     }
 
 
@@ -102,7 +123,8 @@ class DemographicFragment : Fragment() {
 
 
 // 0804測試
-    private fun updateBirthday() {
+    private fun selectionPage(){
+
      binding?.birthDate?.inputType = InputType.TYPE_NULL
         //binding.textInputEditText.text.toString()
 
@@ -127,13 +149,62 @@ class DemographicFragment : Fragment() {
         }, year, month, day).show()
         Log.d("DemographicFragment","$year/$month/$day")
     }
-// 0804測試
+
+
+
+    val cityList = arrayListOf("高雄市", "台南市", "台北市", "新北市", "桃園市","台中市","基隆市","新竹市",
+        "嘉義市","新竹縣","苗栗縣","彰化縣","南投縣","雲林縣","嘉義縣","屏東縣","宜蘭縣","花蓮縣","臺東縣","澎湖縣", "其他")
+    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, cityList)
+    // 問題，context? function沒import?
+
+    binding?.city?.adapter = adapter
+
+    binding?.city?.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+
+        override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
+            val selectCity: String = "城市：" + cityList[pos]
+        }
+        override fun onNothingSelected(parent: AdapterView<*>) {}
+    }
+
+
+
+
+ // 這個目前還沒解
+    Demo_next.setOnClickListener {
+        // 開啟檔案串流
+        if (Build.VERSION.SDK_INT >= 23) {
+            val requestCodePermissionStorage = 100
+            val permissions = arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            for (str in permissions) {
+                if (checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(permissions, requestCodePermissionStorage)
+                    return@setOnClickListener
+                }
+            }
+        }
+
+        val subjName = findViewById<EditText>(R.id.subjName)
+        val subjCode = findViewById<EditText>(R.id.subjCode)
+        val subjBirth = findViewById<EditText>(R.id.birthDate)
+        val rg = findViewById<RadioGroup>(R.id.GenderGroup)
+        val subjGrade = findViewById<RadioGroup>(R.id.GradeGroup)
+        val subjHand = findViewById<RadioGroup>(R.id.HandGroup)
+        val gender:String
+        val grade:String
+        val hand:String
+
+        //問題: 目前這邊都紅字，改成這種syntax，並放到onViewCreated就可以work
+        //val editTextView = requireView()!!.findViewById<View>(R.id.birthDate) as EditText
 
 
 
 
     }
-
+// 0804測試
 
 
 
