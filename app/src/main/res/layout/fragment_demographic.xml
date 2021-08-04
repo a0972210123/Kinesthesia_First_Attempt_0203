@@ -16,35 +16,39 @@
             android:layout_height="match_parent">
 
 
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/go_to_demographic_page" />
-
-
             <ImageView
                 android:id="@+id/demographic_Page_picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginStart="32dp"
                 android:contentDescription="@string/demo"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/cupcake" />
 
             <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/go_to_demographic_page"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/demographic_Page_picture" />
+
+            <TextView
                 android:id="@+id/enter_subjectName"
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="120dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/demo_name"
                 android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/demographic_Page_picture" />
+                app:layout_constraintStart_toEndOf="@+id/demographic_Page_picture"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <EditText
@@ -52,30 +56,26 @@
                 android:layout_width="697dp"
                 android:layout_height="65dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginTop="120dp"
+                android:layout_marginBottom="8dp"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="@string/demo_entername"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/GenderGroup"
                 app:layout_constraintStart_toEndOf="@id/enter_subjectName"
-                app:layout_constraintTop_toBottomOf="@id/demographic_Page_picture" />
-
-
-
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <TextView
                 android:id="@+id/enter_birthday"
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/demo_birth"
                 android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/demographic_Page_picture"
                 app:layout_constraintTop_toBottomOf="@id/enter_gender" />
 
             <EditText
@@ -83,81 +83,73 @@
                 android:layout_width="683dp"
                 android:layout_height="65dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/GenderGroup"
-                app:layout_constraintStart_toEndOf="@+id/enter_birthday"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:inputType="date"
-                android:text="@string/demo_enterbirth" />
+                android:text="@string/demo_enterbirth"
+                app:layout_constraintStart_toEndOf="@+id/enter_birthday"
+                app:layout_constraintTop_toBottomOf="@+id/GenderGroup" />
 
 
             <TextView
                 android:id="@+id/enter_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/demo_gender"
                 android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/demographic_Page_picture"
                 app:layout_constraintTop_toBottomOf="@+id/enter_subjectName" />
-
-
 
 
             <TextView
                 android:id="@+id/enter_grade"
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/demo_grade"
                 android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/demographic_Page_picture"
                 app:layout_constraintTop_toBottomOf="@+id/enter_handiness" />
 
             <TextView
                 android:id="@+id/enter_handiness"
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/demo_handiness"
                 android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/demographic_Page_picture"
                 app:layout_constraintTop_toBottomOf="@+id/enter_birthday" />
 
             <TextView
                 android:id="@+id/enter_city"
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/demo_city"
                 android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/demographic_Page_picture"
                 app:layout_constraintTop_toBottomOf="@+id/enter_grade" />
 
             <TextView
                 android:id="@+id/enter_code"
                 android:layout_width="wrap_content"
                 android:layout_height="65dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/demo_code"
                 android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/demographic_Page_picture"
                 app:layout_constraintTop_toBottomOf="@+id/enter_city" />
 
             <RadioGroup
@@ -165,11 +157,9 @@
                 android:layout_width="694dp"
                 android:layout_height="65dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/enter_gender"
                 app:layout_constraintTop_toBottomOf="@+id/subjName">
 
@@ -191,14 +181,12 @@
 
             <RadioGroup
                 android:id="@+id/HandGroup"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="65dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/enter_handiness"
                 app:layout_constraintTop_toBottomOf="@id/birthDate">
 
@@ -219,24 +207,22 @@
 
             <EditText
                 android:id="@+id/subjCode"
-                android:layout_width="0dp"
+                android:layout_width="300dp"
                 android:layout_height="65dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="@string/demo_entercode"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/enter_code"
                 app:layout_constraintTop_toBottomOf="@id/city" />
 
             <RadioGroup
                 android:id="@+id/GradeGroup"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="65dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="horizontal"
@@ -292,35 +278,31 @@
                     android:layout_weight="1"
                     android:text="@string/demo_6"
                     android:textSize="24sp" />
+
             </RadioGroup>
 
             <Spinner
                 android:id="@+id/city"
-                android:layout_width="0dp"
+                android:layout_width="300dp"
                 android:layout_height="65dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginTop="8dp"
                 android:addStatesFromChildren="false"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/enter_city"
                 app:layout_constraintTop_toBottomOf="@id/GradeGroup" />
 
 
             <Button
                 android:id="@+id/Demo_next"
-                android:layout_width="172dp"
-                android:layout_height="102dp"
-                android:layout_marginBottom="32dp"
+                android:layout_width="165dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:onClick="@{() -> demographicFragment.goToIntroduction()}"
                 android:text="@string/next_page"
                 android:textSize="30sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:onClick="@{() -> demographicFragment.goToIntroduction()}"
-                />
-
-
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

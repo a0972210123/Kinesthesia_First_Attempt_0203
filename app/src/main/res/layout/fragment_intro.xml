@@ -7,9 +7,7 @@
         <variable
             name="viewModel"
             type="com.example.kinesthesia_first_attempt.ui.main.MainViewModel" />  <!--this could not work-->
-        <variable
-            name="pagerAdapter"
-            type="com.example.kinesthesia_first_attempt.PagerAdapter" />
+
         <variable
             name="introFragment"
             type="com.example.kinesthesia_first_attempt.IntroFragment" />

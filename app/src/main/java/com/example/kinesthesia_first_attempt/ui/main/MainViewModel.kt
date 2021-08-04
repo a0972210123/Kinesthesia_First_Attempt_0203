@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
+
 // 常數定義區段 : 此段落放不會改變的參數，例如總測驗次數/練習次數等等
 
 
@@ -49,6 +50,28 @@ class MainViewModel : ViewModel() {
 
 
     // function段落，與按鈕、app logic、變數更動相關的method/funtion
+
+
+    //基本資料頁用function
+
+  open fun selectionPage(){
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
