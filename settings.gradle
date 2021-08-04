@@ -1,0 +1,2 @@
+rootProject.name = "Kinesthesia_First_Attempt"
+include ':app'

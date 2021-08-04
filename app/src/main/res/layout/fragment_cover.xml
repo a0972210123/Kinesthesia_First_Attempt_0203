@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="coverFragment"
+            type="com.example.kinesthesia_first_attempt.CoverFragment" />
+    </data>
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/side_margin">
+
+            <TextView
+                android:id="@+id/app_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_between_elements"
+                android:text="平板化運動覺測驗開發"
+                android:textSize="34sp"
+                app:layout_constraintBottom_toTopOf="@id/cover_image_view" />
+
+            <ImageView
+                android:id="@+id/cover_image_view"
+                android:layout_width="@dimen/image_size"
+                android:layout_height="@dimen/image_size"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_between_elements"
+                android:importantForAccessibility="no"
+                android:scaleType="center"
+                app:srcCompat="@drawable/cupcake" />
+
+
+            <Button
+                android:id="@+id/go_to_demographic_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_between_elements"
+                android:minWidth="@dimen/default_button_width"
+                android:text="@string/go_to_demographic_page"
+                android:textSize="28sp"
+                android:onClick="@{() -> coverFragment.goToDemographic()}"
+                />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</layout>

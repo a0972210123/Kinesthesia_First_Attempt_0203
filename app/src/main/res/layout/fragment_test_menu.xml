@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="testMenuFragment"
+            type="com.example.kinesthesia_first_attempt.TestMenuFragment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/cover_image_view"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_between_elements"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:importantForAccessibility="no"
+            android:scaleType="center"
+            app:srcCompat="@drawable/cupcake" />
+
+        <TextView
+            android:id="@+id/task_selection_instruction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="請選擇要施測的類型"
+            android:textColor="@color/design_default_color_background"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cover_image_view" />
+
+
+        <Button
+            android:id="@+id/practice_task"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:text="練習題"
+            android:textSize="36sp"
+            app:layout_constraintTop_toBottomOf="@id/task_selection_instruction"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/formal_task"
+            android:padding="@dimen/side_margin"
+            android:onClick="@{() -> testMenuFragment.goToPractice()}" />
+
+
+        <Button
+            android:id="@+id/formal_task"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="正式測驗"
+            android:textSize="36sp"
+            app:layout_constraintTop_toBottomOf="@id/task_selection_instruction"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/practice_task"
+            android:padding="@dimen/side_margin"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+</layout>

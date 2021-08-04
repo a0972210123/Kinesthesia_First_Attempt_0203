@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">Kinesthesia_First_Attempt</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="go_to_demographic_page">填寫基本資料</string>
+    <string name="Cover_page"> </string>
+    <string name="demographic_page">基本資料</string>
+    <string name="introduction_page">測驗說明</string>
+    <string name="menu_page">測驗選單</string>
+    <string name="practice_page">測驗練習</string>
+    <string name="formal_page">正式測驗</string>
+
+
+
+    <string name="demo">基本資料</string>
+    <string name="demo_name">姓名</string>
+    <string name="demo_gender">性別</string>
+    <string name="demo_grade">年級</string>
+    <string name="demo_handiness">慣用手</string>
+    <string name="demo_city">城市</string>
+    <string name="demo_birth">生日</string>
+    <string name="demo_code">編碼</string>
+    <string name="demo_male">男</string>
+    <string name="demo_female">女</string>
+    <string name="demo_1">1</string>
+    <string name="demo_2">2</string>
+    <string name="demo_3">3</string>
+    <string name="demo_4">4</string>
+    <string name="demo_5">5</string>
+    <string name="demo_6">6</string>
+    <string name="demo_left">左</string>
+    <string name="demo_right">右</string>
+    <string name="demo_enterbirth"></string>
+    <string name="demo_entername"></string>
+    <string name="demo_entercode"></string>
+    <string name="next_page">下一頁</string>
+    <string name="grade_1">測驗一</string>
+    <string name="grade_2">測驗二</string>
+    <string name="grade_3">測驗三</string>
+    <string name="grade_4">測驗四</string>
+    <string name="grade_5">測驗五</string>
+    <string name="grade_6">測驗六</string>
+    <string name="korea">測驗七</string>
+    <string name="finish_btn">跳出程式</string>
+    <string name="me">我</string>
+    <string name="start">開始</string>
+
+
+</resources>
