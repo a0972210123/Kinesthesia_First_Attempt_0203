@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
 
     }
 
+    //test
 
     //Within the same class, add code to override the onSupportNavigateUp() function.
     // This code will ask the navController to handle navigating up in the app.
