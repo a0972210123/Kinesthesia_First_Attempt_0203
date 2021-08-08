@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.kinesthesia_first_attempt.databinding.FragmentPracticeBinding
@@ -14,8 +15,8 @@ class PracticeFragment : Fragment() {
 
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var viewModel: MainViewModel
-    private var binding: FragmentPracticeBinding? = null
-
+    //private var binding: FragmentPracticeBinding? = null
+    private lateinit var binding: FragmentPracticeBinding
 
 
 
@@ -28,9 +29,11 @@ class PracticeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val fragmentBinding = FragmentPracticeBinding.inflate(inflater, container, false)
-        binding = fragmentBinding
-        return fragmentBinding.root
+        //val fragmentBinding = FragmentPracticeBinding.inflate(inflater, container, false)
+        //binding = fragmentBinding
+        //return fragmentBinding.root
+        binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_practice, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,6 +55,6 @@ class PracticeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
+        //binding = null
     }
 }

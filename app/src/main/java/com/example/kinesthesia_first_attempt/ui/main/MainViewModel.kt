@@ -36,8 +36,9 @@ class MainViewModel : ViewModel() {
 
     //測驗表現資料
 
-    val instructionList = listOf("指導語1","指導語2","指導語3","指導語4")
+    //val instructionList = listOf("指導語1","指導語2","指導語3","指導語4")
     // instructionList[0] = 第一個
+
 
     val instructionList2 = listOf ("歡迎使用本系統",
     "此評量需約30分鐘，請確認你處於舒適的坐姿且不被干擾",

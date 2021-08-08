@@ -11,52 +11,44 @@
             name="introFragment"
             type="com.example.kinesthesia_first_attempt.IntroFragment" />
 
+
+
+
     </data>
 
-    <ScrollView
-        android:id="@+id/content"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
 
         <TextView
             android:id="@+id/page_number"
-            android:text="@{viewModel.instructionList[1]}"
-
             style="@style/AppTheme.LabelStyle"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_marginStart="100dp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginEnd="100dp"
-            android:layout_marginRight="100dp"
-            android:layout_marginBottom="200dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="0dp"
+            android:background="#3F51B5"
+            android:textColor="#000000"
+            android:textSize="34sp"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+
+
+            />
 
 
 
-
-        <Button
-            android:id="@+id/button123"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginBottom="150dp"
-            android:text="@string/next_page"
-            android:textColor="#000000"
-            android:textSize="36sp"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+    </LinearLayout>
 
 
-
-</ScrollView>
 </layout>

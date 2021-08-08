@@ -1,24 +1,16 @@
 package com.example.kinesthesia_first_attempt
 
-import android.Manifest
-import android.app.DatePickerDialog
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.databinding.FragmentDemographicBinding
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -46,7 +38,8 @@ class DemographicFragment : Fragment() {
 
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var viewModel: MainViewModel
-    private var binding: FragmentDemographicBinding? = null
+    //private var binding: FragmentDemographicBinding? = null
+    private lateinit var binding: FragmentDemographicBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,13 +51,18 @@ class DemographicFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val fragmentBinding = FragmentDemographicBinding.inflate(inflater, container, false)
-        binding = fragmentBinding
-        return fragmentBinding.root
+        //val fragmentBinding = FragmentDemographicBinding.inflate(inflater, container, false)
+        //binding = fragmentBinding
+        //return fragmentBinding.root
+        binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_demographic, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
         binding?.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
@@ -87,6 +85,8 @@ class DemographicFragment : Fragment() {
         val gender: String
         val grade: String
         val hand: String
+        //val Demo_next = requireView()!!.findViewById<Button>(R.id.Demo_next)
+
         //0804測試
 
 
@@ -107,9 +107,13 @@ class DemographicFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
+        //binding = null
     }
 
+
+
+
+    /*
 
     // 0804測試
     private fun selectionPage() {
@@ -159,8 +163,8 @@ class DemographicFragment : Fragment() {
         }
 
 
-        // 這個目前還沒解
-        Demo_next.setOnClickListener {
+
+        binding?.DemoNext?.setOnClickListener {
             // 開啟檔案串流
             if (Build.VERSION.SDK_INT >= 23) {
                 val requestCodePermissionStorage = 100
@@ -179,6 +183,7 @@ class DemographicFragment : Fragment() {
             //問題: 目前這邊都紅字，改成這種syntax，並放到onViewCreated就可以work
             //val editTextView = requireView()!!.findViewById<View>(R.id.birthDate) as EditText
 
+            /*
             val subjName = findViewById<EditText>(R.id.subjName)
             val subjCode = findViewById<EditText>(R.id.subjCode)
             val subjBirth = findViewById<EditText>(R.id.birthDate)
@@ -188,16 +193,16 @@ class DemographicFragment : Fragment() {
             val gender:String
             val grade:String
             val hand:String
-
+            */
 
             //依選取項目顯示不同訊息
-            gender = when (rg.checkedRadioButtonId) {
+            val gender = when (rg.checkedRadioButtonId) {
                 R.id.male -> "性別:男"
                 R.id.female -> "性別:女"
                 else -> "性別:"
             }
 
-            grade = when (subjGrade.checkedRadioButtonId) {
+            val grade = when (subjGrade.checkedRadioButtonId) {
                 R.id.Grade1 -> "年級:1"
                 R.id.Grade2 -> "年級:2"
                 R.id.Grade3 -> "年級:3"
@@ -207,7 +212,7 @@ class DemographicFragment : Fragment() {
                 else -> "年級:"
             }
 
-            hand = when (subjHand.checkedRadioButtonId) {
+            val hand = when (subjHand.checkedRadioButtonId) {
                 R.id.leftHand -> "慣用手:左"
                 R.id.rightHand -> "慣用手:右"
                 else -> "慣用手:"
@@ -217,9 +222,9 @@ class DemographicFragment : Fragment() {
             gcode = subjCode.text.toString()
 
             val selectCity: String = "城市:" + city.selectedItem.toString()
-            val name = "姓名:"+subjName.text.toString()
-            val code = "編號:"+subjCode.text.toString()
-            val bDate = "生日:"+subjBirth.text.toString()
+            val name = "姓名:"+ subjName.text.toString()
+            val code = "編號:"+ subjCode.text.toString()
+            val bDate = "生日:"+ subjBirth.text.toString()
             val emp = "\n"
 
             val txtFile: File
@@ -227,7 +232,7 @@ class DemographicFragment : Fragment() {
             val filePath = File(getExternalFilesDir("").toString(), subjCode.text.toString())
 
             if (filePath.exists()) {
-                Toast.makeText(this, "這個編號已經使用過了", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "這個編號已經使用過了", Toast.LENGTH_SHORT).show()
                 val s=Calendar.getInstance().time
                 txtFile = File(filePath, subjCode.text.toString() + "_demographic_"+ s+".txt")
             } else {
@@ -252,19 +257,68 @@ class DemographicFragment : Fragment() {
                 out.write(code.toByteArray())
                 out.flush()
                 out.close()
-                Toast.makeText(this, "Demographic Data Save Success", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Demographic Data Save Success", Toast.LENGTH_SHORT).show()
 
-                val intent = Intent(this, TaskSelectionPage::class.java)
-                startActivity(intent)
+                //val intent = Intent(this, TaskSelectionPage::class.java)
+                //startActivity(intent)
             }
         }
-
-
-
-
 
     } //selectionpage
 
 
-    //以上 0804測試
-}
+    //以上 0804測試   */
+
+
+
+    //from unscramble 抓使用者輸入>並轉成字串
+    //val playerWord = binding.textInputEditText.text.toString()
+
+
+    //from unscramble 按鈕後顯示對話框 > 重填或是繼續
+    /*
+        private fun showFinalScoreDialog(){
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.congratulations)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+            .setMessage(getString(R.string.you_scored, viewModel.score.value)) //Set the message to show the final score,
+            .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
+
+            .setNegativeButton(getString(R.string.exit)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
+                exitGame()
+            }
+            .setPositiveButton(getString(R.string.play_again)) { _, _ ->
+                restartGame()
+            }
+
+            .show() //creates and then displays the alert dialog.
+
+    }
+    //Context as the name suggests means the context or the current state of the application, activity, or fragment.
+// It contains the information regarding the activity, fragment or application.
+     */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+} //fragment end

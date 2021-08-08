@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -16,7 +17,9 @@ class CoverFragment : Fragment() {
 
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var viewModel: MainViewModel
-    private var binding: FragmentCoverBinding? = null
+    //private var binding: FragmentCoverBinding? = null
+    private lateinit var binding: FragmentCoverBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,10 +30,14 @@ class CoverFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val fragmentBinding = FragmentCoverBinding.inflate(inflater, container, false)
-        binding = fragmentBinding
-        //binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
-        return fragmentBinding.root
+        //val fragmentBinding = FragmentCoverBinding.inflate(inflater, container, false)
+        //binding = fragmentBinding
+
+        binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_cover, container, false)
+
+        return binding.root
+
+        //return fragmentBinding.root
     }
 
 
@@ -63,7 +70,7 @@ class CoverFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
+        //binding = null
     }
 
 }
