@@ -7,6 +7,11 @@
         <variable
             name="demographicFragment"
             type="com.example.kinesthesia_first_attempt.DemographicFragment" />
+
+        <variable
+            name="viewModel"
+            type="com.example.kinesthesia_first_attempt.ui.main.MainViewModel" />  <!--this could not work-->
+
     </data>
 
 
@@ -169,14 +174,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/demo_male"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:checked="@{viewModel.sex.equals(@string/demo_male)}"
+                    android:onClick="@{() -> viewModel.setSex(@string/demo_male)}"
+                    />
 
                 <RadioButton
                     android:id="@+id/female"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/demo_female"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:checked="@{viewModel.sex.equals(@string/demo_female)}"
+                    android:onClick="@{() -> viewModel.setSex(@string/demo_female)}"
+
+                    />
 
             </RadioGroup>
 
@@ -196,14 +208,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/demo_left"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:checked="@{viewModel.handedness.equals(@string/demo_left)}"
+                    android:onClick="@{() -> viewModel.setHandedness(@string/demo_left)}"
+                    />
 
                 <RadioButton
                     android:id="@+id/rightHand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/demo_right"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:checked="@{viewModel.handedness.equals(@string/demo_right)}"
+                    android:onClick="@{() -> viewModel.setHandedness(@string/demo_right)}"
+                    />
             </RadioGroup>
 
             <EditText
@@ -238,7 +256,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/demo_1"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:checked="@{viewModel.grade.equals(@string/demo_1)}"
+                    android:onClick="@{() -> viewModel.setGrade(@string/demo_1)}"
+                    />
 
                 <RadioButton
                     android:id="@+id/Grade2"
@@ -246,7 +267,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/demo_2"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:checked="@{viewModel.grade.equals(@string/demo_2)}"
+                    android:onClick="@{() -> viewModel.setGrade(@string/demo_2)}"
+                    />
 
                 <RadioButton
                     android:id="@+id/Grade3"
@@ -254,7 +278,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/demo_3"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:checked="@{viewModel.grade.equals(@string/demo_3)}"
+                    android:onClick="@{() -> viewModel.setGrade(@string/demo_3)}"
+                    />
 
                 <RadioButton
                     android:id="@+id/Grade4"
@@ -262,7 +289,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/demo_4"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:checked="@{viewModel.grade.equals(@string/demo_4)}"
+                    android:onClick="@{() -> viewModel.setGrade(@string/demo_4)}"
+                    />
 
                 <RadioButton
                     android:id="@+id/Grade5"
@@ -270,7 +300,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/demo_5"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:checked="@{viewModel.grade.equals(@string/demo_5)}"
+                    android:onClick="@{() -> viewModel.setGrade(@string/demo_5)}"
+                    />
 
                 <RadioButton
                     android:id="@+id/Grade6"
@@ -278,7 +311,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/demo_6"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:checked="@{viewModel.grade.equals(@string/demo_6)}"
+                    android:onClick="@{() -> viewModel.setGrade(@string/demo_6)}"
+                    />
 
             </RadioGroup>
 
@@ -299,7 +335,7 @@
                 android:layout_height="80dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
-                android:onClick="@{() -> demographicFragment.goToIntroduction()}"
+                android:onClick="@{() -> demographicFragment.checkInputAndUpdate()}"
                 android:text="@string/next_page"
                 android:textSize="30sp"
                 app:layout_constraintStart_toStartOf="parent"

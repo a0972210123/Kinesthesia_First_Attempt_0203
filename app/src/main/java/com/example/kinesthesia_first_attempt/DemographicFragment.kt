@@ -11,12 +11,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.databinding.FragmentDemographicBinding
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -37,7 +34,7 @@ class DemographicFragment : Fragment() {
 
 
     private val sharedViewModel: MainViewModel by activityViewModels()
-    private lateinit var viewModel: MainViewModel
+    //private lateinit var viewModel: MainViewModel
     //private var binding: FragmentDemographicBinding? = null
     private lateinit var binding: FragmentDemographicBinding
 
@@ -271,31 +268,92 @@ class DemographicFragment : Fragment() {
 
 
 
-    //from unscramble 抓使用者輸入>並轉成字串
-    //val playerWord = binding.textInputEditText.text.toString()
 
 
-    //from unscramble 按鈕後顯示對話框 > 重填或是繼續
-    /*
-        private fun showFinalScoreDialog(){
+
+
+
+    // 按鈕後確認資料都有輸入
+     fun checkInputAndUpdate() {
+
+        //1.讀取目前使用者輸入內容。
+        // 註:性別、慣用手、年級在輸入後會由dataBinding及Livedata自動更新
+        val nameInput = binding.subjName.text.toString()  //讀取使用者輸入的值，並且轉換為指定的資料型態
+        val codeInput = binding.subjCode.text.toString()
+        val birthdateInput = binding.birthDate.text.toString()
+
+
+        //2&3.確認所有輸入都非空白，並顯示警告訊息
+
+
+        when {
+            nameInput.isNullOrEmpty() -> {
+                Toast.makeText(activity, "未輸入姓名", Toast.LENGTH_SHORT).show()
+            }
+            codeInput.isNullOrEmpty() -> {
+                Toast.makeText(activity, "未輸入編碼", Toast.LENGTH_SHORT).show()
+            }
+            birthdateInput.isNullOrEmpty() -> {
+                Toast.makeText(activity, "未輸入生日", Toast.LENGTH_SHORT).show()
+            }
+            binding?.viewModel!!.hasNoHandSet() -> {
+                Toast.makeText(activity, "未輸入慣用手", Toast.LENGTH_SHORT).show()
+            }
+            binding?.viewModel!!.hasNoGradeSet() -> {
+                Toast.makeText(activity, "未輸入年級", Toast.LENGTH_SHORT).show()
+            }
+            binding?.viewModel!!.hasNoSexSet() -> {
+                Toast.makeText(activity, "未輸入性別", Toast.LENGTH_SHORT).show()
+            }
+            binding?.viewModel!!.hasNoCitySet() -> {
+                Toast.makeText(activity, "未輸入城市", Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                //4.更新人口學資料。註:性別、慣用手、年級在輸入後會由Databinding及Livedata自動更新，在此不用更動
+                // 目前 城市(spinner)、生日及當日日期(還沒有function)還未加入
+                binding.viewModel?.setName(nameInput)
+                binding.viewModel?.setBirthdate(birthdateInput)
+                binding.viewModel?.setClientCode(codeInput)
+
+                //5. 顯示目前資料對話框
+                showCurrentInputDialog()
+            }
+        }
+
+
+
+    }
+
+
+
+
+        fun showCurrentInputDialog(){
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.congratulations)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
-            .setMessage(getString(R.string.you_scored, viewModel.score.value)) //Set the message to show the final score,
+            .setTitle(getString(R.string.demographic_dialog)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+            .setMessage(
+                getString(R.string.your_name, binding.viewModel?.name?.value)
+                        + "\n" + getString(R.string.your_sex, binding.viewModel?.sex?.value)
+                        + "\n" + getString(R.string.your_birthdate, binding.viewModel?.birthdate?.value)
+                        + "\n" + getString(R.string.your_handedness, binding.viewModel?.handedness?.value)
+                        + "\n" + getString(R.string.your_grade, binding.viewModel?.grade?.value)
+                        + "\n" + getString(R.string.your_city, binding.viewModel?.city?.value)
+                        + "\n" + getString(R.string.your_code, binding.viewModel?.clientCode?.value)
+            ) //Set the message to show the final score,
+
             .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
 
-            .setNegativeButton(getString(R.string.exit)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
-                exitGame()
+            .setNegativeButton(getString(R.string.modify_input)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
+                binding.viewModel?.resetDemographicInput()
             }
-            .setPositiveButton(getString(R.string.play_again)) { _, _ ->
-                restartGame()
+            .setPositiveButton(getString(R.string.confirm_input)) { _, _ ->
+                goToIntroduction()
             }
-
             .show() //creates and then displays the alert dialog.
 
     }
     //Context as the name suggests means the context or the current state of the application, activity, or fragment.
 // It contains the information regarding the activity, fragment or application.
-     */
+
 
 
 
