@@ -1,7 +1,10 @@
 package com.example.kinesthesia_first_attempt
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,21 +16,27 @@ import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.databinding.FragmentDemographicBinding
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.text.SimpleDateFormat
 import java.util.*
 
 // 變數宣告
-var filePathStr:String = ""
+var filePathStr: String = ""
+
 //var mContext_demo: Context? = null
 lateinit var mContext_demo: Context
 lateinit var city: Spinner
-val cityList = arrayListOf("高雄市", "台南市", "台北市", "新北市", "桃園市","台中市","基隆市","新竹市",
-    "嘉義市","新竹縣","苗栗縣","彰化縣","南投縣","雲林縣","嘉義縣","屏東縣","宜蘭縣","花蓮縣","臺東縣","澎湖縣", "其他")
+lateinit var birthdate: EditText
+val cityList = arrayListOf(
+    "高雄市", "台南市", "台北市", "新北市", "桃園市", "台中市", "基隆市", "新竹市",
+    "嘉義市", "新竹縣", "苗栗縣", "彰化縣", "南投縣", "雲林縣", "嘉義縣", "屏東縣", "宜蘭縣", "花蓮縣", "臺東縣", "澎湖縣", "其他"
+)
 
 
 class DemographicFragment : Fragment() {
 
 
     private val sharedViewModel: MainViewModel by activityViewModels()
+
     //private lateinit var viewModel: MainViewModel
     //private var binding: FragmentDemographicBinding? = null
     private lateinit var binding: FragmentDemographicBinding
@@ -45,7 +54,7 @@ class DemographicFragment : Fragment() {
         //val fragmentBinding = FragmentDemographicBinding.inflate(inflater, container, false)
         //binding = fragmentBinding
         //return fragmentBinding.root
-        binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_demographic, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_demographic, container, false)
         return binding.root
     }
 
@@ -64,14 +73,14 @@ class DemographicFragment : Fragment() {
 
         //city選單CODE
         mContext_demo = requireActivity().applicationContext
-
         city = requireView()!!.findViewById<View>(R.id.city) as Spinner
-
-        //城市選單CODE: arrayList已經移置string ,name: city_list
-        val adapter = ArrayAdapter.createFromResource( mContext_demo , R.array.city_list, android.R.layout.simple_spinner_dropdown_item)
+        val adapter = ArrayAdapter.createFromResource(
+            mContext_demo,
+            R.array.city_list,
+            android.R.layout.simple_spinner_dropdown_item
+        )
         city.adapter = adapter
-
-        city.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+        city.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
@@ -79,7 +88,7 @@ class DemographicFragment : Fragment() {
                 id: Long
             ) {
                 binding.viewModel?.setCity(cityList[position])
-                Toast.makeText(activity, "城市:"+cityList[position] , Toast.LENGTH_SHORT).show()
+                //Toast.makeText(activity, "城市:"+cityList[position] , Toast.LENGTH_SHORT).show()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 //TODO("Not yet implemented")
@@ -88,13 +97,19 @@ class DemographicFragment : Fragment() {
         //以上: 城市選單CODE: arrayList已經移置string ,name: city_list
 
 
-
+        //生日選擇及測驗日期選擇
+        //延遲至所有lifecycle call完成再執行避免crash 及 dialog需特定context輸入
+        // reference:
+        // 1. https://stackoverflow.com/questions/4187673/problems-creating-a-popup-window-in-android-activity
+        // 2. https://stackoverflow.com/questions/61237173/kotlin-datepicker-pop-up-doesnt-work-inside-fragment-windowmanagerbadtokenex
+        birthdate = requireView()!!.findViewById<View>(R.id.birthDate) as EditText
+        birthdate.post(Runnable { dateSelection() })
+        //以上生日選擇及測驗日期選擇
 
     } //OnViewCreated End
 
 
     companion object {
-
     }
 
 
@@ -104,64 +119,97 @@ class DemographicFragment : Fragment() {
         findNavController().navigate(R.id.action_demographicFragment_to_introFragment)
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         //binding = null
     }
 
+    fun citySelection() {
+        // 之後可以將CODE從onViewCreated移到這裡
+    }
 
-
-    /*
-
-    // 0804測試
-    private fun selectionPage() {
-
+    // 生日或是測驗日期選擇
+    fun dateSelection() {
         binding?.birthDate?.inputType = InputType.TYPE_NULL
-        //binding.textInputEditText.text.toString()
-
         binding?.birthDate?.setOnClickListener {
-
             val c = Calendar.getInstance()
             val year = c.get(Calendar.YEAR)
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
-
-            // 問題，context? function沒import?
-            DatePickerDialog(this, { _, year, month, day ->
+            //
+            DatePickerDialog(requireActivity(), { _, year, month, day ->
                 run {
+                    //將月前加上0
                     val month2 = month + 1
                     var month3: String = month2.toString()
                     if (month2 < 10) {
                         month3 = "0$month2"
                     }
-                    val subjDate = "$month3/$day/$year"
+                    //將日前加上0
+                    val day2 = day + 1
+                    var day3: String = day2.toString()
+                    if (day2 < 10) {
+                        day3 = "0$day2"
+                    }
+                    val subjDate = "$month3/$day3/$year"
                     binding?.birthDate?.setText(subjDate)
+                    binding.viewModel?.setBirthdate("$month3/$day3/$year")
+                    Log.d("DemographicFragment", "birthDate:$month3/$day3/$year")
                 }
             }, year, month, day).show()
-            Log.d("DemographicFragment", "$year/$month/$day")
+            //Log.d("DemographicFragment", "birthDate:$year/$month/$day")
+            binding.viewModel?.setTestDate(getTestDate())
+            Log.d("DemographicFragment", "testDate:" + getTestDate())
         }
+    } // 以上生日選擇function
 
 
-        val cityList = arrayListOf(
-            "高雄市", "台南市", "台北市", "新北市", "桃園市", "台中市", "基隆市", "新竹市",
-            "嘉義市", "新竹縣", "苗栗縣", "彰化縣", "南投縣", "雲林縣", "嘉義縣", "屏東縣", "宜蘭縣", "花蓮縣", "臺東縣", "澎湖縣", "其他"
-        )
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, cityList)
-        // 問題，context? function沒import?
+    // 測驗日期選擇function
+    //val tempTestDate = getTestDate()
+    fun getTestDate(): String {
+        var currentDate: String = ""
+        val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        val calendar = Calendar.getInstance()
 
-        binding?.city?.adapter = adapter
+        currentDate = formatter.format(calendar.time).toString()
+        return currentDate
+    }
 
-        binding?.city?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+    // 其他格式範例
+    var formateA = SimpleDateFormat("yyyy年MM月dd日 HH時mm分ss秒")
+    var formateB = SimpleDateFormat("yyyy/MM/dd")
+    var formateC = SimpleDateFormat("yyyy-MM-dd")
+    // pattern reference: https://www.itread01.com/content/1541297598.html
+    /*
+    SimpleDateFormat函式語法：
+    G 年代標誌符
+    y 年
+    M 月
+    d 日
+    h 時 在上午或下午 (1~12)
+    H 時 在一天中 (0~23)
+    m 分
+    s 秒
+    S 毫秒
+    E 星期
+    D 一年中的第幾天
+    F 一月中第幾個星期幾
+    w 一年中第幾個星期
+    W 一月中第幾個星期
+    a 上午 / 下午 標記符
+    k 時 在一天中 (1~24)
+    K 時 在上午或下午 (0~11)
+    z 時區
+     */
 
-            override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
-                val selectCity: String = "城市：" + cityList[pos]
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
 
 
+
+
+    /*
+    // 存檔function 零件
+    // 0804測試
+    private fun selectionPage() {
 
         binding?.DemoNext?.setOnClickListener {
             // 開啟檔案串流
@@ -179,43 +227,7 @@ class DemographicFragment : Fragment() {
                 }
             }
 
-            //問題: 目前這邊都紅字，改成這種syntax，並放到onViewCreated就可以work
-            //val editTextView = requireView()!!.findViewById<View>(R.id.birthDate) as EditText
-
-            /*
-            val subjName = findViewById<EditText>(R.id.subjName)
-            val subjCode = findViewById<EditText>(R.id.subjCode)
-            val subjBirth = findViewById<EditText>(R.id.birthDate)
-            val rg = findViewById<RadioGroup>(R.id.GenderGroup)
-            val subjGrade = findViewById<RadioGroup>(R.id.GradeGroup)
-            val subjHand = findViewById<RadioGroup>(R.id.HandGroup)
-            val gender:String
-            val grade:String
-            val hand:String
-            */
-
-            //依選取項目顯示不同訊息
-            val gender = when (rg.checkedRadioButtonId) {
-                R.id.male -> "性別:男"
-                R.id.female -> "性別:女"
-                else -> "性別:"
-            }
-
-            val grade = when (subjGrade.checkedRadioButtonId) {
-                R.id.Grade1 -> "年級:1"
-                R.id.Grade2 -> "年級:2"
-                R.id.Grade3 -> "年級:3"
-                R.id.Grade4 -> "年級:4"
-                R.id.Grade5 -> "年級:5"
-                R.id.Grade6 -> "年級:6"
-                else -> "年級:"
-            }
-
-            val hand = when (subjHand.checkedRadioButtonId) {
-                R.id.leftHand -> "慣用手:左"
-                R.id.rightHand -> "慣用手:右"
-                else -> "慣用手:"
-            }
+   // 整理人口學資料段落
 
             gHand = hand.substring(4)
             gcode = subjCode.text.toString()
@@ -264,25 +276,12 @@ class DemographicFragment : Fragment() {
         }
 
     } //selectionpage
-
-
     //以上 0804測試   */
 
 
-
-
-
-
-
-
-
-
-
-
-
     // 按鈕後確認資料都有輸入
-     fun checkInputAndUpdate() {
-
+    // 待處理: 需加入存檔function
+    fun checkInputAndUpdate() {
         //1.讀取目前使用者輸入內容。
         // 註:性別、慣用手、年級在輸入後會由dataBinding及Livedata自動更新
         val nameInput = binding.subjName.text.toString()  //讀取使用者輸入的值，並且轉換為指定的資料型態
@@ -327,15 +326,14 @@ class DemographicFragment : Fragment() {
     }
 
 
-
-
-        fun showCurrentInputDialog(){
+    fun showCurrentInputDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.demographic_dialog)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
             .setMessage(
                 getString(R.string.your_name, binding.viewModel?.name?.value)
                         + "\n" + getString(R.string.your_sex, binding.viewModel?.sex?.value)
                         + "\n" + getString(R.string.your_birthdate, binding.viewModel?.birthdate?.value)
+                        + "\n" + getString(R.string.your_testDate, binding.viewModel?.testDate?.value)
                         + "\n" + getString(R.string.your_handedness, binding.viewModel?.handedness?.value)
                         + "\n" + getString(R.string.your_grade, binding.viewModel?.grade?.value)
                         + "\n" + getString(R.string.your_city, binding.viewModel?.city?.value)
@@ -351,13 +349,9 @@ class DemographicFragment : Fragment() {
                 goToIntroduction()
             }
             .show() //creates and then displays the alert dialog.
-
     }
     //Context as the name suggests means the context or the current state of the application, activity, or fragment.
 // It contains the information regarding the activity, fragment or application.
-
-
-
 
 
 } //fragment end

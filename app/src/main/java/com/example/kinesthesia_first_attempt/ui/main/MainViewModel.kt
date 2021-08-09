@@ -3,15 +3,17 @@ package com.example.kinesthesia_first_attempt.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 // 常數定義區段 : 此段落放不會改變的參數，例如總測驗次數/練習次數等等，方格大小、等等
 
 private const val TARGET_BOX_SIZE = 2.00 //待修改
-private const val RESPONSE_DOT_SIZE= 3.00
+private const val RESPONSE_DOT_SIZE = 3.00
 
-private const val MAX_PRACTICE_TRIAL= 8
-private const val MAX_FORMAL_TRIAL= 5
+private const val MAX_PRACTICE_TRIAL = 8
+private const val MAX_FORMAL_TRIAL = 5
 
 
 //
@@ -55,17 +57,13 @@ class MainViewModel : ViewModel() {
     private lateinit var currentWord: String  // 轉換成測驗的 總測驗次數var   單測驗layout執行次數 >> key: value
     ///
 
-    private fun updateTrialsCounts(){
+    private fun updateTrialsCounts() {
     }
 
     private val _currentTestID = MutableLiveData<String>("")
     val currentTestID: LiveData<String> = _currentTestID
 
-    var  testList = listOf<String>("A","B","C","L2R","R2L")
-
-
-
-
+    var testList = listOf<String>("A", "B", "C", "L2R", "R2L")
 
 
     // function段落，與按鈕、app logic、變數更動相關的method/function
@@ -103,13 +101,12 @@ class MainViewModel : ViewModel() {
     }
 
 
-
     // 起始時將參數歸零
-    init{
+    init {
         resetDemographicInput()
     }
 
-    fun resetDemographicInput(){
+    fun resetDemographicInput() {
         _birthdate.value = ""
         _testDate.value = ""
         _city.value = ""
@@ -133,6 +130,12 @@ class MainViewModel : ViewModel() {
     fun hasNoBirthdateSet(): Boolean {
         return _birthdate.value.isNullOrEmpty()
     }
+
+    fun hasNoTestDateSet(): Boolean {
+        return _testDate.value.isNullOrEmpty()
+    }
+
+
     fun hasNoHandSet(): Boolean {
         return _handedness.value.isNullOrEmpty()
     }
@@ -151,38 +154,31 @@ class MainViewModel : ViewModel() {
     // 以上用於檢查是否有輸入
 
 
-
-
-
-
-
-
-
-
-
     //基本資料頁用function
+    // 測驗日期選擇function (參考cupcake)
 
-  open fun selectionPage(){
+    //以下Fun 用於處理使用者選擇日期 來自cupcake
 
+    val dateOptions = getPickupOptions()
+    private fun getPickupOptions(): List<String> {
+        val options = mutableListOf<String>()
+        val formatter = SimpleDateFormat("E MMM d", Locale.getDefault())
+        val calendar = Calendar.getInstance()
 
-
-  }
-
-
-
-
-
-
-
-
-
-
-
-
+        repeat(4) {
+            options.add(formatter.format(calendar.time))
+            calendar.add(Calendar.DATE, 1)
+        }
+        return options
+    }
 
 
-
-
+    // 改寫: 測驗日期function
+    // 相關fun :
+    // hasNoBirthdateSet()
+    // hasNoTestDateSet()
+    // setBirthdate()
+    // setTestDate()
 
 
 }

@@ -15,7 +15,8 @@
     <string name="demographic_dialog">已輸入基本資料</string>
     <string name="your_name">"姓名: %s"</string>
     <string name="your_sex">"性別: %s"</string>
-    <string name="your_birthdate">"生日: %s"</string>
+    <string name="your_birthdate">"出生日期: %s"</string>
+    <string name="your_testDate">"測驗日期: %s"</string>
     <string name="your_handedness">"慣用手: %s"</string>
     <string name="your_grade">"年級: %s"</string>
     <string name="your_city">"城市: %s"</string>
