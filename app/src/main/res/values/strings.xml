@@ -44,6 +44,7 @@
     <string name="demo_5">5</string>
     <string name="demo_6">6</string>
 
+
     <string name="demo_left">左</string>
     <string name="demo_right">右</string>
 
@@ -62,6 +63,33 @@
     <string name="finish_btn">跳出程式</string>
     <string name="me">我</string>
     <string name="start">開始</string>
+
+
+    <string-array name="city_list">
+        <item>請選擇城市</item>
+        <item>高雄市</item>
+        <item>台南市</item>
+        <item>台北市</item>
+        <item>新北市</item>
+        <item>桃園市</item>
+        <item>台中市</item>
+        <item>基隆市</item>
+        <item>新竹市</item>
+        <item>嘉義市</item>
+        <item>新竹縣</item>
+        <item>苗栗縣</item>
+        <item>彰化縣</item>
+        <item>南投縣</item>
+        <item>雲林縣</item>
+        <item>嘉義縣</item>
+        <item>屏東縣</item>
+        <item>宜蘭縣</item>
+        <item>花蓮縣</item>
+        <item>臺東縣</item>
+        <item>澎湖縣</item>
+        <item>其他</item>
+    </string-array>
+
 
 
 </resources>

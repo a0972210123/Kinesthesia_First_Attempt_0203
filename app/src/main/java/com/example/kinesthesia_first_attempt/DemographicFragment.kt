@@ -1,5 +1,6 @@
 package com.example.kinesthesia_first_attempt
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,20 +15,13 @@ import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DemographicFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-
-
 // 變數宣告
-var gcode: String = ""
-var gHand: String = ""
 var filePathStr:String = ""
-
-
+//var mContext_demo: Context? = null
+lateinit var mContext_demo: Context
+lateinit var city: Spinner
+val cityList = arrayListOf("高雄市", "台南市", "台北市", "新北市", "桃園市","台中市","基隆市","新竹市",
+    "嘉義市","新竹縣","苗栗縣","彰化縣","南投縣","雲林縣","嘉義縣","屏東縣","宜蘭縣","花蓮縣","臺東縣","澎湖縣", "其他")
 
 
 class DemographicFragment : Fragment() {
@@ -47,7 +41,7 @@ class DemographicFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         //val fragmentBinding = FragmentDemographicBinding.inflate(inflater, container, false)
         //binding = fragmentBinding
         //return fragmentBinding.root
@@ -68,26 +62,35 @@ class DemographicFragment : Fragment() {
                 this@DemographicFragment //使用listenser binding，用UI button 在xml中設定onclick
         }
 
+        //city選單CODE
+        mContext_demo = requireActivity().applicationContext
 
-        //0804測試
-        //syntax    val imageView = requireView()!!.findViewById<View>(R.id.foo) as ImageView
-        //val editTextView = requireView()!!.findViewById<View>(R.id.birthDate) as EditText
+        city = requireView()!!.findViewById<View>(R.id.city) as Spinner
 
-        val subjName = requireView()!!.findViewById<EditText>(R.id.subjName)
-        val subjCode = requireView()!!.findViewById<EditText>(R.id.subjCode)
-        val subjBirth = requireView()!!.findViewById<EditText>(R.id.birthDate)
-        val rg = requireView()!!.findViewById<RadioGroup>(R.id.GenderGroup)
-        val subjGrade = requireView()!!.findViewById<RadioGroup>(R.id.GradeGroup)
-        val subjHand = requireView()!!.findViewById<RadioGroup>(R.id.HandGroup)
-        val gender: String
-        val grade: String
-        val hand: String
-        //val Demo_next = requireView()!!.findViewById<Button>(R.id.Demo_next)
+        //城市選單CODE: arrayList已經移置string ,name: city_list
+        val adapter = ArrayAdapter.createFromResource( mContext_demo , R.array.city_list, android.R.layout.simple_spinner_dropdown_item)
+        city.adapter = adapter
 
-        //0804測試
+        city.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                binding.viewModel?.setCity(cityList[position])
+                Toast.makeText(activity, "城市:"+cityList[position] , Toast.LENGTH_SHORT).show()
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //TODO("Not yet implemented")
+            }
+        }
+        //以上: 城市選單CODE: arrayList已經移置string ,name: city_list
 
 
-    }
+
+
+    } //OnViewCreated End
 
 
     companion object {
@@ -106,7 +109,6 @@ class DemographicFragment : Fragment() {
         super.onDestroyView()
         //binding = null
     }
-
 
 
 
@@ -273,6 +275,11 @@ class DemographicFragment : Fragment() {
 
 
 
+
+
+
+
+
     // 按鈕後確認資料都有輸入
      fun checkInputAndUpdate() {
 
@@ -284,8 +291,6 @@ class DemographicFragment : Fragment() {
 
 
         //2&3.確認所有輸入都非空白，並顯示警告訊息
-
-
         when {
             nameInput.isNullOrEmpty() -> {
                 Toast.makeText(activity, "未輸入姓名", Toast.LENGTH_SHORT).show()
@@ -319,9 +324,6 @@ class DemographicFragment : Fragment() {
                 showCurrentInputDialog()
             }
         }
-
-
-
     }
 
 
@@ -338,7 +340,7 @@ class DemographicFragment : Fragment() {
                         + "\n" + getString(R.string.your_grade, binding.viewModel?.grade?.value)
                         + "\n" + getString(R.string.your_city, binding.viewModel?.city?.value)
                         + "\n" + getString(R.string.your_code, binding.viewModel?.clientCode?.value)
-            ) //Set the message to show the final score,
+            ) //Set the message to show the data
 
             .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
 
@@ -353,27 +355,6 @@ class DemographicFragment : Fragment() {
     }
     //Context as the name suggests means the context or the current state of the application, activity, or fragment.
 // It contains the information regarding the activity, fragment or application.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
