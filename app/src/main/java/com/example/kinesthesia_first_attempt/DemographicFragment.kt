@@ -16,23 +16,26 @@ import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.databinding.FragmentDemographicBinding
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
 // 變數宣告
 var filePathStr: String = ""
 
-//var mContext_demo: Context? = null
-lateinit var mContext_demo: Context
-lateinit var city: Spinner
-lateinit var birthdate: EditText
-val cityList = arrayListOf(
-    "高雄市", "台南市", "台北市", "新北市", "桃園市", "台中市", "基隆市", "新竹市",
-    "嘉義市", "新竹縣", "苗栗縣", "彰化縣", "南投縣", "雲林縣", "嘉義縣", "屏東縣", "宜蘭縣", "花蓮縣", "臺東縣", "澎湖縣", "其他"
-)
-
-
 class DemographicFragment : Fragment() {
+
+
+    lateinit var mContext_demo: Context
+    lateinit var city: Spinner
+    lateinit var birthdate: EditText
+    val cityList = arrayListOf(
+        "請選擇城市",
+        "高雄市", "台南市", "台北市", "新北市", "桃園市", "台中市", "基隆市", "新竹市",
+        "嘉義市", "新竹縣", "苗栗縣", "彰化縣", "南投縣", "雲林縣", "嘉義縣", "屏東縣", "宜蘭縣", "花蓮縣", "臺東縣", "澎湖縣", "其他"
+    )
+
 
 
     private val sharedViewModel: MainViewModel by activityViewModels()
@@ -44,7 +47,6 @@ class DemographicFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -61,8 +63,6 @@ class DemographicFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         binding?.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
@@ -70,6 +70,7 @@ class DemographicFragment : Fragment() {
             demographicFragment =
                 this@DemographicFragment //使用listenser binding，用UI button 在xml中設定onclick
         }
+
 
         //city選單CODE
         mContext_demo = requireActivity().applicationContext
@@ -97,8 +98,8 @@ class DemographicFragment : Fragment() {
         //以上: 城市選單CODE: arrayList已經移置string ,name: city_list
 
 
-        //生日選擇及測驗日期選擇
-        //延遲至所有lifecycle call完成再執行避免crash 及 dialog需特定context輸入
+        //生日選擇及測驗日期選擇，crash問題處理
+        // 1.延遲至所有lifecycle call完成再執行避免crash   2.dialog需特定context輸入
         // reference:
         // 1. https://stackoverflow.com/questions/4187673/problems-creating-a-popup-window-in-android-activity
         // 2. https://stackoverflow.com/questions/61237173/kotlin-datepicker-pop-up-doesnt-work-inside-fragment-windowmanagerbadtokenex
@@ -136,7 +137,7 @@ class DemographicFragment : Fragment() {
             val year = c.get(Calendar.YEAR)
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
-            //
+
             DatePickerDialog(requireActivity(), { _, year, month, day ->
                 run {
                     //將月前加上0
@@ -167,12 +168,9 @@ class DemographicFragment : Fragment() {
     // 測驗日期選擇function
     //val tempTestDate = getTestDate()
     fun getTestDate(): String {
-        var currentDate: String = ""
         val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
         val calendar = Calendar.getInstance()
-
-        currentDate = formatter.format(calendar.time).toString()
-        return currentDate
+        return formatter.format(calendar.time).toString() //當日日期
     }
 
     // 其他格式範例
@@ -206,89 +204,85 @@ class DemographicFragment : Fragment() {
 
 
 
-    /*
-    // 存檔function 零件
-    // 0804測試
-    private fun selectionPage() {
 
-        binding?.DemoNext?.setOnClickListener {
-            // 開啟檔案串流
-            if (Build.VERSION.SDK_INT >= 23) {
-                val requestCodePermissionStorage = 100
-                val permissions = arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-                for (str in permissions) {
-                    if (checkSelfPermission(str) != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(permissions, requestCodePermissionStorage)
-                        return@setOnClickListener
-                    }
-                }
-            }
 
-   // 整理人口學資料段落
+    // var filePathStr: String = ""
+    // 存檔function: 創建一個資料夾，並儲存個案基本資料
+    //取得權限: AndroidManifest.xml 需貼上
+    //<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    //<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-            gHand = hand.substring(4)
-            gcode = subjCode.text.toString()
+    fun saveDemographic() {
 
-            val selectCity: String = "城市:" + city.selectedItem.toString()
-            val name = "姓名:"+ subjName.text.toString()
-            val code = "編號:"+ subjCode.text.toString()
-            val bDate = "生日:"+ subjBirth.text.toString()
-            val emp = "\n"
+        // 整理人口學資料段落
+        val outputName = getString(R.string.your_name, binding.viewModel?.name?.value)
+        val outputSex = getString(R.string.your_sex, binding.viewModel?.sex?.value)
+        val outputBirthdate = getString(R.string.your_birthdate, binding.viewModel?.birthdate?.value)
+        val outputTestDate = getString(R.string.your_testDate, binding.viewModel?.testDate?.value)
+        val outputHand = getString(R.string.your_handedness, binding.viewModel?.handedness?.value)
+        val outputGrade = getString(R.string.your_grade, binding.viewModel?.grade?.value)
+        val outputCity = getString(R.string.your_city, binding.viewModel?.city?.value)
+        val outputCode = getString(R.string.your_code, binding.viewModel?.clientCode?.value)
 
-            val txtFile: File
-            //建立檔案資料夾
-            val filePath = File(getExternalFilesDir("").toString(), subjCode.text.toString())
+        val emp = "\n"  //換行字串
+        val txtFile: File  //創建檔案
+        val filePathConstructCode = binding.viewModel?.clientCode?.value.toString()
 
-            if (filePath.exists()) {
-                Toast.makeText(activity, "這個編號已經使用過了", Toast.LENGTH_SHORT).show()
-                val s=Calendar.getInstance().time
-                txtFile = File(filePath, subjCode.text.toString() + "_demographic_"+ s+".txt")
-            } else {
-                filePath.mkdir()
-                txtFile = File(filePath, subjCode.text.toString() + ".txt")
+        val timeStamp: String //避免資料夾個案編號資料重複的額外後接編號
+        val timeStampFormatter = SimpleDateFormat("HH_mm_ss", Locale.getDefault()) //H 時 在一天中 (0~23) // m 分 // s 秒
+        val timeStampCalendar = Calendar.getInstance()
+        timeStamp =  timeStampFormatter.format(timeStampCalendar.time).toString() //當日日期
 
-                filePathStr = filePath.path
-                //儲存基本資料檔案
-                val out = FileOutputStream(txtFile, true)
-                out.write(name.toByteArray())
-                out.write(emp.toByteArray())
-                out.write(gender.toByteArray())
-                out.write(emp.toByteArray())
-                out.write(bDate.toByteArray())
-                out.write(emp.toByteArray())
-                out.write(hand.toByteArray())
-                out.write(emp.toByteArray())
-                out.write(grade.toByteArray())
-                out.write(emp.toByteArray())
-                out.write(selectCity.toByteArray())
-                out.write(emp.toByteArray())
-                out.write(code.toByteArray())
-                out.flush()
-                out.close()
-                Toast.makeText(activity, "Demographic Data Save Success", Toast.LENGTH_SHORT).show()
+        /////建立檔案資料夾段落
 
-                //val intent = Intent(this, TaskSelectionPage::class.java)
-                //startActivity(intent)
-            }
+        //資料夾名稱/路徑
+        val filePath = File(activity?.getExternalFilesDir("").toString(), filePathConstructCode)
+        val backupFilePath = File(activity?.getExternalFilesDir("").toString(), filePathConstructCode + "_" + timeStamp)
+
+        //檢查目前個案標號是否使用過，建立資料夾並建立txt檔
+        if (filePath.exists()) {
+            Toast.makeText(activity, "這個編號已經使用過了，將自動產生新資料夾", Toast.LENGTH_SHORT).show()
+            backupFilePath.mkdir()
+            txtFile = File(backupFilePath, filePathConstructCode + "_demographic_"+ timeStamp +".txt")
+            filePathStr =  backupFilePath.path  //更新全域變數，用於後續存檔(此段產生的資料夾名稱不同)
+        } else {
+            filePath.mkdir()
+            txtFile = File(filePath, filePathConstructCode + "_demographic_" + ".txt")
+            filePathStr = filePath.path      //更新全域變數，用於後續存檔
         }
 
-    } //selectionpage
-    //以上 0804測試   */
+        //儲存基本資料檔案
+            val out = FileOutputStream(txtFile, true)
+            out.write(outputName.toByteArray())
+            out.write(emp.toByteArray())
+            out.write(outputSex.toByteArray())
+            out.write(emp.toByteArray())
+            out.write(outputBirthdate.toByteArray())
+            out.write(emp.toByteArray())
+            out.write(outputTestDate.toByteArray())
+            out.write(emp.toByteArray())
+            out.write(outputHand.toByteArray())
+            out.write(emp.toByteArray())
+            out.write(outputGrade.toByteArray())
+            out.write(emp.toByteArray())
+            out.write(outputCity.toByteArray())
+            out.write(emp.toByteArray())
+            out.write(outputCode.toByteArray())
+            out.flush()
+            out.close()
+            Toast.makeText(activity, "Demographic Data Save Success", Toast.LENGTH_SHORT).show()
+
+    }  // 存檔function END
 
 
     // 按鈕後確認資料都有輸入
     // 待處理: 需加入存檔function
     fun checkInputAndUpdate() {
-        //1.讀取目前使用者輸入內容。
-        // 註:性別、慣用手、年級在輸入後會由dataBinding及Livedata自動更新
-        val nameInput = binding.subjName.text.toString()  //讀取使用者輸入的值，並且轉換為指定的資料型態
+        //1.讀取目前使用者輸入內容。並且轉換為指定的資料型態
+        // 註:性別、慣用手、年級、生日、城市在輸入後會由dataBinding及Livedata自動更新
+        val nameInput = binding.subjName.text.toString()
         val codeInput = binding.subjCode.text.toString()
         val birthdateInput = binding.birthDate.text.toString()
-
-
         //2&3.確認所有輸入都非空白，並顯示警告訊息
         when {
             nameInput.isNullOrEmpty() -> {
@@ -313,14 +307,17 @@ class DemographicFragment : Fragment() {
                 Toast.makeText(activity, "未輸入城市", Toast.LENGTH_SHORT).show()
             }
             else -> {
-                //4.更新人口學資料。註:性別、慣用手、年級在輸入後會由Databinding及Livedata自動更新，在此不用更動
-                // 目前 城市(spinner)、生日及當日日期(還沒有function)還未加入
+                //4.更新人口學資料。
+                // 註:性別、慣用手、年級、出生日期、城市在輸入後會由Databinding及Livedata自動更新，在此不用更動
                 binding.viewModel?.setName(nameInput)
                 binding.viewModel?.setBirthdate(birthdateInput)
                 binding.viewModel?.setClientCode(codeInput)
 
                 //5. 顯示目前資料對話框
                 showCurrentInputDialog()
+
+                //6. call存檔function (從viewModel)
+                //saveDemographic()
             }
         }
     }
@@ -346,6 +343,7 @@ class DemographicFragment : Fragment() {
                 binding.viewModel?.resetDemographicInput()
             }
             .setPositiveButton(getString(R.string.confirm_input)) { _, _ ->
+                saveDemographic()
                 goToIntroduction()
             }
             .show() //creates and then displays the alert dialog.
