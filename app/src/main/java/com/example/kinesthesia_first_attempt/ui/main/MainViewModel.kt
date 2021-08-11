@@ -12,8 +12,8 @@ import java.util.*
 private const val TARGET_BOX_SIZE = 2.00 //待修改
 private const val RESPONSE_DOT_SIZE = 3.00
 
-private const val MAX_PRACTICE_TRIAL = 8
-private const val MAX_FORMAL_TRIAL = 5
+const val MAX_PRACTICE_TRIAL = 8
+const val MAX_FORMAL_TRIAL = 5
 
 
 //

@@ -92,5 +92,23 @@
     </string-array>
 
 
+    <string name="practice_dialog_title">測驗練習</string>
+    <string name="practice_dialog_message">已完成基本練習次數</string>
+
+    <string name="practice_dialog_try_again">再試一次</string>
+    <string name="practice_dialog_back_to_menu">前往選單</string>
+
+    <string name="start_position">Start Position: d%</string>
+    <string name="test_position">Test Position: d%</string>
+    <string name="rest_position">Rest Position: d%</string>
+    <string name="response_position">Response Position: d%</string>
+
+
+    <string name="record_position">紀錄位置</string>
+
+    <string name="instruction_title">步驟說明</string>
+
+
+
 
 </resources>

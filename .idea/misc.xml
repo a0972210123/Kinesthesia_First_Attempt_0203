@@ -6,8 +6,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/arrow_upward.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/circle_arrow_up.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/circle_target.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/ic_baseline_arrow_circle_up_24.xml" value="0.24078212290502793" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/north_150.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/response_50.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/response_50_red.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_demographic.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_intro.xml" value="0.2075" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_practice.xml" value="0.2" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/item_page.xml" value="0.1" />
       </map>
     </option>

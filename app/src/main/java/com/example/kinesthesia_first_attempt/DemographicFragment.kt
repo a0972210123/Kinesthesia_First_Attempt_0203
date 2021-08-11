@@ -37,7 +37,6 @@ class DemographicFragment : Fragment() {
     )
 
 
-
     private val sharedViewModel: MainViewModel by activityViewModels()
 
     //private lateinit var viewModel: MainViewModel
