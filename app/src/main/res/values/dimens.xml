@@ -4,7 +4,7 @@
 <resources>
 
     <!-- From cupcake-->
-    <dimen name="image_size">300dp</dimen>
+    <dimen name="image_size">250dp</dimen>
     <dimen name="default_button_width">250dp</dimen>
     <dimen name="side_margin">16dp</dimen>
     <dimen name="margin_between_elements">8dp</dimen>

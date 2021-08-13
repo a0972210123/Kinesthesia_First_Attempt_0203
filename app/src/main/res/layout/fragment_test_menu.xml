@@ -33,7 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="請選擇要施測的類型"
-            android:textColor="@color/design_default_color_background"
             android:textSize="50sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +68,9 @@
             app:layout_constraintTop_toBottomOf="@id/task_selection_instruction"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/practice_task"
-            android:padding="@dimen/side_margin"/>
+            android:padding="@dimen/side_margin"
+            android:onClick="@{() -> testMenuFragment.goToFormal()}"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

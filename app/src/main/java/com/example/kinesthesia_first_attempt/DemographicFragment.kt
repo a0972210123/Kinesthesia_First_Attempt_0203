@@ -223,14 +223,15 @@ class DemographicFragment : Fragment() {
         val outputCity = getString(R.string.your_city, binding.viewModel?.city?.value)
         val outputCode = getString(R.string.your_code, binding.viewModel?.clientCode?.value)
 
-        val emp = "\n"  //換行字串
+        val emp = "\r\n"  //換行字串 "\n">> Txt沒換行 測試\r\n
         val txtFile: File  //創建檔案
         val filePathConstructCode = binding.viewModel?.clientCode?.value.toString()
 
         val timeStamp: String //避免資料夾個案編號資料重複的額外後接編號
         val timeStampFormatter = SimpleDateFormat("HH_mm_ss", Locale.getDefault()) //H 時 在一天中 (0~23) // m 分 // s 秒
         val timeStampCalendar = Calendar.getInstance()
-        timeStamp =  timeStampFormatter.format(timeStampCalendar.time).toString() //當日日期
+        timeStamp =  timeStampFormatter.format(timeStampCalendar.time).toString() //當日時間  //需傳到viewmodel
+
 
         /////建立檔案資料夾段落
 
@@ -249,6 +250,8 @@ class DemographicFragment : Fragment() {
             txtFile = File(filePath, filePathConstructCode + "_demographic_" + ".txt")
             filePathStr = filePath.path      //更新全域變數，用於後續存檔
         }
+            //更新檔案路徑
+            binding?.viewModel!!.setFilePath(filePathStr)
 
         //儲存基本資料檔案
             val out = FileOutputStream(txtFile, true)

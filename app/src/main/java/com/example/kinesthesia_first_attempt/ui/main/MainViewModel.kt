@@ -16,11 +16,29 @@ const val MAX_PRACTICE_TRIAL = 8
 const val MAX_FORMAL_TRIAL = 5
 
 
+
+
 //
 
 class MainViewModel : ViewModel() {
     // TODO: Implement the ViewModel
     // 放入所有要記錄的變數: 如人口學資料
+
+    private var _outputFilePath = MutableLiveData<String>("")
+    val outputFilePath: LiveData<String> = _outputFilePath
+
+    fun setFilePath(PathInput: String) {
+        _outputFilePath.value = PathInput
+    }
+
+    private var _totalPracticeTime = MutableLiveData<Int>(0)
+    val totalPracticeTime: LiveData<Int> = _totalPracticeTime
+
+    fun setPracticeTime(Input:Int) {
+        _totalPracticeTime.value = Input
+    }
+
+
 
 
     private val _name = MutableLiveData<String>("")

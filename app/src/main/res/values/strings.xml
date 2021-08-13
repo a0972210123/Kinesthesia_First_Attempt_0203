@@ -5,7 +5,7 @@
 
 
     <string name="go_to_demographic_page">填寫基本資料</string>
-    <string name="Cover_page"> </string>
+    <string name="Cover_page"></string>
     <string name="demographic_page">基本資料</string>
     <string name="introduction_page">測驗說明</string>
     <string name="menu_page">測驗選單</string>
@@ -24,7 +24,6 @@
 
     <string name="confirm_input">確認</string>
     <string name="modify_input">重新輸入</string>
-
 
 
     <string name="demo">基本資料</string>
@@ -105,10 +104,14 @@
 
 
     <string name="record_position">紀錄位置</string>
+    <string name="next_trial">完成本次</string>
 
     <string name="instruction_title">步驟說明</string>
 
 
+    <string name="st_btn">輸入編號後開始</string>
+    <string name="text_first">第一次：-999</string>
+    <string name="text_last">最後一次：-999</string>
 
 
 </resources>

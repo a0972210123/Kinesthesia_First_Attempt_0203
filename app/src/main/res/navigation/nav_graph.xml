@@ -20,8 +20,7 @@
     <fragment
         android:id="@+id/demographicFragment"
         android:name="com.example.kinesthesia_first_attempt.DemographicFragment"
-        android:label="@string/demographic_page"
-        tools:layout="@layout/fragment_demographic" >
+        android:label="@string/demographic_page">
         <action
             android:id="@+id/action_demographicFragment_to_introFragment"
             app:destination="@id/introFragment" />
@@ -36,6 +35,9 @@
         <action
             android:id="@+id/action_testMenuFragment_to_practiceFragment"
             app:destination="@id/practiceFragment" />
+        <action
+            android:id="@+id/action_testMenuFragment_to_testFragment"
+            app:destination="@id/testFragment" />
     </fragment>
 
 
@@ -51,11 +53,15 @@
     <fragment
         android:id="@+id/coverFragment"
         android:name="com.example.kinesthesia_first_attempt.CoverFragment"
-        android:label="CoverFragment">
+        android:label="@string/Cover_page">
         <action
             android:id="@+id/action_coverFragment_to_demographicFragment"
             app:destination="@id/demographicFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.example.kinesthesia_first_attempt.TestFragment"
+        android:label="TestFragment" />
 
 
 </navigation>

@@ -28,8 +28,8 @@
             android:layout_height="wrap_content"
 
 
-            android:layout_marginTop="250dp"
-            android:layout_marginEnd="1200dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="850dp"
 
             android:text="@string/instruction_title"
             android:textSize="40sp"
@@ -42,7 +42,7 @@
 
         <TextView
             android:id="@+id/instruction_demonstration"
-            android:layout_width="500dp"
+            android:layout_width="300dp"
             android:layout_height="150dp"
 
             android:text="這邊將會放入隨測驗步驟更動的指導語或測驗說明"
@@ -52,6 +52,27 @@
             app:layout_constraintStart_toStartOf="@id/instruction_title"
             app:layout_constraintTop_toBottomOf="@+id/instruction_title"
             />
+
+
+        <Button
+            android:id="@+id/next_trial"
+            android:layout_width="165dp"
+            android:layout_height="80dp"
+
+            android:onClick="@{ () -> practiceFragment.goBackToMenu() }"
+
+
+
+            android:text="@string/next_trial"
+            android:textSize="30sp"
+
+            app:layout_constraintTop_toBottomOf="@id/instruction_demonstration"
+            app:layout_constraintEnd_toEndOf="@id/instruction_title"
+            app:layout_constraintStart_toStartOf="@id/instruction_title"
+            />
+
+
+
 
 
         <!-- 以下測驗表現textView-->
@@ -64,8 +85,8 @@
             android:text="測驗表現"
             android:textSize="40sp"
 
-            android:layout_marginTop="250dp"
-            android:layout_marginStart="1200dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="850dp"
 
 
             app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +96,7 @@
 
         <TextView
             android:id="@+id/performance_start_position"
-            android:layout_width="500dp"
+            android:layout_width="300dp"
             android:layout_height="30dp"
 
             android:text="這邊將會放入測驗表現的文字 \n 123"
@@ -89,7 +110,7 @@
 
         <TextView
             android:id="@+id/performance_test_position"
-            android:layout_width="500dp"
+            android:layout_width="300dp"
             android:layout_height="30dp"
 
             android:text="這邊將會放入測驗表現的文字 \n 123"
@@ -102,7 +123,7 @@
 
         <TextView
             android:id="@+id/performance_rest_position"
-            android:layout_width="500dp"
+            android:layout_width="300dp"
             android:layout_height="30dp"
 
             android:text="這邊將會放入測驗表現的文字 \n 123"
@@ -115,7 +136,7 @@
 
         <TextView
             android:id="@+id/performance_response_position"
-            android:layout_width="500dp"
+            android:layout_width="300dp"
             android:layout_height="30dp"
 
             android:text="這邊將會放入測驗表現的文字 \n 123"
@@ -128,7 +149,7 @@
 
         <TextView
             android:id="@+id/performance_current_trial_score"
-            android:layout_width="500dp"
+            android:layout_width="300dp"
             android:layout_height="30dp"
 
             android:text="這邊將會放入測驗表現的文字 \n 123"
@@ -163,7 +184,7 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/target_50"
 
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="25dp"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -209,6 +230,13 @@
             android:layout_marginTop="150dp"
             android:layout_marginStart="150dp"
             />
+
+
+
+
+
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
