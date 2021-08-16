@@ -191,12 +191,5 @@ class MainViewModel : ViewModel() {
     }
 
 
-    // 改寫: 測驗日期function
-    // 相關fun :
-    // hasNoBirthdateSet()
-    // hasNoTestDateSet()
-    // setBirthdate()
-    // setTestDate()
-
 
 }

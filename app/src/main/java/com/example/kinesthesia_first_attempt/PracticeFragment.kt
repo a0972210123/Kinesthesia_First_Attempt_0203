@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,13 +20,18 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
+//全域變數宣告，不然無法讀取到class給的資料
+var startX: Float = 0f
+var startY: Float = 0f
+var bb: Float = 0f
+var b1: Float = 0f
+var b2: Float = 0f
+
+
 
 class PracticeFragment : Fragment() {
 
     private val sharedViewModel: MainViewModel by activityViewModels()
-
-    //private lateinit var viewModel: MainViewModel
-    //private var binding: FragmentPracticeBinding? = null
     private lateinit var binding: FragmentPracticeBinding
 
 
@@ -399,6 +405,34 @@ class PracticeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         //binding = null
+    }
+
+
+
+
+
+
+
+
+
+
+
+    //按鈕後執行
+    fun printData(): List<Float>{
+        Log.d("X/Y/面積/長軸/短軸：inFragment", "$startX  $startY  $bb  $b1  $b2")
+        changeText()
+        return listOf(startX,startY,bb,b1,b2)  //outPutCoordinate()
+    }
+
+    fun changeText(){
+        val text1 = requireView()!!.findViewById<TextView>(R.id.text1)
+        val text3 = requireView()!!.findViewById<TextView>(R.id.text3)
+
+        if (text1.text.toString()=="第一次：-999") {
+            text1.text = "第一次：X= $startX ; Y= $startY"
+        }
+        text3.text = "最後一次：X= $startX ; Y= $startY"
+
     }
 
 

@@ -168,7 +168,7 @@
             android:layout_width="165dp"
             android:layout_height="80dp"
 
-            android:onClick="@{() -> practiceFragment.recordPosition()}"
+            android:onClick="@{() -> practiceFragment.printData()}"
 
             android:text="@string/record_position"
             android:textSize="30sp"
@@ -230,6 +230,45 @@
             android:layout_marginTop="150dp"
             android:layout_marginStart="150dp"
             />
+
+
+
+        <com.example.kinesthesia_first_attempt.TouchBoard
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/material_on_background_disabled"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 以下測試-->
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/text_first"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/text_last"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text1" />
+
+
+
 
 
 

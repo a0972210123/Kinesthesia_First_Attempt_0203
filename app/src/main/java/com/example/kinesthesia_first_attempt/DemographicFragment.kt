@@ -223,7 +223,7 @@ class DemographicFragment : Fragment() {
         val outputCity = getString(R.string.your_city, binding.viewModel?.city?.value)
         val outputCode = getString(R.string.your_code, binding.viewModel?.clientCode?.value)
 
-        val emp = "\r\n"  //換行字串 "\n">> Txt沒換行 測試\r\n
+        val emp = "\n"  //換行字串 "\n">> Txt沒換行 測試\r\n
         val txtFile: File  //創建檔案
         val filePathConstructCode = binding.viewModel?.clientCode?.value.toString()
 
