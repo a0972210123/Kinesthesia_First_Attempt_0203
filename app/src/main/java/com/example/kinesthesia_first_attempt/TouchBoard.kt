@@ -5,15 +5,13 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import java.io.File
-import java.io.FileOutputStream
 import android.annotation.SuppressLint as SuppressLint1
 
 
 
  class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) {
 
-     val kData = StringBuffer()
+    // val kData = StringBuffer()
 
     @SuppressLint1("ClickableViewAccessibility", "SetTextI18n")
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -30,7 +28,7 @@ import android.annotation.SuppressLint as SuppressLint1
                 Log.d("X/Y/面積/長軸/短軸：onTouch", "$startX  $startY  $bb  $b1  $b2")
 
 
-
+/*
                 kData.append(currentTimestamp)
                 kData.append(",")
                 kData.append(startX)
@@ -43,6 +41,8 @@ import android.annotation.SuppressLint as SuppressLint1
                 kData.append(",")
                 kData.append(b2)
                 kData.append("\r\n")
+
+ */
                 invalidate() //重新整理整個view
 
             }
@@ -51,7 +51,7 @@ import android.annotation.SuppressLint as SuppressLint1
     }
 
 
-
+/*
     fun sendkData() {
         val currentTimestamp = System.currentTimeMillis()
         val fileW = File(filePathStr, "$currentTimestamp.csv")
@@ -63,6 +63,8 @@ import android.annotation.SuppressLint as SuppressLint1
         os.close()
         tmp.setLength(0) //clean buffer
     }
+
+ */
 
 
 

@@ -1,10 +1,12 @@
 package com.example.kinesthesia_first_attempt
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -17,8 +19,8 @@ import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
 import java.util.*
+
 
 //全域變數宣告，不然無法讀取到class給的資料
 var startX: Float = 0f
@@ -26,7 +28,6 @@ var startY: Float = 0f
 var bb: Float = 0f
 var b1: Float = 0f
 var b2: Float = 0f
-
 
 
 class PracticeFragment : Fragment() {
@@ -66,53 +67,14 @@ class PracticeFragment : Fragment() {
         restPositionY = 0f
         responsePositionX = 0f
         responsePositionY = 0f
-        buttonPressedCountsInATrial = 0
-
+        //buttonPressedCountsInATrial = 0
+        condition = ""
+        startX = 0f
+        startY = 0f
     }
 
     fun addTrialsCount() {
         practiceTrialsCount++
-    }
-
-
-    var trialCondition =
-        listOf<String>("Start Position", "Test Position", "Rest Position", "Response Position")
-
-    // 記錄當下手指位置，並管理測驗流程
-    fun recordPosition() {
-        //單次測驗紀錄區段
-        buttonPressedCountsInATrial++ //每按一次按鈕+1  (要debounce?)
-
-        when (buttonPressedCountsInATrial) {
-            1 -> {
-                var condition = trialCondition[0]
-                startPositionX = 0f
-                startPositionY = 0f
-            }
-            2 -> {
-                var condition = trialCondition[1]
-                testPositionX = 20f
-                testPositionY = 20f
-            }
-            3 -> {
-                var condition = trialCondition[2]
-                restPositionX = 30f
-                restPositionY = 30f
-            }
-            4 -> {
-                var condition = trialCondition[3]
-                responsePositionX = 40f
-                responsePositionY = 40f
-            }
-
-            5 -> {
-                saveCurrentTrialRecord()   // 將單次反應存入?LIST? SET?
-                clearCurrentTrialRecord()  //清除單次表現
-                addTrialsCount()           // 完成一次測驗練習
-                checkPracticeLimit()       //檢查是否達到練習次數
-            }
-
-        }
     }
 
 
@@ -148,81 +110,59 @@ class PracticeFragment : Fragment() {
 
 
     fun saveCurrentTrialRecord() { // 將單次反應存入?LIST? SET?
+        val text1 = requireView()!!.findViewById<TextView>(R.id.text1)
 
         //確認目前practiceTrialsCount: android 可以用 eval() ?
         when (practiceTrialsCount) {
             1 -> {
                 val Trial_1 = saveTrialToMap()
                 val Trial_1_list = saveTrialToList()
-                Log.d(
-                    "PracticeFragment",
-                    Trial_1.map { "${it.key} is ${it.value}" }.joinToString(",\n")
-                )
             }
 
             2 -> {
                 val Trial_2 = saveTrialToMap()
                 val Trial_2_list = saveTrialToList()
-                Log.d(
-                    "PracticeFragment",
-                    Trial_2.map { "${it.key} is ${it.value}" }.joinToString(",\n")
-                )
+
             }
 
             3 -> {
                 val Trial_3 = saveTrialToMap()
                 val Trial_3_list = saveTrialToList()
-                Log.d(
-                    "PracticeFragment",
-                    Trial_3.map { "${it.key} is ${it.value}" }.joinToString(",\n")
-                )
+
             }
 
             4 -> {
                 val Trial_4 = saveTrialToMap()
                 val Trial_4_list = saveTrialToList()
-                Log.d(
-                    "PracticeFragment",
-                    Trial_4.map { "${it.key} is ${it.value}" }.joinToString(",\n")
-                )
+
             }
 
             5 -> {
                 val Trial_5 = saveTrialToMap()
                 val Trial_5_list = saveTrialToList()
-                Log.d(
-                    "PracticeFragment",
-                    Trial_5.map { "${it.key} is ${it.value}" }.joinToString(",\n")
-                )
+
             }
 
             6 -> {
                 val Trial_6 = saveTrialToMap()
                 val Trial_6_list = saveTrialToList()
-                Log.d(
-                    "PracticeFragment",
-                    Trial_6.map { "${it.key} is ${it.value}" }.joinToString(",\n")
-                )
+
             }
 
             7 -> {
                 val Trial_7 = saveTrialToMap()
                 val Trial_7_list = saveTrialToList()
-                Log.d(
-                    "PracticeFragment",
-                    Trial_7.map { "${it.key} is ${it.value}" }.joinToString(",\n")
-                )
+
             }
 
             8 -> {
                 val Trial_8 = saveTrialToMap()
                 val Trial_8_list = saveTrialToList()
-                Log.d(
-                    "PracticeFragment",
-                    Trial_8.map { "${it.key} is ${it.value}" }.joinToString(",\n")
-                )
+
             }
         }
+
+
     }
 
 
@@ -257,14 +197,11 @@ class PracticeFragment : Fragment() {
         //整理表現資料>> 在這邊要把LIST排好
         val test = listOf<String>("0")
         // 這邊需要測試
-        Log.d("PracticeFragment","開始整理資料")
-
-
-
+        Log.d("PracticeFragment", "開始整理資料")
 
 
         // 存檔
-        outputCsv(outputFileName,test,0)
+        outputCsv(outputFileName, test, 0)
     }
 
 
@@ -283,49 +220,37 @@ class PracticeFragment : Fragment() {
     }  // sample from HW
 
 
-
-
-    //用於抓按鈕按下時間和計時
-    fun getTime(): Float {
-        val formatter = SimpleDateFormat("SSSS", Locale.getDefault())
-        val calendar = Calendar.getInstance()
-        return formatter.format(calendar.time).toString().toFloat() //點按時間點
-    }
-
-    //須測試哪一個不會ERROR
-    fun getTime_2(): Float {
-        return System.currentTimeMillis().toFloat()
-    }
-
     // 注意目前寫法，會停在此function不出來4秒
     fun checkTime() {
-        var T1 = getTime()
-        while (getTime() - T1 <= 4000) {
-            var timeCountDown = 4000 - (getTime() - T1)
+        // 找到關聯的view
+        val recordingButton = requireView()!!.findViewById<Button>(R.id.practice_record_position)
+        val text1 = requireView()!!.findViewById<TextView>(R.id.text1)
+        // hide button
+        recordingButton.visibility = View.INVISIBLE
 
-            when (timeCountDown.toInt()) {
-                4000 -> {
-                    Log.d("PracticeFragment", "TimeCountDown:4")
-                }
-                3000 -> {
-                    Log.d("PracticeFragment", "TimeCountDown:3")
-                }
-                2000 -> {
-                    Log.d("PracticeFragment", "TimeCountDown:2")
-                }
-                1000 -> {
-                    Log.d("PracticeFragment", "TimeCountDown:1")
-                }
-                0 -> {
-                    Log.d("PracticeFragment", "TimeCountDown:0")
-                }
+        var millisInFuture:Long = 4000
+        //確認是否需要倒數  millisInFuture
+        if (buttonPressedCountsInATrial == 5) {
+            millisInFuture = 0
+        } else {
+            millisInFuture = 4000
+        }
+
+        //計時器宣告
+        val timer = object : CountDownTimer(millisInFuture, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                text1.text = "seconds remaining: " + millisUntilFinished / 1000
             }
 
-        } //while loop end
-
-        // 4秒時間到
-        // beep
-        // show button
+            // 時間到時將會執行的任務
+            override fun onFinish() {
+                text1.text = "Time is up! Do Next Step!"
+                // beep
+                // show　button
+                recordingButton.visibility = View.VISIBLE
+            }
+        }
+        timer.start() //開始計時
     }
 
 
@@ -336,8 +261,9 @@ class PracticeFragment : Fragment() {
 
 
     fun checkPracticeLimit() {
-        if (practiceTrialsCount > MAX_PRACTICE_TRIAL) {
-            practiceTime ++
+        // practiceTrialsCount > MAX_PRACTICE_TRIAL
+        if (practiceTrialsCount >=2) {
+            practiceTime++
             binding.viewModel!!.setPracticeTime(practiceTime) //更新總練習次數
 
             MaterialAlertDialogBuilder(requireContext())
@@ -349,12 +275,12 @@ class PracticeFragment : Fragment() {
 
                 .setNegativeButton(getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
                     savePracticePerformanceToCSV()//儲存測驗表現
-                    clearRecord()  //清除測驗表現
+                    //clearRecord()  // 清除測驗表現>> 還沒寫完
                     Toast.makeText(activity, "再試一次", Toast.LENGTH_SHORT)
                 }
                 .setPositiveButton(getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
                     savePracticePerformanceToCSV()// 儲存測驗表現
-                    clearRecord()  // 清除測驗表現
+                    //clearRecord()  // 清除測驗表現>> 還沒寫完
                     goBackToMenu() // 前往測驗選單
                 }
                 .show() //creates and then displays the alert dialog.
@@ -406,36 +332,125 @@ class PracticeFragment : Fragment() {
         super.onDestroyView()
         //binding = null
     }
-
-
-
-
-
-
-
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     //按鈕後執行
-    fun printData(): List<Float>{
+    //1.增加按鈕次數
+    //2.call recordPosition
+    //3.call changeText
+    //4. 計時
+    //5.歸零按鈕次數
+    fun pressButton() {
+        buttonPressedCountsInATrial++      //每按一次按鈕+1
         Log.d("X/Y/面積/長軸/短軸：inFragment", "$startX  $startY  $bb  $b1  $b2")
-        changeText()
-        return listOf(startX,startY,bb,b1,b2)  //outPutCoordinate()
-    }
-
-    fun changeText(){
-        val text1 = requireView()!!.findViewById<TextView>(R.id.text1)
-        val text3 = requireView()!!.findViewById<TextView>(R.id.text3)
-
-        if (text1.text.toString()=="第一次：-999") {
-            text1.text = "第一次：X= $startX ; Y= $startY"
+        recordPosition()   //儲存位置，並管理測驗流程
+        changeText()       //更動text
+        checkTime()
+        if (buttonPressedCountsInATrial == 5){
+            addTrialsCount() // 完成一次測驗練習
+            saveCurrentTrialRecord() // 將單次反應存入?LIST? SET?
+            clearCurrentTrialRecord() // 清除單次表現、歸零座標、重設測驗情境
+            checkPracticeLimit()    //檢查是否達到練習次數
+            buttonPressedCountsInATrial =0
         }
-        text3.text = "最後一次：X= $startX ; Y= $startY"
 
+
+
+        return //outPutCoordinate()
     }
 
 
+    // 記錄當下手指位置，並管理測驗流程
+    // recordPosition功能描述
+    // 1.將XY存入對應情境的變數中
+    // 2.log.d中印出對應情境的資料
+    var trialCondition =
+        listOf<String>("Start Position", "Test Position", "Rest Position", "Response Position")
+    var condition: String = ""
+    fun recordPosition() {
+
+        when (buttonPressedCountsInATrial) {
+            1 -> {
+                condition = trialCondition[0]
+                startPositionX = startX
+                startPositionY = startY
+                Log.d("$condition", "$startPositionX  $startPositionY ")
+            }
+            2 -> {
+                condition = trialCondition[1]
+                testPositionX = startX
+                testPositionY = startY
+                Log.d("$condition", "$testPositionX  $testPositionY ")
+            }
+            3 -> {
+                condition = trialCondition[2]
+                restPositionX = startX
+                restPositionY = startY
+                Log.d("$condition", "$restPositionX  $restPositionY  ")
+            }
+            4 -> {
+                condition = trialCondition[3]
+                responsePositionX = startX
+                responsePositionY = startY
+                Log.d("$condition", "$responsePositionX  $responsePositionY  ")
+            }
+
+            5 -> {
+                condition = ""
+                startX = 0f
+                startY = 0f
+            }
+
+
+        }
+    }
+
+
+    // 更新測驗表現、指導語
+    fun changeText() {
+        // 找到測驗表現textView
+        val start = requireView()!!.findViewById<TextView>(R.id.performance_start_position)
+        val test = requireView()!!.findViewById<TextView>(R.id.performance_test_position)
+        val rest = requireView()!!.findViewById<TextView>(R.id.performance_rest_position)
+        val response = requireView()!!.findViewById<TextView>(R.id.performance_response_position)
+        //找到指導語textView
+        val instructionText = requireView()!!.findViewById<TextView>(R.id.instruction_demonstration)
+        //找到測驗按鈕
+        val recordingButton = requireView()!!.findViewById<Button>(R.id.practice_record_position)
+
+        //判斷測驗情境，並更新對應的Text
+        when (condition) {
+            "Start Position" -> {
+                start.text = "Start Position：X= $startPositionX ; Y= $startPositionY"
+                instructionText.text = "將受試者的手指或筆移動到目標位置上，確認停止後按下紀錄"
+            }
+            "Test Position" -> {
+                test.text = "Test Position：X= $testPositionX ; Y= $testPositionY"
+                instructionText.text = "將受試者的手指或筆移動回預備位置上，確認停止後按下紀錄"
+            }
+            "Rest Position" -> {
+                rest.text = "Rest Position：X= $restPositionX ; Y= $restPositionY"
+                instructionText.text = "受試者聽到嗶聲後，需將自己的手或是筆移動回記憶中的目標位置，確認停止後按下紀錄"
+            }
+            "Response Position" -> {
+                response.text = "Response Position：X= $responsePositionX ; Y= $responsePositionY"
+                instructionText.text = "將受試者的手移開平板，確認資料正確後按下Save Trial"
+                recordingButton.text = getString(R.string.next_trial)
+                recordingButton.textSize = 24.toFloat()
+            }
+            "" -> {
+                start.text = "Start Position："
+                test.text = "Test Position："
+                rest.text = "Rest Position："
+                response.text = "Response Position："
+                instructionText.text = "請將受試者手指或筆尖放在下方預備位置上，確認停止後按下紀錄"
+                recordingButton.text = getString(R.string.record_position)
+                recordingButton.textSize = 30.toFloat()
+            }
+        }
+    }
 
 
 } // fragment end
+
