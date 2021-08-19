@@ -13,6 +13,15 @@
         <variable
             name="viewModel"
             type="com.example.kinesthesia_first_attempt.ui.main.MainViewModel" />
+
+
+
+        <variable
+            name="maxPracticeTrial"
+            type="int" />
+
+
+
     </data>
 
 
@@ -125,19 +134,24 @@
             app:layout_constraintStart_toStartOf="@id/practice_record_position"
             app:layout_constraintTop_toBottomOf="@id/performance_rest_position" />
 
+
+        <!--  android:layout_height="30dp" -->
+        <!-- 以上測驗表現textView-->
+
+
         <TextView
-            android:id="@+id/performance_current_trial_score"
+            android:id="@+id/practice_count"
             android:layout_width="300sp"
             android:layout_height="30dp"
-
-            android:text="Score"
             android:textSize="@dimen/performance_text_size"
 
+            android:text="@string/practice_count"
             app:layout_constraintEnd_toEndOf="@id/practice_record_position"
             app:layout_constraintStart_toStartOf="@id/practice_record_position"
-            app:layout_constraintTop_toBottomOf="@id/performance_response_position" />
+            app:layout_constraintTop_toBottomOf="@id/performance_response_position"
 
-        <!-- 以上測驗表現textView-->
+
+            />
 
 
         <Button
@@ -152,7 +166,7 @@
 
             app:layout_constraintEnd_toEndOf="@id/performance_title"
             app:layout_constraintStart_toStartOf="@id/performance_title"
-            app:layout_constraintTop_toBottomOf="@id/performance_current_trial_score" />
+            app:layout_constraintTop_toBottomOf="@id/practice_count" />
 
         <ImageView
             android:id="@+id/target"
@@ -231,6 +245,19 @@
             app:layout_constraintStart_toStartOf="@id/practice_record_position"
             app:layout_constraintTop_toBottomOf="@id/practice_record_position"
             />
+
+        <TextView
+            android:id="@+id/performance_current_trial_score"
+            android:layout_width="300sp"
+            android:layout_height="wrap_content"
+
+            android:text="Score"
+            android:textSize="@dimen/performance_text_size"
+
+            app:layout_constraintEnd_toEndOf="@id/practice_record_position"
+            app:layout_constraintStart_toStartOf="@id/practice_record_position"
+            app:layout_constraintTop_toBottomOf="@id/text1" />
+
 
 
 

@@ -41,7 +41,7 @@ class PagerAdapter : RecyclerView.Adapter<PagerAdapter.PagerViewHolder>() {
     class PagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mTextView: TextView = itemView.findViewById(R.id.page_number)
 
-        private var colors = arrayOf("#CCFF99","#41F1E5","#8D41F1","#FF99CC","#FF99CC")
+        private var colors = arrayOf("#FFFFFFFF","#FFFFFFFF","#FFFFFFFF","#FFFFFFFF","#FFFFFFFF")
 
         fun bindData(i: Int) {
             mTextView.setBackgroundColor(Color.parseColor(colors[i-1]))
@@ -60,10 +60,10 @@ class PagerAdapter : RecyclerView.Adapter<PagerAdapter.PagerViewHolder>() {
                     holder.mTextView.text = "歡迎使用本系統"
                 }
                 1 -> {
-                    holder.mTextView.text = "此評量需約30分鐘，請確認你處於舒適的坐姿且不被干擾"
+                    holder.mTextView.text = "此評量需約XX分鐘，請確認你處於舒適的坐姿"
                 }
                 2 -> {
-                    holder.mTextView.text = "評量時，需使用我們提供的筆將指定的文字抄寫至空格中"
+                    holder.mTextView.text = "評量時，需要用你的手或請你握著筆，在平板上移動到不同的位置"
                 }
                 3 -> {
                     holder.mTextView.text = "準備好了，請按開始"

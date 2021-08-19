@@ -1,5 +1,8 @@
 package com.example.kinesthesia_first_attempt
 
+import android.annotation.SuppressLint
+import android.media.AudioManager
+import android.media.ToneGenerator
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -20,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import kotlin.math.sqrt
 
 
 //全域變數宣告，不然無法讀取到class給的資料
@@ -31,23 +35,18 @@ var b2: Float = 0f
 
 
 class PracticeFragment : Fragment() {
-
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentPracticeBinding
 
 
     //測驗相關變數宣告
-
-    var A = MAX_PRACTICE_TRIAL
-
     var buttonPressedCountsInATrial: Int = 0  //按鈕次數
-
-    var practiceTrialsCount: Int = 0  //練習次數
+    var practiceTrialsCount: Int = 0  //已練習次數
+    var currentTrial:Int = 1  //當前Trial
 
     var practiceTime: Int = 0  //完整練習測驗進行次數
 
-
-    // 測驗表現  >>> 要改成float?
+    // 測驗表現
     var startPositionX: Float = 0f
     var startPositionY: Float = 0f
     var testPositionX: Float = 0f
@@ -56,7 +55,6 @@ class PracticeFragment : Fragment() {
     var restPositionY: Float = 0f
     var responsePositionX: Float = 0f
     var responsePositionY: Float = 0f
-
 
     fun clearCurrentTrialRecord() {
         startPositionX = 0f
@@ -67,7 +65,6 @@ class PracticeFragment : Fragment() {
         restPositionY = 0f
         responsePositionX = 0f
         responsePositionY = 0f
-        //buttonPressedCountsInATrial = 0
         condition = ""
         startX = 0f
         startY = 0f
@@ -75,27 +72,13 @@ class PracticeFragment : Fragment() {
 
     fun addTrialsCount() {
         practiceTrialsCount++
+        currentTrial++
     }
 
 
-    // 儲存方法1
-    fun saveTrialToMap(): MutableMap<String, Float> {
-        // 將當前儲存的trialData轉換成map
-        return mutableMapOf(
-            "startPositionX" to startPositionX,
-            "startPositionY" to startPositionY,
-            "testPositionX" to testPositionX,
-            "testPositionY" to testPositionY,
-            "restPositionX" to restPositionX,
-            "restPositionY" to restPositionY,
-            "responsePositionX" to responsePositionX,
-            "responsePositionY" to responsePositionY
-        )
-    }
-
-    // 儲存方法2: 此方法list內容順序有差
     fun saveTrialToList(): List<Float> {
-        // 將當前儲存的trialData轉換成map
+        val tempScore = calculateTrialScore()  //計算當前trial表現Error
+        // 將當前儲存的trialData轉換成List
         return listOf<Float>(
             startPositionX,
             startPositionY,
@@ -104,123 +87,273 @@ class PracticeFragment : Fragment() {
             restPositionX,
             restPositionY,
             responsePositionX,
-            responsePositionY
+            responsePositionY,
+            tempScore[0],  //RE AP
+            tempScore[1],  //RE ML
+            tempScore[2],  //AE AP
+            tempScore[3],  //AE ML
+            tempScore[4]   //AE T2R
         )
     }
 
 
-    fun saveCurrentTrialRecord() { // 將單次反應存入?LIST? SET?
-        val text1 = requireView()!!.findViewById<TextView>(R.id.text1)
+    // 存檔相關變數宣告
 
-        //確認目前practiceTrialsCount: android 可以用 eval() ?
+    private val positionData = StringBuffer()
+
+    private lateinit var arrayListOf8Trial :ArrayList<List<Float>>
+    private var trial1list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f) //四次表現(X/Y) + 5個表現參數  = 13
+    private var trial2list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+    private var trial3list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+    private var trial4list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+    private var trial5list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+    private var trial6list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+    private var trial7list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+    private var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+
+
+    fun reset8Trial(){
+        for (n in 0..7){
+            arrayListOf8Trial[n] = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+        }
+    }
+
+
+    // 將單次反應存入LIST
+    fun saveCurrentTrialRecord() {
+        //確認目前practiceTrialsCount
         when (practiceTrialsCount) {
-            1 -> {
-                val Trial_1 = saveTrialToMap()
-                val Trial_1_list = saveTrialToList()
+            1 -> { trial1list = saveTrialToList() }
+            2 -> { trial2list = saveTrialToList() }
+            3 -> { trial3list = saveTrialToList() }
+            4 -> { trial4list = saveTrialToList() }
+            5 -> { trial5list = saveTrialToList() }
+            6 -> { trial6list = saveTrialToList() }
+            7 -> { trial7list = saveTrialToList() }
+            8 -> { trial8list = saveTrialToList() }
+        }
+    }
+
+
+    fun combineList(): ArrayList<List<Float>> {
+        return arrayListOf(
+            trial1list,
+            trial2list,
+            trial3list,
+            trial4list,
+            trial5list,
+            trial6list,
+            trial7list,
+            trial8list
+        )
+    }  //這邊的list 最後要清掉
+
+    // 將List排進Buffer (還沒加上標)
+    fun arrangeData(TargetStringBuffer:StringBuffer):StringBuffer{
+        for(index in 0..7){  //選一個trial
+            TargetStringBuffer.append(index + 1) //trial
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][0])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][1])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][2])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][3])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][4])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][5])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][6])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][7])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][8])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][9])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][10])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][11])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append(arrayListOf8Trial[index][12])
+            TargetStringBuffer.append(",")
+            TargetStringBuffer.append("\r\n")
+        }
+        return TargetStringBuffer
+    }
+
+
+    fun calculateTrialScore(): List<Float> {
+        //計算向量: 以startPosition為基準/原點
+        //Vector( test2Response ) = Vector( start2Response ) - Vector( start2Test )
+
+        //start2Test = Test(x,y) - Start(x,y)
+        var start2TestX = testPositionX - startPositionX
+        var start2TestY = testPositionY - startPositionY
+
+        //start2Response = Response(x,y) - Start(x,y)
+        var start2ResponseX = responsePositionX - startPositionX
+        var start2ResponseY = responsePositionY - startPositionY
+
+        //test2Response
+        var test2ResponseAP = start2ResponseY - start2TestY
+        var test2ResponseML = start2ResponseX - start2TestX
+
+        //Relative Error: AP、ML
+        var relativeErrorAP = test2ResponseAP
+        var relativeErrorML = test2ResponseML
+        //Absolute Error: AP、ML、T2R(AP^2+ML^2)^1/2
+        var absoluteErrorAP = kotlin.math.abs(test2ResponseAP)
+        var absoluteErrorML = kotlin.math.abs(test2ResponseML)
+
+        val a = test2ResponseAP.toDouble()
+        val b = test2ResponseML.toDouble()
+        val c:Double = sqrt(a*a + b*b)
+        var absoluteErrorT2R = c.toFloat()
+
+        return listOf(
+            relativeErrorAP,
+            relativeErrorML,
+            absoluteErrorAP,
+            absoluteErrorML,
+            absoluteErrorT2R
+        )
+        // Variable Error: AP、ML、(AP^2+ML^2)^1/2  >> 需每個方向全部測完才能算 >> 在這邊先不算
+    }
+
+
+    var scoreListForDisplay =  listOf<Float>(0f, 0f, 0f, 0f, 0f)
+    //update when buttonPressed 5 times
+    //clear the List After Display   // scoreListForDisplay =  (0f, 0f, 0f, 0f, 0f)
+
+
+    fun displayScoreInText(inputScoreList:List<Float>,flag: Int){
+        val Score = requireView()!!.findViewById<TextView>(R.id.performance_current_trial_score)
+
+        var performanceDescriptionAP:String = ""  //Y軸
+        var performanceDescriptionML:String = ""  //X軸
+
+        when {
+            inputScoreList[0] >0 -> {
+                performanceDescriptionAP = "Underestimated"
             }
-
-            2 -> {
-                val Trial_2 = saveTrialToMap()
-                val Trial_2_list = saveTrialToList()
-
+            inputScoreList[0] <0 -> {
+                performanceDescriptionAP = "Overestimated"
             }
-
-            3 -> {
-                val Trial_3 = saveTrialToMap()
-                val Trial_3_list = saveTrialToList()
-
+            inputScoreList[0] == 0f -> {
+                performanceDescriptionAP = "Perfect Matched"
             }
+        }
 
-            4 -> {
-                val Trial_4 = saveTrialToMap()
-                val Trial_4_list = saveTrialToList()
-
+        when {
+            inputScoreList[1] >0 -> {
+                performanceDescriptionML = "Right Deviated"
             }
-
-            5 -> {
-                val Trial_5 = saveTrialToMap()
-                val Trial_5_list = saveTrialToList()
-
+            inputScoreList[1] <0 -> {
+                performanceDescriptionML = "Left  Deviated"
             }
-
-            6 -> {
-                val Trial_6 = saveTrialToMap()
-                val Trial_6_list = saveTrialToList()
-
-            }
-
-            7 -> {
-                val Trial_7 = saveTrialToMap()
-                val Trial_7_list = saveTrialToList()
-
-            }
-
-            8 -> {
-                val Trial_8 = saveTrialToMap()
-                val Trial_8_list = saveTrialToList()
-
+            inputScoreList[1] == 0f -> {
+                performanceDescriptionML = "Perfect Matched"
             }
         }
 
 
+        when (flag){
+            1 -> {
+                val modifyString:String = (  "Score" + "\n"+
+                        "Relative Error AP: " + inputScoreList[0].toString() + " " + performanceDescriptionAP + "\n" +
+                        "Relative Error ML: " + inputScoreList[1].toString() + " " + performanceDescriptionML + "\n" +
+                        "Absolute Error AP: " + inputScoreList[2].toString() + "\n" +
+                        "Absolute Error ML: " + inputScoreList[3].toString() + "\n" +
+                        "Absolute Error T2R: "+ inputScoreList[4].toString() )
+                Score.text = modifyString
+            }
+            0 -> {
+                val modifyString:String = (  "Score" + "\n"+
+                        "Relative Error AP: " + "" + "\n"+
+                        "Relative Error ML: " + "" + "\n"+
+                        "Absolute Error AP: " + "" + "\n"+
+                        "Absolute Error ML: " + "" + "\n"+
+                        "Absolute Error T2R: "+ "" )
+                Score.text = modifyString
+            }
+        }
     }
 
-
-    val titleList = arrayListOf(
-        "Trial",
-        "Start Position X", "Start Position Y",
-        "Test Position X", "Test Position Y",
-        "Rest Position X", "Rest Position Y",
-        "Response Position X", "Response Position Y"
-    )
-
-    // 注意 titleList practiceTrialCount dataList 還沒整合成arraay
-
-
-    fun calculateTrialScore() {
-        // Absolute Error: AP、ML、(AP^2+ML^2)^1/2
-
-        // Relative Error: AP、ML
-
-        // Variable Error: AP、ML、(AP^2+ML^2)^1/2  >> 需每個方向全部測完才能算
+    fun clearScoreList(){
+        scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
     }
+
 
 
     fun savePracticePerformanceToCSV() {
-        // 存檔前置參數宣告
-
-        //檔案路徑與名稱段落
-        val outputPath = binding.viewModel!!.outputFilePath.toString()  //讀取存在viewModel的路徑
+        //call 整理8trialData
+        arrayListOf8Trial = combineList()
+        //call function 將List排進buffer
+        arrangeData(positionData)
+        //切割buffer
+        val outputPositionData = positionData.toString().replace("\r", "").split("\n")
+        //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
         val outputFileName = "Practice_Performance_$practiceTime.csv"
-        // val outputCsvFile = File(outputPath, "Practice_Performance" + ".csv")         //儲存在這個fragment需要的檔案
-
-        //整理表現資料>> 在這邊要把LIST排好
-        val test = listOf<String>("0")
-        // 這邊需要測試
-        Log.d("PracticeFragment", "開始整理資料")
-
-
-        // 存檔
-        outputCsv(outputFileName, test, 0)
+        // 存檔: name,List,flag
+        outputCsv(outputFileName, outputPositionData , 0)
     }
 
 
-    // sample from HW
-    // List要先排好
-    //需要: 1. 檔名、檔案路徑  2. list   3. Int = 0
 
-    fun outputCsv(fileName: String, kkk: List<String>, flag: Int) {
-        val tmp = StringBuffer()//必需
-        val file = File(filePathStr, fileName)         //必需，可加時間末碼
-        val os = FileOutputStream(file, true)   // 這邊給的字串要有檔案類型 >> 看引用的地方
-        os.write(tmp.toString().toByteArray())
+    fun outputCsv(fileName: String, input: List<String>, flag: Int) {
+        //檔案路徑: 目前直接讀在demographic的全域變數，有error再讀viewModel備用
+        //val outputPath = binding.viewModel!!.outputFilePath.toString()  //讀取存在viewModel的路徑
+        val output = StringBuffer()//必需
+
+        val titleList = listOf(
+            "Trial",
+            "Start Position X", "Start Position Y",
+            "Test Position X", "Test Position Y",
+            "Rest Position X", "Rest Position Y",
+            "Response Position X", "Response Position Y"
+        )
+
+        val scoreTitleList = listOf(
+            "Relative Error AP",
+            "Relative Error ML",
+            "Absolute Error AP",
+            "Absolute Error ML",
+            "Absolute Error T2R"
+        )
+
+        //合併title
+        val allTitle: MutableList<String> = mutableListOf()
+        allTitle.addAll(titleList)
+        allTitle.addAll(scoreTitleList)
+
+        // 放入標題，使用迴圈，避免前後出現[]
+        for (i in 0..13){
+            output.append(allTitle[i])
+            output.append(",")
+        }
+        output.append("\r\n")
+
+        //輸入後 再次排列
+        for (u in input) {  //這邊需要測試看outPut結果
+            output.append(u)
+            output.append("\r\n")
+        }
+
+
+        val file = File(filePathStr, fileName)
+        val os = FileOutputStream(file, true)   // 這邊給的字串要有檔案類型
+        os.write(output.toString().toByteArray())
         os.flush()
         os.close()
-        tmp.setLength(0) //clean buffer
+        output.setLength(0) //clean buffer
+        Toast.makeText(activity, "練習題測驗表現儲存成功", Toast.LENGTH_SHORT)
+        Log.d("data","outCSV Success")
     }  // sample from HW
 
 
-    // 注意目前寫法，會停在此function不出來4秒
     fun checkTime() {
         // 找到關聯的view
         val recordingButton = requireView()!!.findViewById<Button>(R.id.practice_record_position)
@@ -228,14 +361,13 @@ class PracticeFragment : Fragment() {
         // hide button
         recordingButton.visibility = View.INVISIBLE
 
-        var millisInFuture:Long = 4000
         //確認是否需要倒數  millisInFuture
+        var millisInFuture: Long = 4000
         if (buttonPressedCountsInATrial == 5) {
             millisInFuture = 0
         } else {
             millisInFuture = 4000
         }
-
         //計時器宣告
         val timer = object : CountDownTimer(millisInFuture, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -244,8 +376,35 @@ class PracticeFragment : Fragment() {
 
             // 時間到時將會執行的任務
             override fun onFinish() {
-                text1.text = "Time is up! Do Next Step!"
-                // beep
+
+                when (buttonPressedCountsInATrial) {
+                    0 -> {
+                        text1.text = "Get Ready!"
+                    }
+                    1 -> {
+                        text1.text = "Time is up! Do Next Step!"
+                    }
+                    2 -> {
+                        text1.text = "Time is up! Do Next Step!"
+                    }
+                    3 -> {
+                        text1.text = "Time is up! Do Next Step!"
+                    }
+                    4 -> {
+                        text1.text = "Click to Save this Trial"
+                    }
+                    5 -> {
+                        text1.text = "Get Ready!"
+                    }
+                }
+
+                //Beep sound
+                val toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 80)
+                if (buttonPressedCountsInATrial == 3) {
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 200)
+                } else {
+                }
+
                 // show　button
                 recordingButton.visibility = View.VISIBLE
             }
@@ -256,14 +415,17 @@ class PracticeFragment : Fragment() {
 
     // 清除所有參數!，還沒寫完!
     fun clearRecord() {
-        practiceTrialsCount = 0
+        clearCurrentTrialRecord() // 四個位置、startX/Y的全域變數
+        practiceTrialsCount = 0   //進入測驗練習後的練習次數
+        currentTrial = 1
+        reset8Trial()             // 清除所有trial的紀錄
+        positionData.setLength(0) //clean buffer
     }
 
 
     fun checkPracticeLimit() {
-        // practiceTrialsCount > MAX_PRACTICE_TRIAL
-        if (practiceTrialsCount >=2) {
-            practiceTime++
+        if (practiceTrialsCount >= 2) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
+            practiceTime++  //增加練習次數
             binding.viewModel!!.setPracticeTime(practiceTime) //更新總練習次數
 
             MaterialAlertDialogBuilder(requireContext())
@@ -275,12 +437,12 @@ class PracticeFragment : Fragment() {
 
                 .setNegativeButton(getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
                     savePracticePerformanceToCSV()//儲存測驗表現
-                    //clearRecord()  // 清除測驗表現>> 還沒寫完
-                    Toast.makeText(activity, "再試一次", Toast.LENGTH_SHORT)
+                    clearRecord()  // 清除測驗表現>> 還沒寫完
+                    Toast.makeText(requireContext(), "再試一次", Toast.LENGTH_SHORT)
                 }
                 .setPositiveButton(getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
                     savePracticePerformanceToCSV()// 儲存測驗表現
-                    //clearRecord()  // 清除測驗表現>> 還沒寫完
+                    clearRecord()  // 清除測驗表現>> 還沒寫完
                     goBackToMenu() // 前往測驗選單
                 }
                 .show() //creates and then displays the alert dialog.
@@ -290,12 +452,8 @@ class PracticeFragment : Fragment() {
 
     fun goBackToMenu() {
         Toast.makeText(activity, "回到測驗選單", Toast.LENGTH_SHORT)
-        findNavController().navigate(R.id.action_practiceFragment_to_testMenuFragment2)
+        findNavController().navigate(R.id.action_practiceFragment_to_testMenuFragment)
     }
-
-
-    ////////////////////////////////////////////////////////////////
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -315,15 +473,16 @@ class PracticeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.apply {
-            lifecycleOwner = viewLifecycleOwner
+
             viewModel = sharedViewModel
             //sendButton.setOnClickListener { sendOrder() }
             practiceFragment = this@PracticeFragment //使用listenser binding，用UI button 在xml中設定onclick
-        }
-        //tBoard = requireView()!!.findViewById<TouchBoard>(R.id.view)
-        //detectTouch()
-    }
+            lifecycleOwner = viewLifecycleOwner
 
+            maxPracticeTrial = MAX_PRACTICE_TRIAL //用於更新練習次數文字
+        }
+
+    }
 
     companion object {
     }
@@ -333,7 +492,6 @@ class PracticeFragment : Fragment() {
         //binding = null
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     //按鈕後執行
     //1.增加按鈕次數
@@ -347,17 +505,24 @@ class PracticeFragment : Fragment() {
         recordPosition()   //儲存位置，並管理測驗流程
         changeText()       //更動text
         checkTime()
-        if (buttonPressedCountsInATrial == 5){
-            addTrialsCount() // 完成一次測驗練習
-            saveCurrentTrialRecord() // 將單次反應存入?LIST? SET?
-            clearCurrentTrialRecord() // 清除單次表現、歸零座標、重設測驗情境
-            checkPracticeLimit()    //檢查是否達到練習次數
-            buttonPressedCountsInATrial =0
+
+        if(buttonPressedCountsInATrial == 4){
+            scoreListForDisplay = calculateTrialScore()   //計算測驗表現 (RE*2，AE*3)
+            displayScoreInText(scoreListForDisplay,1)       //更新text內容
+            clearScoreList()
+        }else{
+            displayScoreInText(scoreListForDisplay,0)
         }
 
 
-
-        return //outPutCoordinate()
+        if (buttonPressedCountsInATrial == 5) {
+            addTrialsCount()           // 完成一次測驗練習
+            saveCurrentTrialRecord()   //將單次反應存入LIST(包含分數計算)
+            clearCurrentTrialRecord()  //清除單次表現、歸零座標、重設測驗情境
+            checkPracticeLimit()       //檢查是否達到練習次數
+            buttonPressedCountsInATrial = 0
+        }
+        return
     }
 
 
@@ -369,7 +534,6 @@ class PracticeFragment : Fragment() {
         listOf<String>("Start Position", "Test Position", "Rest Position", "Response Position")
     var condition: String = ""
     fun recordPosition() {
-
         when (buttonPressedCountsInATrial) {
             1 -> {
                 condition = trialCondition[0]
@@ -401,23 +565,26 @@ class PracticeFragment : Fragment() {
                 startX = 0f
                 startY = 0f
             }
-
-
         }
     }
 
-
     // 更新測驗表現、指導語
+
+    @SuppressLint("SetTextI18n")
     fun changeText() {
         // 找到測驗表現textView
         val start = requireView()!!.findViewById<TextView>(R.id.performance_start_position)
         val test = requireView()!!.findViewById<TextView>(R.id.performance_test_position)
         val rest = requireView()!!.findViewById<TextView>(R.id.performance_rest_position)
         val response = requireView()!!.findViewById<TextView>(R.id.performance_response_position)
+        //測驗次數textView
+        val practiceCount = requireView()!!.findViewById<TextView>(R.id.practice_count)
         //找到指導語textView
         val instructionText = requireView()!!.findViewById<TextView>(R.id.instruction_demonstration)
         //找到測驗按鈕
         val recordingButton = requireView()!!.findViewById<Button>(R.id.practice_record_position)
+        //顯示已完成練習次數
+        practiceCount.text = "練習次數: $currentTrial / $MAX_PRACTICE_TRIAL"
 
         //判斷測驗情境，並更新對應的Text
         when (condition) {
@@ -450,7 +617,6 @@ class PracticeFragment : Fragment() {
             }
         }
     }
-
 
 } // fragment end
 

@@ -21,7 +21,7 @@ const val MAX_FORMAL_TRIAL = 5
 //
 
 class MainViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+
     // 放入所有要記錄的變數: 如人口學資料
 
     private var _outputFilePath = MutableLiveData<String>("")

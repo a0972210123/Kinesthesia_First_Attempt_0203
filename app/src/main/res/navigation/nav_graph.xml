@@ -47,7 +47,7 @@
         android:label="@string/practice_page"
         tools:layout="@layout/fragment_practice" >
         <action
-            android:id="@+id/action_practiceFragment_to_testMenuFragment2"
+            android:id="@+id/action_practiceFragment_to_testMenuFragment"
             app:destination="@id/testMenuFragment" />
     </fragment>
     <fragment

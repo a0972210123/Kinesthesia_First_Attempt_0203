@@ -108,6 +108,8 @@
 
     <string name="instruction_title">步驟說明</string>
 
+    <string name="practice_count">練習次數:</string>
+
 
     <string name="st_btn">輸入編號後開始</string>
     <string name="text_first">第一次：-999</string>
