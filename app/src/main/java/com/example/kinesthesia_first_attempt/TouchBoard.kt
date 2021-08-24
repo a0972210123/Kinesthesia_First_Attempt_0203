@@ -5,16 +5,22 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import android.annotation.SuppressLint as SuppressLint1
 
 
+class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) {
+    var sharedViewModel = MainViewModel()
 
- class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) {
+
+
 
     // val kData = StringBuffer()
 
     @SuppressLint1("ClickableViewAccessibility", "SetTextI18n")
     override fun onTouchEvent(event: MotionEvent): Boolean {
+
+
 
         val currentTimestamp = System.currentTimeMillis()
         bb = event.getAxisValue(MotionEvent.AXIS_SIZE)
@@ -25,8 +31,15 @@ import android.annotation.SuppressLint as SuppressLint1
                 startX = event.x
                 startY = event.y
 
-                Log.d("X/Y/面積/長軸/短軸：onTouch", "$startX  $startY  $bb  $b1  $b2")
+                _testX.value = startX
+                _testY.value = startY
+                _testPosition.value = "Current Position: X= $startX  ,Y= $startY"
 
+                //positionTask.text = "Current Position: X= $startX  ,Y= $startY"
+
+                sharedViewModel.setCurrentPosition(startX ,startY)
+
+                Log.d("X/Y/面積/長軸/短軸：onTouch", "$startX  $startY  $bb  $b1  $b2")
 
 /*
                 kData.append(currentTimestamp)
@@ -44,9 +57,9 @@ import android.annotation.SuppressLint as SuppressLint1
 
  */
                 invalidate() //重新整理整個view
-
             }
         }
+
         return true
     }
 

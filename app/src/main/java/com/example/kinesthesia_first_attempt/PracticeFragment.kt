@@ -15,6 +15,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.databinding.FragmentPracticeBinding
 import com.example.kinesthesia_first_attempt.ui.main.MAX_PRACTICE_TRIAL
@@ -26,15 +28,35 @@ import java.util.*
 import kotlin.math.sqrt
 
 
+
+
+
+
+
 //全域變數宣告，不然無法讀取到class給的資料
 var startX: Float = 0f
 var startY: Float = 0f
+var currentPosition:String = "Current Position: X= $startX ,Y= $startY"
+
+var _testX = MutableLiveData<Float>(0f)
+val testX: LiveData<Float> = _testX
+
+var _testY = MutableLiveData<Float>(0f)
+val testY: LiveData<Float> = _testY
+
+var _testPosition = MutableLiveData<String>("just initialize")
+val testPosition: LiveData<String> = _testPosition
+
+
+
+
 var bb: Float = 0f
 var b1: Float = 0f
 var b2: Float = 0f
 
 
-class PracticeFragment : Fragment() {
+
+class PracticeFragment : Fragment(){
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentPracticeBinding
 
@@ -228,9 +250,8 @@ class PracticeFragment : Fragment() {
     //update when buttonPressed 5 times
     //clear the List After Display   // scoreListForDisplay =  (0f, 0f, 0f, 0f, 0f)
 
-
     fun displayScoreInText(inputScoreList:List<Float>,flag: Int){
-        val Score = requireView()!!.findViewById<TextView>(R.id.performance_current_trial_score)
+        val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
 
         var performanceDescriptionAP:String = ""  //Y軸
         var performanceDescriptionML:String = ""  //X軸
@@ -356,8 +377,8 @@ class PracticeFragment : Fragment() {
 
     fun checkTime() {
         // 找到關聯的view
-        val recordingButton = requireView()!!.findViewById<Button>(R.id.practice_record_position)
-        val text1 = requireView()!!.findViewById<TextView>(R.id.text1)
+        val recordingButton = requireView().findViewById<Button>(R.id.practice_record_position)
+        val text1 = requireView().findViewById<TextView>(R.id.text1)
         // hide button
         recordingButton.visibility = View.INVISIBLE
 
@@ -455,43 +476,62 @@ class PracticeFragment : Fragment() {
         findNavController().navigate(R.id.action_practiceFragment_to_testMenuFragment)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View{
         //val fragmentBinding = FragmentPracticeBinding.inflate(inflater, container, false)
         //binding = fragmentBinding
         //return fragmentBinding.root
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_practice, container, false)
+        //binding.lifecycleOwner = this
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.apply {
-
-            viewModel = sharedViewModel
-            //sendButton.setOnClickListener { sendOrder() }
-            practiceFragment = this@PracticeFragment //使用listenser binding，用UI button 在xml中設定onclick
+        binding.apply {
             lifecycleOwner = viewLifecycleOwner
+            viewModel = sharedViewModel
+            practiceFragment = this@PracticeFragment //使用listenser binding，用UI button 在xml中設定onclick
 
+            currentPositionInXML = testPosition?.value.toString()  //testing
             maxPracticeTrial = MAX_PRACTICE_TRIAL //用於更新練習次數文字
         }
 
+
+        val currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)
+        val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
+
+        /*
+        touchBoard.setOnClickListener(
+            View.OnClickListener {
+            currentPosition.text = ("Current Position: X= $startX ,Y= $startY") }
+        )
+
+         */
+
+        //0824可以讀到即時觸碰位置
+        touchBoard.setOnTouchListener(View.OnTouchListener { v, event ->
+            currentPosition.text = ("Current Position: X= $startX ,Y= $startY")
+            //邏輯寫在這裡
+            false
+        })
+
+
+
     }
 
-    companion object {
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        //binding = null
-    }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //按鈕後執行
     //1.增加按鈕次數
@@ -504,7 +544,7 @@ class PracticeFragment : Fragment() {
         Log.d("X/Y/面積/長軸/短軸：inFragment", "$startX  $startY  $bb  $b1  $b2")
         recordPosition()   //儲存位置，並管理測驗流程
         changeText()       //更動text
-        checkTime()
+        checkTime()        //計時
 
         if(buttonPressedCountsInATrial == 4){
             scoreListForDisplay = calculateTrialScore()   //計算測驗表現 (RE*2，AE*3)
@@ -573,16 +613,16 @@ class PracticeFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     fun changeText() {
         // 找到測驗表現textView
-        val start = requireView()!!.findViewById<TextView>(R.id.performance_start_position)
-        val test = requireView()!!.findViewById<TextView>(R.id.performance_test_position)
-        val rest = requireView()!!.findViewById<TextView>(R.id.performance_rest_position)
-        val response = requireView()!!.findViewById<TextView>(R.id.performance_response_position)
+        val start = requireView().findViewById<TextView>(R.id.performance_start_position)
+        val test = requireView().findViewById<TextView>(R.id.performance_test_position)
+        val rest = requireView().findViewById<TextView>(R.id.performance_rest_position)
+        val response = requireView().findViewById<TextView>(R.id.performance_response_position)
         //測驗次數textView
-        val practiceCount = requireView()!!.findViewById<TextView>(R.id.practice_count)
+        val practiceCount = requireView().findViewById<TextView>(R.id.practice_count)
         //找到指導語textView
-        val instructionText = requireView()!!.findViewById<TextView>(R.id.instruction_demonstration)
+        val instructionText = requireView().findViewById<TextView>(R.id.instruction_demonstration)
         //找到測驗按鈕
-        val recordingButton = requireView()!!.findViewById<Button>(R.id.practice_record_position)
+        val recordingButton = requireView().findViewById<Button>(R.id.practice_record_position)
         //顯示已完成練習次數
         practiceCount.text = "練習次數: $currentTrial / $MAX_PRACTICE_TRIAL"
 
@@ -590,11 +630,11 @@ class PracticeFragment : Fragment() {
         when (condition) {
             "Start Position" -> {
                 start.text = "Start Position：X= $startPositionX ; Y= $startPositionY"
-                instructionText.text = "將受試者的手指或筆移動到目標位置上，確認停止後按下紀錄"
+                instructionText.text = "將受試者的手指或筆移動到'目標位置'上，確認停止後按下紀錄"
             }
             "Test Position" -> {
                 test.text = "Test Position：X= $testPositionX ; Y= $testPositionY"
-                instructionText.text = "將受試者的手指或筆移動回預備位置上，確認停止後按下紀錄"
+                instructionText.text = "將受試者的手指或筆移動回'預備位置'上，確認停止後按下紀錄"
             }
             "Rest Position" -> {
                 rest.text = "Rest Position：X= $restPositionX ; Y= $restPositionY"
@@ -611,7 +651,7 @@ class PracticeFragment : Fragment() {
                 test.text = "Test Position："
                 rest.text = "Rest Position："
                 response.text = "Response Position："
-                instructionText.text = "請將受試者手指或筆尖放在下方預備位置上，確認停止後按下紀錄"
+                instructionText.text = "請將受試者手指或筆尖放在下方'預備位置'上，確認停止後按下紀錄"
                 recordingButton.text = getString(R.string.record_position)
                 recordingButton.textSize = 30.toFloat()
             }
@@ -619,4 +659,5 @@ class PracticeFragment : Fragment() {
     }
 
 } // fragment end
+
 

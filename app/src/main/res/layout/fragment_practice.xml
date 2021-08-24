@@ -14,6 +14,8 @@
             name="viewModel"
             type="com.example.kinesthesia_first_attempt.ui.main.MainViewModel" />
 
+        <import type="androidx.lifecycle.LiveData" />
+        <variable name="testPosition" type="LiveData&lt;String>"/>
 
 
         <variable
@@ -21,7 +23,14 @@
             type="int" />
 
 
+        <variable
+            name="currentPositionInXML"
+            type="String" />
 
+
+        <variable
+            name="currentPosition"
+            type="String" />
     </data>
 
 
@@ -67,6 +76,23 @@
 
 
         <!-- 以下測驗表現textView-->
+
+
+        <TextView
+            android:id="@+id/current_position_field"
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+
+            android:text="@{currentPositionInXML}"
+            android:textSize="@dimen/performance_text_size"
+
+            app:layout_constraintEnd_toEndOf="@id/practice_record_position"
+            app:layout_constraintStart_toStartOf="@id/practice_record_position"
+            app:layout_constraintBottom_toTopOf="@id/performance_title"
+
+        />
+
+
 
         <TextView
             android:id="@+id/performance_title"

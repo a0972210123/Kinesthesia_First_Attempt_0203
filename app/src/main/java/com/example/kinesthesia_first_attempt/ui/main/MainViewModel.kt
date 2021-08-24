@@ -31,6 +31,9 @@ class MainViewModel : ViewModel() {
         _outputFilePath.value = PathInput
     }
 
+
+
+
     private var _totalPracticeTime = MutableLiveData<Int>(0)
     val totalPracticeTime: LiveData<Int> = _totalPracticeTime
 
@@ -38,6 +41,25 @@ class MainViewModel : ViewModel() {
         _totalPracticeTime.value = Input
     }
 
+
+    private var _currentPositionX = MutableLiveData<Float>(0f)
+    val currentPositionX: LiveData<Float> = _currentPositionX
+
+    private var _currentPositionY = MutableLiveData<Float>(0f)
+    val currentPositionY: LiveData<Float> = _currentPositionY
+
+    private var _currentPositionData = MutableLiveData<String>("")
+    val currentPositionData: LiveData<String> = _currentPositionData
+
+    init{
+        setCurrentPosition(0f,0f)
+    }
+
+    fun setCurrentPosition(X:Float,Y:Float) {
+        _currentPositionX.value = X
+        _currentPositionX.value = Y
+        _currentPositionData.value = "Current Position: X= $X ,Y= $Y"
+    }
 
 
 
