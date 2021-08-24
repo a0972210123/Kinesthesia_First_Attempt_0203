@@ -15,8 +15,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.databinding.FragmentPracticeBinding
 import com.example.kinesthesia_first_attempt.ui.main.MAX_PRACTICE_TRIAL
@@ -36,19 +34,6 @@ import kotlin.math.sqrt
 //全域變數宣告，不然無法讀取到class給的資料
 var startX: Float = 0f
 var startY: Float = 0f
-var currentPosition:String = "Current Position: X= $startX ,Y= $startY"
-
-var _testX = MutableLiveData<Float>(0f)
-val testX: LiveData<Float> = _testX
-
-var _testY = MutableLiveData<Float>(0f)
-val testY: LiveData<Float> = _testY
-
-var _testPosition = MutableLiveData<String>("just initialize")
-val testPosition: LiveData<String> = _testPosition
-
-
-
 
 var bb: Float = 0f
 var b1: Float = 0f
@@ -501,7 +486,6 @@ class PracticeFragment : Fragment(){
             viewModel = sharedViewModel
             practiceFragment = this@PracticeFragment //使用listenser binding，用UI button 在xml中設定onclick
 
-            currentPositionInXML = testPosition?.value.toString()  //testing
             maxPracticeTrial = MAX_PRACTICE_TRIAL //用於更新練習次數文字
         }
 

@@ -14,23 +14,12 @@
             name="viewModel"
             type="com.example.kinesthesia_first_attempt.ui.main.MainViewModel" />
 
-        <import type="androidx.lifecycle.LiveData" />
-        <variable name="testPosition" type="LiveData&lt;String>"/>
-
 
         <variable
             name="maxPracticeTrial"
             type="int" />
 
 
-        <variable
-            name="currentPositionInXML"
-            type="String" />
-
-
-        <variable
-            name="currentPosition"
-            type="String" />
     </data>
 
 
@@ -83,7 +72,7 @@
             android:layout_width="300dp"
             android:layout_height="30dp"
 
-            android:text="@{currentPositionInXML}"
+            android:text="Current Position: X=0.0, Y=0.0 "
             android:textSize="@dimen/performance_text_size"
 
             app:layout_constraintEnd_toEndOf="@id/practice_record_position"

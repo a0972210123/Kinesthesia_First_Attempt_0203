@@ -30,34 +30,18 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
             MotionEvent.ACTION_DOWN -> {
                 startX = event.x
                 startY = event.y
-
-                _testX.value = startX
-                _testY.value = startY
-                _testPosition.value = "Current Position: X= $startX  ,Y= $startY"
-
-                //positionTask.text = "Current Position: X= $startX  ,Y= $startY"
-
-                sharedViewModel.setCurrentPosition(startX ,startY)
-
-                Log.d("X/Y/面積/長軸/短軸：onTouch", "$startX  $startY  $bb  $b1  $b2")
-
-/*
-                kData.append(currentTimestamp)
-                kData.append(",")
-                kData.append(startX)
-                kData.append(",")
-                kData.append(startY)
-                kData.append(",")
-                kData.append(bb)
-                kData.append(",")
-                kData.append(b1)
-                kData.append(",")
-                kData.append(b2)
-                kData.append("\r\n")
-
- */
+                Log.d("onTouch", "$startX  $startY  $bb  $b1  $b2")
                 invalidate() //重新整理整個view
             }
+
+
+            MotionEvent.ACTION_MOVE -> {
+                startX = event.x
+                startY = event.y
+                Log.d("onMove", "$startX  $startY  $bb  $b1  $b2")
+                invalidate()
+            }
+
         }
 
         return true
