@@ -493,14 +493,6 @@ class PracticeFragment : Fragment(){
         val currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
 
-        /*
-        touchBoard.setOnClickListener(
-            View.OnClickListener {
-            currentPosition.text = ("Current Position: X= $startX ,Y= $startY") }
-        )
-
-         */
-
         //0824可以讀到即時觸碰位置
         touchBoard.setOnTouchListener(View.OnTouchListener { v, event ->
             currentPosition.text = ("Current Position: X= $startX ,Y= $startY")
