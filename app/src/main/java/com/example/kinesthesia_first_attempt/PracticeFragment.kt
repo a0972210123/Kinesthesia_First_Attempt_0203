@@ -357,7 +357,7 @@ class PracticeFragment : Fragment(){
         os.flush()
         os.close()
         output.setLength(0) //clean buffer
-        Toast.makeText(activity, "練習題測驗表現儲存成功", Toast.LENGTH_SHORT)
+        Toast.makeText(activity, "練習題測驗表現儲存成功", Toast.LENGTH_SHORT).show()
         Log.d("data","outCSV Success")
     }  // sample from HW
 
@@ -446,7 +446,7 @@ class PracticeFragment : Fragment(){
                     savePracticePerformanceToCSV()//儲存測驗表現
                     clearRecord()  // 清除測驗表現>> 還沒寫完
                     practiceCount.text = "練習次數: $currentTrial / $MAX_PRACTICE_TRIAL"
-                    Toast.makeText(requireContext(), "再試一次", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "再試一次", Toast.LENGTH_SHORT).show()
                 }
                 .setPositiveButton(getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
                     savePracticePerformanceToCSV()// 儲存測驗表現
@@ -459,7 +459,7 @@ class PracticeFragment : Fragment(){
 
 
     fun goBackToMenu() {
-        Toast.makeText(activity, "回到測驗選單", Toast.LENGTH_SHORT)
+        Toast.makeText(activity, "回到測驗選單", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_practiceFragment_to_testMenuFragment)
     }
 

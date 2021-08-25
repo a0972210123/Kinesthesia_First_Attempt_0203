@@ -28,11 +28,10 @@
                 android:text="Current Position: X=0.0, Y=0.0 "
                 android:textSize="@dimen/performance_text_size"
 
-                app:layout_constraintBottom_toTopOf="@id/performance_title"
+                app:layout_constraintTop_toBottomOf="@id/performance_title"
 
                 app:layout_constraintEnd_toEndOf="@+id/performance_title"
                 app:layout_constraintStart_toStartOf="@+id/performance_title" />
-
 
 
             <TextView
@@ -40,16 +39,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_marginStart="850dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="250dp"
+                android:layout_marginStart="500dp"
 
                 android:text="測驗表現"
                 android:textSize="40sp"
 
-
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+
+                />
 
             <TextView
                 android:id="@+id/performance_start_position"
@@ -61,7 +60,7 @@
 
                 app:layout_constraintEnd_toEndOf="@id/performance_title"
                 app:layout_constraintStart_toStartOf="@id/performance_title"
-                app:layout_constraintTop_toBottomOf="@id/performance_title"
+                app:layout_constraintTop_toBottomOf="@id/current_position_field"
 
                 />
 
@@ -205,59 +204,96 @@
                 android:id="@+id/target"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
 
-                app:layout_constraintEnd_toEndOf="parent"
+
+
+                android:layout_marginStart="500dp"
+                android:layout_marginTop="150dp"
 
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+
                 app:srcCompat="@drawable/target_50"
 
-                />
-
-            <ImageView
-                android:id="@+id/arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/target"
-                app:srcCompat="@drawable/north_150"
-
+                android:visibility="gone"
                 />
 
             <ImageView
                 android:id="@+id/start_point"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
+
+
+                android:layout_marginStart="150dp"
+                android:layout_marginTop="150dp"
+
 
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/arrow"
+                app:layout_constraintTop_toTopOf="parent"
+
                 app:srcCompat="@drawable/response_50"
 
+                android:visibility="gone"
                 />
 
             <ImageView
                 android:id="@+id/response"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
                 android:layout_marginStart="150dp"
                 android:layout_marginTop="150dp"
-                android:visibility="invisible"
+
+                android:visibility="gone"
+
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/response_50_red"
-                tools:layout_editor_absoluteX="728dp"
-                tools:layout_editor_absoluteY="150dp" />
 
-
-            <!-- 以下測試-->
+                app:srcCompat="@drawable/response_50_red" />
 
 
 
+            <ImageView
+                android:id="@+id/arrow_to_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/north_east_150"
 
+                android:visibility="gone"
+
+                app:layout_constraintTop_toBottomOf="@id/target"
+                app:layout_constraintEnd_toStartOf="@id/target"
+                app:layout_constraintBottom_toTopOf="@id/start_point"
+                app:layout_constraintStart_toEndOf="@id/start_point"
+                />
+
+            <ImageView
+                android:id="@+id/arrow_to_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/north_west_150"
+
+                android:visibility="gone"
+
+                app:layout_constraintTop_toBottomOf="@id/target"
+                app:layout_constraintStart_toEndOf="@id/target"
+                app:layout_constraintBottom_toTopOf="@id/start_point"
+                app:layout_constraintEnd_toStartOf="@id/start_point"
+                />
+
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/north_150"
+
+                app:layout_constraintEnd_toEndOf="@id/target"
+                app:layout_constraintStart_toStartOf="@id/target"
+
+                app:layout_constraintTop_toBottomOf="@id/target"
+
+                android:visibility="gone"
+                />
 
 
 

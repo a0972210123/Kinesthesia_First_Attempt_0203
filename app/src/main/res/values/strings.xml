@@ -99,6 +99,9 @@
 
     <string name="test_dialog_title">正式測驗</string>
     <string name="test_dialog_message">已完成本方向測驗次數</string>
+
+    <string name="test_dialog_message_finished_all">已完成所有測驗方向</string>
+
     <string name="test_dialog_next_condition">更換方向</string>
     <string name="test_dialog_back_to_menu">前往選單</string>
 

@@ -26,8 +26,10 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
+
         setupActionBarWithNavController(navController)
         //
+
         //setContentView(R.layout.main_activity)
 
 
@@ -45,9 +47,13 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
     // This code will ask the navController to handle navigating up in the app.
     // Otherwise, fall back to back to the superclass implementation
     // (in AppCompatActivity) of handling the Up button.
+
+
     override fun onSupportNavigateUp(): Boolean {
         return  navController.navigateUp() || super.onSupportNavigateUp()
     }  //up button指 螢幕下方的返回鍵  而不是APP 本身的actionbar
+
+
 
 
 }

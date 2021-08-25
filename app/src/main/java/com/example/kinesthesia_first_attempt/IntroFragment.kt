@@ -125,7 +125,7 @@ class IntroFragment : Fragment() {
     companion object {}
 
     fun goToMenu() {
-        Toast.makeText(activity, "進入測驗選單", Toast.LENGTH_SHORT)
+        Toast.makeText(activity, "進入測驗選單", Toast.LENGTH_SHORT).show()
         //使用以下code來抓取navController，用findNavController().navigate()，並輸入"動作的ID"。也就是要執行的nav動作(要和nav_graph.xml相同
         findNavController().navigate(R.id.action_introFragment_to_testMenuFragment)
     }
