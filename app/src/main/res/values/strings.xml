@@ -93,9 +93,17 @@
 
     <string name="practice_dialog_title">測驗練習</string>
     <string name="practice_dialog_message">已完成基本練習次數</string>
-
     <string name="practice_dialog_try_again">再試一次</string>
     <string name="practice_dialog_back_to_menu">前往選單</string>
+
+
+    <string name="test_dialog_title">正式測驗</string>
+    <string name="test_dialog_message">已完成本方向測驗次數</string>
+    <string name="test_dialog_next_condition">更換方向</string>
+    <string name="test_dialog_back_to_menu">前往選單</string>
+
+
+
 
 
 
@@ -108,6 +116,8 @@
     <string name="response_position">Response Position: X=d% Y=d%</string>
 
 
+    <string name="select_direction">確認選擇</string>
+
     <string name="record_position">紀錄位置</string>
     <string name="next_trial">Save Trial</string>
 
@@ -119,6 +129,15 @@
     <string name="st_btn">輸入編號後開始</string>
     <string name="text_first">第一次：-999</string>
     <string name="text_last">最後一次：-999</string>
+
+
+    <string-array name="direction_list">
+        <item>請選方向</item>
+        <item>L2L</item>
+        <item>L2R</item>
+        <item>R2R</item>
+        <item>R2L</item>
+    </string-array>
 
 
 </resources>

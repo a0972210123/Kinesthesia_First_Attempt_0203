@@ -32,8 +32,6 @@ class MainViewModel : ViewModel() {
     }
 
 
-
-
     private var _totalPracticeTime = MutableLiveData<Int>(0)
     val totalPracticeTime: LiveData<Int> = _totalPracticeTime
 

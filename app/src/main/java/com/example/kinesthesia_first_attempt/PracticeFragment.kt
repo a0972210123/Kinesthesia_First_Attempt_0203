@@ -51,7 +51,13 @@ class PracticeFragment : Fragment(){
     var practiceTrialsCount: Int = 0  //已練習次數
     var currentTrial:Int = 1  //當前Trial
 
+
     var practiceTime: Int = 0  //完整練習測驗進行次數
+
+
+    init{ //讀取viewModel中存取的練習次數
+        practiceTime = binding.viewModel!!.totalPracticeTime.value!!
+    }
 
     // 測驗表現
     var startPositionX: Float = 0f
@@ -292,8 +298,6 @@ class PracticeFragment : Fragment(){
         scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
     }
 
-
-
     fun savePracticePerformanceToCSV() {
         //call 整理8trialData
         arrayListOf8Trial = combineList()
@@ -306,8 +310,6 @@ class PracticeFragment : Fragment(){
         // 存檔: name,List,flag
         outputCsv(outputFileName, outputPositionData , 0)
     }
-
-
 
     fun outputCsv(fileName: String, input: List<String>, flag: Int) {
         //檔案路徑: 目前直接讀在demographic的全域變數，有error再讀viewModel備用
@@ -358,7 +360,6 @@ class PracticeFragment : Fragment(){
         Toast.makeText(activity, "練習題測驗表現儲存成功", Toast.LENGTH_SHORT)
         Log.d("data","outCSV Success")
     }  // sample from HW
-
 
     fun checkTime() {
         // 找到關聯的view
@@ -417,8 +418,6 @@ class PracticeFragment : Fragment(){
         }
         timer.start() //開始計時
     }
-
-
     // 清除所有參數!，還沒寫完!
     fun clearRecord() {
         clearCurrentTrialRecord() // 四個位置、startX/Y的全域變數
@@ -434,6 +433,8 @@ class PracticeFragment : Fragment(){
             practiceTime++  //增加練習次數
             binding.viewModel!!.setPracticeTime(practiceTime) //更新總練習次數
 
+            val practiceCount = requireView().findViewById<TextView>(R.id.practice_count)
+
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.practice_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
                 .setMessage(
@@ -444,6 +445,7 @@ class PracticeFragment : Fragment(){
                 .setNegativeButton(getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
                     savePracticePerformanceToCSV()//儲存測驗表現
                     clearRecord()  // 清除測驗表現>> 還沒寫完
+                    practiceCount.text = "練習次數: $currentTrial / $MAX_PRACTICE_TRIAL"
                     Toast.makeText(requireContext(), "再試一次", Toast.LENGTH_SHORT)
                 }
                 .setPositiveButton(getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
@@ -585,7 +587,6 @@ class PracticeFragment : Fragment(){
     }
 
     // 更新測驗表現、指導語
-
     @SuppressLint("SetTextI18n")
     fun changeText() {
         // 找到測驗表現textView
