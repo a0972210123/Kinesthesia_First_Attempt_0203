@@ -24,6 +24,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 
@@ -138,45 +139,111 @@ class TestFragment : Fragment() {
     private var trial5list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 
 
-    //此段落: 用於condition選擇 (參考city list)
-
     //版面相關變數宣告
-
-    //oncreate
-    val widthOfDeviceScreen  = Resources.getSystem().displayMetrics.widthPixels
-    val heightOfDeviceScreen  = Resources.getSystem().displayMetrics.heightPixels
-
 
     //隨機位置相關變數宣告 (每一輪只有5Trial)
     var randWidth = IntArray(5)
     var randHeight = IntArray(5)
 
     //螢幕寬、高
-    val w = Resources.getSystem().displayMetrics.widthPixels
-    val h = Resources.getSystem().displayMetrics.heightPixels
+    val w = Resources.getSystem().displayMetrics.widthPixels    //網路資料值 =2800，程式計算值=2800
+    val h = Resources.getSystem().displayMetrics.heightPixels   //網路資料值 =1752，程式計算值=1650
+    val pixelDensity = Resources.getSystem().displayMetrics.densityDpi
+    //資料值為 266 >>抓系統 為340
 
-    val centerX = w/2
-    val centerY = h/2
-
-
-
-    fun randomThePosition(){
-        //這邊會決定出來的數值範圍寬度
-        val tempWidth = (2..widthOfDeviceScreen - 300 step 20).shuffled()
-        val tempHeight = (heightOfDeviceScreen / 2..heightOfDeviceScreen - 300 step 20).shuffled()
-        // 這邊暫存
-        randWidth = tempWidth.subList(0, 5).toIntArray()
-        randHeight = tempHeight.subList(0, 5).toIntArray()
-    }   //需要調整數值範圍
+    val centerX = w/2  //1400
+    val centerY = h/2  //825
 
 
+
+
+    //(螢幕實際長度(mm), 螢幕實際寬度(mm),螢幕長度dp,螢幕寬度dp, x(mm/pixel))
+    //可嘗試用程式計算值帶入 w or h
+    val screenParameters = calculateScreenParams(w,h,314.96, pixelDensity)
+    val screenLengthMM = screenParameters[0]
+    val screenWidthMM = screenParameters[1]
+    val screenLengthIn2dp = screenParameters[2]
+    val screenWidthIn2dp = screenParameters[3]
+    val mmPerPixel = screenParameters[4]       //(mm/pixel)
+
+    //換算單位段落
+    //由於 1. xml中僅接受輸入dp 2. fragment中call layoutParams時使用的單位為pixel
+    //若要確認排版位置一致，或是設定指定長度，需要進行換算
+    val desireStart2TargetLengthInMM:Int = 100   //先設定10公分
+    val desiretargetBoxSizeInMM:Int = 50   //先設定10公分
+
+    // mm >>  pixel
+    val targetBoxSize = (desiretargetBoxSizeInMM/mmPerPixel).toInt()   //先設定 5公分  //暫定 >> 需要計算實際長度 vs pixel
+
+
+    val Center2Target  = ((desireStart2TargetLengthInMM/2)/mmPerPixel).toInt()
+    val Center2Start   = ((desireStart2TargetLengthInMM/2)/mmPerPixel).toInt()
+
+    // dp = (width in pixels * 160) / screen density
+    // pixel = (dp * screen density)/160
+    val widthOfTitle = 350
+    val widthOfTandS = 50 //dp
+    val titleCalibrate = viewAdjustDp2Pixel(widthOfTitle)
+    val TandSCalibrate =  viewAdjustDp2Pixel(widthOfTandS)
+
+    fun viewAdjustDp2Pixel(dpWidthOfView: Int): Int {
+        return (((dpWidthOfView/2)* pixelDensity) / 160).toInt()
+    }
+
+    fun calculateScreenParams(
+        resolutionLength: Int,
+        resolutionWidth: Int,
+        screenDiagonalSizeMM: Double,
+        screenPixelDensity:Int
+    ): List<Double> {
+        //參考資料Comment
+        /* 公式推導
+         // 依據已知螢幕解析度長寬比(a:b) 令 螢幕長為8x 寬為5x，已知螢幕對角線長度為314.96mm ，求螢幕實際長寬(mm)，並換匴此螢幕每單位pixel長度(x)。
+         // (ax)^2 + (bx)^2 = ( 314.96 )^2
+         // (a^2+b^2)(x^2) = (314.96)^2
+         // x = sqrt((314.96)^2 / (a^2+b^2))
+         // ax = 螢幕實際長度, bx=螢幕實際寬度, x 單位為 (mm/pixel)
+         */
+        /* 參考網站及資料
+        android material:  //https://material.io/design/layout/pixel-density.html
+        dp vs sp vs pixel :  //https://stackoverflow.com/questions/2025282/what-is-the-difference-between-px-dip-dp-and-sp
+         */
+        /* 目前平板參數
+        網站: https://icecat.biz/zh-tw/p/samsung/sm-t970nzkaeue/galaxy+tab+s7%2B-tablets-8806090623523-wi-fi+sm-t970-80509596.html
+            //型號及規格 :  Galaxy Tab S7+ SM-T970NZKAEUE
+            //平板大小: PHYSICAL SPECIFICATIONS - Dimensions	Tablet: 285 x 185 x 5.7 mm
+            //螢幕大小(對角)/面積 : 12.4 inches( 314.96 mm ~ 31.5 cm)  , area (446.1 cm2 )
+            //解析度 Resolution:	1752 x 2800 pixels,
+            //長寬比 16:10 ratio:
+            //pixel density: (~266 ppi density)
+         */
+        /* pixel dp轉換
+           // Pixel density on Android:  Dps and screen density
+            // A dp is equal to one physical pixel on a screen with a density of 160.
+            // To calculate dp: dp = (width in pixels * 160) / screen density
+         */
+        val a = resolutionLength.toDouble()
+        val b = resolutionWidth.toDouble()
+        val mmPerPixel = sqrt(screenDiagonalSizeMM.pow(2.0) / (a.pow(2.0) + b.pow(2.0))).toDouble()
+        val screenLengthMM = a * mmPerPixel
+        val screenWidthMM = b * mmPerPixel
+        //本平板pixel density = 266, Resolution:	1752 x 2800 pixels,
+        val screenLengthIn2dp = ((resolutionLength * 160) / screenPixelDensity ).toDouble()
+        val screenWidthIn2dp  = ((resolutionWidth * 160)  / screenPixelDensity ).toDouble()
+
+        val logString = "長mm:$screenLengthMM,寬mm:$screenWidthMM,長dp:$screenLengthIn2dp,寬dp:$screenWidthIn2dp,$mmPerPixel(mm/pixel)"
+        Log.d("Screen Information",logString)
+
+        return listOf(screenLengthMM, screenWidthMM,screenLengthIn2dp ,screenWidthIn2dp ,mmPerPixel)
+    }
+    // 輸入螢幕 (長pixel:Int ,寬pixel:Int ,螢幕對角長度(mm):Double, 螢幕pixel密度)
+    // 傳回List: (螢幕實際長度(mm), 螢幕實際寬度(mm),螢幕長度dp,螢幕寬度dp, x(mm/pixel))
 
 
     fun setDirection(directionInput: String) {
         currentTestDirection = directionInput  //儲存目前選擇方向
 
-
-        //Image宣告
+        //View宣告
         val targetView = requireView().findViewById<ImageView>(R.id.target)
         val startView = requireView().findViewById<ImageView>(R.id.start_point)
         val upArrow = requireView().findViewById<ImageView>(R.id.arrow)
@@ -184,7 +251,6 @@ class TestFragment : Fragment() {
         val rightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_right)
 
         val performanceTitle = requireView().findViewById<TextView>(R.id.performance_title)
-
 
         //宣告調整各view需要的layoutParams
         val targetParams = targetView.layoutParams as ViewGroup.MarginLayoutParams
@@ -234,42 +300,37 @@ class TestFragment : Fragment() {
         }
 
         //調整view位置
-
-        //需再參考這兩個網站調整dp和pixel 計算實際長度
-        //https://material.io/design/layout/pixel-density.html
-        //https://stackoverflow.com/questions/2025282/what-is-the-difference-between-px-dip-dp-and-sp
-
         when(currentTestDirection){
-            "請選方向" ->{     //centerX =1400  centerY =825
-                titleParams.setMargins(centerX , centerY-400  , 0, 0)
+            "請選方向" ->{
+                titleParams.setMargins(centerX-titleCalibrate  , centerY-400  , 0, 0)
             }
 
             "L2L" -> {
-                targetParams.setMargins(centerX -600 , centerY-600 , 0, 0)
-                startParams.setMargins (centerX -600 , centerY +600 , 0, 0)
+                targetParams.setMargins(centerX-TandSCalibrate-Center2Target , centerY-Center2Target , 0, 0)
+                startParams.setMargins (centerX-TandSCalibrate-Center2Start , centerY+Center2Start , 0, 0)
 
-                titleParams.setMargins( centerX +700 , centerY-400 , 0, 0)
+                titleParams.setMargins( centerX-titleCalibrate +700 , centerY-400 , 0, 0)
             }
 
             "L2R" -> {
-                targetParams.setMargins(centerX+600 , centerY -600 , 0, 0)
-                startParams.setMargins (centerX-600 , centerY +600 , 0, 0)
+                targetParams.setMargins(centerX-TandSCalibrate+Center2Target , centerY-Center2Target , 0, 0)
+                startParams.setMargins (centerX-TandSCalibrate-Center2Start , centerY +Center2Start, 0, 0)
 
-                titleParams.setMargins(centerX+700 , centerY -400 , 0, 0)
+                titleParams.setMargins(centerX-titleCalibrate +700 , centerY -400 , 0, 0)
             }
 
             "R2R" -> {
-                targetParams.setMargins(centerX+600 , centerY -600 , 0, 0)
-                startParams.setMargins (centerX+600 , centerY +600 , 0, 0)
+                targetParams.setMargins(centerX-TandSCalibrate+Center2Target , centerY-Center2Target , 0, 0)
+                startParams.setMargins (centerX-TandSCalibrate+Center2Start , centerY+Center2Start , 0, 0)
 
-                titleParams.setMargins(centerX-700  , centerY -400 , 0, 0)
+                titleParams.setMargins(centerX-titleCalibrate -700  , centerY -400 , 0, 0)
             }
 
             "R2L" -> {
-                targetParams.setMargins(centerX-600 , centerY -600 , 0, 0)
-                startParams.setMargins (centerX+600 , centerY +600 , 0, 0)
+                targetParams.setMargins(centerX-TandSCalibrate-Center2Target , centerY-Center2Target , 0, 0)
+                startParams.setMargins (centerX-TandSCalibrate+600 , centerY +600 , 0, 0)
 
-                titleParams.setMargins(centerX-700  , centerY -400, 0, 0)
+                titleParams.setMargins(centerX-titleCalibrate -700  , centerY -400, 0, 0)
             }
         }
     }
@@ -292,6 +353,46 @@ class TestFragment : Fragment() {
             }
         }
     }    //確認選擇方向、並更新測驗紀錄
+
+    // 確認方向後，產生randomlist
+
+    fun randomThePosition(){
+        //這邊會決定出來的數值範圍寬度
+        val tempWidth  = ((-targetBoxSize/2)..(targetBoxSize/2) step 20).shuffled()
+        val tempHeight = ((-targetBoxSize/2)..(targetBoxSize/2) step 20).shuffled()
+        // 這邊暫存
+        randWidth  = tempWidth.subList(0, 4).toIntArray()
+        randHeight = tempHeight.subList(0, 4).toIntArray()
+    }   //需要調整數值範圍
+
+    fun setTargetPosition(){
+
+        //
+        val targetView = requireView().findViewById<ImageView>(R.id.target)
+        val targetParams = targetView.layoutParams as ViewGroup.MarginLayoutParams
+
+        randWidth[trialsCount-1]
+        randHeight[trialsCount-1]
+
+        when(currentTestDirection){
+            "L2L" -> {
+                targetParams.setMargins(centerX -600 , centerY-600 , 0, 0)
+            }
+            "L2R" -> {
+                targetParams.setMargins(centerX +600 , centerY -600 , 0, 0)
+            }
+            "R2R" -> {
+                targetParams.setMargins(centerX +600 , centerY -600 , 0, 0)
+            }
+            "R2L" -> {
+                targetParams.setMargins(centerX -600 , centerY -600 , 0, 0)
+            }
+        }
+
+
+    }
+
+
 
     fun checkDirectionTested(){
         val checkList = arrayListOf<String>("L2L", "L2R", "R2R", "R2L")
@@ -725,7 +826,7 @@ class TestFragment : Fragment() {
         output.setLength(0) //clean buffer
         Toast.makeText(activity, "正式測驗: " + currentTestDirection + " 儲存成功", Toast.LENGTH_SHORT).show()
         //Toast.makeText(activity, "正式測驗"+$direction+"儲存成功", Toast.LENGTH_SHORT)
-        Log.d("data", "outCSV Success")
+        //Log.d("data", "outCSV Success")
     }  // sample from HW
 
     fun checkTime() {

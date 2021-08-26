@@ -36,14 +36,16 @@
 
             <TextView
                 android:id="@+id/performance_title"
-                android:layout_width="wrap_content"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
-
-                android:layout_marginTop="250dp"
-                android:layout_marginStart="500dp"
-
+                android:gravity="center"
                 android:text="測驗表現"
                 android:textSize="40sp"
+
+                android:paddingStart="0dp"
+
+                android:layout_marginStart="1029px"
+                android:layout_marginTop="425px"
 
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -295,6 +297,17 @@
                 android:visibility="gone"
                 />
 
+            <Button
+                android:id="@+id/test_random"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                app:layout_constraintEnd_toEndOf   ="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf    ="parent"
+
+                android:onClick="@{() -> testFragment.randomThePosition()}"
+                />
 
 
 
