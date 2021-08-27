@@ -13,6 +13,10 @@
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/north_150.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/north_east_150.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/north_west_150.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/pen_random_target_20.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/pen_start_20.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/pen_target_20.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/random_target_50.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/response_50.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/response_50_red.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/target_50.xml" value="0.1" />
@@ -20,7 +24,7 @@
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_demographic.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_intro.xml" value="0.2075" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_practice.xml" value="0.26805555555555555" />
-        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_test.xml" value="0.4" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_test.xml" value="0.18660714285714286" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_test_menu.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/item_page.xml" value="0.1" />
       </map>

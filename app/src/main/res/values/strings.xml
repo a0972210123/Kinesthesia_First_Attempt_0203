@@ -128,6 +128,8 @@
 
     <string name="practice_count">練習次數:</string>
 
+    <string name="trial_count">測驗次數:</string>
+
 
     <string name="st_btn">輸入編號後開始</string>
     <string name="text_first">第一次：-999</string>

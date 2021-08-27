@@ -154,9 +154,6 @@ class TestFragment : Fragment() {
     val centerX = w/2  //1400
     val centerY = h/2  //825
 
-
-
-
     //(螢幕實際長度(mm), 螢幕實際寬度(mm),螢幕長度dp,螢幕寬度dp, x(mm/pixel))
     //可嘗試用程式計算值帶入 w or h
     val screenParameters = calculateScreenParams(w,h,314.96, pixelDensity)
@@ -170,11 +167,12 @@ class TestFragment : Fragment() {
     //由於 1. xml中僅接受輸入dp 2. fragment中call layoutParams時使用的單位為pixel
     //若要確認排版位置一致，或是設定指定長度，需要進行換算
     val desireStart2TargetLengthInMM:Int = 100   //先設定10公分
-    val desiretargetBoxSizeInMM:Int = 50   //先設定10公分
+    val desiretargetBoxSizeInMM:Int = 20  //先設定2公分
+    val desiretargetStepInMM:Int = 5  //以5mm間隔
 
     // mm >>  pixel
     val targetBoxSize = (desiretargetBoxSizeInMM/mmPerPixel).toInt()   //先設定 5公分  //暫定 >> 需要計算實際長度 vs pixel
-
+    val targetStep = (desiretargetStepInMM/mmPerPixel).toInt()
 
     val Center2Target  = ((desireStart2TargetLengthInMM/2)/mmPerPixel).toInt()
     val Center2Start   = ((desireStart2TargetLengthInMM/2)/mmPerPixel).toInt()
@@ -185,6 +183,14 @@ class TestFragment : Fragment() {
     val widthOfTandS = 50 //dp
     val titleCalibrate = viewAdjustDp2Pixel(widthOfTitle)
     val TandSCalibrate =  viewAdjustDp2Pixel(widthOfTandS)
+
+
+
+
+
+
+
+
 
     fun viewAdjustDp2Pixel(dpWidthOfView: Int): Int {
         return (((dpWidthOfView/2)* pixelDensity) / 160).toInt()
@@ -348,6 +354,8 @@ class TestFragment : Fragment() {
             } else {
                 //若沒選過  >> toast >> update view
                 TestingFinishedList.add(currentTestDirection)
+                randomThePosition()
+                setTargetPosition()
                 Toast.makeText(activity, "開始進行 $currentTestDirection 測驗", Toast.LENGTH_SHORT).show()
                 manageVisibility(0)  //顯示觸控板及記錄紐
             }
@@ -355,44 +363,48 @@ class TestFragment : Fragment() {
     }    //確認選擇方向、並更新測驗紀錄
 
     // 確認方向後，產生randomlist
-
     fun randomThePosition(){
         //這邊會決定出來的數值範圍寬度
-        val tempWidth  = ((-targetBoxSize/2)..(targetBoxSize/2) step 20).shuffled()
-        val tempHeight = ((-targetBoxSize/2)..(targetBoxSize/2) step 20).shuffled()
+        val tempWidth  = ((-targetBoxSize/2)..(targetBoxSize/2) step targetStep ).shuffled()
+        val tempHeight = ((-targetBoxSize/2)..(targetBoxSize/2) step targetStep ).shuffled()
         // 這邊暫存
-        randWidth  = tempWidth.subList(0, 4).toIntArray()
-        randHeight = tempHeight.subList(0, 4).toIntArray()
+        randWidth  = tempWidth.subList(0, 5).toIntArray()
+        randHeight = tempHeight.subList(0, 5).toIntArray()
     }   //需要調整數值範圍
 
     fun setTargetPosition(){
-
-        //
-        val targetView = requireView().findViewById<ImageView>(R.id.target)
-        val targetParams = targetView.layoutParams as ViewGroup.MarginLayoutParams
-
-        randWidth[trialsCount-1]
-        randHeight[trialsCount-1]
-
+        var c2tX = 0
+        var c2tY = 0
         when(currentTestDirection){
             "L2L" -> {
-                targetParams.setMargins(centerX -600 , centerY-600 , 0, 0)
+                 c2tX = centerX-TandSCalibrate-Center2Target
+                 c2tY = centerY-Center2Target
+                 setTargetRandomPosition(c2tX,c2tY)
             }
             "L2R" -> {
-                targetParams.setMargins(centerX +600 , centerY -600 , 0, 0)
+                 c2tX = centerX-TandSCalibrate+Center2Target
+                 c2tY = centerY-Center2Target
+                 setTargetRandomPosition(c2tX,c2tY)
             }
             "R2R" -> {
-                targetParams.setMargins(centerX +600 , centerY -600 , 0, 0)
+                 c2tX = centerX-TandSCalibrate+Center2Target
+                 c2tY = centerY-Center2Target
+                 setTargetRandomPosition(c2tX,c2tY)
             }
             "R2L" -> {
-                targetParams.setMargins(centerX -600 , centerY -600 , 0, 0)
+                 c2tX = centerX-TandSCalibrate-Center2Target
+                 c2tY = centerY-Center2Target
+                 setTargetRandomPosition(c2tX,c2tY)
             }
         }
+    }   //根據選項決定方向參數
 
-
-    }
-
-
+    fun setTargetRandomPosition(c2tX:Int,c2tY:Int){
+        val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
+        randomTargetView.visibility = View.VISIBLE
+        val randomTargetParams = randomTargetView.layoutParams as ViewGroup.MarginLayoutParams
+        randomTargetParams.setMargins(c2tX+randWidth[trialsCount],c2tY+randHeight[trialsCount] , 0, 0)
+    }  //在方向參數基礎上，加上隨機位置參數
 
     fun checkDirectionTested(){
         val checkList = arrayListOf<String>("L2L", "L2R", "R2R", "R2L")
@@ -417,12 +429,16 @@ class TestFragment : Fragment() {
         directionSpinner = requireView()!!.findViewById<View>(R.id.direction_list) as Spinner
         val selectButton = requireView().findViewById(R.id.select_direction) as Button
         val recordingButton = requireView().findViewById<Button>(R.id.record_position)
-
+        val trialCount =requireView().findViewById<TextView>(R.id.trial_count)
         val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
+
+        val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
+
 
         when (flag) {
             0 -> {
                 //顯示測驗進行VIEW
+                trialCount.visibility = View.VISIBLE
                 recordingButton.visibility = View.VISIBLE
                 touchBoard.visibility = View.VISIBLE
                 //隱藏方向選擇VIEW
@@ -432,13 +448,15 @@ class TestFragment : Fragment() {
 
             1 -> {    //放在每5次結束
                 //隱藏測驗進行VIEW
-                recordingButton.visibility = View.INVISIBLE
+                trialCount.visibility = View.GONE
+                recordingButton.visibility = View.GONE
                 touchBoard.visibility = View.INVISIBLE
                 //顯示方向選擇VIEW
                 directionSpinner.visibility = View.VISIBLE
                 selectButton.visibility = View.VISIBLE
                 //
                 Score.text = "Score"
+                randomTargetView.visibility = View.INVISIBLE
             }
         }
     }  //管理測驗相關View顯示、可觸控與否
@@ -451,21 +469,24 @@ class TestFragment : Fragment() {
         checkTime()        //計時
 
         if (buttonPressedCountsInATrial == 4) {
-            scoreListForDisplay = calculateTrialScore()   //計算測驗表現 (RE*2，AE*3)
-            displayScoreInText(scoreListForDisplay, 1)       //更新text內容
+            scoreListForDisplay = calculateTrialScore()
+            displayScoreInText(scoreListForDisplay, 1)
             clearScoreList()
         } else {
             displayScoreInText(scoreListForDisplay, 0)
-        }
-
+        }  //計算測驗表現 (RE*2，AE*3)  //更新text內容
 
         if (buttonPressedCountsInATrial == 5) {
             addTrialsCount()           // 完成一次測驗練習
+            if(trialsCount == 5){ //第五trail結束不用再設目標
+                 } else{
+                setTargetPosition()// 重設目標位置
+            }
             saveCurrentTrialRecord()   //將單次反應存入LIST(包含分數計算)
             clearCurrentTrialRecord()  //清除單次表現、歸零座標、重設測驗情境
             checkTrialLimit()       //檢查是否達到練習次數
             buttonPressedCountsInATrial = 0
-        }
+        }   //每一輪結束後，reset 參數以及view
         return
     }   //按鈕後執行  //1.增加按鈕次數 2.call recordPosition 3.call changeText 4. 計時 5.歸零按鈕次數
 
@@ -741,8 +762,8 @@ class TestFragment : Fragment() {
         when (flag) {
             1 -> {
                 val modifyString: String = ("Score" + "\n" +
-                        "Anterior-Posterior Direction: " + performanceDescriptionAP + "\n" +
-                        "Medial - Lateral   Direction: " + performanceDescriptionML + "\n" +
+                        "Anterior-Posterior: " + performanceDescriptionAP + "\n" +
+                        "Medial - Lateral: " + performanceDescriptionML + "\n" +
                         "Relative Error  AP: " + inputScoreList[0].toString() + "\n" +
                         "Relative Error  ML: " + inputScoreList[1].toString() + "\n" +
                         "Absolute Error  AP: " + inputScoreList[2].toString() + "\n" +
@@ -752,8 +773,8 @@ class TestFragment : Fragment() {
             }
             0 -> {
                 val modifyString: String = ("Score" + "\n" +
-                        "Anterior-Posterior Direction: " + "" + "\n" +
-                        "Medial - Lateral   Direction: " + "" + "\n" +
+                        "Anterior-Posterior: " + "" + "\n" +
+                        "Medial - Lateral: "  + "" + "\n" +
                         "Relative Error  AP: " + "" + "\n" +
                         "Relative Error  ML: " + "" + "\n" +
                         "Absolute Error  AP: " + "" + "\n" +

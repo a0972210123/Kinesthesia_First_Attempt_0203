@@ -112,30 +112,30 @@
 
             <TextView
                 android:id="@+id/trial_count"
-                android:layout_width="350dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/trial_count"
+                android:visibility="gone"
                 android:textSize="@dimen/performance_text_size"
-
-                android:text="@string/practice_count"
-                app:layout_constraintEnd_toEndOf="@id/performance_title"
-                app:layout_constraintStart_toStartOf="@id/performance_title"
-                app:layout_constraintTop_toBottomOf="@id/performance_response_position"
-                />
+                app:layout_constraintEnd_toEndOf="@+id/record_position"
+                app:layout_constraintStart_toStartOf="@+id/record_position"
+                app:layout_constraintTop_toBottomOf="@+id/text1" />
 
 
             <Button
                 android:id="@+id/record_position"
                 android:layout_width="165dp"
                 android:layout_height="80dp"
-                android:visibility="invisible"
                 android:onClick="@{() -> testFragment.pressButton()}"
-
                 android:text="@string/record_position"
-                android:textSize="30sp"
 
-                app:layout_constraintEnd_toEndOf="@id/performance_title"
-                app:layout_constraintStart_toStartOf="@id/performance_title"
-                app:layout_constraintTop_toBottomOf="@id/trial_count" />
+                android:textSize="30sp"
+                android:visibility="gone"
+
+                app:layout_constraintEnd_toEndOf   ="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf    ="parent"
+                />
 
 
             <Spinner
@@ -143,9 +143,10 @@
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:addStatesFromChildren="false"
-                app:layout_constraintEnd_toEndOf="@+id/performance_current_trial_score"
-                app:layout_constraintStart_toStartOf="@+id/performance_current_trial_score"
-                app:layout_constraintTop_toBottomOf="@+id/performance_current_trial_score" />
+                app:layout_constraintEnd_toEndOf="@+id/record_position"
+
+                app:layout_constraintStart_toStartOf="@+id/record_position"
+                app:layout_constraintTop_toBottomOf="@+id/trial_count" />
 
             <Button
                 android:id="@+id/select_direction"
@@ -177,37 +178,31 @@
                 android:id="@+id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
 
+                android:textSize="@dimen/performance_text_size"
 
-                app:layout_constraintEnd_toEndOf="@+id/performance_title"
-                app:layout_constraintStart_toStartOf="@+id/performance_title"
+                app:layout_constraintEnd_toEndOf="@+id/record_position"
+                app:layout_constraintStart_toStartOf="@+id/record_position"
                 app:layout_constraintTop_toBottomOf="@id/record_position" />
 
             <TextView
                 android:id="@+id/performance_current_trial_score"
-                android:layout_width="300sp"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
 
                 android:text="Score"
-                android:textSize="@dimen/performance_text_size"
+                android:textSize="18sp"
 
 
                 app:layout_constraintEnd_toEndOf="@+id/performance_title"
                 app:layout_constraintStart_toStartOf="@+id/performance_title"
-                app:layout_constraintTop_toBottomOf="@id/text1" />
-
-
-
-
+                app:layout_constraintTop_toBottomOf="@+id/performance_response_position" />
 
 
             <ImageView
                 android:id="@+id/target"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-
 
                 android:layout_marginStart="500dp"
                 android:layout_marginTop="150dp"
@@ -233,13 +228,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
 
-                app:srcCompat="@drawable/response_50"
+                app:srcCompat="@drawable/start_50"
 
                 android:visibility="gone"
                 />
 
+
+
             <ImageView
-                android:id="@+id/response"
+                android:id="@+id/random_target"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -251,7 +248,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
 
-                app:srcCompat="@drawable/response_50_red" />
+                app:srcCompat="@drawable/random_target_50"
+                app:tint="@color/pink_950" />
 
 
 
@@ -289,28 +287,12 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/north_150"
 
-                app:layout_constraintEnd_toEndOf="@id/target"
-                app:layout_constraintStart_toStartOf="@id/target"
-
-                app:layout_constraintTop_toBottomOf="@id/target"
+                app:layout_constraintEnd_toEndOf="@id/start_point"
+                app:layout_constraintStart_toStartOf="@id/start_point"
+                app:layout_constraintBottom_toTopOf="@id/start_point"
 
                 android:visibility="gone"
                 />
-
-            <Button
-                android:id="@+id/test_random"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                app:layout_constraintEnd_toEndOf   ="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf    ="parent"
-
-                android:onClick="@{() -> testFragment.randomThePosition()}"
-                />
-
-
-
 
 
 

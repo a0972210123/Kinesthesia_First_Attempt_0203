@@ -22,7 +22,7 @@
     <!--  From handwriting -->
 
 
-    <dimen name="performance_text_size">14sp</dimen>
+    <dimen name="performance_text_size">20sp</dimen>
     <dimen name="instruction_text_size">25sp</dimen>
 
 
