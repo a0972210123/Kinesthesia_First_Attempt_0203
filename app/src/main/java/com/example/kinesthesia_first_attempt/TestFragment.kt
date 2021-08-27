@@ -535,7 +535,7 @@ class TestFragment : Fragment() {
 
     fun checkContextTested() {
         val checkList = arrayListOf<String>("Finger", "Pen")
-        if (finishedContextList == checkList) {
+        if (finishedContextList.toSet() == checkList.toSet()) {
             //finishedcontextList = arrayListOf<String>() //清除List >> 準備測另種情境
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
@@ -605,7 +605,7 @@ class TestFragment : Fragment() {
         contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
         val checkList = arrayListOf<String>("L2L", "L2R", "R2R", "R2L")
         //當四種都測完
-        if (TestingFinishedList == checkList) {
+        if (TestingFinishedList.toSet() == checkList.toSet()) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
                 .setMessage(
