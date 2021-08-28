@@ -253,8 +253,52 @@ class TestFragment : Fragment() {
     // pixel = (dp * screen density)/160
     val widthOfTitle = 350
     val widthOfTandS = 50 //dp
+    val cantextPenWidthOfTandS = 20 //dp
+
     val titleCalibrate = viewAdjustDp2Pixel(widthOfTitle)
     val TandSCalibrate = viewAdjustDp2Pixel(widthOfTandS)
+    val cantextPenTandSCalibrate = viewAdjustDp2Pixel(cantextPenWidthOfTandS)
+
+
+    //context 相關 ImageView宣告
+    lateinit var startView: ImageView
+    lateinit var targetView: ImageView
+    lateinit var randomTargetView: ImageView
+    lateinit var upArrow : ImageView
+    lateinit var leftArrow : ImageView
+    lateinit var rightArrow : ImageView
+
+    fun checkContextAndLaunchView(context:String){
+        var tempContext = context
+        when(context){
+            "請選情境"  ->{ tempContext = "Finger" }  //default 顯示Finger
+            "" ->{ tempContext = "Finger" } //default 顯示Finger
+            "Finger" ->{ tempContext = "Finger" }
+            "Pen" ->{ tempContext = "Pen" }
+        }
+
+        when(tempContext){
+            "Finger" ->{
+                 targetView = requireView().findViewById<ImageView>(R.id.target)
+                 startView = requireView().findViewById<ImageView>(R.id.start_point)
+                 randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
+                 upArrow = requireView().findViewById<ImageView>(R.id.arrow)
+                 leftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_left)
+                 rightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_right)
+            }
+            "Pen" ->{
+                targetView = requireView().findViewById<ImageView>(R.id.pen_target)
+                startView = requireView().findViewById<ImageView>(R.id.pen_start_point)
+                randomTargetView = requireView().findViewById<ImageView>(R.id.pen_random_target)
+                upArrow = requireView().findViewById<ImageView>(R.id.pen_arrow)
+                leftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_left)
+                rightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_right)
+            }
+        }
+
+
+    } //輸入currentContext
+
 
 
     fun viewAdjustDp2Pixel(dpWidthOfView: Int): Int {
@@ -471,9 +515,9 @@ class TestFragment : Fragment() {
         }
     }  //可直接移植到補測
 
-    fun setContext(materialInput: String) {
-        currentTestContext = materialInput
-        when (materialInput) {
+    fun setContext(contextInput: String) {
+        currentTestContext = contextInput
+        when (contextInput) {
             "請選情境" -> {
                 Toast.makeText(activity, "請選擇測驗情境", Toast.LENGTH_SHORT).show()
             }
@@ -587,7 +631,7 @@ class TestFragment : Fragment() {
                 setTargetRandomPosition(c2tX, c2tY)
             }
         }
-    }   //根據選項決定方向參數
+    }   //根據選項決定方向參數pixel
 
     fun setTargetRandomPosition(c2tX: Int, c2tY: Int) {
         val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)

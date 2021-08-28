@@ -320,6 +320,104 @@
                 />
 
 
+            <!--以下PenContext用-->
+
+
+
+            <ImageView
+                android:id="@+id/pen_target"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="500dp"
+                android:layout_marginTop="150dp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                app:srcCompat="@drawable/pen_target_20"
+
+                android:visibility="gone"
+                />
+
+            <ImageView
+                android:id="@+id/pen_start_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="150dp"
+                android:layout_marginTop="150dp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                app:srcCompat="@drawable/pen_start_20"
+
+                android:visibility="gone"
+                />
+
+
+
+            <ImageView
+                android:id="@+id/pen_random_target"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="150dp"
+                android:layout_marginTop="150dp"
+
+                android:visibility="gone"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                app:srcCompat="@drawable/pen_random_target_20"
+                app:tint="@color/pink_950" />
+
+
+
+            <ImageView
+                android:id="@+id/pen_arrow_to_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/north_east_150"
+
+                android:visibility="gone"
+
+                app:layout_constraintTop_toBottomOf="@id/pen_target"
+                app:layout_constraintEnd_toStartOf="@id/pen_target"
+                app:layout_constraintBottom_toTopOf="@id/pen_start_point"
+                app:layout_constraintStart_toEndOf="@id/pen_start_point"
+                />
+
+            <ImageView
+                android:id="@+id/pen_arrow_to_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/north_west_150"
+
+                android:visibility="gone"
+
+                app:layout_constraintTop_toBottomOf="@id/pen_target"
+                app:layout_constraintStart_toEndOf="@id/pen_target"
+                app:layout_constraintBottom_toTopOf="@id/pen_start_point"
+                app:layout_constraintEnd_toStartOf="@id/pen_start_point"
+                />
+
+            <ImageView
+                android:id="@+id/pen_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/north_150"
+
+                app:layout_constraintEnd_toEndOf="@id/pen_start_point"
+                app:layout_constraintStart_toStartOf="@id/pen_start_point"
+                app:layout_constraintBottom_toTopOf="@id/pen_start_point"
+
+                android:visibility="gone"
+                />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
