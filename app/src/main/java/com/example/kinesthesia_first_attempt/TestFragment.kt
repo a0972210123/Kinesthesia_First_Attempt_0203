@@ -76,7 +76,7 @@ class TestFragment : Fragment() {
         launchContextSpinner()
 
         //設應測驗次數 for 補測  > 正式測驗刪掉
-        launchTrialInputSpinner()
+        //launchTrialInputSpinner()
 
         //launch第一次避免crush
         checkContextAndLaunchView(currentTestContext)
@@ -176,7 +176,8 @@ class TestFragment : Fragment() {
 
     //測驗次數上限變數
     // trialCount
-    var maxTrailDesire: Int = 5
+    val maxTrialLimit = 5
+    var maxTrailDesire: Int = maxTrialLimit
     val trialCountList = arrayListOf<String>("請選次數", "5", "4", "3", "2", "1")
 
 
@@ -734,7 +735,7 @@ class TestFragment : Fragment() {
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
         directionSpinner = requireView()!!.findViewById<View>(R.id.direction_list) as Spinner
 
-        trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
+        //trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
         contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
 
 
@@ -753,7 +754,7 @@ class TestFragment : Fragment() {
                 recordingButton.visibility = View.VISIBLE
                 touchBoard.visibility = View.VISIBLE
                 //隱藏方向選擇VIEW
-                trialInputSpinner.visibility = View.INVISIBLE
+                //trialInputSpinner.visibility = View.INVISIBLE
                 contextSpinner.visibility = View.INVISIBLE
 
                 directionSpinner.visibility = View.INVISIBLE
@@ -766,7 +767,7 @@ class TestFragment : Fragment() {
                 recordingButton.visibility = View.GONE
                 touchBoard.visibility = View.INVISIBLE
                 //顯示方向選擇VIEW
-                trialInputSpinner.visibility = View.VISIBLE
+                //trialInputSpinner.visibility = View.VISIBLE
                 //contextSpinner.visibility = View.VISIBLE
                 directionSpinner.visibility = View.VISIBLE
                 selectButton.visibility = View.VISIBLE

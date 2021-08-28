@@ -143,8 +143,9 @@
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:addStatesFromChildren="false"
+
                 app:layout_constraintEnd_toEndOf="@id/record_position"
-                app:layout_constraintStart_toStartOf="@id/record_position"
+                app:layout_constraintStart_toEndOf="@id/context_list"
                 app:layout_constraintTop_toBottomOf="@id/trial_count" />
 
 
@@ -153,9 +154,10 @@
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:addStatesFromChildren="false"
+                android:visibility="gone"
+
 
                 app:layout_constraintEnd_toStartOf="@id/context_list"
-
                 app:layout_constraintTop_toBottomOf="@id/trial_count"
                 />
 
@@ -165,6 +167,7 @@
                 android:layout_height="50dp"
                 android:addStatesFromChildren="false"
 
+                app:layout_constraintStart_toStartOf="@id/record_position"
                 app:layout_constraintEnd_toStartOf="@id/direction_list"
                 app:layout_constraintTop_toBottomOf="@id/trial_count"
                 />
@@ -186,7 +189,7 @@
 
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="@+id/direction_list"
-                app:layout_constraintStart_toStartOf="@+id/direction_list"
+                app:layout_constraintStart_toStartOf="@+id/context_list"
                 app:layout_constraintTop_toBottomOf="@+id/direction_list" />
 
             <com.example.kinesthesia_first_attempt.TouchBoard
