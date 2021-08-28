@@ -77,6 +77,9 @@ class TestFragment : Fragment() {
 
         //設應測驗次數 for 補測  > 正式測驗刪掉
         launchTrialInputSpinner()
+
+        //launch第一次避免crush
+        checkContextAndLaunchView(currentTestContext)
     }
 
 
@@ -128,6 +131,7 @@ class TestFragment : Fragment() {
             ) {
                 setTrialLimit(trialCountList[position])
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 //TODO("Not yet implemented")
             }
@@ -256,49 +260,94 @@ class TestFragment : Fragment() {
     val cantextPenWidthOfTandS = 20 //dp
 
     val titleCalibrate = viewAdjustDp2Pixel(widthOfTitle)
-    val TandSCalibrate = viewAdjustDp2Pixel(widthOfTandS)
-    val cantextPenTandSCalibrate = viewAdjustDp2Pixel(cantextPenWidthOfTandS)
 
+
+    val TandSCalibrate = viewAdjustDp2Pixel(widthOfTandS)
+    val penTandSCalibrate = viewAdjustDp2Pixel(cantextPenWidthOfTandS)
+
+    var calibrateWidth = TandSCalibrate
 
     //context 相關 ImageView宣告
     lateinit var startView: ImageView
     lateinit var targetView: ImageView
     lateinit var randomTargetView: ImageView
-    lateinit var upArrow : ImageView
-    lateinit var leftArrow : ImageView
-    lateinit var rightArrow : ImageView
+    lateinit var upArrow: ImageView
+    lateinit var leftArrow: ImageView
+    lateinit var rightArrow: ImageView
 
-    fun checkContextAndLaunchView(context:String){
+    fun checkContextAndLaunchView(context: String) {
         var tempContext = context
-        when(context){
-            "請選情境"  ->{ tempContext = "Finger" }  //default 顯示Finger
-            "" ->{ tempContext = "Finger" } //default 顯示Finger
-            "Finger" ->{ tempContext = "Finger" }
-            "Pen" ->{ tempContext = "Pen" }
+        when (context) {
+            "請選情境" -> {
+                tempContext = "Finger"
+            }  //default 顯示Finger
+            "" -> {
+                tempContext = "Finger"
+            } //default 顯示Finger
+            "Finger" -> {
+                tempContext = "Finger"
+            }
+            "Pen" -> {
+                tempContext = "Pen"
+            }
         }
 
-        when(tempContext){
-            "Finger" ->{
-                 targetView = requireView().findViewById<ImageView>(R.id.target)
-                 startView = requireView().findViewById<ImageView>(R.id.start_point)
-                 randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
-                 upArrow = requireView().findViewById<ImageView>(R.id.arrow)
-                 leftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_left)
-                 rightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_right)
+        //清掉前一個情境的view
+        when (tempContext) {
+            "Pen"  -> {
+                val hideTargetView = requireView().findViewById<ImageView>(R.id.target)
+                val hideStartView = requireView().findViewById<ImageView>(R.id.start_point)
+                val hideRandomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
+                val hideUpArrow = requireView().findViewById<ImageView>(R.id.arrow)
+                val hideLeftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_left)
+                val hideRightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_right)
+                hideTargetView.visibility = View.GONE
+                hideStartView.visibility = View.GONE
+                hideRandomTargetView.visibility = View.GONE
+                hideUpArrow.visibility = View.GONE
+                hideLeftArrow.visibility = View.GONE
+                hideRightArrow.visibility = View.GONE
             }
-            "Pen" ->{
+            "Finger" -> {
+                val hideTargetView = requireView().findViewById<ImageView>(R.id.pen_target)
+                val hideStartView  = requireView().findViewById<ImageView>(R.id.pen_start_point)
+                val hideRandomTargetView = requireView().findViewById<ImageView>(R.id.pen_random_target)
+                val hideUpArrow = requireView().findViewById<ImageView>(R.id.pen_arrow)
+                val hideLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_left)
+                val hideRightArrow  = requireView().findViewById<ImageView>(R.id.pen_arrow_to_right)
+                hideTargetView.visibility = View.GONE
+                hideStartView.visibility = View.GONE
+                hideRandomTargetView.visibility = View.GONE
+                hideUpArrow.visibility = View.GONE
+                hideLeftArrow.visibility = View.GONE
+                hideRightArrow.visibility = View.GONE
+            }
+        }
+
+
+        when (tempContext) {
+            "Finger" -> {
+                targetView = requireView().findViewById<ImageView>(R.id.target)
+                startView = requireView().findViewById<ImageView>(R.id.start_point)
+                randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
+                upArrow = requireView().findViewById<ImageView>(R.id.arrow)
+                leftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_left)
+                rightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_right)
+                calibrateWidth = TandSCalibrate
+            }
+            "Pen" -> {
                 targetView = requireView().findViewById<ImageView>(R.id.pen_target)
                 startView = requireView().findViewById<ImageView>(R.id.pen_start_point)
                 randomTargetView = requireView().findViewById<ImageView>(R.id.pen_random_target)
                 upArrow = requireView().findViewById<ImageView>(R.id.pen_arrow)
                 leftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_left)
                 rightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_right)
+                calibrateWidth = penTandSCalibrate
             }
         }
 
 
     } //輸入currentContext
-
 
 
     fun viewAdjustDp2Pixel(dpWidthOfView: Int): Int {
@@ -366,14 +415,17 @@ class TestFragment : Fragment() {
         currentTestDirection = directionInput  //儲存目前選擇方向
 
         //View宣告
+        /*
         val targetView = requireView().findViewById<ImageView>(R.id.target)
         val startView = requireView().findViewById<ImageView>(R.id.start_point)
         val upArrow = requireView().findViewById<ImageView>(R.id.arrow)
         val leftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_left)
         val rightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_right)
 
-        val performanceTitle = requireView().findViewById<TextView>(R.id.performance_title)
+         */
+        checkContextAndLaunchView(currentTestContext) //判斷狀況並launch特定view
 
+        val performanceTitle = requireView().findViewById<TextView>(R.id.performance_title)
         //宣告調整各view需要的layoutParams
         val targetParams = targetView.layoutParams as ViewGroup.MarginLayoutParams
         val startParams = startView.layoutParams as ViewGroup.MarginLayoutParams
@@ -429,14 +481,14 @@ class TestFragment : Fragment() {
 
             "L2L" -> {
                 targetParams.setMargins(
-                    centerX - TandSCalibrate - Center2Target,
-                    centerY - Center2Target,
+                    centerX - calibrateWidth - Center2Target,
+                    centerY - calibrateWidth - Center2Target,
                     0,
                     0
                 )
                 startParams.setMargins(
-                    centerX - TandSCalibrate - Center2Start,
-                    centerY + Center2Start,
+                    centerX - calibrateWidth - Center2Start,
+                    centerY - calibrateWidth + Center2Start,
                     0,
                     0
                 )
@@ -446,14 +498,14 @@ class TestFragment : Fragment() {
 
             "L2R" -> {
                 targetParams.setMargins(
-                    centerX - TandSCalibrate + Center2Target,
-                    centerY - Center2Target,
+                    centerX - calibrateWidth + Center2Target,
+                    centerY - calibrateWidth - Center2Target,
                     0,
                     0
                 )
                 startParams.setMargins(
-                    centerX - TandSCalibrate - Center2Start,
-                    centerY + Center2Start,
+                    centerX - calibrateWidth - Center2Start,
+                    centerY - calibrateWidth + Center2Start,
                     0,
                     0
                 )
@@ -463,14 +515,14 @@ class TestFragment : Fragment() {
 
             "R2R" -> {
                 targetParams.setMargins(
-                    centerX - TandSCalibrate + Center2Target,
-                    centerY - Center2Target,
+                    centerX - calibrateWidth + Center2Target,
+                    centerY - calibrateWidth - Center2Target,
                     0,
                     0
                 )
                 startParams.setMargins(
-                    centerX - TandSCalibrate + Center2Start,
-                    centerY + Center2Start,
+                    centerX - calibrateWidth + Center2Start,
+                    centerY - calibrateWidth + Center2Start,
                     0,
                     0
                 )
@@ -480,12 +532,17 @@ class TestFragment : Fragment() {
 
             "R2L" -> {
                 targetParams.setMargins(
-                    centerX - TandSCalibrate - Center2Target,
-                    centerY - Center2Target,
+                    centerX - calibrateWidth - Center2Target,
+                    centerY - calibrateWidth - Center2Target,
                     0,
                     0
                 )
-                startParams.setMargins(centerX - TandSCalibrate + 600, centerY + 600, 0, 0)
+                startParams.setMargins(
+                    centerX - calibrateWidth + 600,
+                    centerY - calibrateWidth + 600,
+                    0,
+                    0
+                )
 
                 titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
             }
@@ -522,16 +579,20 @@ class TestFragment : Fragment() {
                 Toast.makeText(activity, "請選擇測驗情境", Toast.LENGTH_SHORT).show()
             }
             // 將ImageView更換 (大/小)
-            "Finger" -> {}
-            "Pen" ->{}
+            "Finger" -> {
+            }
+            "Pen" -> {
+            }
         }
+        //checkContextAndLaunchView(currentTestContext) //更換ImageView宣告內容
+        setDirection(currentTestDirection) //更新View(內含上一行
     }
 
     fun confirmSelection() {
         val contextChecked = checkContextInput()
         val directionChecked = checkDirectionInput()
-        if (contextChecked ==1){
-            if(directionChecked ==1){
+        if (contextChecked == 1) {
+            if (directionChecked == 1) {
                 TestingFinishedList.add(currentTestDirection)
                 //finishedcontextList.add(currentTestContext) >>改到測完所有方向
                 randomThePosition()
@@ -542,15 +603,15 @@ class TestFragment : Fragment() {
         }
     }    //確認選擇方向、情境、並更新測驗紀錄    //移植補測後 刪掉判斷是否有選過
 
-    fun checkContextInput(): Int{
+    fun checkContextInput(): Int {
         checkContextTested()//避免bug可以跳出
         var flag = 0
-        if(currentTestContext == contextList[0]){
+        if (currentTestContext == contextList[0]) {
             Toast.makeText(activity, "測驗情境尚未設定", Toast.LENGTH_SHORT).show()
-        }else{
-            if(finishedContextList.contains(currentTestContext)){
+        } else {
+            if (finishedContextList.contains(currentTestContext)) {
                 Toast.makeText(activity, "此情境已測過", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 //finishedcontextList.add(currentTestContext)
                 flag = 1
             }
@@ -611,30 +672,30 @@ class TestFragment : Fragment() {
         var c2tY = 0
         when (currentTestDirection) {
             "L2L" -> {
-                c2tX = centerX - TandSCalibrate - Center2Target
-                c2tY = centerY - Center2Target
+                c2tX = centerX - calibrateWidth - Center2Target
+                c2tY = centerY - calibrateWidth - Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
             "L2R" -> {
-                c2tX = centerX - TandSCalibrate + Center2Target
-                c2tY = centerY - Center2Target
+                c2tX = centerX - calibrateWidth + Center2Target
+                c2tY = centerY - calibrateWidth - Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
             "R2R" -> {
-                c2tX = centerX - TandSCalibrate + Center2Target
-                c2tY = centerY - Center2Target
+                c2tX = centerX - calibrateWidth + Center2Target
+                c2tY = centerY - calibrateWidth - Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
             "R2L" -> {
-                c2tX = centerX - TandSCalibrate - Center2Target
-                c2tY = centerY - Center2Target
+                c2tX = centerX - calibrateWidth - Center2Target
+                c2tY = centerY - calibrateWidth - Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
         }
     }   //根據選項決定方向參數pixel
 
     fun setTargetRandomPosition(c2tX: Int, c2tY: Int) {
-        val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
+        //val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
         randomTargetView.visibility = View.VISIBLE
         val randomTargetParams = randomTargetView.layoutParams as ViewGroup.MarginLayoutParams
         randomTargetParams.setMargins(
@@ -682,7 +743,7 @@ class TestFragment : Fragment() {
         val trialCount = requireView().findViewById<TextView>(R.id.trial_count)
         val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
 
-        val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
+        //val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
 
 
         when (flag) {
@@ -711,7 +772,7 @@ class TestFragment : Fragment() {
                 selectButton.visibility = View.VISIBLE
                 //
                 Score.text = "Score"
-                randomTargetView.visibility = View.INVISIBLE
+                randomTargetView.visibility = View.GONE
             }
         }
     }  //管理測驗相關View顯示、可觸控與否
@@ -1050,7 +1111,7 @@ class TestFragment : Fragment() {
 
 
         //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
-        val outputFileName = currentTestContext+"_"+currentTestDirection+".csv"
+        val outputFileName = currentTestContext + "_" + currentTestDirection + ".csv"
 
         // 存檔: name,List,flag
         outputCsv(outputFileName, outputPositionData, 0)
@@ -1101,7 +1162,11 @@ class TestFragment : Fragment() {
         os.flush()
         os.close()
         output.setLength(0) //clean buffer
-        Toast.makeText(activity, "正式測驗:$currentTestContext $currentTestDirection 儲存成功", Toast.LENGTH_SHORT)
+        Toast.makeText(
+            activity,
+            "正式測驗:$currentTestContext $currentTestDirection 儲存成功",
+            Toast.LENGTH_SHORT
+        )
             .show()
         //Toast.makeText(activity, "正式測驗"+$direction+"儲存成功", Toast.LENGTH_SHORT)
         //Log.d("data", "outCSV Success")
