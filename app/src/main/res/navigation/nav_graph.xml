@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_testMenuFragment_to_testFragment"
             app:destination="@id/testFragment" />
+        <action
+            android:id="@+id/action_testMenuFragment_to_additionFragment"
+            app:destination="@id/additionFragment" />
     </fragment>
 
 
@@ -64,6 +67,15 @@
         android:label="TestFragment" >
         <action
             android:id="@+id/action_testFragment_to_testMenuFragment"
+            app:destination="@id/testMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/additionFragment"
+        android:name="com.example.kinesthesia_first_attempt.AdditionFragment"
+        android:label="fragment_addition"
+        tools:layout="@layout/fragment_addition" >
+        <action
+            android:id="@+id/action_additionFragment_to_testMenuFragment"
             app:destination="@id/testMenuFragment" />
     </fragment>
 

@@ -44,15 +44,15 @@
             android:id="@+id/practice_task"
             android:layout_width="@dimen/btn_width"
             android:layout_height="@dimen/btn_height"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
             android:text="練習題"
             android:textSize="36sp"
             app:layout_constraintTop_toBottomOf="@id/task_selection_instruction"
-            app:layout_constraintStart_toStartOf="parent"
+
             app:layout_constraintEnd_toStartOf="@id/formal_task"
-            android:padding="@dimen/side_margin"
+
             android:onClick="@{() -> testMenuFragment.goToPractice()}" />
 
 
@@ -61,15 +61,32 @@
             android:layout_width="@dimen/btn_width"
             android:layout_height="@dimen/btn_height"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
             android:text="正式測驗"
             android:textSize="36sp"
             app:layout_constraintTop_toBottomOf="@id/task_selection_instruction"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/practice_task"
-            android:padding="@dimen/side_margin"
+            app:layout_constraintStart_toStartOf="parent"
+
             android:onClick="@{() -> testMenuFragment.goToFormal()}"
+            />
+
+
+
+        <Button
+            android:id="@+id/addition_task"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:text="補充測驗"
+            android:textSize="36sp"
+            app:layout_constraintTop_toBottomOf="@id/task_selection_instruction"
+            app:layout_constraintStart_toEndOf="@id/formal_task"
+
+            android:onClick="@{() -> testMenuFragment.goToAddition()}"
             />
 
 

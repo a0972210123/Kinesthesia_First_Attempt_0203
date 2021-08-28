@@ -97,6 +97,11 @@
     <string name="practice_dialog_back_to_menu">前往選單</string>
 
 
+    <string name="addition_test_dialog_title">補充測驗</string>
+    <string name="addition_test_dialog_message">已完成本次補測內容</string>
+    <string name="addition_test_dialog_next_condition">更換選項</string>
+
+
     <string name="test_dialog_title">正式測驗</string>
     <string name="test_dialog_message">已完成本方向測驗次數</string>
 
@@ -107,10 +112,6 @@
     <string name="test_dialog_next_context">更換情境</string>
     <string name="test_dialog_next_condition">更換方向</string>
     <string name="test_dialog_back_to_menu">前往選單</string>
-
-
-
-
 
 
     <string name="current_position">Current Position: X= f% Y= f%</string>
