@@ -36,6 +36,7 @@ class DemographicFragment : Fragment() {
         "嘉義市", "新竹縣", "苗栗縣", "彰化縣", "南投縣", "雲林縣", "嘉義縣", "屏東縣", "宜蘭縣", "花蓮縣", "臺東縣", "澎湖縣", "其他"
     )
 
+    lateinit var citySpinner: Spinner
 
     private val sharedViewModel: MainViewModel by activityViewModels()
 
@@ -70,33 +71,8 @@ class DemographicFragment : Fragment() {
                 this@DemographicFragment //使用listenser binding，用UI button 在xml中設定onclick
         }
 
-
         //city選單CODE
-        mContext_demo = requireActivity().applicationContext
-        city = requireView()!!.findViewById<View>(R.id.city) as Spinner
-        val adapter = ArrayAdapter.createFromResource(
-            mContext_demo,
-            R.array.city_list,
-            android.R.layout.simple_spinner_dropdown_item
-        )
-        city.adapter = adapter
-        city.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                binding.viewModel?.setCity(cityList[position])
-                //Toast.makeText(activity, "城市:"+cityList[position] , Toast.LENGTH_SHORT).show()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
-            }
-        }
-        //以上: 城市選單CODE: arrayList已經移置string ,name: city_list
-
-
+        launchCitySpinner()
         //生日選擇及測驗日期選擇，crash問題處理
         // 1.延遲至所有lifecycle call完成再執行避免crash   2.dialog需特定context輸入
         // reference:
@@ -109,9 +85,32 @@ class DemographicFragment : Fragment() {
     } //OnViewCreated End
 
 
-    companion object {
-    }
 
+
+    fun launchCitySpinner() {
+        mContext_demo = requireActivity().applicationContext
+        citySpinner = requireView()!!.findViewById<View>(R.id.city) as Spinner
+        val adapter = ArrayAdapter.createFromResource(
+            mContext_demo,
+            R.array.city_list,
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        citySpinner.adapter = adapter
+        citySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                binding.viewModel?.setCity(cityList[position])
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //TODO("Not yet implemented")
+            }
+        }
+    }
 
     fun goToIntroduction() {
         Toast.makeText(activity, "開始測驗說明", Toast.LENGTH_SHORT).show()
@@ -122,10 +121,6 @@ class DemographicFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         //binding = null
-    }
-
-    fun citySelection() {
-        // 之後可以將CODE從onViewCreated移到這裡
     }
 
     // 生日或是測驗日期選擇
@@ -198,11 +193,6 @@ class DemographicFragment : Fragment() {
     K 時 在上午或下午 (0~11)
     z 時區
      */
-
-
-
-
-
 
 
     // var filePathStr: String = ""

@@ -40,27 +40,6 @@ class MainViewModel : ViewModel() {
     }
 
 
-    private var _currentPositionX = MutableLiveData<Float>(0f)
-    val currentPositionX: LiveData<Float> = _currentPositionX
-
-    private var _currentPositionY = MutableLiveData<Float>(0f)
-    val currentPositionY: LiveData<Float> = _currentPositionY
-
-    private var _currentPositionData = MutableLiveData<String>("")
-    val currentPositionData: LiveData<String> = _currentPositionData
-
-    init{
-        setCurrentPosition(0f,0f)
-    }
-
-    fun setCurrentPosition(X:Float,Y:Float) {
-        _currentPositionX.value = X
-        _currentPositionX.value = Y
-        _currentPositionData.value = "Current Position: X= $X ,Y= $Y"
-    }
-
-
-
     private val _name = MutableLiveData<String>("")
     val name: LiveData<String> = _name
 
@@ -90,18 +69,8 @@ class MainViewModel : ViewModel() {
     //absoluteError relativeError variableError  TrialsCounts  testList
     // x.y座標等等
 
-    ///from unscramble
-    private var wordsList: MutableList<String> = mutableListOf()   // 轉換成測驗的layout編號list
-    private lateinit var currentWord: String  // 轉換成測驗的 總測驗次數var   單測驗layout執行次數 >> key: value
-    ///
 
-    private fun updateTrialsCounts() {
-    }
 
-    private val _currentTestID = MutableLiveData<String>("")
-    val currentTestID: LiveData<String> = _currentTestID
-
-    var testList = listOf<String>("A", "B", "C", "L2R", "R2L")
 
 
     // function段落，與按鈕、app logic、變數更動相關的method/function

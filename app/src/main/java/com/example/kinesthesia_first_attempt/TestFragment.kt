@@ -256,7 +256,7 @@ class TestFragment : Fragment() {
 
     // dp = (width in pixels * 160) / screen density
     // pixel = (dp * screen density)/160
-    val widthOfTitle = 350
+    val widthOfTitle = 400
     val widthOfTandS = 50 //dp
     val cantextPenWidthOfTandS = 20 //dp
 
@@ -295,7 +295,7 @@ class TestFragment : Fragment() {
 
         //清掉前一個情境的view
         when (tempContext) {
-            "Pen"  -> {
+            "Pen" -> {
                 val hideTargetView = requireView().findViewById<ImageView>(R.id.target)
                 val hideStartView = requireView().findViewById<ImageView>(R.id.start_point)
                 val hideRandomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
@@ -311,11 +311,12 @@ class TestFragment : Fragment() {
             }
             "Finger" -> {
                 val hideTargetView = requireView().findViewById<ImageView>(R.id.pen_target)
-                val hideStartView  = requireView().findViewById<ImageView>(R.id.pen_start_point)
-                val hideRandomTargetView = requireView().findViewById<ImageView>(R.id.pen_random_target)
+                val hideStartView = requireView().findViewById<ImageView>(R.id.pen_start_point)
+                val hideRandomTargetView =
+                    requireView().findViewById<ImageView>(R.id.pen_random_target)
                 val hideUpArrow = requireView().findViewById<ImageView>(R.id.pen_arrow)
                 val hideLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_left)
-                val hideRightArrow  = requireView().findViewById<ImageView>(R.id.pen_arrow_to_right)
+                val hideRightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_right)
                 hideTargetView.visibility = View.GONE
                 hideStartView.visibility = View.GONE
                 hideRandomTargetView.visibility = View.GONE
@@ -1273,8 +1274,6 @@ class TestFragment : Fragment() {
             decorView.systemUiVisibility = uiOptions
         }
     }
-
-
 
 
     private fun showBottomUIMenu() {

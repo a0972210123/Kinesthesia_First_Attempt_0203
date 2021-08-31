@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -52,12 +53,11 @@ class PracticeFragment : Fragment(){
     var currentTrial:Int = 1  //當前Trial
 
 
-    var practiceTime: Int = 0  //完整練習測驗進行次數
+    //var practiceTime: Int = 0  //完整練習測驗進行次數
+
+    var  practiceTime: Int = 0  // binding.viewModel!!.totalPracticeTime.value!!
 
 
-    init{ //讀取viewModel中存取的練習次數
-        practiceTime = binding.viewModel!!.totalPracticeTime.value!!
-    }
 
     // 測驗表現
     var startPositionX: Float = 0f
@@ -464,7 +464,10 @@ class PracticeFragment : Fragment(){
     }
 
 
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+    }
 
 
 

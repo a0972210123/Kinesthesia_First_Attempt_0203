@@ -254,7 +254,7 @@ class AdditionFragment : Fragment() {
 
     // dp = (width in pixels * 160) / screen density
     // pixel = (dp * screen density)/160
-    val widthOfTitle = 350
+    val widthOfTitle = 400
     val widthOfTandS = 50 //dp
     val cantextPenWidthOfTandS = 20 //dp
 
