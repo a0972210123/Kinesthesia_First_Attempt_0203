@@ -117,13 +117,46 @@ class PracticeFragment : Fragment(){
     private var trial7list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
     private var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 
+    fun recordPosition() {
+        when (buttonPressedCountsInATrial) {
+            1 -> {
+                condition = trialCondition[0]
+                startPositionX = startX
+                startPositionY = startY
+                Log.d("$condition", "$startPositionX  $startPositionY ")
+            }
+            2 -> {
+                condition = trialCondition[1]
+                testPositionX = startX
+                testPositionY = startY
+                Log.d("$condition", "$testPositionX  $testPositionY ")
+            }
+            3 -> {
+                condition = trialCondition[2]
+                restPositionX = startX
+                restPositionY = startY
+                Log.d("$condition", "$restPositionX  $restPositionY  ")
+            }
+            4 -> {
+                condition = trialCondition[3]
+                responsePositionX = startX
+                responsePositionY = startY
+                Log.d("$condition", "$responsePositionX  $responsePositionY  ")
+            }
+
+            5 -> {
+                condition = ""
+                startX = 0f
+                startY = 0f
+            }
+        }
+    }
 
     fun reset8Trial(){
         for (n in 0..7){
             arrayListOf8Trial[n] = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
         }
     }
-
 
     // 將單次反應存入LIST
     fun saveCurrentTrialRecord() {
@@ -139,7 +172,6 @@ class PracticeFragment : Fragment(){
             8 -> { trial8list = saveTrialToList() }
         }
     }
-
 
     fun combineList(): ArrayList<List<Float>> {
         return arrayListOf(
@@ -354,123 +386,11 @@ class PracticeFragment : Fragment(){
         Log.d("data","outCSV Success")
     }  // sample from HW
 
-    fun checkTime() {
-        // 找到關聯的view
-        val recordingButton = requireView().findViewById<Button>(R.id.practice_record_position)
-        val text1 = requireView().findViewById<TextView>(R.id.text1)
-        // hide button
-        recordingButton.visibility = View.INVISIBLE
-
-        //確認是否需要倒數  millisInFuture
-        var millisInFuture: Long = 4000
-
-        if (buttonPressedCountsInATrial == 5) {
-            millisInFuture = 0
-        } else {
-            millisInFuture = 1000 //暫時改
-        }
-
-        if (buttonPressedCountsInATrial == 5) {
-            millisInFuture = 0
-        } else {
-            millisInFuture = 4000
-        }
-        //計時器宣告
-        val timer = object : CountDownTimer(millisInFuture, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                text1.text = "seconds remaining: " + millisUntilFinished / 1000
-            }
-
-            // 時間到時將會執行的任務
-            override fun onFinish() {
-
-                when (buttonPressedCountsInATrial) {
-                    0 -> {
-                        text1.text = "Get Ready!"
-                    }
-                    1 -> {
-                        text1.text = "Time is up! Do Next Step!"
-                    }
-                    2 -> {
-                        text1.text = "Time is up! Do Next Step!"
-                    }
-                    3 -> {
-                        text1.text = "Time is up! Do Next Step!"
-                    }
-                    4 -> {
-                        text1.text = "Click to Save this Trial"
-                    }
-                    5 -> {
-                        text1.text = "Get Ready!"
-                    }
-                }
-
-                //Beep sound
-                val toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 80)
-                if (buttonPressedCountsInATrial == 3) {
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 200)
-                } else {
-                }
-
-                // show　button
-                recordingButton.visibility = View.VISIBLE
-            }
-        }
-        timer.start() //開始計時
-    }
-    // 清除所有參數!，還沒寫完!
-    fun clearRecord() {
-        clearCurrentTrialRecord() // 四個位置、startX/Y的全域變數
-        practiceTrialsCount = 0   //進入測驗練習後的練習次數
-        currentTrial = 1
-        reset8Trial()             // 清除所有trial的紀錄
-        positionData.setLength(0) //clean buffer
-    }
-
-
-    fun checkPracticeLimit() {
-        if (practiceTrialsCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
-            practiceTime++  //增加練習次數
-            binding.viewModel!!.setPracticeTime(practiceTime) //更新總練習次數
-
-            val practiceCount = requireView().findViewById<TextView>(R.id.practice_count)
-
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.practice_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
-                .setMessage(
-                    getString(R.string.practice_dialog_message)
-                ) //Set the message to show the data
-                .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
-
-                .setNegativeButton(getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
-                    savePracticePerformanceToCSV()//儲存測驗表現
-                    clearRecord()  // 清除測驗表現>> 還沒寫完
-                    practiceCount.text = "練習次數: $currentTrial / $maxTrailDesire"
-                    manageVisibility(1)
-                    Toast.makeText(requireContext(), "再試一次", Toast.LENGTH_SHORT).show()
-                }
-                .setPositiveButton(getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
-                    savePracticePerformanceToCSV()// 儲存測驗表現
-                    clearRecord()  // 清除測驗表現>> 還沒寫完
-                    goBackToMenu() // 前往測驗選單
-                }
-                .show() //creates and then displays the alert dialog.
-        }
-    }
-
-
-    fun goBackToMenu() {
-        Toast.makeText(activity, "回到測驗選單", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_practiceFragment_to_testMenuFragment)
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
     }
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -543,8 +463,6 @@ class PracticeFragment : Fragment(){
     var maxTrailDesire: Int = 5
     val practiceTrialCountList = arrayListOf<String>("8","7","6","5", "4", "3", "2", "1")
 
-
-
     fun setTrialLimit(trialLimitInput: String) {
                maxTrailDesire = trialLimitInput.toInt()
 
@@ -552,10 +470,9 @@ class PracticeFragment : Fragment(){
 
     fun confirmSelection() {
         Toast.makeText(activity, "開始測驗練習", Toast.LENGTH_SHORT).show()
+        changeText()
         manageVisibility(0)  //顯示觸控板及記錄紐
     }
-
-
 
     fun manageVisibility(flag: Int) {
         //找到相關的View
@@ -640,40 +557,116 @@ class PracticeFragment : Fragment(){
     var trialCondition =
         listOf<String>("Start Position", "Test Position", "Rest Position", "Response Position")
     var condition: String = ""
-    fun recordPosition() {
-        when (buttonPressedCountsInATrial) {
-            1 -> {
-                condition = trialCondition[0]
-                startPositionX = startX
-                startPositionY = startY
-                Log.d("$condition", "$startPositionX  $startPositionY ")
-            }
-            2 -> {
-                condition = trialCondition[1]
-                testPositionX = startX
-                testPositionY = startY
-                Log.d("$condition", "$testPositionX  $testPositionY ")
-            }
-            3 -> {
-                condition = trialCondition[2]
-                restPositionX = startX
-                restPositionY = startY
-                Log.d("$condition", "$restPositionX  $restPositionY  ")
-            }
-            4 -> {
-                condition = trialCondition[3]
-                responsePositionX = startX
-                responsePositionY = startY
-                Log.d("$condition", "$responsePositionX  $responsePositionY  ")
+
+
+    fun checkTime() {
+        // 找到關聯的view
+        val recordingButton = requireView().findViewById<Button>(R.id.practice_record_position)
+        val text1 = requireView().findViewById<TextView>(R.id.text1)
+        // hide button
+        recordingButton.visibility = View.INVISIBLE
+
+        //確認是否需要倒數  millisInFuture
+        var millisInFuture: Long = 4000
+
+        if (buttonPressedCountsInATrial == 5) {
+            millisInFuture = 0
+        } else {
+            millisInFuture = 1000 //暫時改
+        }
+
+        if (buttonPressedCountsInATrial == 5) {
+            millisInFuture = 0
+        } else {
+            millisInFuture = 4000
+        }
+        //計時器宣告
+        val timer = object : CountDownTimer(millisInFuture, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                text1.text = "seconds remaining: " + millisUntilFinished / 1000
             }
 
-            5 -> {
-                condition = ""
-                startX = 0f
-                startY = 0f
+            // 時間到時將會執行的任務
+            override fun onFinish() {
+
+                when (buttonPressedCountsInATrial) {
+                    0 -> {
+                        text1.text = "Get Ready!"
+                    }
+                    1 -> {
+                        text1.text = "Time is up! Do Next Step!"
+                    }
+                    2 -> {
+                        text1.text = "Time is up! Do Next Step!"
+                    }
+                    3 -> {
+                        text1.text = "Time is up! Do Next Step!"
+                    }
+                    4 -> {
+                        text1.text = "Click to Save this Trial"
+                    }
+                    5 -> {
+                        text1.text = "Get Ready!"
+                    }
+                }
+
+                //Beep sound
+                val toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 80)
+                if (buttonPressedCountsInATrial == 3) {
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 200)
+                } else {
+                }
+
+                // show　button
+                recordingButton.visibility = View.VISIBLE
             }
         }
+        timer.start() //開始計時
     }
+    // 清除所有參數!，還沒寫完!
+    fun clearRecord() {
+        clearCurrentTrialRecord() // 四個位置、startX/Y的全域變數
+        practiceTrialsCount = 0   //進入測驗練習後的練習次數
+        currentTrial = 1
+        reset8Trial()             // 清除所有trial的紀錄
+        positionData.setLength(0) //clean buffer
+    }
+
+    fun checkPracticeLimit() {
+        if (practiceTrialsCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
+            practiceTime++  //增加練習次數
+            binding.viewModel!!.setPracticeTime(practiceTime) //更新總練習次數
+
+            val practiceCount = requireView().findViewById<TextView>(R.id.practice_count)
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.practice_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+                .setMessage(
+                    getString(R.string.practice_dialog_message)
+                ) //Set the message to show the data
+                .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
+
+                .setNegativeButton(getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
+                    savePracticePerformanceToCSV()//儲存測驗表現
+                    clearRecord()  // 清除測驗表現>> 還沒寫完
+                    practiceCount.text = "練習次數: $currentTrial / $maxTrailDesire"
+                    manageVisibility(1)
+                    Toast.makeText(requireContext(), "再試一次", Toast.LENGTH_SHORT).show()
+                }
+                .setPositiveButton(getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
+                    savePracticePerformanceToCSV()// 儲存測驗表現
+                    clearRecord()  // 清除測驗表現>> 還沒寫完
+                    goBackToMenu() // 前往測驗選單
+                }
+                .show() //creates and then displays the alert dialog.
+        }
+    }
+
+    fun goBackToMenu() {
+        Toast.makeText(activity, "回到測驗選單", Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.action_practiceFragment_to_testMenuFragment)
+    }
+
 
     // 更新測驗表現、指導語
     @SuppressLint("SetTextI18n")
@@ -685,30 +678,44 @@ class PracticeFragment : Fragment(){
         val response = requireView().findViewById<TextView>(R.id.performance_response_position)
         //測驗次數textView
         val practiceCount = requireView().findViewById<TextView>(R.id.practice_count)
-        //找到指導語textView
-        val instructionText = requireView().findViewById<TextView>(R.id.instruction_demonstration)
+
         //找到測驗按鈕
         val recordingButton = requireView().findViewById<Button>(R.id.practice_record_position)
         //顯示已完成練習次數
         practiceCount.text =  "練習次數: $currentTrial / $maxTrailDesire"
 
-        //判斷測驗情境，並更新對應的Text
+
+        //找到指導語textView
+        val instructionText = requireView().findViewById<TextView>(R.id.instruction_demonstration)
+
+        val instructionList = arrayListOf(
+            "施測者將受試者的手指或筆尖，"+"\n"+"移動至下方預備位置上，"+"\n"+"確認動作停止後按下紀錄。",
+            "施測者將受試者的手指或筆尖，"+"\n"+"移動到上方目標位置上，"+"\n"+"確認動作停止後按下紀錄。",
+            "施測者將受試者的手指或筆尖，"+"\n"+"移回下方的預備位置上，"+"\n"+"確認動作停止後按下紀錄。",
+            "受試者聽到嗶聲後將手指或是筆，"+"\n"+"移動到所記得的位置，"+"\n"+"確認動作停止後按下紀錄。",
+            "施測者將受試者的手指或筆尖，"+"\n"+"移動到平板外的桌面上，"+"\n"+"確認資料正確後按下Save Trial。")
+
+
+
+
+
+                //判斷測驗情境，並更新對應的Text
         when (condition) {
             "Start Position" -> {
                 start.text = "Start Position：X= $startPositionX ; Y= $startPositionY"
-                instructionText.text = "將受試者的手指或筆移動到'目標位置'上，確認停止後按下紀錄"
+                instructionText.text =  instructionList[1]
             }
             "Test Position" -> {
                 test.text = "Test Position：X= $testPositionX ; Y= $testPositionY"
-                instructionText.text = "將受試者的手指或筆移動回'預備位置'上，確認停止後按下紀錄"
+                instructionText.text = instructionList[2]
             }
             "Rest Position" -> {
                 rest.text = "Rest Position：X= $restPositionX ; Y= $restPositionY"
-                instructionText.text = "受試者聽到嗶聲後，需將自己的手或是筆移動回記憶中的目標位置，確認停止後按下紀錄"
+                instructionText.text = instructionList[3]
             }
             "Response Position" -> {
                 response.text = "Response Position：X= $responsePositionX ; Y= $responsePositionY"
-                instructionText.text = "將受試者的手移開平板，確認資料正確後按下Save Trial"
+                instructionText.text = instructionList[4]
                 recordingButton.text = getString(R.string.next_trial)
                 recordingButton.textSize = 24.toFloat()
             }
@@ -717,7 +724,7 @@ class PracticeFragment : Fragment(){
                 test.text = "Test Position："
                 rest.text = "Rest Position："
                 response.text = "Response Position："
-                instructionText.text = "請將受試者手指或筆尖放在下方'預備位置'上，確認停止後按下紀錄"
+                instructionText.text = instructionList[0]
                 recordingButton.text = getString(R.string.record_position)
                 recordingButton.textSize = 30.toFloat()
             }

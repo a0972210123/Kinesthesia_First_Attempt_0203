@@ -593,6 +593,7 @@ class AdditionFragment : Fragment() {
                 //finishedcontextList.add(currentTestContext) >>改到測完所有方向
                 randomThePosition()
                 setTargetPosition()
+                changeText()
                 Toast.makeText(activity, "開始補測 $currentTestContext $currentTestDirection", Toast.LENGTH_SHORT).show()
                 manageVisibility(0)  //顯示觸控板及記錄紐
             }
@@ -743,6 +744,7 @@ class AdditionFragment : Fragment() {
 
         //val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
 
+        val instructionText = requireView().findViewById<TextView>(R.id.instruction_demonstration)
 
         when (flag) {
             0 -> {
@@ -750,6 +752,8 @@ class AdditionFragment : Fragment() {
                 trialCount.visibility = View.VISIBLE
                 recordingButton.visibility = View.VISIBLE
                 touchBoard.visibility = View.VISIBLE
+                instructionText.visibility = View.VISIBLE
+
                 //隱藏方向選擇VIEW
                 trialInputSpinner.visibility = View.INVISIBLE
                 contextSpinner.visibility = View.INVISIBLE
@@ -763,6 +767,8 @@ class AdditionFragment : Fragment() {
                 trialCount.visibility = View.GONE
                 recordingButton.visibility = View.GONE
                 touchBoard.visibility = View.INVISIBLE
+                instructionText.visibility = View.GONE
+
                 //顯示方向選擇VIEW
                 trialInputSpinner.visibility = View.VISIBLE
                 contextSpinner.visibility = View.VISIBLE
@@ -855,21 +861,52 @@ class AdditionFragment : Fragment() {
         //顯示已完成練習次數
         formalTrialCount.text = "測驗次數: $currentTrial / $maxTrailDesire"
 
+
+        //找到指導語textView
+        val instructionText = requireView().findViewById<TextView>(R.id.instruction_demonstration)
+        var instructionList =  arrayListOf("")
+
+        val pen =  arrayListOf(
+            "施測者將受試者握著的筆尖，" +"\n"+ "移動至下方預備位置上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" +"\n"+ "移動到上方目標位置上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" +"\n"+ "移回下方的預備位置上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "受試者聽到嗶聲後將自己握著的筆，" +"\n"+ "移動到所記得的位置，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" +"\n"+ "移動到平板外的桌面上，" +"\n"+ "確認資料正確後按下Save Trial。")
+
+        val finger = arrayListOf(
+            "施測者將受試者的手指，" +"\n"+ "移動至下方預備位置上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" +"\n"+ "移動到上方目標位置上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" +"\n"+ "移回下方的預備位置上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "受試者聽到嗶聲後將自己的手指，" +"\n"+ "移動到所記得的位置，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" +"\n"+ "移動到平板外的桌面上，" +"\n"+ "確認資料正確後按下Save Trial。")
+
+        when(currentTestContext){
+            "Pen" -> {  instructionList = pen  }
+
+            "Finger" -> { instructionList = finger }
+        }
+
+
+
         //判斷測驗情境，並更新對應的Text
         when (condition) {
             "Start Position" -> {
                 start.text = "Start Position：X= $startPositionX ; Y= $startPositionY"
+                instructionText.text = instructionList[1]
             }
             "Test Position" -> {
                 test.text = "Test Position：X= $testPositionX ; Y= $testPositionY"
+                instructionText.text = instructionList[2]
             }
             "Rest Position" -> {
                 rest.text = "Rest Position：X= $restPositionX ; Y= $restPositionY"
+                instructionText.text = instructionList[3]
             }
             "Response Position" -> {
                 response.text = "Response Position：X= $responsePositionX ; Y= $responsePositionY"
                 recordingButton.text = getString(R.string.next_trial)
                 recordingButton.textSize = 24.toFloat()
+                instructionText.text = instructionList[4]
             }
             "" -> {
                 start.text = "Start Position："
@@ -878,6 +915,8 @@ class AdditionFragment : Fragment() {
                 response.text = "Response Position："
                 recordingButton.text = getString(R.string.record_position)
                 recordingButton.textSize = 30.toFloat()
+
+                instructionText.text = instructionList[0]
             }
         }
     }
