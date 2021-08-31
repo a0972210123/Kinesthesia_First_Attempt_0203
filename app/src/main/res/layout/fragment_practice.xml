@@ -52,7 +52,7 @@
             android:layout_width="400dp"
             android:layout_height="180dp"
 
-            android:text="這邊將會放入隨測驗步驟更動的指導語或測驗說明"
+            android:text="請先選擇練習次數，並按下確認按鈕"
             android:textSize="@dimen/instruction_text_size"
 
             app:layout_constraintEnd_toEndOf="@id/instruction_title"
@@ -160,12 +160,13 @@
             android:id="@+id/practice_record_position"
             android:layout_width="165dp"
             android:layout_height="80dp"
+            android:layout_marginTop="10dp"
             android:onClick="@{() -> practiceFragment.pressButton()}"
+
             android:text="@string/record_position"
 
             android:textSize="30sp"
-
-
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -177,6 +178,7 @@
 
             android:textSize="@dimen/performance_text_size"
 
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/practice_record_position"
             app:layout_constraintStart_toStartOf="@+id/practice_record_position"
             app:layout_constraintTop_toBottomOf="@id/practice_record_position" />
@@ -189,11 +191,38 @@
             android:text="@string/practice_count"
 
             android:textSize="@dimen/performance_text_size"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/practice_record_position"
             app:layout_constraintStart_toStartOf="@id/practice_record_position"
-            app:layout_constraintTop_toBottomOf="@id/text1"
-            />
+            app:layout_constraintTop_toBottomOf="@id/text1" />
 
+
+        <Spinner
+            android:id="@+id/trialInput_list"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+
+            android:layout_marginTop="10dp"
+            android:addStatesFromChildren="false"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+            android:id="@+id/confirm_trial"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+
+            android:onClick="@{() -> practiceFragment.confirmSelection()}"
+
+            android:text="@string/select_direction"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/trialInput_list"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/trialInput_list"
+            app:layout_constraintTop_toBottomOf="@+id/trialInput_list" />
 
         <ImageView
             android:id="@+id/target"
@@ -239,7 +268,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/material_on_background_disabled"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

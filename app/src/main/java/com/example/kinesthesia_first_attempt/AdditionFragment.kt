@@ -23,6 +23,7 @@ import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -1106,9 +1107,14 @@ class AdditionFragment : Fragment() {
         //切割buffer
         val outputPositionData = positionData.toString().replace("\r", "").split("\n")
 
+        val timeStamp: String //避免資料夾個案編號資料重複的額外後接編號
+        val timeStampFormatter = SimpleDateFormat("HH_mm_ss", Locale.getDefault()) //H 時 在一天中 (0~23) // m 分 // s 秒
+        val timeStampCalendar = Calendar.getInstance()
+        timeStamp =  timeStampFormatter.format(timeStampCalendar.time).toString() //當日時間  //需傳到viewmodel
+
 
         //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
-        val outputFileName = "Addition_" + currentTestContext + "_" + currentTestDirection + ".csv"
+        val outputFileName = "Addition_" + currentTestContext + "_" + currentTestDirection +"_" + timeStamp + ".csv"
 
         // 存檔: name,List,flag
         outputCsv(outputFileName, outputPositionData, 0)

@@ -1,6 +1,7 @@
 package com.example.kinesthesia_first_attempt
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.Bundle
@@ -9,9 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -51,13 +50,7 @@ class PracticeFragment : Fragment(){
     var buttonPressedCountsInATrial: Int = 0  //按鈕次數
     var practiceTrialsCount: Int = 0  //已練習次數
     var currentTrial:Int = 1  //當前Trial
-
-
-    //var practiceTime: Int = 0  //完整練習測驗進行次數
-
-    var  practiceTime: Int = 0  // binding.viewModel!!.totalPracticeTime.value!!
-
-
+    var practiceTime: Int = 0
 
     // 測驗表現
     var startPositionX: Float = 0f
@@ -370,6 +363,13 @@ class PracticeFragment : Fragment(){
 
         //確認是否需要倒數  millisInFuture
         var millisInFuture: Long = 4000
+
+        if (buttonPressedCountsInATrial == 5) {
+            millisInFuture = 0
+        } else {
+            millisInFuture = 1000 //暫時改
+        }
+
         if (buttonPressedCountsInATrial == 5) {
             millisInFuture = 0
         } else {
@@ -429,7 +429,7 @@ class PracticeFragment : Fragment(){
 
 
     fun checkPracticeLimit() {
-        if (practiceTrialsCount >= 2) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
+        if (practiceTrialsCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
             practiceTime++  //增加練習次數
             binding.viewModel!!.setPracticeTime(practiceTime) //更新總練習次數
 
@@ -445,7 +445,8 @@ class PracticeFragment : Fragment(){
                 .setNegativeButton(getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
                     savePracticePerformanceToCSV()//儲存測驗表現
                     clearRecord()  // 清除測驗表現>> 還沒寫完
-                    practiceCount.text = "練習次數: $currentTrial / $MAX_PRACTICE_TRIAL"
+                    practiceCount.text = "練習次數: $currentTrial / $maxTrailDesire"
+                    manageVisibility(1)
                     Toast.makeText(requireContext(), "再試一次", Toast.LENGTH_SHORT).show()
                 }
                 .setPositiveButton(getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
@@ -494,7 +495,6 @@ class PracticeFragment : Fragment(){
             maxPracticeTrial = MAX_PRACTICE_TRIAL //用於更新練習次數文字
         }
 
-
         val currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
 
@@ -506,11 +506,97 @@ class PracticeFragment : Fragment(){
         })
 
 
+        launchTrialInputSpinner()
+    }
 
+
+    lateinit var mContext_demo: Context
+    lateinit var trialInputSpinner:Spinner
+
+    fun launchTrialInputSpinner() {
+        mContext_demo = requireActivity().applicationContext
+        trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
+        val adapter = ArrayAdapter.createFromResource(
+            mContext_demo,
+            R.array.practice_trial_count_list,
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        trialInputSpinner.adapter = adapter
+        trialInputSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                setTrialLimit(practiceTrialCountList[position])
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //TODO("Not yet implemented")
+            }
+        }
+    }
+
+    //測驗次數上限變數
+    // trialCount
+    var maxTrailDesire: Int = 5
+    val practiceTrialCountList = arrayListOf<String>("8","7","6","5", "4", "3", "2", "1")
+
+
+
+    fun setTrialLimit(trialLimitInput: String) {
+               maxTrailDesire = trialLimitInput.toInt()
+
+    }  //可直接移植到補測
+
+    fun confirmSelection() {
+        Toast.makeText(activity, "開始測驗練習", Toast.LENGTH_SHORT).show()
+        manageVisibility(0)  //顯示觸控板及記錄紐
     }
 
 
 
+    fun manageVisibility(flag: Int) {
+        //找到相關的View
+        val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
+        trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
+        val selectButton = requireView().findViewById(R.id.confirm_trial) as Button
+
+        val countAndHint =   requireView().findViewById<TextView>(R.id.text1)
+        val recordingButton = requireView().findViewById<Button>(R.id.practice_record_position)
+        val trialCount = requireView().findViewById<TextView>(R.id.practice_count)
+        val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
+
+        //val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
+
+
+        when (flag) {
+            0 -> {
+                //顯示測驗進行VIEW
+                countAndHint.visibility = View.VISIBLE
+                trialCount.visibility = View.VISIBLE
+                recordingButton.visibility = View.VISIBLE
+                touchBoard.visibility = View.VISIBLE
+                //隱藏方向選擇VIEW
+                trialInputSpinner.visibility = View.INVISIBLE
+                selectButton.visibility = View.INVISIBLE
+            }
+
+            1 -> {
+                //隱藏測驗進行VIEW
+                countAndHint.visibility = View.GONE
+                trialCount.visibility = View.GONE
+                recordingButton.visibility = View.GONE
+                touchBoard.visibility = View.GONE
+                //顯示方向選擇VIEW
+                trialInputSpinner.visibility = View.VISIBLE
+                selectButton.visibility = View.VISIBLE
+                //
+                Score.text = "Score"
+            }
+        }
+    }  //管理測驗相關View顯示、可觸控與否
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -604,7 +690,7 @@ class PracticeFragment : Fragment(){
         //找到測驗按鈕
         val recordingButton = requireView().findViewById<Button>(R.id.practice_record_position)
         //顯示已完成練習次數
-        practiceCount.text = "練習次數: $currentTrial / $MAX_PRACTICE_TRIAL"
+        practiceCount.text =  "練習次數: $currentTrial / $maxTrailDesire"
 
         //判斷測驗情境，並更新對應的Text
         when (condition) {

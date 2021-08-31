@@ -157,6 +157,18 @@
         <item>1</item>
     </string-array>
 
+    <string-array name="practice_trial_count_list">
+        <item>8</item>
+        <item>7</item>
+        <item>6</item>
+        <item>5</item>
+        <item>4</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+
+
     <string-array name="context_list">
         <item>請選情境</item>
         <item>Finger</item>
