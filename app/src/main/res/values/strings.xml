@@ -135,17 +135,13 @@
     <string name="trial_count">測驗次數:</string>
 
 
-    <string name="st_btn">輸入編號後開始</string>
-    <string name="text_first">第一次：-999</string>
-    <string name="text_last">最後一次：-999</string>
-
 
     <string-array name="direction_list">
         <item>請選方向</item>
-        <item>L2L</item>
-        <item>L2R</item>
-        <item>R2R</item>
-        <item>R2L</item>
+        <item>左下至左上</item>
+        <item>左下至右上</item>
+        <item>右下至右上</item>
+        <item>右下至左上</item>
     </string-array>
 
     <string-array name="trial_count_list">
@@ -171,9 +167,8 @@
 
     <string-array name="context_list">
         <item>請選情境</item>
-        <item>Finger</item>
-        <item>Pen</item>
+        <item>手指</item>
+        <item>握筆</item>
     </string-array>
-
 
 </resources>

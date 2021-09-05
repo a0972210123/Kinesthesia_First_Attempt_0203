@@ -478,7 +478,7 @@ class TestFragment : Fragment() {
         //調整view位置
         when (currentTestDirection) {
             "請選方向" -> {
-                titleParams.setMargins(centerX - titleCalibrate, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate, centerY + 400, 0, 0)
             }
 
             "L2L" -> {
@@ -495,7 +495,7 @@ class TestFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 700, centerY + 400, 0, 0)
             }
 
             "L2R" -> {
@@ -512,7 +512,7 @@ class TestFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 700,centerY + 400, 0, 0)
             }
 
             "R2R" -> {
@@ -529,7 +529,7 @@ class TestFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate - 700, centerY + 400, 0, 0)
             }
 
             "R2L" -> {
@@ -546,7 +546,7 @@ class TestFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate - 700, centerY + 400, 0, 0)
             }
         }
     }
@@ -869,16 +869,16 @@ class TestFragment : Fragment() {
         var instructionList =  arrayListOf("")
 
         val pen =  arrayListOf(
-            "施測者將受試者握著的筆尖，" +"\n"+ "移動至下方預備位置上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者握著的筆尖，" +"\n"+ "移動到上方目標位置上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者握著的筆尖，" +"\n"+ "移回下方的預備位置上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" +"\n"+ "移動至 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" +"\n"+ "移動到 目標位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" +"\n"+ "移動回 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
             "受試者聽到嗶聲後將自己握著的筆，" +"\n"+ "移動到所記得的位置，" +"\n"+ "確認動作停止後按下紀錄。",
             "施測者將受試者握著的筆尖，" +"\n"+ "移動到平板外的桌面上，" +"\n"+ "確認資料正確後按下Save Trial。")
 
         val finger = arrayListOf(
-            "施測者將受試者的手指，" +"\n"+ "移動至下方預備位置上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者的手指，" +"\n"+ "移動到上方目標位置上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者的手指，" +"\n"+ "移回下方的預備位置上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" +"\n"+ "移動至 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" +"\n"+ "移動到 目標位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" +"\n"+ "移動回 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
             "受試者聽到嗶聲後將自己的手指，" +"\n"+ "移動到所記得的位置，" +"\n"+ "確認動作停止後按下紀錄。",
             "施測者將受試者的手指，" +"\n"+ "移動到平板外的桌面上，" +"\n"+ "確認資料正確後按下Save Trial。")
 
