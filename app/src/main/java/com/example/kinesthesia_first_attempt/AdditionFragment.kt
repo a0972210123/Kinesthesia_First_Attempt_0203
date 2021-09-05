@@ -887,7 +887,6 @@ class AdditionFragment : Fragment() {
         }
 
 
-
         //判斷測驗情境，並更新對應的Text
         when (condition) {
             "Start Position" -> {
