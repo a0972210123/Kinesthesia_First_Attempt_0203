@@ -7,7 +7,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.annotation.SuppressLint as SuppressLint1
 
-
 class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     @SuppressLint1("ClickableViewAccessibility", "SetTextI18n")
