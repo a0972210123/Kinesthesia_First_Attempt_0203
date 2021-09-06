@@ -42,6 +42,7 @@ class AdditionFragment : Fragment() {
         super.onCreate(savedInstanceState)
         (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
         //hideBottomUIMenu()
+        hideSystemUI()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -1321,7 +1322,7 @@ class AdditionFragment : Fragment() {
                     or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_FULLSCREEN)
             decorView.systemUiVisibility = uiOptions
         }
-    }
+    }  //觸控時會重新顯示
 
 
     private fun showBottomUIMenu() {
@@ -1335,6 +1336,40 @@ class AdditionFragment : Fragment() {
             val uiOptions: Int = View.SCREEN_STATE_OFF
             decorView.systemUiVisibility = uiOptions
         }
+    } //觸控時會重新顯示
+
+    //https://stackoverflow.com/questions/37380587/android-how-to-hide-the-system-ui-properly
+    private fun hideSystemUI() {
+        val decorView = requireActivity().window.decorView
+        val uiOptions = decorView.systemUiVisibility
+        var newUiOptions = uiOptions
+        newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_LOW_PROFILE
+        newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_FULLSCREEN
+        newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE
+        newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        decorView.systemUiVisibility = newUiOptions
     }
+
+    private fun showSystemUI() {
+        val decorView = requireActivity().window.decorView
+        val uiOptions = decorView.systemUiVisibility
+        var newUiOptions = uiOptions
+        newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_LOW_PROFILE.inv()
+        newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_FULLSCREEN.inv()
+        newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION.inv()
+        newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_IMMERSIVE.inv()
+        newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY.inv()
+        decorView.systemUiVisibility = newUiOptions
+    }
+
+
+
+
+
+
+
+
+
 
 } //Fragment End
