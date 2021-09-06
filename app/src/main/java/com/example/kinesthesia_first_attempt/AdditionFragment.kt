@@ -54,6 +54,7 @@ class AdditionFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -66,10 +67,11 @@ class AdditionFragment : Fragment() {
 
         val currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
-        touchBoard.setOnTouchListener(View.OnTouchListener { v, event ->
+        touchBoard.setOnTouchListener { _, _ ->
             currentPosition.text = ("Current Position: X= $startX ,Y= $startY")
+            //true
             false
-        }) //0824可以讀到即時觸碰位置
+        } //0824可以讀到即時觸碰位置
 
         /// direction spinner
         launchDirectionSpinner()

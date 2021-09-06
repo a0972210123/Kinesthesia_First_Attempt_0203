@@ -2,11 +2,9 @@ package com.example.kinesthesia_first_attempt
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.actionToString
 import android.view.View
-import androidx.core.view.MotionEventCompat
 import android.annotation.SuppressLint as SuppressLint1
 
 class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) {
@@ -18,30 +16,33 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
         b1 = event.getAxisValue(MotionEvent.AXIS_TOUCH_MAJOR)
         b2 = event.getAxisValue(MotionEvent.AXIS_TOOL_MAJOR)
 
+        var result:Boolean = true
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 startX = event.x
                 startY = event.y
-                Log.d("onTouch", "$startX  $startY  $bb  $b1  $b2")
-                invalidate() //重新整理整個view
+                //invalidate() //重新整理整個view
+                result = true
             }
 
             MotionEvent.ACTION_MOVE -> {
                 startX = event.x
                 startY = event.y
-                Log.d("onMove", "$startX  $startY  $bb  $b1  $b2")
-                invalidate()
+                //invalidate()
+                result = false
             }
 
             MotionEvent.ACTION_UP -> {
                 startX = 0f
                 startY = 0f
-                Log.d("onLift", "$startX  $startY  $bb  $b1  $b2")
                 invalidate()
+                result = true
             }
         }
 
 
+/*
 ////多點觸控TEST
         var action = MotionEventCompat.getActionMasked(event);
         // Get the index of the pointer associated with the action.
@@ -65,9 +66,8 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
         checkAction(action)
 //// 多點觸控TEST
 
-
-
-        return true
+ */
+        return  result
     }
 
 
