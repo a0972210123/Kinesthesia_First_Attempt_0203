@@ -8,6 +8,7 @@ import android.media.ToneGenerator
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.SystemClock.currentThreadTimeMillis
 import android.util.Log
 import android.view.*
 import android.view.View.OnTouchListener
@@ -26,12 +27,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.pow
 import kotlin.math.sqrt
-
-
-
-
-
-
 
 
 class AutorecordFragment : Fragment() {
@@ -66,7 +61,8 @@ class AutorecordFragment : Fragment() {
         binding?.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
-            autorecordFragment = this@AutorecordFragment //使用listenser binding，用UI button 在xml中設定onclick
+            autorecordFragment =
+                this@AutorecordFragment //使用listenser binding，用UI button 在xml中設定onclick
         }
 
 
@@ -74,13 +70,12 @@ class AutorecordFragment : Fragment() {
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
 
 
+        /*     touchBoard.setOnTouchListener { _, _ ->
+                 currentPosition.text = ("Current Position: X= $startX ,Y= $startY")
 
-   /*     touchBoard.setOnTouchListener { _, _ ->
-            currentPosition.text = ("Current Position: X= $startX ,Y= $startY")
-
-            //true
-            false
-        } //0824可以讀到即時觸碰位置*/
+                 //true
+                 false
+             } //0824可以讀到即時觸碰位置*/
 
 
 
@@ -88,15 +83,16 @@ class AutorecordFragment : Fragment() {
 
             // 建立GestureDetector物件，並傳入自己定義的手勢物件（繼承自SimpleOnGestureListener）
             var gd: GestureDetector =
-                GestureDetector( requireContext(), MyGestureDetectorListener())
+                GestureDetector(requireContext(), MyGestureDetectorListener())
 
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 // 呼叫GestureDetector的onTouchEvent()方法，傳入收到的MotionEvent物件
-
                 gd.onTouchEvent(event)
                 currentPosition.text = ("Current Position: X= $startX ,Y= $startY")
                 return false
             }
+
+
 
         })
 
@@ -323,7 +319,7 @@ class AutorecordFragment : Fragment() {
         }
         //清掉前一個情境的view
         when (tempContext) {
-            "Pen"  -> {
+            "Pen" -> {
                 val hideTargetView = requireView().findViewById<ImageView>(R.id.target)
                 val hideStartView = requireView().findViewById<ImageView>(R.id.start_point)
                 val hideRandomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
@@ -339,11 +335,12 @@ class AutorecordFragment : Fragment() {
             }
             "Finger" -> {
                 val hideTargetView = requireView().findViewById<ImageView>(R.id.pen_target)
-                val hideStartView  = requireView().findViewById<ImageView>(R.id.pen_start_point)
-                val hideRandomTargetView = requireView().findViewById<ImageView>(R.id.pen_random_target)
+                val hideStartView = requireView().findViewById<ImageView>(R.id.pen_start_point)
+                val hideRandomTargetView =
+                    requireView().findViewById<ImageView>(R.id.pen_random_target)
                 val hideUpArrow = requireView().findViewById<ImageView>(R.id.pen_arrow)
                 val hideLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_left)
-                val hideRightArrow  = requireView().findViewById<ImageView>(R.id.pen_arrow_to_right)
+                val hideRightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_right)
                 hideTargetView.visibility = View.GONE
                 hideStartView.visibility = View.GONE
                 hideRandomTargetView.visibility = View.GONE
@@ -520,7 +517,7 @@ class AutorecordFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate + 700, centerY + 400 , 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 700, centerY + 400, 0, 0)
             }
 
             "L2R" -> {
@@ -625,7 +622,11 @@ class AutorecordFragment : Fragment() {
                 randomThePosition()
                 setTargetPosition()
                 changeText()
-                Toast.makeText(activity, "開始補測 $currentTestContext $currentTestDirection", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    activity,
+                    "開始補測 $currentTestContext $currentTestDirection",
+                    Toast.LENGTH_SHORT
+                ).show()
                 manageVisibility(0)  //顯示觸控板及記錄紐
             }
         }
@@ -895,26 +896,32 @@ class AutorecordFragment : Fragment() {
 
         //找到指導語textView
         val instructionText = requireView().findViewById<TextView>(R.id.instruction_demonstration)
-        var instructionList =  arrayListOf("")
+        var instructionList = arrayListOf("")
 
-        val pen =  arrayListOf(
-            "施測者將受試者握著的筆尖，" +"\n"+ "移動至 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者握著的筆尖，" +"\n"+ "移動到 目標位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者握著的筆尖，" +"\n"+ "移動回 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "受試者聽到嗶聲後將自己握著的筆，" +"\n"+ "移動到所記得的位置，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者握著的筆尖，" +"\n"+ "移動到平板外的桌面上，" +"\n"+ "確認資料正確後按下Save Trial。")
+        val pen = arrayListOf(
+            "施測者將受試者握著的筆尖，" + "\n" + "移動至 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" + "\n" + "移動到 目標位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" + "\n" + "移動回 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "受試者聽到嗶聲後將自己握著的筆，" + "\n" + "移動到所記得的位置，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" + "\n" + "移動到平板外的桌面上，" + "\n" + "確認資料正確後按下Save Trial。"
+        )
 
         val finger = arrayListOf(
-            "施測者將受試者的手指，" +"\n"+ "移動至 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者的手指，" +"\n"+ "移動到 目標位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者的手指，" +"\n"+ "移動回 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "受試者聽到嗶聲後將自己的手指，" +"\n"+ "移動到所記得的位置，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者的手指，" +"\n"+ "移動到平板外的桌面上，" +"\n"+ "確認資料正確後按下Save Trial。")
+            "施測者將受試者的手指，" + "\n" + "移動至 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" + "\n" + "移動到 目標位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" + "\n" + "移動回 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "受試者聽到嗶聲後將自己的手指，" + "\n" + "移動到所記得的位置，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" + "\n" + "移動到平板外的桌面上，" + "\n" + "確認資料正確後按下Save Trial。"
+        )
 
-        when(currentTestContext){
-            "Pen" -> {  instructionList = pen  }
+        when (currentTestContext) {
+            "Pen" -> {
+                instructionList = pen
+            }
 
-            "Finger" -> { instructionList = finger }
+            "Finger" -> {
+                instructionList = finger
+            }
         }
 
 
@@ -1177,13 +1184,16 @@ class AutorecordFragment : Fragment() {
         val outputPositionData = positionData.toString().replace("\r", "").split("\n")
 
         val timeStamp: String //避免資料夾個案編號資料重複的額外後接編號
-        val timeStampFormatter = SimpleDateFormat("HH_mm_ss", Locale.getDefault()) //H 時 在一天中 (0~23) // m 分 // s 秒
+        val timeStampFormatter =
+            SimpleDateFormat("HH_mm_ss", Locale.getDefault()) //H 時 在一天中 (0~23) // m 分 // s 秒
         val timeStampCalendar = Calendar.getInstance()
-        timeStamp =  timeStampFormatter.format(timeStampCalendar.time).toString() //當日時間  //需傳到viewmodel
+        timeStamp =
+            timeStampFormatter.format(timeStampCalendar.time).toString() //當日時間  //需傳到viewmodel
 
 
         //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
-        val outputFileName = "AutoRecord_" + currentTestContext + "_" + currentTestDirection +"_" + timeStamp + ".csv"
+        val outputFileName =
+            "AutoRecord_" + currentTestContext + "_" + currentTestDirection + "_" + timeStamp + ".csv"
 
         // 存檔: name,List,flag
         outputCsv(outputFileName, outputPositionData, 0)
@@ -1313,7 +1323,7 @@ class AutorecordFragment : Fragment() {
                 ) //Set the message to show the data
                 .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
 
-                .setNegativeButton(getString(R.string.addition_test_dialog_next_condition)){ _, _ ->
+                .setNegativeButton(getString(R.string.addition_test_dialog_next_condition)) { _, _ ->
                     savePracticePerformanceToCSV()//儲存測驗表現
                     clearRecord()  // 清除測驗表現
                     formalTrialCount.text = "測驗次數: $currentTrial / $maxTrailDesire "
@@ -1394,34 +1404,52 @@ class AutorecordFragment : Fragment() {
     }
 
 
-
-
 } //Fragment End
 
 
-
-class MyGestureDetectorListener: GestureDetector.OnGestureListener {
+class MyGestureDetectorListener : GestureDetector.OnGestureListener {
     //https://www.itread01.com/content/1549194854.html
+    //https://developer.android.com/training/gestures/detector
+    //https://developer.android.com/jetpack/compose/gestures
     private val SWIPE_THRESHOLD: Int = 300
     private val SWIPE_VELOCITY_THRESHOLD = 300
 
+    var scrollThresholdValue_x = 0f
+    var scrollThresholdValue_y = 0f
+
+    var onDownTime: Long = 0
+    var onLongPressTime: Long = 0
+    var onScrollTime: Long =0
+    var interval: Long = 0
+
+    fun resetTime() {
+        onDownTime = 0
+        onLongPressTime = 0
+        interval = 0
+        scrollThresholdValue_x = 0f
+        scrollThresholdValue_y = 0f
+        onScrollTime =0
+    }
+
+
     override fun onDown(e: MotionEvent?): Boolean {
+        onDownTime = currentThreadTimeMillis()
         startX = e!!.x
         startY = e!!.y
-        Log.d("Gesture","onDown")
+        Log.d("Gesture", "onDown")
         return false
     }
 
     override fun onShowPress(e: MotionEvent?) {
         startX = e!!.x
         startY = e!!.y
-        Log.d("Gesture","onShowPress")
+        Log.d("Gesture", "onShowPress")
     }
 
     override fun onSingleTapUp(e: MotionEvent?): Boolean {
         startX = 0f
         startY = 0f
-        Log.d("Gesture","onSingleTapUp")
+        Log.d("Gesture", "onSingleTapUp")
         return false
     }
 
@@ -1431,12 +1459,26 @@ class MyGestureDetectorListener: GestureDetector.OnGestureListener {
         distanceX: Float,
         distanceY: Float
     ): Boolean {
-        Log.d("Gesture","onScroll")
-        return false
+       // Log.d("Gesture", "onScroll")
+
+        onScrollTime = currentThreadTimeMillis()
+        interval = onScrollTime - onDownTime
+        //Log.d("Gesture", "onScroll: interval = $interval ms")
+        var scrollThresholdValue_x = e2!!.x - e1!!.x
+        var scrollThresholdValue_y = e2!!.y - e1!!.y
+        Log.d("Gesture", "onScroll: Scroll Threshold Value X=$scrollThresholdValue_x Y=$scrollThresholdValue_y")
+        resetTime()
+        //return false
+        return true
     }
 
     override fun onLongPress(e: MotionEvent?) {
-        Log.d("Gesture","onLongPress")
+        onLongPressTime = currentThreadTimeMillis()
+        interval = onLongPressTime - onDownTime
+        Log.d("Gesture", "onLongPress: interval = $interval ms")
+        resetTime()
+
+        //測試結果: GestureDetector 本身 onLongPress 的時間設定為 10 - 40ms之間，並不穩定，且時長短
     }
 
     override fun onFling(
@@ -1446,54 +1488,70 @@ class MyGestureDetectorListener: GestureDetector.OnGestureListener {
         velocityY: Float
     ): Boolean {
 
-       var result:Boolean = false
+        var result: Boolean = false
 
-        try{
-        var diffY = e2!!.y - e1!!.y
-        var diffX = e2!!.x - e1!!.x
+        try {
+            var diffY = e2!!.y - e1!!.y
+            var diffX = e2!!.x - e1!!.x
 
-        if (Math.abs(diffX) > Math.abs(diffY)) {
-            if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                if (diffX > 0) {
-                    onSwipeRight();
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffX > 0) {
+                        onSwipeRight();
+                    } else {
+                        onSwipeLeft();
+                    }
+                    result = true;
+                }
+
+            } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                if (diffY > 0) {
+                    onSwipeBottom();
                 } else {
-                    onSwipeLeft();
+                    onSwipeTop();
                 }
                 result = true;
             }
 
-        } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-            if (diffY > 0) {
-                onSwipeBottom();
-            } else {
-                onSwipeTop();
-            }
-            result = true;
+        } catch (exception: Exception) {
+            exception.printStackTrace();
         }
 
-    } catch (exception:Exception) {
-        exception.printStackTrace();
-    }
-
-        Log.d("Gesture"," onFling")
-
+        Log.d("Gesture", " onFling Confirm")
         return result
         //return true
     }
 
-    fun onSwipeRight(){}
+    fun onSwipeRight() {  Log.d("Gesture", " onFling: Right") }
 
-    fun onSwipeLeft(){}
+    fun onSwipeLeft() {  Log.d("Gesture", " onFling: Left")}
 
-    fun onSwipeTop(){}
+    fun onSwipeTop() {  Log.d("Gesture", " onFling: Top")}
 
-    fun onSwipeBottom(){}
-
-
-    
-
+    fun onSwipeBottom() { Log.d("Gesture", " onFling: Bottom") }
 
 
 }
+
+
+class MyOnDoubleTapListener : GestureDetector.OnDoubleTapListener{
+
+    override fun onDoubleTap(event: MotionEvent?): Boolean {
+        Log.d("Gesture", "onDoubleTap: $event")
+        return true
+    }
+
+    override fun onDoubleTapEvent(event: MotionEvent?): Boolean {
+        Log.d("Gesture", "onDoubleTapEvent: $event")
+        return true
+    }
+
+    override fun onSingleTapConfirmed(event: MotionEvent?): Boolean {
+        Log.d("Gesture", "onSingleTapConfirmed: $event")
+        return true
+    }
+
+}
+
 
 
