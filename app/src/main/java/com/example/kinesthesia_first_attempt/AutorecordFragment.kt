@@ -1466,7 +1466,9 @@ class MyGestureDetectorListener : GestureDetector.OnGestureListener {
         //Log.d("Gesture", "onScroll: interval = $interval ms")
         var scrollThresholdValue_x = e2!!.x - e1!!.x
         var scrollThresholdValue_y = e2!!.y - e1!!.y
-        Log.d("Gesture", "onScroll: Scroll Threshold Value X=$scrollThresholdValue_x Y=$scrollThresholdValue_y")
+        //Log.d("Gesture", "onScroll: Scroll Threshold Value X=$scrollThresholdValue_x Y=$scrollThresholdValue_y")
+        Log.d("Gesture", "onScroll: Scroll parameters X=$distanceX Y=$distanceY")
+
         resetTime()
         //return false
         return true
