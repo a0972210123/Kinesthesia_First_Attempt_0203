@@ -135,7 +135,6 @@
     <string name="trial_count">測驗次數:</string>
 
 
-
     <string-array name="direction_list">
         <item>請選方向</item>
         <item>左下至左上</item>

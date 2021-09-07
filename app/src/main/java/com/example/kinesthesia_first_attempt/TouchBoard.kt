@@ -9,6 +9,9 @@ import android.annotation.SuppressLint as SuppressLint1
 
 class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) {
 
+
+
+
     @SuppressLint1("ClickableViewAccessibility", "SetTextI18n")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val currentTimestamp = System.currentTimeMillis()
@@ -17,6 +20,7 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
         b2 = event.getAxisValue(MotionEvent.AXIS_TOOL_MAJOR)
 
         var result:Boolean = true
+
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {

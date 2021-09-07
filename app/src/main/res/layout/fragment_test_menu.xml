@@ -83,6 +83,23 @@
             app:layout_constraintTop_toTopOf="@+id/formal_task" />
 
 
+
+        <Button
+            android:id="@+id/auto_task"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:onClick="@{() -> testMenuFragment.goToAuto()}"
+            android:text="自動記錄測試"
+            android:textSize="36sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/formal_task" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
