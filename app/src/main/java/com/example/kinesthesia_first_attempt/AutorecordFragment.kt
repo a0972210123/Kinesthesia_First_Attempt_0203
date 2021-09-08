@@ -89,6 +89,11 @@ class AutorecordFragment : Fragment() {
                 // 呼叫GestureDetector的onTouchEvent()方法，傳入收到的MotionEvent物件
                 gd.onTouchEvent(event)
                 currentPosition.text = ("Current Position: X= $startX ,Y= $startY")
+
+
+                // var action = event!!.actionMasked
+
+
                 return false
             }
 
@@ -1422,6 +1427,9 @@ class MyGestureDetectorListener : GestureDetector.OnGestureListener {
     var onScrollTime: Long =0
     var interval: Long = 0
 
+    var isLongPressed:Boolean = false
+
+
     fun resetTime() {
         onDownTime = 0
         onLongPressTime = 0
@@ -1473,6 +1481,10 @@ class MyGestureDetectorListener : GestureDetector.OnGestureListener {
         //return false
         return true
     }
+
+
+
+
 
     override fun onLongPress(e: MotionEvent?) {
         onLongPressTime = currentThreadTimeMillis()
