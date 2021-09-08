@@ -475,7 +475,7 @@ class AdditionFragment : Fragment() {
         //調整view位置
         when (currentTestDirection) {
             "請選方向" -> {
-                titleParams.setMargins(centerX - titleCalibrate, centerY + 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate, centerY - 400, 0, 0)
             }
 
             "L2L" -> {
@@ -492,7 +492,7 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate + 700, centerY + 400 , 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400 , 0, 0)
             }
 
             "L2R" -> {
@@ -509,7 +509,7 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate + 700, centerY + 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400, 0, 0)
             }
 
             "R2R" -> {
@@ -526,7 +526,7 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate - 700, centerY + 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
             }
 
             "R2L" -> {
@@ -543,7 +543,7 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate - 700, centerY + 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
             }
         }
     }
