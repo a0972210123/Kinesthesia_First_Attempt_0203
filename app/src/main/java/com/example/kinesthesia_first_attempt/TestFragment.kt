@@ -64,11 +64,31 @@ class TestFragment : Fragment() {
 
 
         val currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)
+        currentPosition.text = ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY))
+
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
-        touchBoard.setOnTouchListener(View.OnTouchListener { v, event ->
-            currentPosition.text = ("Current Position: X= $startX ,Y= $startY")
+        touchBoard.setOnTouchListener { _, _ ->
+            currentPosition.text = ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY))
+            //true
             false
-        }) //0824可以讀到即時觸碰位置
+        } //0824可以讀到即時觸碰位置
+
+        //更新文字view
+        changeText()
+
+        val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
+        val modifyString: String = ("表現概述" + "\n" +
+                "整體誤差距離: " + "" + "\n" +
+                "前後方向表現: " + "" + "\n" +
+                "左右方向表現: " + "" + "\n" +
+                "\n" +
+                "詳細分數" + "\n" +
+                "Relative Error  AP: " + "" + "\n" +
+                "Relative Error  ML: " + "" + "\n" +
+                "Absolute Error  AP: " + "" + "\n" +
+                "Absolute Error  ML: " + "" + "\n"
+                )
+        Score.text = modifyString
 
         /// direction spinner
         launchDirectionSpinner()
@@ -177,14 +197,15 @@ class TestFragment : Fragment() {
 
     //測驗次數上限變數
     // trialCount
-    val maxTrialLimit = 5
+    //val maxTrialLimit = 5
+    val maxTrialLimit = 1
     var maxTrailDesire: Int = maxTrialLimit
     val trialCountList = arrayListOf<String>("請選次數", "5", "4", "3", "2", "1")
 
 
     //測驗方向變數
     var currentTestDirection: String = ""
-    val directionList = arrayListOf<String>("請選方向", "L2L", "L2R", "R2R", "R2L")
+    val directionList = arrayListOf<String>("請選方向", "L_Up", "L_Up_Right", "R_Up", "R_Up_Left", "L_Down", "L_Down_Right", "R_Down", "R_Down_Left",)
     var TestingFinishedList = arrayListOf<String>()
 
     //測驗方式
@@ -274,8 +295,13 @@ class TestFragment : Fragment() {
     lateinit var targetView: ImageView
     lateinit var randomTargetView: ImageView
     lateinit var upArrow: ImageView
-    lateinit var leftArrow: ImageView
-    lateinit var rightArrow: ImageView
+    lateinit var upLeftArrow: ImageView
+    lateinit var upRightArrow: ImageView
+
+    //0908改版面新增
+    lateinit var downArrow: ImageView
+    lateinit var downLeftArrow: ImageView
+    lateinit var downRightArrow: ImageView
 
     fun checkContextAndLaunchView(context: String) {
         var tempContext = context
@@ -293,65 +319,94 @@ class TestFragment : Fragment() {
                 tempContext = "Pen"
             }
         }
-
         //清掉前一個情境的view
         when (tempContext) {
-            "Pen" -> {
+            "Pen"  -> {
                 val hideTargetView = requireView().findViewById<ImageView>(R.id.target)
                 val hideStartView = requireView().findViewById<ImageView>(R.id.start_point)
                 val hideRandomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
-                val hideUpArrow = requireView().findViewById<ImageView>(R.id.arrow)
-                val hideLeftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_left)
-                val hideRightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_right)
+                val hideUpArrow = requireView().findViewById<ImageView>(R.id.up_arrow)
+                val hideUpLeftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_up_left)
+                val hideUpRightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_up_right)
+
+                //0908new
+                val hideDownArrow = requireView().findViewById<ImageView>(R.id.down_arrow)
+                val hideDownLeftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_down_left)
+                val hideDownRightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_down_right)
+
                 hideTargetView.visibility = View.GONE
                 hideStartView.visibility = View.GONE
                 hideRandomTargetView.visibility = View.GONE
                 hideUpArrow.visibility = View.GONE
-                hideLeftArrow.visibility = View.GONE
-                hideRightArrow.visibility = View.GONE
+                hideUpLeftArrow.visibility = View.GONE
+                hideUpRightArrow.visibility = View.GONE
+
+                //0908new
+                hideDownArrow.visibility = View.GONE
+                hideDownLeftArrow.visibility = View.GONE
+                hideDownRightArrow.visibility = View.GONE
+
             }
             "Finger" -> {
                 val hideTargetView = requireView().findViewById<ImageView>(R.id.pen_target)
-                val hideStartView = requireView().findViewById<ImageView>(R.id.pen_start_point)
-                val hideRandomTargetView =
-                    requireView().findViewById<ImageView>(R.id.pen_random_target)
-                val hideUpArrow = requireView().findViewById<ImageView>(R.id.pen_arrow)
-                val hideLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_left)
-                val hideRightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_right)
+                val hideStartView  = requireView().findViewById<ImageView>(R.id.pen_start_point)
+                val hideRandomTargetView = requireView().findViewById<ImageView>(R.id.pen_random_target)
+                val hideUpArrow = requireView().findViewById<ImageView>(R.id.pen_up_arrow)
+                val hideUpLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_left)
+                val hideUpRightArrow  = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_right)
+
+                //0908new
+                val hideDownArrow = requireView().findViewById<ImageView>(R.id.pen_down_arrow)
+                val hideDownLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_down_left)
+                val hideDownRightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_down_right)
+
                 hideTargetView.visibility = View.GONE
                 hideStartView.visibility = View.GONE
                 hideRandomTargetView.visibility = View.GONE
                 hideUpArrow.visibility = View.GONE
-                hideLeftArrow.visibility = View.GONE
-                hideRightArrow.visibility = View.GONE
+                hideUpLeftArrow.visibility = View.GONE
+                hideUpRightArrow.visibility = View.GONE
+                //0908new
+                hideDownArrow.visibility = View.GONE
+                hideDownLeftArrow.visibility = View.GONE
+                hideDownRightArrow.visibility = View.GONE
             }
         }
-
 
         when (tempContext) {
             "Finger" -> {
                 targetView = requireView().findViewById<ImageView>(R.id.target)
                 startView = requireView().findViewById<ImageView>(R.id.start_point)
                 randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
-                upArrow = requireView().findViewById<ImageView>(R.id.arrow)
-                leftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_left)
-                rightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_right)
+                upArrow = requireView().findViewById<ImageView>(R.id.up_arrow)
+                upLeftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_up_left)
+                upRightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_up_right)
+
+                //0908new
+                downArrow = requireView().findViewById<ImageView>(R.id.down_arrow)
+                downLeftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_down_left)
+                downRightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_down_right)
+
                 calibrateWidth = TandSCalibrate
             }
             "Pen" -> {
                 targetView = requireView().findViewById<ImageView>(R.id.pen_target)
                 startView = requireView().findViewById<ImageView>(R.id.pen_start_point)
                 randomTargetView = requireView().findViewById<ImageView>(R.id.pen_random_target)
-                upArrow = requireView().findViewById<ImageView>(R.id.pen_arrow)
-                leftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_left)
-                rightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_right)
+                upArrow = requireView().findViewById<ImageView>(R.id.pen_up_arrow)
+                upLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_left)
+                upRightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_right)
+
+                //0908new
+                downArrow = requireView().findViewById<ImageView>(R.id.pen_down_arrow)
+                downLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_down_left)
+                downRightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_down_right)
+
                 calibrateWidth = penTandSCalibrate
             }
         }
 
-
     } //輸入currentContext
-
 
     fun viewAdjustDp2Pixel(dpWidthOfView: Int): Int {
         return (((dpWidthOfView / 2) * pixelDensity) / 160).toInt()
@@ -433,9 +488,8 @@ class TestFragment : Fragment() {
         val targetParams = targetView.layoutParams as ViewGroup.MarginLayoutParams
         val startParams = startView.layoutParams as ViewGroup.MarginLayoutParams
         val titleParams = performanceTitle.layoutParams as ViewGroup.MarginLayoutParams
-        //val upArrowParams = upArrow.layoutParams as ViewGroup.MarginLayoutParams
-        //val leftArrowParams = leftArrow.layoutParams as ViewGroup.MarginLayoutParams
-        //val rightArrowParams = rightArrow.layoutParams as ViewGroup.MarginLayoutParams
+
+        // "L_Up", "L_Up_Right", "R_Up", "R_Up_Left", "L_Down", "L_Down_Right", "R_Down", "R_Down_Left",)
 
         //調整要呈現的View
         when (currentTestDirection) {
@@ -443,36 +497,103 @@ class TestFragment : Fragment() {
                 targetView.visibility = View.GONE
                 startView.visibility = View.GONE
                 upArrow.visibility = View.GONE
-                leftArrow.visibility = View.GONE
-                rightArrow.visibility = View.GONE
+                upLeftArrow.visibility = View.GONE
+                upRightArrow.visibility = View.GONE
+
+                //new
+                downArrow.visibility = View.GONE
+                downLeftArrow.visibility = View.GONE
+                downRightArrow.visibility = View.GONE
+
             }
-            "L2L" -> {
+            "L_Up" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.VISIBLE
-                leftArrow.visibility = View.GONE
-                rightArrow.visibility = View.GONE
+                upLeftArrow.visibility = View.GONE
+                upRightArrow.visibility = View.GONE
+                //new
+                downArrow.visibility = View.GONE
+                downLeftArrow.visibility = View.GONE
+                downRightArrow.visibility = View.GONE
             }
-            "L2R" -> {
+            "L_Up_Right" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.GONE
-                leftArrow.visibility = View.GONE
-                rightArrow.visibility = View.VISIBLE
+                upLeftArrow.visibility = View.GONE
+                upRightArrow.visibility = View.VISIBLE
+                //new
+                downArrow.visibility = View.GONE
+                downLeftArrow.visibility = View.GONE
+                downRightArrow.visibility = View.GONE
             }
-            "R2R" -> {
+            "R_Up" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.VISIBLE
-                leftArrow.visibility = View.GONE
-                rightArrow.visibility = View.GONE
+                upLeftArrow.visibility = View.GONE
+                upRightArrow.visibility = View.GONE
+                //new
+                downArrow.visibility = View.GONE
+                downLeftArrow.visibility = View.GONE
+                downRightArrow.visibility = View.GONE
             }
-            "R2L" -> {
+            "R_Up_Left" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.GONE
-                leftArrow.visibility = View.VISIBLE
-                rightArrow.visibility = View.GONE
+                upLeftArrow.visibility = View.VISIBLE
+                upRightArrow.visibility = View.GONE
+                //new
+                downArrow.visibility = View.GONE
+                downLeftArrow.visibility = View.GONE
+                downRightArrow.visibility = View.GONE
+            }
+//////////////////////////////////////////////
+            "L_Down" -> {
+                targetView.visibility = View.VISIBLE
+                startView.visibility = View.VISIBLE
+                upArrow.visibility = View.GONE
+                upLeftArrow.visibility = View.GONE
+                upRightArrow.visibility = View.GONE
+                //new
+                downArrow.visibility = View.VISIBLE
+                downLeftArrow.visibility = View.GONE
+                downRightArrow.visibility = View.GONE
+            }
+            "L_Down_Right"-> {
+                targetView.visibility = View.VISIBLE
+                startView.visibility = View.VISIBLE
+                upArrow.visibility = View.GONE
+                upLeftArrow.visibility = View.GONE
+                upRightArrow.visibility = View.GONE
+                //new
+                downArrow.visibility = View.GONE
+                downLeftArrow.visibility = View.GONE
+                downRightArrow.visibility = View.VISIBLE
+            }
+            "R_Down"-> {
+                targetView.visibility = View.VISIBLE
+                startView.visibility = View.VISIBLE
+                upArrow.visibility = View.GONE
+                upLeftArrow.visibility = View.GONE
+                upRightArrow.visibility = View.GONE
+                //new
+                downArrow.visibility = View.VISIBLE
+                downLeftArrow.visibility = View.GONE
+                downRightArrow.visibility = View.GONE
+            }
+            "R_Down_Left"-> {
+                targetView.visibility = View.VISIBLE
+                startView.visibility = View.VISIBLE
+                upArrow.visibility = View.GONE
+                upLeftArrow.visibility = View.GONE
+                upRightArrow.visibility = View.GONE
+                //new
+                downArrow.visibility = View.GONE
+                downLeftArrow.visibility = View.VISIBLE
+                downRightArrow.visibility = View.GONE
             }
         }
 
@@ -481,8 +602,7 @@ class TestFragment : Fragment() {
             "請選方向" -> {
                 titleParams.setMargins(centerX - titleCalibrate, centerY - 400, 0, 0)
             }
-
-            "L2L" -> {
+            "L_Up" -> {
                 targetParams.setMargins(
                     centerX - calibrateWidth - Center2Target,
                     centerY - calibrateWidth - Center2Target,
@@ -496,10 +616,9 @@ class TestFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400 , 0, 0)
             }
-
-            "L2R" -> {
+            "L_Up_Right" -> {
                 targetParams.setMargins(
                     centerX - calibrateWidth + Center2Target,
                     centerY - calibrateWidth - Center2Target,
@@ -513,10 +632,9 @@ class TestFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate + 700,centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400, 0, 0)
             }
-
-            "R2R" -> {
+            "R_Up" -> {
                 targetParams.setMargins(
                     centerX - calibrateWidth + Center2Target,
                     centerY - calibrateWidth - Center2Target,
@@ -532,8 +650,7 @@ class TestFragment : Fragment() {
 
                 titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
             }
-
-            "R2L" -> {
+            "R_Up_Left" -> {
                 targetParams.setMargins(
                     centerX - calibrateWidth - Center2Target,
                     centerY - calibrateWidth - Center2Target,
@@ -541,8 +658,73 @@ class TestFragment : Fragment() {
                     0
                 )
                 startParams.setMargins(
-                    centerX - calibrateWidth + 600,
-                    centerY - calibrateWidth + 600,
+                    centerX - calibrateWidth + Center2Target,
+                    centerY - calibrateWidth + Center2Target,
+                    0,
+                    0
+                )
+
+                titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
+            }
+
+            "L_Down" -> {
+                targetParams.setMargins(
+                    centerX - calibrateWidth - Center2Target,
+                    centerY - calibrateWidth + Center2Target,
+                    0,
+                    0
+                )
+                startParams.setMargins(
+                    centerX - calibrateWidth - Center2Start,
+                    centerY - calibrateWidth - Center2Start,
+                    0,
+                    0
+                )
+
+                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400 , 0, 0)
+            }
+            "L_Down_Right"-> {
+                targetParams.setMargins(
+                    centerX - calibrateWidth + Center2Target,
+                    centerY - calibrateWidth + Center2Target,
+                    0,
+                    0
+                )
+                startParams.setMargins(
+                    centerX - calibrateWidth - Center2Target,
+                    centerY - calibrateWidth - Center2Target,
+                    0,
+                    0
+                )
+
+                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400, 0, 0)
+            }
+            "R_Down"-> {
+                targetParams.setMargins(
+                    centerX - calibrateWidth + Center2Target,
+                    centerY - calibrateWidth + Center2Target,
+                    0,
+                    0
+                )
+                startParams.setMargins(
+                    centerX - calibrateWidth + Center2Start,
+                    centerY - calibrateWidth - Center2Start,
+                    0,
+                    0
+                )
+
+                titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
+            }
+            "R_Down_Left"-> {
+                targetParams.setMargins(
+                    centerX - calibrateWidth - Center2Target,
+                    centerY - calibrateWidth + Center2Target,
+                    0,
+                    0
+                )
+                startParams.setMargins(
+                    centerX - calibrateWidth + Center2Start,
+                    centerY - calibrateWidth - Center2Start,
                     0,
                     0
                 )
@@ -551,6 +733,7 @@ class TestFragment : Fragment() {
             }
         }
     }
+
 
     fun setTrialLimit(trialLimitInput: String) {
         when (trialLimitInput) {
@@ -674,25 +857,47 @@ class TestFragment : Fragment() {
     fun setTargetPosition() {
         var c2tX = 0
         var c2tY = 0
+
         when (currentTestDirection) {
-            "L2L" -> {
+            "L_Up" -> {
                 c2tX = centerX - calibrateWidth - Center2Target
                 c2tY = centerY - calibrateWidth - Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
-            "L2R" -> {
+            "L_Up_Right" -> {
                 c2tX = centerX - calibrateWidth + Center2Target
                 c2tY = centerY - calibrateWidth - Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
-            "R2R" -> {
+            "R_Up" -> {
                 c2tX = centerX - calibrateWidth + Center2Target
                 c2tY = centerY - calibrateWidth - Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
-            "R2L" -> {
+            "R_Up_Left" -> {
                 c2tX = centerX - calibrateWidth - Center2Target
                 c2tY = centerY - calibrateWidth - Center2Target
+                setTargetRandomPosition(c2tX, c2tY)
+            }
+
+            "L_Down" -> {
+                c2tX = centerX - calibrateWidth - Center2Target
+                c2tY = centerY - calibrateWidth + Center2Target
+                setTargetRandomPosition(c2tX, c2tY)
+            }
+            "L_Down_Right"-> {
+                c2tX = centerX - calibrateWidth + Center2Target
+                c2tY = centerY - calibrateWidth + Center2Target
+                setTargetRandomPosition(c2tX, c2tY)
+            }
+            "R_Down"-> {
+                c2tX = centerX - calibrateWidth + Center2Target
+                c2tY = centerY - calibrateWidth + Center2Target
+                setTargetRandomPosition(c2tX, c2tY)
+            }
+            "R_Down_Left"-> {
+                c2tX = centerX - calibrateWidth - Center2Target
+                c2tY = centerY - calibrateWidth + Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
         }
@@ -712,7 +917,8 @@ class TestFragment : Fragment() {
 
     fun checkDirectionTested() {
         contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
-        val checkList = arrayListOf<String>("L2L", "L2R", "R2R", "R2L")
+        //目前暫定需要八種全測
+        val checkList = arrayListOf<String>("L_Up", "L_Up_Right", "R_Up", "R_Up_Left", "L_Down", "L_Down_Right", "R_Down", "R_Down_Left")
         //當四種都測完
         if (TestingFinishedList.toSet() == checkList.toSet()) {
             MaterialAlertDialogBuilder(requireContext())
@@ -726,25 +932,49 @@ class TestFragment : Fragment() {
                     TestingFinishedList = arrayListOf<String>() //清除List >> 準備測另種情境
                     contextSpinner.visibility = View.VISIBLE
                     Toast.makeText(activity, "更換情境", Toast.LENGTH_SHORT).show()
-                    checkContextTested() //確認兩種情境是否測驗完成
+                    //checkContextTested() //確認兩種情境是否測驗完成
 
                 }
                 .show() //creates and then displays the alert dialog.
         }
-    } //判斷是否所有方向都測過
+    }//判斷是否所有方向都測過
+
+    fun checkDirectionTested2() {
+        contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
+        //目前暫定需要八種全測
+        val checkList = arrayListOf<String>("L_Down", "L_Down_Right", "R_Down", "R_Down_Left")
+        //當四種都測完
+        if (TestingFinishedList.toSet() == checkList.toSet()) {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+                .setMessage(
+                    getString(R.string.test_dialog_message_finished_all_direction)
+                ) //Set the message to show the data
+                .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
+                .setPositiveButton(getString(R.string.test_dialog_next_context)) { _, _ ->
+                    finishedContextList.add(currentTestContext)
+                    TestingFinishedList = arrayListOf<String>() //清除List >> 準備測另種情境
+                    contextSpinner.visibility = View.VISIBLE
+                    Toast.makeText(activity, "更換情境", Toast.LENGTH_SHORT).show()
+                    //checkContextTested() //確認兩種情境是否測驗完成
+
+                }
+                .show() //creates and then displays the alert dialog.
+        }
+    }//判斷是否所有方向都測過 備用只測後四種
 
     fun manageVisibility(flag: Int) {
         //找到相關的View
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
         directionSpinner = requireView()!!.findViewById<View>(R.id.direction_list) as Spinner
 
-        //trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
+        trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
         contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
-
 
         val selectButton = requireView().findViewById(R.id.select_direction) as Button
         val recordingButton = requireView().findViewById<Button>(R.id.record_position)
         val trialCount = requireView().findViewById<TextView>(R.id.trial_count)
+        val countDown = requireView().findViewById<TextView>(R.id.text1)
         val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
 
         //val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
@@ -758,8 +988,10 @@ class TestFragment : Fragment() {
                 recordingButton.visibility = View.VISIBLE
                 touchBoard.visibility = View.VISIBLE
                 instructionText.visibility = View.VISIBLE
+                countDown.visibility = View.VISIBLE
+
                 //隱藏方向選擇VIEW
-                //trialInputSpinner.visibility = View.INVISIBLE
+                trialInputSpinner.visibility = View.INVISIBLE
                 contextSpinner.visibility = View.INVISIBLE
 
                 directionSpinner.visibility = View.INVISIBLE
@@ -770,15 +1002,28 @@ class TestFragment : Fragment() {
                 //隱藏測驗進行VIEW
                 trialCount.visibility = View.GONE
                 recordingButton.visibility = View.GONE
-                touchBoard.visibility = View.INVISIBLE
+                touchBoard.visibility = View.GONE
                 instructionText.visibility = View.GONE
+                countDown.visibility = View.GONE
+
                 //顯示方向選擇VIEW
-                //trialInputSpinner.visibility = View.VISIBLE
-                //contextSpinner.visibility = View.VISIBLE
+                trialInputSpinner.visibility = View.VISIBLE
+                contextSpinner.visibility = View.VISIBLE
                 directionSpinner.visibility = View.VISIBLE
                 selectButton.visibility = View.VISIBLE
                 //
-                Score.text = "Score"
+                val modifyString: String = ("表現概述" + "\n" +
+                        "整體誤差距離: " + "" + "\n" +
+                        "前後方向表現: " + "" + "\n" +
+                        "左右方向表現: " + "" + "\n" +
+                        "\n" +
+                        "詳細分數" + "\n" +
+                        "Relative Error  AP: " + "" + "\n" +
+                        "Relative Error  ML: " + "" + "\n" +
+                        "Absolute Error  AP: " + "" + "\n" +
+                        "Absolute Error  ML: " + "" + "\n"
+                        )
+                Score.text = modifyString
                 randomTargetView.visibility = View.GONE
             }
         }
@@ -893,30 +1138,31 @@ class TestFragment : Fragment() {
         //判斷測驗情境，並更新對應的Text
         when (condition) {
             "Start Position" -> {
-                start.text = "Start Position：X= $startPositionX ; Y= $startPositionY"
+                start.text = "起始位置：X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
                 instructionText.text = instructionList[1]
             }
             "Test Position" -> {
-                test.text = "Test Position：X= $testPositionX ; Y= $testPositionY"
+                test.text = "目標位置：X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
                 instructionText.text = instructionList[2]
             }
             "Rest Position" -> {
-                rest.text = "Rest Position：X= $restPositionX ; Y= $restPositionY"
+                rest.text = "預備位置：X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
                 instructionText.text = instructionList[3]
             }
             "Response Position" -> {
-                response.text = "Response Position：X= $responsePositionX ; Y= $responsePositionY"
+                response.text = "反應位置：X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
                 recordingButton.text = getString(R.string.next_trial)
                 recordingButton.textSize = 24.toFloat()
                 instructionText.text = instructionList[4]
             }
             "" -> {
-                start.text = "Start Position："
-                test.text = "Test Position："
-                rest.text = "Rest Position："
-                response.text = "Response Position："
+                start.text = "起始位置："
+                test.text = "目標位置："
+                rest.text = "預備位置："
+                response.text = "反應位置："
                 recordingButton.text = getString(R.string.record_position)
                 recordingButton.textSize = 30.toFloat()
+
                 instructionText.text = instructionList[0]
             }
         }
@@ -1089,32 +1335,92 @@ class TestFragment : Fragment() {
         var performanceDescriptionAP: String = ""  //Y軸
         var performanceDescriptionML: String = ""  //X軸
 
-        when {
-            inputScoreList[0] > 0 -> {
-                performanceDescriptionAP = "Underestimated"
+
+        //受試者測出發題目:
+        val far2NearList = arrayListOf<String>("L_Down", "L_Down_Right", "R_Down", "R_Down_Left")
+        //施測者測出發題目:
+        val near2FarList = arrayListOf<String>("L_Up", "L_Up_Right", "R_Up", "R_Up_Left")
+
+        var reverseFlag = 0
+
+        if (far2NearList.contains(currentTestDirection)){
+            reverseFlag = 1
+        } else if(near2FarList.contains(currentTestDirection)){
+            reverseFlag = 0
+        }
+
+
+        when(reverseFlag){
+            1 ->{
+                when {
+                    inputScoreList[0] < 0 -> {
+                        //performanceDescriptionAP = "Underestimated"
+                        performanceDescriptionAP = "少於指定目標位置"
+                    }
+                    inputScoreList[0] > 0 -> {
+                        //performanceDescriptionAP = "Overestimated"
+                        performanceDescriptionAP = "多於指定目標位置"
+                    }
+                    inputScoreList[0] == 0f -> {
+                        //performanceDescriptionAP = "Perfect Matched"
+                        performanceDescriptionAP = "等於指定目標位置"
+                    }
+                }
+
+                when {
+                    inputScoreList[1] < 0 -> {
+                        //performanceDescriptionML = "Right Deviated"
+                        performanceDescriptionML = "右偏指定目標位置"
+                    }
+                    inputScoreList[1] > 0 -> {
+                        //performanceDescriptionML = "Left  Deviated"
+                        performanceDescriptionML = "左偏指定目標位置"
+                    }
+                    inputScoreList[1] == 0f -> {
+                        //performanceDescriptionML = "Perfect Matched"
+                        performanceDescriptionML = "等於指定目標位置"
+                    }
+                }
             }
-            inputScoreList[0] < 0 -> {
-                performanceDescriptionAP = "Overestimated"
-            }
-            inputScoreList[0] == 0f -> {
-                performanceDescriptionAP = "Perfect Matched"
+            0 ->{
+                when {
+                    inputScoreList[0] > 0 -> {
+                        //performanceDescriptionAP = "Underestimated"
+                        performanceDescriptionAP = "少於指定目標位置"
+                    }
+                    inputScoreList[0] < 0 -> {
+                        //performanceDescriptionAP = "Overestimated"
+                        performanceDescriptionAP = "多於指定目標位置"
+                    }
+                    inputScoreList[0] == 0f -> {
+                        //performanceDescriptionAP = "Perfect Matched"
+                        performanceDescriptionAP = "等於指定目標位置"
+                    }
+                }
+
+                when {
+                    inputScoreList[1] > 0 -> {
+                        //performanceDescriptionML = "Right Deviated"
+                        performanceDescriptionML = "右偏指定目標位置"
+                    }
+                    inputScoreList[1] < 0 -> {
+                        //performanceDescriptionML = "Left  Deviated"
+                        performanceDescriptionML = "左偏指定目標位置"
+                    }
+                    inputScoreList[1] == 0f -> {
+                        //performanceDescriptionML = "Perfect Matched"
+                        performanceDescriptionML = "等於指定目標位置"
+                    }
+                }
             }
         }
 
-        when {
-            inputScoreList[1] > 0 -> {
-                performanceDescriptionML = "Right Deviated"
-            }
-            inputScoreList[1] < 0 -> {
-                performanceDescriptionML = "Left  Deviated"
-            }
-            inputScoreList[1] == 0f -> {
-                performanceDescriptionML = "Perfect Matched"
-            }
-        }
+// + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
+// /////// 將表現分數取小數點
 
         when (flag) {
             1 -> {
+                /*
                 val modifyString: String = ("Score" + "\n" +
                         "Anterior-Posterior: " + performanceDescriptionAP + "\n" +
                         "Medial - Lateral: " + performanceDescriptionML + "\n" +
@@ -1123,17 +1429,40 @@ class TestFragment : Fragment() {
                         "Absolute Error  AP: " + inputScoreList[2].toString() + "\n" +
                         "Absolute Error  ML: " + inputScoreList[3].toString() + "\n" +
                         "Absolute Error T2R: " + inputScoreList[4].toString())
+                 */
+                val modifyString: String = ("表現概述" + "\n" +
+                        "整體誤差距離: " + String.format("%.2f", inputScoreList[4]) + "\n" +
+                        "前後方向表現: " + performanceDescriptionAP + "\n" +
+                        "左右方向表現: " + performanceDescriptionML + "\n" +
+                        "\n" +
+                        "詳細分數" + "\n" +
+                        "Relative Error  AP: " + String.format("%.2f", inputScoreList[0]) + "\n" +
+                        "Relative Error  ML: " + String.format("%.2f", inputScoreList[1]) + "\n" +
+                        "Absolute Error  AP: " + String.format("%.2f", inputScoreList[2]) + "\n" +
+                        "Absolute Error  ML: " + String.format("%.2f", inputScoreList[3]) + "\n"
+                        )
                 Score.text = modifyString
             }
             0 -> {
-                val modifyString: String = ("Score" + "\n" +
-                        "Anterior-Posterior: " + "" + "\n" +
-                        "Medial - Lateral: " + "" + "\n" +
+                /*  val modifyString: String = ("Score" + "\n" +
+                          "Anterior-Posterior: " + "" + "\n" +
+                          "Medial - Lateral: " + "" + "\n" +
+                          "Relative Error  AP: " + "" + "\n" +
+                          "Relative Error  ML: " + "" + "\n" +
+                          "Absolute Error  AP: " + "" + "\n" +
+                          "Absolute Error  ML: " + "" + "\n" +
+                          "Absolute Error T2R: " + "")*/
+                val modifyString: String = ("表現概述" + "\n" +
+                        "整體誤差距離: " + "" + "\n" +
+                        "前後方向表現: " + "" + "\n" +
+                        "左右方向表現: " + "" + "\n" +
+                        "\n" +
+                        "詳細分數" + "\n" +
                         "Relative Error  AP: " + "" + "\n" +
                         "Relative Error  ML: " + "" + "\n" +
                         "Absolute Error  AP: " + "" + "\n" +
-                        "Absolute Error  ML: " + "" + "\n" +
-                        "Absolute Error T2R: " + "")
+                        "Absolute Error  ML: " + "" + "\n"
+                        )
                 Score.text = modifyString
             }
         }
@@ -1295,7 +1624,6 @@ class TestFragment : Fragment() {
         findNavController().navigate(R.id.action_testFragment_to_testMenuFragment)
     }
 
-
     private fun hideBottomUIMenu() {
         //https://www.cnblogs.com/Alex80/p/12986581.html
         //隱藏虛擬按鍵，並且全螢幕
@@ -1311,7 +1639,6 @@ class TestFragment : Fragment() {
         }
     }
 
-
     private fun showBottomUIMenu() {
         //恢復普通狀態
         if (Build.VERSION.SDK_INT in 12..18) { // lower api
@@ -1324,8 +1651,6 @@ class TestFragment : Fragment() {
             decorView.systemUiVisibility = uiOptions
         }
     }
-
-
 
     //https://stackoverflow.com/questions/37380587/android-how-to-hide-the-system-ui-properly
     private fun hideSystemUI() {
@@ -1351,11 +1676,5 @@ class TestFragment : Fragment() {
         newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY.inv()
         decorView.systemUiVisibility = newUiOptions
     }
-
-
-
-
-
-
 
 } //Fragment End
