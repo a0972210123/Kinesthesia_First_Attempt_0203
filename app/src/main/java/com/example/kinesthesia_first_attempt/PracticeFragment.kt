@@ -39,8 +39,6 @@ var bb: Float = 0f
 var b1: Float = 0f
 var b2: Float = 0f
 
-
-
 class PracticeFragment : Fragment(){
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentPracticeBinding
@@ -223,7 +221,7 @@ class PracticeFragment : Fragment(){
     }
 
 
-    fun calculateTrialScore(): List<Float> {
+    fun calculateTrialScoreP(): List<Float> {
         //計算向量: 以startPosition為基準/原點
         //Vector( test2Response ) = Vector( start2Response ) - Vector( start2Test )
 
@@ -262,66 +260,11 @@ class PracticeFragment : Fragment(){
     }
 
 
-    var scoreListForDisplay =  listOf<Float>(0f, 0f, 0f, 0f, 0f)
+
     //update when buttonPressed 5 times
     //clear the List After Display   // scoreListForDisplay =  (0f, 0f, 0f, 0f, 0f)
 
-    fun displayScoreInText(inputScoreList:List<Float>,flag: Int){
-        val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
 
-        var performanceDescriptionAP:String = ""  //Y軸
-        var performanceDescriptionML:String = ""  //X軸
-
-        when {
-            inputScoreList[0] >0 -> {
-                performanceDescriptionAP = "Underestimated"
-            }
-            inputScoreList[0] <0 -> {
-                performanceDescriptionAP = "Overestimated"
-            }
-            inputScoreList[0] == 0f -> {
-                performanceDescriptionAP = "Perfect Matched"
-            }
-        }
-
-        when {
-            inputScoreList[1] >0 -> {
-                performanceDescriptionML = "Right Deviated"
-            }
-            inputScoreList[1] <0 -> {
-                performanceDescriptionML = "Left  Deviated"
-            }
-            inputScoreList[1] == 0f -> {
-                performanceDescriptionML = "Perfect Matched"
-            }
-        }
-
-
-        when (flag){
-            1 -> {
-                val modifyString:String = (  "Score" + "\n"+
-                        "Relative Error AP: " + inputScoreList[0].toString() + " " + performanceDescriptionAP + "\n" +
-                        "Relative Error ML: " + inputScoreList[1].toString() + " " + performanceDescriptionML + "\n" +
-                        "Absolute Error AP: " + inputScoreList[2].toString() + "\n" +
-                        "Absolute Error ML: " + inputScoreList[3].toString() + "\n" +
-                        "Absolute Error T2R: "+ inputScoreList[4].toString() )
-                Score.text = modifyString
-            }
-            0 -> {
-                val modifyString:String = (  "Score" + "\n"+
-                        "Relative Error AP: " + "" + "\n"+
-                        "Relative Error ML: " + "" + "\n"+
-                        "Absolute Error AP: " + "" + "\n"+
-                        "Absolute Error ML: " + "" + "\n"+
-                        "Absolute Error T2R: "+ "" )
-                Score.text = modifyString
-            }
-        }
-    }
-
-    fun clearScoreList(){
-        scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
-    }
 
     fun savePracticePerformanceToCSV() {
         //call 整理8trialData
@@ -419,13 +362,35 @@ class PracticeFragment : Fragment(){
         val currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
 
-        //0824可以讀到即時觸碰位置
-        touchBoard.setOnTouchListener(View.OnTouchListener { v, event ->
-            currentPosition.text = ("Current Position: X= $startX ,Y= $startY")
-            //邏輯寫在這裡
+        currentPosition.text =
+            ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
+        touchBoard.setOnTouchListener { _, _ ->
+            currentPosition.text =
+                ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                ))
+            //true
             false
-        })
+        } //0824可以讀到即時觸碰位置
 
+
+        //更新文字view
+        changeText()
+
+        val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
+        val modifyString: String = ("表現概述" + "\n" +
+                "整體誤差距離: " + "" + "\n" +
+                "前後方向表現: " + "" + "\n" +
+                "左右方向表現: " + "" + "\n" +
+                "\n" +
+                "詳細分數" + "\n" +
+                "Relative Error  AP: " + "" + "\n" +
+                "Relative Error  ML: " + "" + "\n" +
+                "Absolute Error  AP: " + "" + "\n" +
+                "Absolute Error  ML: " + "" + "\n"
+                )
+        Score.text = modifyString
 
         launchTrialInputSpinner()
     }
@@ -461,7 +426,7 @@ class PracticeFragment : Fragment(){
 
     //測驗次數上限變數
     // trialCount
-    var maxTrailDesire: Int = 5
+    var maxTrailDesire: Int = 8
     val practiceTrialCountList = arrayListOf<String>("8","7","6","5", "4", "3", "2", "1")
 
     fun setTrialLimit(trialLimitInput: String) {
@@ -482,8 +447,8 @@ class PracticeFragment : Fragment(){
         val selectButton = requireView().findViewById(R.id.confirm_trial) as Button
 
         val countAndHint =   requireView().findViewById<TextView>(R.id.text1)
-        val recordingButton = requireView().findViewById<Button>(R.id.practice_record_position)
-        val trialCount = requireView().findViewById<TextView>(R.id.practice_count)
+        val recordingButton = requireView().findViewById<Button>(R.id.record_position)
+        val trialCount = requireView().findViewById<TextView>(R.id.trial_count)
         val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
 
         //val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
@@ -532,7 +497,7 @@ class PracticeFragment : Fragment(){
         checkTime()        //計時
 
         if(buttonPressedCountsInATrial == 4){
-            scoreListForDisplay = calculateTrialScore()   //計算測驗表現 (RE*2，AE*3)
+            scoreListForDisplay = calculateTrialScoreP()   //計算測驗表現 (RE*2，AE*3)
             displayScoreInText(scoreListForDisplay,1)       //更新text內容
             clearScoreList()
         }else{
@@ -562,7 +527,7 @@ class PracticeFragment : Fragment(){
 
     fun checkTime() {
         // 找到關聯的view
-        val recordingButton = requireView().findViewById<Button>(R.id.practice_record_position)
+        val recordingButton = requireView().findViewById<Button>(R.id.record_position)
         val text1 = requireView().findViewById<TextView>(R.id.text1)
         // hide button
         recordingButton.visibility = View.INVISIBLE
@@ -638,7 +603,7 @@ class PracticeFragment : Fragment(){
             practiceTime++  //增加練習次數
             binding.viewModel!!.setPracticeTime(practiceTime) //更新總練習次數
 
-            val practiceCount = requireView().findViewById<TextView>(R.id.practice_count)
+            val practiceCount = requireView().findViewById<TextView>(R.id.trial_count)
 
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.practice_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
@@ -678,59 +643,260 @@ class PracticeFragment : Fragment(){
         val rest = requireView().findViewById<TextView>(R.id.performance_rest_position)
         val response = requireView().findViewById<TextView>(R.id.performance_response_position)
         //測驗次數textView
-        val practiceCount = requireView().findViewById<TextView>(R.id.practice_count)
+        val formalTrialCount = requireView().findViewById<TextView>(R.id.trial_count)
 
         //找到測驗按鈕
-        val recordingButton = requireView().findViewById<Button>(R.id.practice_record_position)
+        val recordingButton = requireView().findViewById<Button>(R.id.record_position)
         //顯示已完成練習次數
-        practiceCount.text =  "練習次數: $currentTrial / $maxTrailDesire"
+        formalTrialCount.text = "測驗次數: $currentTrial / $maxTrailDesire"
 
 
         //找到指導語textView
         val instructionText = requireView().findViewById<TextView>(R.id.instruction_demonstration)
 
+
         val instructionList = arrayListOf(
-            "施測者將受試者的手指或筆尖，"+"\n"+"移動至下方預備位置上，"+"\n"+"確認動作停止後按下紀錄。",
-            "施測者將受試者的手指或筆尖，"+"\n"+"移動到上方目標位置上，"+"\n"+"確認動作停止後按下紀錄。",
-            "施測者將受試者的手指或筆尖，"+"\n"+"移回下方的預備位置上，"+"\n"+"確認動作停止後按下紀錄。",
-            "受試者聽到嗶聲後將手指或是筆，"+"\n"+"移動到所記得的位置，"+"\n"+"確認動作停止後按下紀錄。",
-            "施測者將受試者的手指或筆尖，"+"\n"+"移動到平板外的桌面上，"+"\n"+"確認資料正確後按下Save Trial。")
+            "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動至 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動到 目標位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動回 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "受試者聽到嗶聲後將手指或握著的筆，" + "\n" + "移動到所記得的位置，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動到平板外的桌面上，" + "\n" + "確認資料正確後按下Save Trial。"
+        )
 
 
-
-
-
-                //判斷測驗情境，並更新對應的Text
+        //判斷測驗情境，並更新對應的Text
         when (condition) {
             "Start Position" -> {
-                start.text = "Start Position：X= $startPositionX ; Y= $startPositionY"
-                instructionText.text =  instructionList[1]
+                start.text = "起始位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                )
+                instructionText.text = instructionList[1]
             }
             "Test Position" -> {
-                test.text = "Test Position：X= $testPositionX ; Y= $testPositionY"
+                test.text = "目標位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                )
                 instructionText.text = instructionList[2]
             }
             "Rest Position" -> {
-                rest.text = "Rest Position：X= $restPositionX ; Y= $restPositionY"
+                rest.text = "預備位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                )
                 instructionText.text = instructionList[3]
             }
             "Response Position" -> {
-                response.text = "Response Position：X= $responsePositionX ; Y= $responsePositionY"
-                instructionText.text = instructionList[4]
+                response.text = "反應位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                )
                 recordingButton.text = getString(R.string.next_trial)
                 recordingButton.textSize = 24.toFloat()
+                instructionText.text = instructionList[4]
             }
             "" -> {
-                start.text = "Start Position："
-                test.text = "Test Position："
-                rest.text = "Rest Position："
-                response.text = "Response Position："
-                instructionText.text = instructionList[0]
+                start.text = "起始位置："
+                test.text = "目標位置："
+                rest.text = "預備位置："
+                response.text = "反應位置："
                 recordingButton.text = getString(R.string.record_position)
                 recordingButton.textSize = 30.toFloat()
+
+                instructionText.text = instructionList[0]
             }
         }
     }
+
+
+
+    //顯示表現用暫存LIST
+    var scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
+
+    fun calculateTrialScore(): List<Float> {
+        //計算向量: 以startPosition為基準/原點
+        //Vector( test2Response ) = Vector( start2Response ) - Vector( start2Test )
+
+        //start2Test(x,y) = Test(x,y) - Start(x,y)
+        var start2TestX = testPositionX - startPositionX
+        var start2TestY = testPositionY - startPositionY
+
+        //start2Response(x,y) = Response(x,y) - Start(x,y)
+        var start2ResponseX = responsePositionX - startPositionX
+        var start2ResponseY = responsePositionY - startPositionY
+
+        //test2Response
+        var test2ResponseAP = start2ResponseY - start2TestY
+        var test2ResponseML = start2ResponseX - start2TestX
+
+        //Relative Error: AP、ML
+        var relativeErrorAP = test2ResponseAP
+        var relativeErrorML = test2ResponseML
+        //Absolute Error: AP、ML、T2R(AP^2+ML^2)^1/2
+        var absoluteErrorAP = kotlin.math.abs(test2ResponseAP)
+        var absoluteErrorML = kotlin.math.abs(test2ResponseML)
+
+        val a = test2ResponseAP.toDouble()
+        val b = test2ResponseML.toDouble()
+        val c: Double = sqrt(a * a + b * b)
+        var absoluteErrorT2R = c.toFloat()
+
+        return listOf(
+            relativeErrorAP,
+            relativeErrorML,
+            absoluteErrorAP,
+            absoluteErrorML,
+            absoluteErrorT2R
+        )
+        // Variable Error: AP、ML、(AP^2+ML^2)^1/2  >> 需每個方向全部測完才能算 >> 在這邊先不算
+    }  //計算測驗分數
+
+    fun clearScoreList() {
+        scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
+    } //清除測驗分數
+
+    fun displayScoreInText(inputScoreList: List<Float>, flag: Int) {
+        val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
+
+        var performanceDescriptionAP: String = ""  //Y軸
+        var performanceDescriptionML: String = ""  //X軸
+
+
+        //受試者測出發題目:
+        val far2NearList = arrayListOf<String>("L_Down", "L_Down_Right", "R_Down", "R_Down_Left")
+        //施測者測出發題目:
+        val near2FarList = arrayListOf<String>("L_Up", "L_Up_Right", "R_Up", "R_Up_Left")
+
+        var reverseFlag = 1
+
+      /*  if (far2NearList.contains(currentTestDirection)) {
+            reverseFlag = 1
+        } else if (near2FarList.contains(currentTestDirection)) {
+            reverseFlag = 0
+        }*/
+
+        when (reverseFlag) {
+            1 -> {
+                when {
+                    inputScoreList[0] < 0 -> {
+                        //performanceDescriptionAP = "Underestimated"
+                        performanceDescriptionAP = "少於指定目標位置"
+                    }
+                    inputScoreList[0] > 0 -> {
+                        //performanceDescriptionAP = "Overestimated"
+                        performanceDescriptionAP = "多於指定目標位置"
+                    }
+                    inputScoreList[0] == 0f -> {
+                        //performanceDescriptionAP = "Perfect Matched"
+                        performanceDescriptionAP = "等於指定目標位置"
+                    }
+                }
+
+                when {
+                    inputScoreList[1] < 0 -> {
+                        //performanceDescriptionML = "Right Deviated"
+                        performanceDescriptionML = "右偏指定目標位置"
+                    }
+                    inputScoreList[1] > 0 -> {
+                        //performanceDescriptionML = "Left  Deviated"
+                        performanceDescriptionML = "左偏指定目標位置"
+                    }
+                    inputScoreList[1] == 0f -> {
+                        //performanceDescriptionML = "Perfect Matched"
+                        performanceDescriptionML = "等於指定目標位置"
+                    }
+                }
+            }
+            0 -> {
+                when {
+                    inputScoreList[0] > 0 -> {
+                        //performanceDescriptionAP = "Underestimated"
+                        performanceDescriptionAP = "少於指定目標位置"
+                    }
+                    inputScoreList[0] < 0 -> {
+                        //performanceDescriptionAP = "Overestimated"
+                        performanceDescriptionAP = "多於指定目標位置"
+                    }
+                    inputScoreList[0] == 0f -> {
+                        //performanceDescriptionAP = "Perfect Matched"
+                        performanceDescriptionAP = "等於指定目標位置"
+                    }
+                }
+
+                when {
+                    inputScoreList[1] > 0 -> {
+                        //performanceDescriptionML = "Right Deviated"
+                        performanceDescriptionML = "右偏指定目標位置"
+                    }
+                    inputScoreList[1] < 0 -> {
+                        //performanceDescriptionML = "Left  Deviated"
+                        performanceDescriptionML = "左偏指定目標位置"
+                    }
+                    inputScoreList[1] == 0f -> {
+                        //performanceDescriptionML = "Perfect Matched"
+                        performanceDescriptionML = "等於指定目標位置"
+                    }
+                }
+            }
+        }
+
+// + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
+// /////// 將表現分數取小數點
+
+        when (flag) {
+            1 -> {
+                /*
+                val modifyString: String = ("Score" + "\n" +
+                        "Anterior-Posterior: " + performanceDescriptionAP + "\n" +
+                        "Medial - Lateral: " + performanceDescriptionML + "\n" +
+                        "Relative Error  AP: " + inputScoreList[0].toString() + "\n" +
+                        "Relative Error  ML: " + inputScoreList[1].toString() + "\n" +
+                        "Absolute Error  AP: " + inputScoreList[2].toString() + "\n" +
+                        "Absolute Error  ML: " + inputScoreList[3].toString() + "\n" +
+                        "Absolute Error T2R: " + inputScoreList[4].toString())
+                 */
+                val modifyString: String = ("表現概述" + "\n" +
+                        "整體誤差距離: " + String.format("%.2f", inputScoreList[4]) + "\n" +
+                        "前後方向表現: " + performanceDescriptionAP + "\n" +
+                        "左右方向表現: " + performanceDescriptionML + "\n" +
+                        "\n" +
+                        "詳細分數" + "\n" +
+                        "Relative Error  AP: " + String.format("%.2f", inputScoreList[0]) + "\n" +
+                        "Relative Error  ML: " + String.format("%.2f", inputScoreList[1]) + "\n" +
+                        "Absolute Error  AP: " + String.format("%.2f", inputScoreList[2]) + "\n" +
+                        "Absolute Error  ML: " + String.format("%.2f", inputScoreList[3]) + "\n"
+                        )
+                Score.text = modifyString
+            }
+            0 -> {
+                /*  val modifyString: String = ("Score" + "\n" +
+                          "Anterior-Posterior: " + "" + "\n" +
+                          "Medial - Lateral: " + "" + "\n" +
+                          "Relative Error  AP: " + "" + "\n" +
+                          "Relative Error  ML: " + "" + "\n" +
+                          "Absolute Error  AP: " + "" + "\n" +
+                          "Absolute Error  ML: " + "" + "\n" +
+                          "Absolute Error T2R: " + "")*/
+                val modifyString: String = ("表現概述" + "\n" +
+                        "整體誤差距離: " + "" + "\n" +
+                        "前後方向表現: " + "" + "\n" +
+                        "左右方向表現: " + "" + "\n" +
+                        "\n" +
+                        "詳細分數" + "\n" +
+                        "Relative Error  AP: " + "" + "\n" +
+                        "Relative Error  ML: " + "" + "\n" +
+                        "Absolute Error  AP: " + "" + "\n" +
+                        "Absolute Error  ML: " + "" + "\n"
+                        )
+                Score.text = modifyString
+            }
+        }
+    }  //用於描述測驗表現
+
+
+
+
 
     //https://stackoverflow.com/questions/37380587/android-how-to-hide-the-system-ui-properly
     private fun hideSystemUI() {

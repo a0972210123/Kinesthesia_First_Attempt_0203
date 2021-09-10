@@ -133,6 +133,8 @@
     <string name="practice_count">練習次數:</string>
 
     <string name="trial_count">測驗次數:</string>
+    <string name="client_direction">受測者座位方向</string>
+    <string name="examiner_direction">施測者座位方向</string>
 
 
     <string-array name="direction_list">

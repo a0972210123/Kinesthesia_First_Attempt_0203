@@ -66,11 +66,16 @@ class AdditionFragment : Fragment() {
 
 
         val currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)
-        currentPosition.text = ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY))
+        currentPosition.text =
+            ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
 
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
         touchBoard.setOnTouchListener { _, _ ->
-            currentPosition.text = ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY))
+            currentPosition.text =
+                ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                ))
             //true
             false
         } //0824可以讀到即時觸碰位置
@@ -207,7 +212,17 @@ class AdditionFragment : Fragment() {
     var currentTestDirection: String = ""
     //val directionList = arrayListOf<String>("請選方向", "L2L", "L2R", "R2R", "R2L")
 
-    val directionList = arrayListOf<String>("請選方向", "L_Up", "L_Up_Right", "R_Up", "R_Up_Left", "L_Down", "L_Down_Right", "R_Down", "R_Down_Left",)
+    val directionList = arrayListOf<String>(
+        "請選方向",
+        "L_Up",
+        "L_Up_Right",
+        "R_Up",
+        "R_Up_Left",
+        "L_Down",
+        "L_Down_Right",
+        "R_Down",
+        "R_Down_Left",
+    )
 
     var TestingFinishedList = arrayListOf<String>()
 
@@ -228,7 +243,7 @@ class AdditionFragment : Fragment() {
     var responsePositionY: Float = 0f
 
     //顯示表現用暫存LIST
-    var scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
+    private var scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
 
     // 存檔相關變數宣告
     private val positionData = StringBuffer()
@@ -305,8 +320,6 @@ class AdditionFragment : Fragment() {
     lateinit var downRightArrow: ImageView
 
 
-
-
     fun checkContextAndLaunchView(context: String) {
         var tempContext = context
         when (context) {
@@ -325,7 +338,7 @@ class AdditionFragment : Fragment() {
         }
         //清掉前一個情境的view
         when (tempContext) {
-            "Pen"  -> {
+            "Pen" -> {
                 val hideTargetView = requireView().findViewById<ImageView>(R.id.target)
                 val hideStartView = requireView().findViewById<ImageView>(R.id.start_point)
                 val hideRandomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
@@ -335,8 +348,10 @@ class AdditionFragment : Fragment() {
 
                 //0908new
                 val hideDownArrow = requireView().findViewById<ImageView>(R.id.down_arrow)
-                val hideDownLeftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_down_left)
-                val hideDownRightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_down_right)
+                val hideDownLeftArrow =
+                    requireView().findViewById<ImageView>(R.id.arrow_to_down_left)
+                val hideDownRightArrow =
+                    requireView().findViewById<ImageView>(R.id.arrow_to_down_right)
 
                 hideTargetView.visibility = View.GONE
                 hideStartView.visibility = View.GONE
@@ -353,16 +368,21 @@ class AdditionFragment : Fragment() {
             }
             "Finger" -> {
                 val hideTargetView = requireView().findViewById<ImageView>(R.id.pen_target)
-                val hideStartView  = requireView().findViewById<ImageView>(R.id.pen_start_point)
-                val hideRandomTargetView = requireView().findViewById<ImageView>(R.id.pen_random_target)
+                val hideStartView = requireView().findViewById<ImageView>(R.id.pen_start_point)
+                val hideRandomTargetView =
+                    requireView().findViewById<ImageView>(R.id.pen_random_target)
                 val hideUpArrow = requireView().findViewById<ImageView>(R.id.pen_up_arrow)
-                val hideUpLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_left)
-                val hideUpRightArrow  = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_right)
+                val hideUpLeftArrow =
+                    requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_left)
+                val hideUpRightArrow =
+                    requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_right)
 
                 //0908new
                 val hideDownArrow = requireView().findViewById<ImageView>(R.id.pen_down_arrow)
-                val hideDownLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_down_left)
-                val hideDownRightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_down_right)
+                val hideDownLeftArrow =
+                    requireView().findViewById<ImageView>(R.id.pen_arrow_to_down_left)
+                val hideDownRightArrow =
+                    requireView().findViewById<ImageView>(R.id.pen_arrow_to_down_right)
 
                 hideTargetView.visibility = View.GONE
                 hideStartView.visibility = View.GONE
@@ -566,7 +586,7 @@ class AdditionFragment : Fragment() {
                 downLeftArrow.visibility = View.GONE
                 downRightArrow.visibility = View.GONE
             }
-            "L_Down_Right"-> {
+            "L_Down_Right" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.GONE
@@ -577,7 +597,7 @@ class AdditionFragment : Fragment() {
                 downLeftArrow.visibility = View.GONE
                 downRightArrow.visibility = View.VISIBLE
             }
-            "R_Down"-> {
+            "R_Down" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.GONE
@@ -588,7 +608,7 @@ class AdditionFragment : Fragment() {
                 downLeftArrow.visibility = View.GONE
                 downRightArrow.visibility = View.GONE
             }
-            "R_Down_Left"-> {
+            "R_Down_Left" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.GONE
@@ -620,7 +640,7 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400 , 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
             }
             "L_Up_Right" -> {
                 targetParams.setMargins(
@@ -636,7 +656,7 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
             }
             "R_Up" -> {
                 targetParams.setMargins(
@@ -652,7 +672,7 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
             }
             "R_Up_Left" -> {
                 targetParams.setMargins(
@@ -668,7 +688,7 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
             }
 
             "L_Down" -> {
@@ -685,9 +705,9 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400 , 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
             }
-            "L_Down_Right"-> {
+            "L_Down_Right" -> {
                 targetParams.setMargins(
                     centerX - calibrateWidth + Center2Target,
                     centerY - calibrateWidth + Center2Target,
@@ -701,9 +721,9 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate + 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
             }
-            "R_Down"-> {
+            "R_Down" -> {
                 targetParams.setMargins(
                     centerX - calibrateWidth + Center2Target,
                     centerY - calibrateWidth + Center2Target,
@@ -717,9 +737,9 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
             }
-            "R_Down_Left"-> {
+            "R_Down_Left" -> {
                 targetParams.setMargins(
                     centerX - calibrateWidth - Center2Target,
                     centerY - calibrateWidth + Center2Target,
@@ -733,7 +753,7 @@ class AdditionFragment : Fragment() {
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
             }
         }
     }
@@ -787,7 +807,11 @@ class AdditionFragment : Fragment() {
                 randomThePosition()
                 setTargetPosition()
                 changeText()
-                Toast.makeText(activity, "開始補測 $currentTestContext $currentTestDirection", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    activity,
+                    "開始補測 $currentTestContext $currentTestDirection",
+                    Toast.LENGTH_SHORT
+                ).show()
                 manageVisibility(0)  //顯示觸控板及記錄紐
             }
         }
@@ -890,17 +914,17 @@ class AdditionFragment : Fragment() {
                 c2tY = centerY - calibrateWidth + Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
-            "L_Down_Right"-> {
+            "L_Down_Right" -> {
                 c2tX = centerX - calibrateWidth + Center2Target
                 c2tY = centerY - calibrateWidth + Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
-            "R_Down"-> {
+            "R_Down" -> {
                 c2tX = centerX - calibrateWidth + Center2Target
                 c2tY = centerY - calibrateWidth + Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
-            "R_Down_Left"-> {
+            "R_Down_Left" -> {
                 c2tX = centerX - calibrateWidth - Center2Target
                 c2tY = centerY - calibrateWidth + Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
@@ -922,7 +946,16 @@ class AdditionFragment : Fragment() {
 
     fun checkDirectionTested() {
         contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
-        val checkList = arrayListOf<String>("L_Up", "L_Up_Right", "R_Up", "R_Up_Left", "L_Down", "L_Down_Right", "R_Down", "R_Down_Left")
+        val checkList = arrayListOf<String>(
+            "L_Up",
+            "L_Up_Right",
+            "R_Up",
+            "R_Up_Left",
+            "L_Down",
+            "L_Down_Right",
+            "R_Down",
+            "R_Down_Left"
+        )
         //當四種都測完
         if (TestingFinishedList.toSet() == checkList.toSet()) {
             MaterialAlertDialogBuilder(requireContext())
@@ -1092,45 +1125,63 @@ class AdditionFragment : Fragment() {
 
         //找到指導語textView
         val instructionText = requireView().findViewById<TextView>(R.id.instruction_demonstration)
-        var instructionList =  arrayListOf("")
+        var instructionList = arrayListOf("")
 
-        val pen =  arrayListOf(
-            "施測者將受試者握著的筆尖，" +"\n"+ "移動至 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者握著的筆尖，" +"\n"+ "移動到 目標位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者握著的筆尖，" +"\n"+ "移動回 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "受試者聽到嗶聲後將自己握著的筆，" +"\n"+ "移動到所記得的位置，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者握著的筆尖，" +"\n"+ "移動到平板外的桌面上，" +"\n"+ "確認資料正確後按下Save Trial。")
+        val pen = arrayListOf(
+            "施測者將受試者握著的筆尖，" + "\n" + "移動至 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" + "\n" + "移動到 目標位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" + "\n" + "移動回 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "受試者聽到嗶聲後將自己握著的筆，" + "\n" + "移動到所記得的位置，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者握著的筆尖，" + "\n" + "移動到平板外的桌面上，" + "\n" + "確認資料正確後按下Save Trial。"
+        )
 
         val finger = arrayListOf(
-            "施測者將受試者的手指，" +"\n"+ "移動至 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者的手指，" +"\n"+ "移動到 目標位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者的手指，" +"\n"+ "移動回 預備位置 上，" +"\n"+ "確認動作停止後按下紀錄。",
-            "受試者聽到嗶聲後將自己的手指，" +"\n"+ "移動到所記得的位置，" +"\n"+ "確認動作停止後按下紀錄。",
-            "施測者將受試者的手指，" +"\n"+ "移動到平板外的桌面上，" +"\n"+ "確認資料正確後按下Save Trial。")
+            "施測者將受試者的手指，" + "\n" + "移動至 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" + "\n" + "移動到 目標位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" + "\n" + "移動回 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+            "受試者聽到嗶聲後將自己的手指，" + "\n" + "移動到所記得的位置，" + "\n" + "確認動作停止後按下紀錄。",
+            "施測者將受試者的手指，" + "\n" + "移動到平板外的桌面上，" + "\n" + "確認資料正確後按下Save Trial。"
+        )
 
-        when(currentTestContext){
-            "Pen" -> {  instructionList = pen  }
+        when (currentTestContext) {
+            "Pen" -> {
+                instructionList = pen
+            }
 
-            "Finger" -> { instructionList = finger }
+            "Finger" -> {
+                instructionList = finger
+            }
         }
 
 
         //判斷測驗情境，並更新對應的Text
         when (condition) {
             "Start Position" -> {
-                start.text = "起始位置：X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
+                start.text = "起始位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                )
                 instructionText.text = instructionList[1]
             }
             "Test Position" -> {
-                test.text = "目標位置：X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
+                test.text = "目標位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                )
                 instructionText.text = instructionList[2]
             }
             "Rest Position" -> {
-                rest.text = "預備位置：X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
+                rest.text = "預備位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                )
                 instructionText.text = instructionList[3]
             }
             "Response Position" -> {
-                response.text = "反應位置：X= " + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
+                response.text = "反應位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                )
                 recordingButton.text = getString(R.string.next_trial)
                 recordingButton.textSize = 24.toFloat()
                 instructionText.text = instructionList[4]
@@ -1323,15 +1374,15 @@ class AdditionFragment : Fragment() {
 
         var reverseFlag = 0
 
-        if (far2NearList.contains(currentTestDirection)){
+        if (far2NearList.contains(currentTestDirection)) {
             reverseFlag = 1
-        } else if(near2FarList.contains(currentTestDirection)){
+        } else if (near2FarList.contains(currentTestDirection)) {
             reverseFlag = 0
         }
 
 
-        when(reverseFlag){
-            1 ->{
+        when (reverseFlag) {
+            1 -> {
                 when {
                     inputScoreList[0] < 0 -> {
                         //performanceDescriptionAP = "Underestimated"
@@ -1362,7 +1413,7 @@ class AdditionFragment : Fragment() {
                     }
                 }
             }
-            0 ->{
+            0 -> {
                 when {
                     inputScoreList[0] > 0 -> {
                         //performanceDescriptionAP = "Underestimated"
@@ -1420,18 +1471,18 @@ class AdditionFragment : Fragment() {
                         "Relative Error  ML: " + String.format("%.2f", inputScoreList[1]) + "\n" +
                         "Absolute Error  AP: " + String.format("%.2f", inputScoreList[2]) + "\n" +
                         "Absolute Error  ML: " + String.format("%.2f", inputScoreList[3]) + "\n"
-                       )
+                        )
                 Score.text = modifyString
             }
             0 -> {
-              /*  val modifyString: String = ("Score" + "\n" +
-                        "Anterior-Posterior: " + "" + "\n" +
-                        "Medial - Lateral: " + "" + "\n" +
-                        "Relative Error  AP: " + "" + "\n" +
-                        "Relative Error  ML: " + "" + "\n" +
-                        "Absolute Error  AP: " + "" + "\n" +
-                        "Absolute Error  ML: " + "" + "\n" +
-                        "Absolute Error T2R: " + "")*/
+                /*  val modifyString: String = ("Score" + "\n" +
+                          "Anterior-Posterior: " + "" + "\n" +
+                          "Medial - Lateral: " + "" + "\n" +
+                          "Relative Error  AP: " + "" + "\n" +
+                          "Relative Error  ML: " + "" + "\n" +
+                          "Absolute Error  AP: " + "" + "\n" +
+                          "Absolute Error  ML: " + "" + "\n" +
+                          "Absolute Error T2R: " + "")*/
                 val modifyString: String = ("表現概述" + "\n" +
                         "整體誤差距離: " + "" + "\n" +
                         "前後方向表現: " + "" + "\n" +
@@ -1457,14 +1508,17 @@ class AdditionFragment : Fragment() {
         val outputPositionData = positionData.toString().replace("\r", "").split("\n")
 
         val timeStamp: String //避免資料夾個案編號資料重複的額外後接編號
-        val timeStampFormatter = SimpleDateFormat("HH_mm_ss", Locale.getDefault()) //H 時 在一天中 (0~23) // m 分 // s 秒
+        val timeStampFormatter =
+            SimpleDateFormat("HH_mm_ss", Locale.getDefault()) //H 時 在一天中 (0~23) // m 分 // s 秒
         val timeStampCalendar = Calendar.getInstance()
-        timeStamp =  timeStampFormatter.format(timeStampCalendar.time).toString() //當日時間  //需傳到viewmodel
+        timeStamp =
+            timeStampFormatter.format(timeStampCalendar.time).toString() //當日時間  //需傳到viewmodel
 
         val timeStampMillis = System.currentTimeMillis()
 
         //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
-        val outputFileName = "Addition_" + currentTestContext + "_" + currentTestDirection +"_" + timeStampMillis + ".csv"
+        val outputFileName =
+            "Addition_" + currentTestContext + "_" + currentTestDirection + "_" + timeStampMillis + ".csv"
 
         // 存檔: name,List,flag
         outputCsv(outputFileName, outputPositionData, 0)
@@ -1594,7 +1648,7 @@ class AdditionFragment : Fragment() {
                 ) //Set the message to show the data
                 .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
 
-                .setNegativeButton(getString(R.string.addition_test_dialog_next_condition)){ _, _ ->
+                .setNegativeButton(getString(R.string.addition_test_dialog_next_condition)) { _, _ ->
                     savePracticePerformanceToCSV()//儲存測驗表現
                     clearRecord()  // 清除測驗表現
                     formalTrialCount.text = "測驗次數: $currentTrial / $maxTrailDesire "
@@ -1671,7 +1725,6 @@ class AdditionFragment : Fragment() {
         newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY.inv()
         decorView.systemUiVisibility = newUiOptions
     }
-
 
 
 } //Fragment End

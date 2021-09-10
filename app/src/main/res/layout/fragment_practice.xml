@@ -31,18 +31,13 @@
 
         <TextView
             android:id="@+id/instruction_title"
-            android:layout_width="wrap_content"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
-
-
-            android:layout_marginEnd="850dp"
-            android:layout_marginBottom="300dp"
-
+            android:layout_marginStart="175px"
+            android:layout_marginTop="425px"
+            android:gravity="center"
             android:text="@string/instruction_title"
             android:textSize="40sp"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -65,33 +60,32 @@
 
         <TextView
             android:id="@+id/performance_title"
-            android:layout_width="wrap_content"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
 
-            android:layout_marginStart="850dp"
-            android:layout_marginBottom="300dp"
+
+            android:layout_marginStart="1775px"
+            android:layout_marginTop="425px"
+
+            android:gravity="center"
+            android:paddingStart="0dp"
 
             android:text="測驗表現"
             android:textSize="40sp"
-
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/current_position_field"
             android:layout_width="400dp"
             android:layout_height="30dp"
-
             android:text="Current Position: X=0.0, Y=0.0 "
             android:textSize="@dimen/performance_text_size"
-
-            app:layout_constraintEnd_toEndOf="@id/performance_title"
-            app:layout_constraintStart_toStartOf="@id/performance_title"
-
+            app:layout_constraintEnd_toEndOf="@+id/performance_title"
+            app:layout_constraintStart_toStartOf="@+id/performance_title"
             app:layout_constraintTop_toBottomOf="@+id/performance_title" />
+
 
         <TextView
             android:id="@+id/performance_start_position"
@@ -100,6 +94,7 @@
             android:text="Start Position"
             android:textSize="@dimen/performance_text_size"
             app:layout_constraintEnd_toEndOf="@id/performance_title"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@id/performance_title"
             app:layout_constraintTop_toBottomOf="@+id/current_position_field" />
 
@@ -107,69 +102,61 @@
             android:id="@+id/performance_test_position"
             android:layout_width="400dp"
             android:layout_height="30dp"
-
             android:text="Test Position"
             android:textSize="@dimen/performance_text_size"
-
             app:layout_constraintEnd_toEndOf="@id/performance_title"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/performance_title"
-            app:layout_constraintTop_toBottomOf="@id/performance_start_position" />
+            app:layout_constraintTop_toBottomOf="@+id/performance_start_position" />
+
 
         <TextView
             android:id="@+id/performance_rest_position"
             android:layout_width="400dp"
             android:layout_height="30dp"
-
             android:text="Rest Position"
             android:textSize="@dimen/performance_text_size"
-
             app:layout_constraintEnd_toEndOf="@id/performance_title"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/performance_title"
-            app:layout_constraintTop_toBottomOf="@id/performance_test_position" />
+            app:layout_constraintTop_toBottomOf="@+id/performance_test_position" />
 
         <TextView
             android:id="@+id/performance_response_position"
             android:layout_width="400dp"
             android:layout_height="30dp"
-
             android:text="Response Position"
             android:textSize="@dimen/performance_text_size"
-
             app:layout_constraintEnd_toEndOf="@id/performance_title"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/performance_title"
-            app:layout_constraintTop_toBottomOf="@id/performance_rest_position" />
-
-
-        <!--  android:layout_height="30dp" -->
-        <!-- 以上測驗表現textView-->
-
+            app:layout_constraintTop_toBottomOf="@+id/performance_rest_position" />
 
         <TextView
             android:id="@+id/performance_current_trial_score"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
-
             android:text="Score"
-            android:textSize="@dimen/performance_text_size"
-
-            app:layout_constraintEnd_toEndOf="@id/performance_title"
-            app:layout_constraintStart_toStartOf="@id/performance_title"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/performance_title"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/performance_title"
             app:layout_constraintTop_toBottomOf="@+id/performance_response_position" />
 
         <Button
-            android:id="@+id/practice_record_position"
+            android:id="@+id/record_position"
             android:layout_width="165dp"
             android:layout_height="80dp"
-            android:layout_marginTop="10dp"
             android:onClick="@{() -> practiceFragment.pressButton()}"
 
             android:text="@string/record_position"
 
             android:textSize="30sp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="@+id/instruction_demonstration"
+            app:layout_constraintStart_toStartOf="@+id/instruction_demonstration"
+            app:layout_constraintTop_toBottomOf="@+id/instruction_demonstration"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/text1"
@@ -179,12 +166,13 @@
             android:textSize="@dimen/performance_text_size"
 
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@+id/practice_record_position"
-            app:layout_constraintStart_toStartOf="@+id/practice_record_position"
-            app:layout_constraintTop_toBottomOf="@id/practice_record_position" />
+            app:layout_constraintEnd_toEndOf="@+id/record_position"
+            app:layout_constraintStart_toStartOf="@+id/record_position"
+            app:layout_constraintTop_toBottomOf="@id/record_position"
+            tools:visibility="visible" />
 
         <TextView
-            android:id="@+id/practice_count"
+            android:id="@+id/trial_count"
             android:layout_width="wrap_content"
 
             android:layout_height="30dp"
@@ -192,9 +180,10 @@
 
             android:textSize="@dimen/performance_text_size"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@id/practice_record_position"
-            app:layout_constraintStart_toStartOf="@id/practice_record_position"
-            app:layout_constraintTop_toBottomOf="@id/text1" />
+            app:layout_constraintEnd_toEndOf="@id/record_position"
+            app:layout_constraintStart_toStartOf="@id/record_position"
+            app:layout_constraintTop_toBottomOf="@id/text1"
+            tools:visibility="visible" />
 
 
         <Spinner
@@ -225,7 +214,7 @@
             app:layout_constraintTop_toBottomOf="@+id/trialInput_list" />
 
         <ImageView
-            android:id="@+id/target"
+            android:id="@+id/start_point"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp"
@@ -234,7 +223,7 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/target_50"
+            app:srcCompat="@drawable/start_50"
 
             />
 
@@ -245,20 +234,20 @@
             app:layout_constraintEnd_toEndOf="parent"
 
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/target"
-            app:srcCompat="@drawable/north_150"
+            app:layout_constraintTop_toBottomOf="@id/start_point"
+            app:srcCompat="@drawable/south_150"
 
             />
 
         <ImageView
-            android:id="@+id/start_point"
+            android:id="@+id/target"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/arrow"
-            app:srcCompat="@drawable/start_50"
+            app:srcCompat="@drawable/target_50"
 
             />
 
@@ -275,7 +264,70 @@
 
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <!-- 以下測試-->
+
+
+
+        <!-- 以下提示受試者/施測者座位方向textView-->
+
+        <TextView
+            android:id="@+id/client_direction_indication_left"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="175px"
+            android:layout_marginTop="10px"
+            android:drawableTop="@drawable/north_25"
+            android:gravity="center"
+            android:text="@string/client_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/client_direction_indication_right"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1775px"
+            android:layout_marginTop="10px"
+            android:drawableTop="@drawable/north_25"
+            android:gravity="center"
+            android:text="@string/client_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/examiner_direction_indication_left"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="175px"
+            android:layout_marginBottom="10px"
+            android:drawableBottom="@drawable/south_25"
+            android:gravity="center"
+            android:text="@string/examiner_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"  />
+
+        <TextView
+            android:id="@+id/examiner_direction_indication_right"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1775px"
+            android:layout_marginBottom="10px"
+            android:drawableBottom="@drawable/south_25"
+            android:gravity="center"
+            android:text="@string/examiner_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- 以上提示受試者/施測者座位方向textView-->
+
+
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

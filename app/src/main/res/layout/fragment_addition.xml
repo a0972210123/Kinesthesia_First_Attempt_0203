@@ -472,6 +472,61 @@
             app:layout_constraintTop_toBottomOf="@id/pen_start_point"
             app:srcCompat="@drawable/south_150" />
 
+        <!-- 以下提示受試者/施測者座位方向textView-->
+
+        <TextView
+            android:id="@+id/client_direction_indication_left"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="175px"
+            android:layout_marginTop="10px"
+            android:drawableTop="@drawable/north_25"
+            android:gravity="center"
+            android:text="@string/client_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/client_direction_indication_right"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1775px"
+            android:layout_marginTop="10px"
+            android:drawableTop="@drawable/north_25"
+            android:gravity="center"
+            android:text="@string/client_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/examiner_direction_indication_left"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="175px"
+            android:layout_marginBottom="10px"
+            android:drawableBottom="@drawable/south_25"
+            android:gravity="center"
+            android:text="@string/examiner_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"  />
+
+        <TextView
+            android:id="@+id/examiner_direction_indication_right"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1775px"
+            android:layout_marginBottom="10px"
+            android:drawableBottom="@drawable/south_25"
+            android:gravity="center"
+            android:text="@string/examiner_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- 以上提示受試者/施測者座位方向textView-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
