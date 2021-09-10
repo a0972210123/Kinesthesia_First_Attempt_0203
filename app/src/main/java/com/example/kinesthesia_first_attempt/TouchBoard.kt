@@ -9,8 +9,9 @@ import android.annotation.SuppressLint as SuppressLint1
 
 class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) {
 
-
-
+    var isPenInAir:Boolean = true
+    var result:Boolean = true
+    var defaultInAirPressure:Float = -1f
 
     @SuppressLint1("ClickableViewAccessibility", "SetTextI18n")
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -18,29 +19,35 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
         bb = event.getAxisValue(MotionEvent.AXIS_SIZE)
         b1 = event.getAxisValue(MotionEvent.AXIS_TOUCH_MAJOR)
         b2 = event.getAxisValue(MotionEvent.AXIS_TOOL_MAJOR)
-
-        var result:Boolean = true
-
+        isPenInAir = false
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                isPenInAir = false
+
                 startX = event.x
                 startY = event.y
                 //invalidate() //重新整理整個view
+                updateParams(event,defaultInAirPressure,isPenInAir)
                 result = true
             }
 
             MotionEvent.ACTION_MOVE -> {
+                isPenInAir = false
                 startX = event.x
                 startY = event.y
                 //invalidate()
+
+                updateParams(event,defaultInAirPressure,isPenInAir)
                 result = false
             }
 
             MotionEvent.ACTION_UP -> {
-                startX = 0f
+                isPenInAir = true
                 startY = 0f
-                invalidate()
+                startX = 0f
+                //invalidate()
+                updateParams(event,defaultInAirPressure,isPenInAir)
                 result = true
             }
         }
@@ -72,6 +79,13 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
 
  */
         return  result
+    }
+
+
+    override fun onHoverEvent(event: MotionEvent): Boolean {
+        isPenInAir = true
+        updateParams(event,defaultInAirPressure,isPenInAir)
+        return true
     }
 
 
@@ -108,6 +122,64 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
     /////判斷動作TEST
 
 
+    // 預計放在每一動作更新的地方
+    fun updateParams(event: MotionEvent,defaultInAirPressure:Float,inAirFlag:Boolean){
+        systemTimestamp = System.currentTimeMillis()
+        startX = event.x
+        startY = event.y
+        if(inAirFlag){
+            tipPressure = defaultInAirPressure
+        } else{
+            tipPressure = event.pressure
+        }
+        heightZ = event.getAxisValue(MotionEvent.AXIS_DISTANCE)  //Z值 (無單位 超過1cm抓不到
+
+        //arangeInAir() //測試是否能更新全域stringbuffer
+    }
+
+    //可能移出到fragment 的overideInair 才能判斷哪一次按紐/哪一種情境
+    fun arangeInAir(){
+        inAirData.append(systemTimestamp)
+        inAirData.append(",")
+        inAirData.append(startX)
+        inAirData.append(",")
+        inAirData.append(startY)
+        inAirData.append(",")
+        inAirData.append(tipPressure)
+        inAirData.append(",")
+        inAirData.append(heightZ)
+        inAirData.append("\r\n")
+    }
+
+
+  /*  //參考CODE
+    private val kData = StringBuffer()
+    private fun getKdata(event: MotionEvent, tipPressure:Float){
+        val currentTimestamp = System.currentTimeMillis()
+        val paperX = event.x
+        val paperY = event.y
+        val tipPressure = event.pressure
+        val bb = event.getAxisValue(MotionEvent.AXIS_DISTANCE)  //Z值 (無單位 超過1cm抓不到
+        kData.append(currentTimestamp)
+        kData.append(",")
+        kData.append(paperX)
+        kData.append(",")
+        kData.append(paperY)
+        kData.append(",")
+        kData.append(tipPressure)
+        kData.append(",")
+        kData.append(bb)
+        kData.append("\r\n")
+        //Log.d("X/Y/壓力/距離測試onTouch：", "$currentTimestamp  秒  $paperX  $paperY  $tipPressure  $bb")
+    }
+
+
+    override fun onHoverEvent(event: MotionEvent): Boolean {
+        getKdata(event, -1f)    //在空中時的壓力要是-1
+        return true
+    }
+
+    */
 
 }
 

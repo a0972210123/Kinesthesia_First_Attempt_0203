@@ -30,6 +30,18 @@
 
 
         <TextView
+            android:id="@+id/in_air_testing"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:text="InAir Data Testing"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintBottom_toTopOf="@+id/instruction_title"
+            app:layout_constraintEnd_toEndOf="@+id/instruction_title"
+            app:layout_constraintStart_toStartOf="@+id/instruction_title" />
+
+
+
+        <TextView
             android:id="@+id/instruction_title"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -194,9 +206,19 @@
             android:layout_marginTop="10dp"
             android:addStatesFromChildren="false"
             android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/context_list"
+            app:layout_constraintStart_toStartOf="@id/confirm_trial"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Spinner
+            android:id="@+id/context_list"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:addStatesFromChildren="false"
+            app:layout_constraintEnd_toEndOf="@id/confirm_trial"
+            app:layout_constraintStart_toEndOf="@id/trialInput_list"
+            app:layout_constraintTop_toTopOf="@id/trialInput_list" />
 
 
         <Button
@@ -208,48 +230,72 @@
 
             android:text="@string/select_direction"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@+id/trialInput_list"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/trialInput_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/trialInput_list" />
 
         <ImageView
             android:id="@+id/start_point"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
-
+            app:layout_constraintBottom_toTopOf="@id/down_arrow"
             app:layout_constraintEnd_toEndOf="parent"
-
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/start_50"
 
             />
 
         <ImageView
-            android:id="@+id/arrow"
+            android:id="@+id/down_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/start_point"
-            app:srcCompat="@drawable/south_150"
-
-            />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/south_150" />
 
         <ImageView
             android:id="@+id/target"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/arrow"
-            app:srcCompat="@drawable/target_50"
+            app:layout_constraintTop_toBottomOf="@id/down_arrow"
+            app:srcCompat="@drawable/target_50" />
+
+
+        <ImageView
+            android:id="@+id/pen_start_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toTopOf="@id/pen_down_arrow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/pen_start_20"
 
             />
+
+        <ImageView
+            android:id="@+id/pen_down_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/south_150" />
+
+        <ImageView
+            android:id="@+id/pen_target"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pen_down_arrow"
+            app:srcCompat="@drawable/pen_target_20" />
 
 
         <com.example.kinesthesia_first_attempt.TouchBoard
@@ -266,7 +312,6 @@
 
 
         <!-- 以下測試-->
-
 
 
         <!-- 以下提示受試者/施測者座位方向textView-->
@@ -307,8 +352,8 @@
             android:gravity="center"
             android:text="@string/examiner_direction"
             android:textSize="@dimen/performance_text_size"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"  />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/examiner_direction_indication_right"
@@ -320,14 +365,10 @@
             android:gravity="center"
             android:text="@string/examiner_direction"
             android:textSize="@dimen/performance_text_size"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <!-- 以上提示受試者/施測者座位方向textView-->
-
-
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
