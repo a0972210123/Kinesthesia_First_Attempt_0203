@@ -32,18 +32,6 @@ var systemTimestamp: Long = 0  //new: 時間 用於存inair
 var heightZ: Float = 0f        //new: 筆在z軸高度
 var tipPressure: Float = 0f    //new: 筆尖壓力，用於後續分析筆是否在平板上以利裁切資料
 
-fun clearInAir() {
-    systemTimestamp = 0
-    heightZ = 0f
-    tipPressure = 0f
-    inAirData.setLength(0)
-}  //歸零Inair相關參數
-
-
-fun getInAir() {
-
-}
-
 
 var startX: Float = 0f
 var startY: Float = 0f
@@ -158,41 +146,54 @@ class PracticeFragment : Fragment() {
         inAirText.text =
             ("目前InAir :" + "\n" +
                     "timeStamp = $systemTimestamp" + "\n" +
-                    "Z = $heightZ "  + "\n" +
-                    "tipPressure = $tipPressure" )
-
+                    "Z = $heightZ " + "\n" +
+                    "tipPressure = $tipPressure")
         //* new
-
-
 
 
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
         touchBoard.setOnTouchListener { _, _ ->
+
+            if (buttonPressedCountsInATrial == 3 && currentTestContext == "Pen") {
+                arrangeInAirData()
+            }
+
             currentPosition.text =
-                ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
+                ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                ))
 
             //* new
             inAirText.text =
                 ("目前InAir :" + "\n" +
                         "timeStamp = $systemTimestamp" + "\n" +
-                        "Z = $heightZ "  + "\n" +
-                        "tipPressure = $tipPressure" )
+                        "Z = $heightZ " + "\n" +
+                        "tipPressure = $tipPressure")
             //* new
             false
         }
 
 
         //* new
-        touchBoard.setOnHoverListener{ _,_ ->
+        touchBoard.setOnHoverListener { _, _ ->
+
+            if (buttonPressedCountsInATrial == 3 && currentTestContext == "Pen") {
+                arrangeInAirData()
+            }
+
             currentPosition.text =
-                ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
+                ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                ))
 
             //* new
             inAirText.text =
                 ("目前InAir :" + "\n" +
                         "timeStamp = $systemTimestamp" + "\n" +
-                        "Z = $heightZ "  + "\n" +
-                        "tipPressure = $tipPressure" )
+                        "Z = $heightZ " + "\n" +
+                        "tipPressure = $tipPressure")
             false
         }
         //* new
@@ -219,6 +220,73 @@ class PracticeFragment : Fragment() {
         launchContextSpinner()
         checkContextAndLaunchView(currentTestContext)
     }
+
+
+    /////////存INAIR
+
+    fun arrangeInAirData() {
+        inAirData.append(systemTimestamp)
+        inAirData.append(",")
+        inAirData.append(startX)
+        inAirData.append(",")
+        inAirData.append(startY)
+        inAirData.append(",")
+        inAirData.append(heightZ)
+        inAirData.append(",")
+        inAirData.append(tipPressure)
+        inAirData.append("\r\n")
+    }
+
+    fun saveInAirDataToCSV() {
+        val outputInAirData = inAirData.toString().replace("\r", "").split("\n")
+        //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
+        val outputFileName = "Practice_InAir_Trial_$currentTrial.csv"
+        // 存檔: name,List,flag
+        outputInAirCsv(outputFileName, outputInAirData, 0)
+    }
+
+    fun outputInAirCsv(fileName: String, input: List<String>, flag: Int) {
+        //檔案路徑: 目前直接讀在demographic的全域變數，有error再讀viewModel備用
+        //val outputPath = binding.viewModel!!.outputFilePath.toString()  //讀取存在viewModel的路徑
+        val output = StringBuffer()//必需
+
+        val titleList = listOf(
+            "Time Stamp(ms)", "X(pixel)", "Y(pixel)", "Z(0~100)", "Tip pressure"
+        )
+
+        // 放入標題，使用迴圈，避免前後出現[]
+        for (i in 0..4) {
+            output.append(titleList[i])
+            output.append(",")
+        }
+        output.append("\r\n")
+
+        //輸入後 再次排列
+        for (u in input) {  //這邊需要測試看outPut結果
+            output.append(u)
+            output.append("\r\n")
+        }
+
+
+        val file = File(filePathStr, fileName)
+        val os = FileOutputStream(file, true)   // 這邊給的字串要有檔案類型
+        os.write(output.toString().toByteArray())
+        os.flush()
+        os.close()
+        output.setLength(0) //clean buffer
+        Toast.makeText(activity, "InAir_Trial$currentTrial 儲存成功", Toast.LENGTH_SHORT).show()
+        //Log.d("data", "outCSV Success")
+    }  // sample from HW
+
+    fun clearInAir() {
+        systemTimestamp = 0
+        heightZ = 0f
+        tipPressure = 0f
+        inAirData.setLength(0)
+    }  //歸零Inair相關參數
+
+    /////////存INAIR
+
 
     fun launchContextSpinner() {
         mContext_demo = requireActivity().applicationContext
@@ -310,7 +378,6 @@ class PracticeFragment : Fragment() {
                 responsePositionY = startY
                 Log.d("$condition", "$responsePositionX  $responsePositionY  ")
             }
-
             5 -> {
                 condition = ""
                 startX = 0f
@@ -671,6 +738,13 @@ class PracticeFragment : Fragment() {
 
 
         if (buttonPressedCountsInATrial == 5) {
+
+            //0912測試存InAir
+            saveInAirDataToCSV()
+            clearInAir()
+            //
+
+
             addTrialsCount()           // 完成一次測驗練習
             saveCurrentTrialRecord()   //將單次反應存入LIST(包含分數計算)
             clearCurrentTrialRecord()  //清除單次表現、歸零座標、重設測驗情境

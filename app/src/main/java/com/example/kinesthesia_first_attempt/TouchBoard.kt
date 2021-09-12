@@ -15,7 +15,7 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
 
     @SuppressLint1("ClickableViewAccessibility", "SetTextI18n")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val currentTimestamp = System.currentTimeMillis()
+        //val currentTimestamp = System.currentTimeMillis()
         bb = event.getAxisValue(MotionEvent.AXIS_SIZE)
         b1 = event.getAxisValue(MotionEvent.AXIS_TOUCH_MAJOR)
         b2 = event.getAxisValue(MotionEvent.AXIS_TOOL_MAJOR)
@@ -24,7 +24,6 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 isPenInAir = false
-
                 startX = event.x
                 startY = event.y
                 //invalidate() //重新整理整個view
@@ -37,21 +36,21 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
                 startX = event.x
                 startY = event.y
                 //invalidate()
-
                 updateParams(event,defaultInAirPressure,isPenInAir)
                 result = false
             }
 
             MotionEvent.ACTION_UP -> {
                 isPenInAir = true
-                startY = 0f
-                startX = 0f
+                //startY = 0f
+                //startX = 0f
                 //invalidate()
                 updateParams(event,defaultInAirPressure,isPenInAir)
                 result = true
             }
         }
-
+        return  result
+    }
 
 /*
 ////多點觸控TEST
@@ -78,8 +77,6 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
 //// 多點觸控TEST
 
  */
-        return  result
-    }
 
 
     override fun onHoverEvent(event: MotionEvent): Boolean {
@@ -133,21 +130,20 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs) 
             tipPressure = event.pressure
         }
         heightZ = event.getAxisValue(MotionEvent.AXIS_DISTANCE)  //Z值 (無單位 超過1cm抓不到
-
         //arangeInAir() //測試是否能更新全域stringbuffer
     }
 
     //可能移出到fragment 的overideInair 才能判斷哪一次按紐/哪一種情境
-    fun arangeInAir(){
+    fun arrangeInAir(){
         inAirData.append(systemTimestamp)
         inAirData.append(",")
         inAirData.append(startX)
         inAirData.append(",")
         inAirData.append(startY)
         inAirData.append(",")
-        inAirData.append(tipPressure)
-        inAirData.append(",")
         inAirData.append(heightZ)
+        inAirData.append(",")
+        inAirData.append(tipPressure)
         inAirData.append("\r\n")
     }
 

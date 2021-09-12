@@ -71,6 +71,10 @@ class AdditionFragment : Fragment() {
 
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
         touchBoard.setOnTouchListener { _, _ ->
+            if (buttonPressedCountsInATrial == 3 && currentTestContext == "Pen") {
+                arrangeInAirData()
+            }
+
             currentPosition.text =
                 ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format(
                     "%.2f",
@@ -79,6 +83,22 @@ class AdditionFragment : Fragment() {
             //true
             false
         } //0824可以讀到即時觸碰位置
+
+        //* new
+        touchBoard.setOnHoverListener { _, _ ->
+            if (buttonPressedCountsInATrial == 3 && currentTestContext == "Pen") {
+                arrangeInAirData()
+            }
+
+            currentPosition.text =
+                ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                    "%.2f",
+                    startY
+                ))
+            false
+        }
+        //* new
+
 
         //更新文字view
         changeText()
@@ -110,6 +130,69 @@ class AdditionFragment : Fragment() {
         checkContextAndLaunchView(currentTestContext)
     }
 
+
+    /////////存INAIR
+    fun arrangeInAirData() {
+        inAirData.append(systemTimestamp)
+        inAirData.append(",")
+        inAirData.append(startX)
+        inAirData.append(",")
+        inAirData.append(startY)
+        inAirData.append(",")
+        inAirData.append(heightZ)
+        inAirData.append(",")
+        inAirData.append(tipPressure)
+        inAirData.append("\r\n")
+    }
+
+    fun saveInAirDataToCSV() {
+        val outputInAirData = inAirData.toString().replace("\r", "").split("\n")
+        //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
+        val outputFileName = "Addition_${currentTestContext}_${currentTestDirection}_InAir_Trial_$currentTrial.csv"
+        // 存檔: name,List,flag
+        outputInAirCsv(outputFileName, outputInAirData, 0)
+    }
+
+    fun outputInAirCsv(fileName: String, input: List<String>, flag: Int) {
+        //檔案路徑: 目前直接讀在demographic的全域變數，有error再讀viewModel備用
+        //val outputPath = binding.viewModel!!.outputFilePath.toString()  //讀取存在viewModel的路徑
+        val output = StringBuffer()//必需
+
+        val titleList = listOf(
+            "Time Stamp(ms)", "X(pixel)", "Y(pixel)", "Z(0~100)", "Tip pressure"
+        )
+
+        // 放入標題，使用迴圈，避免前後出現[]
+        for (i in 0..4) {
+            output.append(titleList[i])
+            output.append(",")
+        }
+        output.append("\r\n")
+
+        //輸入後 再次排列
+        for (u in input) {  //這邊需要測試看outPut結果
+            output.append(u)
+            output.append("\r\n")
+        }
+
+
+        val file = File(filePathStr, fileName)
+        val os = FileOutputStream(file, true)   // 這邊給的字串要有檔案類型
+        os.write(output.toString().toByteArray())
+        os.flush()
+        os.close()
+        output.setLength(0) //clean buffer
+        Toast.makeText(activity, "InAir_Trial$currentTrial 儲存成功", Toast.LENGTH_SHORT).show()
+        //Log.d("data", "outCSV Success")
+    }  // sample from HW
+
+    fun clearInAir() {
+        systemTimestamp = 0
+        heightZ = 0f
+        tipPressure = 0f
+        inAirData.setLength(0)
+    }  //歸零Inair相關參數
+    /////////存INAIR
 
     //以下三種spinner
     fun launchDirectionSpinner() {
@@ -1058,8 +1141,14 @@ class AdditionFragment : Fragment() {
         }  //計算測驗表現 (RE*2，AE*3)  //更新text內容
 
         if (buttonPressedCountsInATrial == 5) {
+            //0912測試存InAir
+            saveInAirDataToCSV()
+            clearInAir()
+            //
+
+
             addTrialsCount()           // 完成一次測驗練習
-            if (trialsCount == 5) { //第五trail結束不用再設目標
+            if (trialsCount == maxTrailDesire) { //第五trail結束不用再設目標
             } else {
                 setTargetPosition()// 重設目標位置
             }
