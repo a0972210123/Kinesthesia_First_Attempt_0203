@@ -455,8 +455,8 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/pen_target"
-                app:layout_constraintEnd_toStartOf="@id/pen_target"
-                app:layout_constraintStart_toEndOf="@id/pen_start_point"
+                app:layout_constraintStart_toEndOf="@id/pen_target"
+                app:layout_constraintEnd_toStartOf="@id/pen_start_point"
                 app:layout_constraintTop_toBottomOf="@id/pen_start_point"
                 app:srcCompat="@drawable/south_west_150" />
 
