@@ -333,7 +333,7 @@ class PracticeFragment : Fragment() {
     }
 
     fun saveTrialToList(): List<Float> {
-        val tempScore = calculateTrialScore()  //計算當前trial表現Error
+        val tempScore = calculateTrialScoreP()  //計算當前trial表現Error
         // 將當前儲存的trialData轉換成List
         return listOf<Float>(
             startPositionX,
@@ -475,12 +475,11 @@ class PracticeFragment : Fragment() {
     fun calculateTrialScoreP(): List<Float> {
         //計算向量: 以startPosition為基準/原點
         //Vector( test2Response ) = Vector( start2Response ) - Vector( start2Test )
-
-        //start2Test = Test(x,y) - Start(x,y)
+        //start2Test(x,y) = Test(x,y) - Start(x,y)
         var start2TestX = testPositionX - startPositionX
         var start2TestY = testPositionY - startPositionY
 
-        //start2Response = Response(x,y) - Start(x,y)
+        //start2Response(x,y) = Response(x,y) - Start(x,y)
         var start2ResponseX = responsePositionX - startPositionX
         var start2ResponseY = responsePositionY - startPositionY
 
@@ -488,12 +487,45 @@ class PracticeFragment : Fragment() {
         var test2ResponseAP = start2ResponseY - start2TestY
         var test2ResponseML = start2ResponseX - start2TestX
 
-        //Relative Error: AP、ML
-        var relativeErrorAP = test2ResponseAP
-        var relativeErrorML = test2ResponseML
+
         //Absolute Error: AP、ML、T2R(AP^2+ML^2)^1/2
         var absoluteErrorAP = kotlin.math.abs(test2ResponseAP)
         var absoluteErrorML = kotlin.math.abs(test2ResponseML)
+
+        //Relative Error: AP、ML
+        var relativeErrorAP = test2ResponseAP
+        var relativeErrorML = test2ResponseML
+
+        //1105校正relativeError正負號
+        when {
+            test2ResponseAP  < 0 -> {
+                //performanceDescriptionAP = "Underestimated"
+                relativeErrorAP = -absoluteErrorAP
+            }
+            test2ResponseAP  > 0 -> {
+                //performanceDescriptionAP = "Overestimated"
+                relativeErrorAP = absoluteErrorAP
+            }
+            test2ResponseAP  == 0f -> {
+                //performanceDescriptionAP = "Perfect Matched"
+                relativeErrorAP = absoluteErrorAP
+            }
+        }
+
+        when {
+            test2ResponseML < 0 -> {
+                //performanceDescriptionML = "Right Deviated"
+                relativeErrorML = absoluteErrorML
+            }
+            test2ResponseML > 0 -> {
+                //performanceDescriptionML = "Left  Deviated"
+                relativeErrorML = -absoluteErrorML
+            }
+            test2ResponseML == 0f -> {
+                //performanceDescriptionML = "Perfect Matched"
+                relativeErrorML = absoluteErrorML
+            }
+        }
 
         val a = test2ResponseAP.toDouble()
         val b = test2ResponseML.toDouble()
@@ -684,6 +716,7 @@ class PracticeFragment : Fragment() {
         //找到相關的View
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
         trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
+        contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
         val selectButton = requireView().findViewById(R.id.confirm_trial) as Button
 
         val countAndHint = requireView().findViewById<TextView>(R.id.text1)
@@ -704,6 +737,7 @@ class PracticeFragment : Fragment() {
                 //隱藏方向選擇VIEW
                 trialInputSpinner.visibility = View.INVISIBLE
                 selectButton.visibility = View.INVISIBLE
+                contextSpinner.visibility = View.INVISIBLE
             }
 
             1 -> {
@@ -715,6 +749,7 @@ class PracticeFragment : Fragment() {
                 //顯示方向選擇VIEW
                 trialInputSpinner.visibility = View.VISIBLE
                 selectButton.visibility = View.VISIBLE
+                contextSpinner.visibility = View.VISIBLE
                 //
                 Score.text = "Score"
             }
@@ -938,44 +973,6 @@ class PracticeFragment : Fragment() {
         }
     }
 
-    fun calculateTrialScore(): List<Float> {
-        //計算向量: 以startPosition為基準/原點
-        //Vector( test2Response ) = Vector( start2Response ) - Vector( start2Test )
-
-        //start2Test(x,y) = Test(x,y) - Start(x,y)
-        var start2TestX = testPositionX - startPositionX
-        var start2TestY = testPositionY - startPositionY
-
-        //start2Response(x,y) = Response(x,y) - Start(x,y)
-        var start2ResponseX = responsePositionX - startPositionX
-        var start2ResponseY = responsePositionY - startPositionY
-
-        //test2Response
-        var test2ResponseAP = start2ResponseY - start2TestY
-        var test2ResponseML = start2ResponseX - start2TestX
-
-        //Relative Error: AP、ML
-        var relativeErrorAP = test2ResponseAP
-        var relativeErrorML = test2ResponseML
-        //Absolute Error: AP、ML、T2R(AP^2+ML^2)^1/2
-        var absoluteErrorAP = kotlin.math.abs(test2ResponseAP)
-        var absoluteErrorML = kotlin.math.abs(test2ResponseML)
-
-        val a = test2ResponseAP.toDouble()
-        val b = test2ResponseML.toDouble()
-        val c: Double = sqrt(a * a + b * b)
-        var absoluteErrorT2R = c.toFloat()
-
-        return listOf(
-            relativeErrorAP,
-            relativeErrorML,
-            absoluteErrorAP,
-            absoluteErrorML,
-            absoluteErrorT2R
-        )
-        // Variable Error: AP、ML、(AP^2+ML^2)^1/2  >> 需每個方向全部測完才能算 >> 在這邊先不算
-    }  //計算測驗分數
-
     fun clearScoreList() {
         scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
     } //清除測驗分數
@@ -985,89 +982,34 @@ class PracticeFragment : Fragment() {
 
         var performanceDescriptionAP: String = ""  //Y軸
         var performanceDescriptionML: String = ""  //X軸
-
-
-        //受試者測出發題目:
-        val far2NearList = arrayListOf<String>("L_Down", "L_Down_Right", "R_Down", "R_Down_Left")
-        //施測者測出發題目:
-        val near2FarList = arrayListOf<String>("L_Up", "L_Up_Right", "R_Up", "R_Up_Left")
-
-        var reverseFlag = 1
-
-        /*  if (far2NearList.contains(currentTestDirection)) {
-              reverseFlag = 1
-          } else if (near2FarList.contains(currentTestDirection)) {
-              reverseFlag = 0
-          }*/
-
-        when (reverseFlag) {
-            1 -> {
-                when {
-                    inputScoreList[0] < 0 -> {
-                        //performanceDescriptionAP = "Underestimated"
-                        performanceDescriptionAP = "少於指定目標位置"
-                    }
-                    inputScoreList[0] > 0 -> {
-                        //performanceDescriptionAP = "Overestimated"
-                        performanceDescriptionAP = "多於指定目標位置"
-                    }
-                    inputScoreList[0] == 0f -> {
-                        //performanceDescriptionAP = "Perfect Matched"
-                        performanceDescriptionAP = "等於指定目標位置"
-                    }
-                }
-
-                when {
-                    inputScoreList[1] < 0 -> {
-                        //performanceDescriptionML = "Right Deviated"
-                        performanceDescriptionML = "右偏指定目標位置"
-                    }
-                    inputScoreList[1] > 0 -> {
-                        //performanceDescriptionML = "Left  Deviated"
-                        performanceDescriptionML = "左偏指定目標位置"
-                    }
-                    inputScoreList[1] == 0f -> {
-                        //performanceDescriptionML = "Perfect Matched"
-                        performanceDescriptionML = "等於指定目標位置"
-                    }
-                }
+        when {
+            inputScoreList[0] < 0 -> {
+                //performanceDescriptionAP = "Underestimated"
+                performanceDescriptionAP = "少於指定目標位置"
             }
-            0 -> {
-                when {
-                    inputScoreList[0] > 0 -> {
-                        //performanceDescriptionAP = "Underestimated"
-                        performanceDescriptionAP = "少於指定目標位置"
-                    }
-                    inputScoreList[0] < 0 -> {
-                        //performanceDescriptionAP = "Overestimated"
-                        performanceDescriptionAP = "多於指定目標位置"
-                    }
-                    inputScoreList[0] == 0f -> {
-                        //performanceDescriptionAP = "Perfect Matched"
-                        performanceDescriptionAP = "等於指定目標位置"
-                    }
-                }
-
-                when {
-                    inputScoreList[1] > 0 -> {
-                        //performanceDescriptionML = "Right Deviated"
-                        performanceDescriptionML = "右偏指定目標位置"
-                    }
-                    inputScoreList[1] < 0 -> {
-                        //performanceDescriptionML = "Left  Deviated"
-                        performanceDescriptionML = "左偏指定目標位置"
-                    }
-                    inputScoreList[1] == 0f -> {
-                        //performanceDescriptionML = "Perfect Matched"
-                        performanceDescriptionML = "等於指定目標位置"
-                    }
-                }
+            inputScoreList[0] > 0 -> {
+                //performanceDescriptionAP = "Overestimated"
+                performanceDescriptionAP = "多於指定目標位置"
             }
-        }
-
-// + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
-// /////// 將表現分數取小數點
-
+            inputScoreList[0] == 0f -> {
+                //performanceDescriptionAP = "Perfect Matched"
+                performanceDescriptionAP = "等於指定目標位置"
+            }
+        }  //performanceDescriptionAP
+        when {
+            inputScoreList[1] > 0 -> {
+                //performanceDescriptionML = "Right Deviated"
+                performanceDescriptionML = "右偏指定目標位置"
+            }
+            inputScoreList[1] < 0 -> {
+                //performanceDescriptionML = "Left  Deviated"
+                performanceDescriptionML = "左偏指定目標位置"
+            }
+            inputScoreList[1] == 0f -> {
+                //performanceDescriptionML = "Perfect Matched"
+                performanceDescriptionML = "等於指定目標位置"
+            }
+        }  //performanceDescriptionML
         when (flag) {
             1 -> {
                 /*

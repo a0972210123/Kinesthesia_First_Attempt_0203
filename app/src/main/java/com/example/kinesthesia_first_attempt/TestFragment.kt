@@ -297,7 +297,7 @@ class TestFragment : Fragment() {
 
     //測驗方向變數
     var currentTestDirection: String = ""
-    val directionList = arrayListOf<String>(
+   /* val directionList = arrayListOf<String>(
         "請選方向",
         "L_Up",
         "L_Up_Right",
@@ -307,7 +307,14 @@ class TestFragment : Fragment() {
         "L_Down_Right",
         "R_Down",
         "R_Down_Left",
-    )
+    )*/
+   val directionList = arrayListOf<String>(
+       "請選方向",
+       "R_Up",       //<item>右下至右上</item>
+       "R_Up_Left",  // <item>右下至左上</item>
+       "L_Up",       //<item>左下至左上</item>
+       "L_Up_Right", //<item>左下至右上</item>
+   )
     var TestingFinishedList = arrayListOf<String>()
 
     //測驗方式
@@ -615,7 +622,7 @@ class TestFragment : Fragment() {
                 downRightArrow.visibility = View.GONE
 
             }
-            "L_Up" -> {
+            /*"L_Up" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.VISIBLE
@@ -658,9 +665,9 @@ class TestFragment : Fragment() {
                 downArrow.visibility = View.GONE
                 downLeftArrow.visibility = View.GONE
                 downRightArrow.visibility = View.GONE
-            }
-//////////////////////////////////////////////
-            "L_Down" -> {
+            }*/
+            //以下為為受測者方向出發的選項，程式描述為icon對於施測者的方向///
+            "R_Up" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.GONE
@@ -670,8 +677,8 @@ class TestFragment : Fragment() {
                 downArrow.visibility = View.VISIBLE
                 downLeftArrow.visibility = View.GONE
                 downRightArrow.visibility = View.GONE
-            }
-            "L_Down_Right" -> {
+            }        //<item>右下至右上</item>
+            "R_Up_Left" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.GONE
@@ -681,8 +688,8 @@ class TestFragment : Fragment() {
                 downArrow.visibility = View.GONE
                 downLeftArrow.visibility = View.GONE
                 downRightArrow.visibility = View.VISIBLE
-            }
-            "R_Down" -> {
+            }   // <item>右下至左上</item>
+            "L_Up" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.GONE
@@ -692,8 +699,8 @@ class TestFragment : Fragment() {
                 downArrow.visibility = View.VISIBLE
                 downLeftArrow.visibility = View.GONE
                 downRightArrow.visibility = View.GONE
-            }
-            "R_Down_Left" -> {
+            }        //<item>左下至左上</item>
+            "L_Up_Right" -> {
                 targetView.visibility = View.VISIBLE
                 startView.visibility = View.VISIBLE
                 upArrow.visibility = View.GONE
@@ -703,97 +710,96 @@ class TestFragment : Fragment() {
                 downArrow.visibility = View.GONE
                 downLeftArrow.visibility = View.VISIBLE
                 downRightArrow.visibility = View.GONE
-            }
+            }  //<item>左下至右上</item>
         }
-
         //調整view位置
         when (currentTestDirection) {
             "請選方向" -> {
                 titleParams.setMargins(centerX - titleCalibrate, centerY - 400, 0, 0)
             }
-            "L_Up" -> {
-                targetParams.setMargins(
-                    centerX - calibrateWidth - Center2Target,
-                    centerY - calibrateWidth - Center2Target,
-                    0,
-                    0
-                )
-                startParams.setMargins(
-                    centerX - calibrateWidth - Center2Start,
-                    centerY - calibrateWidth + Center2Start,
-                    0,
-                    0
-                )
+            /*   "L_Up" -> {
+                   targetParams.setMargins(
+                       centerX - calibrateWidth - Center2Target,
+                       centerY - calibrateWidth - Center2Target,
+                       0,
+                       0
+                   )
+                   startParams.setMargins(
+                       centerX - calibrateWidth - Center2Start,
+                       centerY - calibrateWidth + Center2Start,
+                       0,
+                       0
+                   )
 
-                titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
-            }
-            "L_Up_Right" -> {
-                targetParams.setMargins(
-                    centerX - calibrateWidth + Center2Target,
-                    centerY - calibrateWidth - Center2Target,
-                    0,
-                    0
-                )
-                startParams.setMargins(
-                    centerX - calibrateWidth - Center2Start,
-                    centerY - calibrateWidth + Center2Start,
-                    0,
-                    0
-                )
+                   titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
+               }
+               "L_Up_Right" -> {
+                   targetParams.setMargins(
+                       centerX - calibrateWidth + Center2Target,
+                       centerY - calibrateWidth - Center2Target,
+                       0,
+                       0
+                   )
+                   startParams.setMargins(
+                       centerX - calibrateWidth - Center2Start,
+                       centerY - calibrateWidth + Center2Start,
+                       0,
+                       0
+                   )
 
-                titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
-            }
+                   titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
+               }
+               "R_Up" -> {
+                   targetParams.setMargins(
+                       centerX - calibrateWidth + Center2Target,
+                       centerY - calibrateWidth - Center2Target,
+                       0,
+                       0
+                   )
+                   startParams.setMargins(
+                       centerX - calibrateWidth + Center2Start,
+                       centerY - calibrateWidth + Center2Start,
+                       0,
+                       0
+                   )
+
+                   titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
+               }
+               "R_Up_Left" -> {
+                   targetParams.setMargins(
+                       centerX - calibrateWidth - Center2Target,
+                       centerY - calibrateWidth - Center2Target,
+                       0,
+                       0
+                   )
+                   startParams.setMargins(
+                       centerX - calibrateWidth + Center2Target,
+                       centerY - calibrateWidth + Center2Target,
+                       0,
+                       0
+                   )
+
+                   titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
+               }*/
+            //以下為為受測者方向出發的選項，程式描述為icon對於施測者的方向///
             "R_Up" -> {
                 targetParams.setMargins(
-                    centerX - calibrateWidth + Center2Target,
-                    centerY - calibrateWidth - Center2Target,
+                    centerX - calibrateWidth - Center2Target,
+                    centerY - calibrateWidth + Center2Target,
                     0,
                     0
                 )
                 startParams.setMargins(
-                    centerX - calibrateWidth + Center2Start,
-                    centerY - calibrateWidth + Center2Start,
+                    centerX - calibrateWidth - Center2Start,
+                    centerY - calibrateWidth - Center2Start,
                     0,
                     0
                 )
 
-                titleParams.setMargins(centerX - titleCalibrate - 700, centerY - 400, 0, 0)
+                titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
             }
             "R_Up_Left" -> {
                 targetParams.setMargins(
-                    centerX - calibrateWidth - Center2Target,
-                    centerY - calibrateWidth - Center2Target,
-                    0,
-                    0
-                )
-                startParams.setMargins(
-                    centerX - calibrateWidth + Center2Target,
-                    centerY - calibrateWidth + Center2Target,
-                    0,
-                    0
-                )
-
-                titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
-            }
-
-            "L_Down" -> {
-                targetParams.setMargins(
-                    centerX - calibrateWidth - Center2Target,
-                    centerY - calibrateWidth + Center2Target,
-                    0,
-                    0
-                )
-                startParams.setMargins(
-                    centerX - calibrateWidth - Center2Start,
-                    centerY - calibrateWidth - Center2Start,
-                    0,
-                    0
-                )
-
-                titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
-            }
-            "L_Down_Right" -> {
-                targetParams.setMargins(
                     centerX - calibrateWidth + Center2Target,
                     centerY - calibrateWidth + Center2Target,
                     0,
@@ -808,7 +814,7 @@ class TestFragment : Fragment() {
 
                 titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
             }
-            "R_Down" -> {
+            "L_Up" -> {
                 targetParams.setMargins(
                     centerX - calibrateWidth + Center2Target,
                     centerY - calibrateWidth + Center2Target,
@@ -824,7 +830,7 @@ class TestFragment : Fragment() {
 
                 titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
             }
-            "R_Down_Left" -> {
+            "L_Up_Right" -> {
                 targetParams.setMargins(
                     centerX - calibrateWidth - Center2Target,
                     centerY - calibrateWidth + Center2Target,
@@ -968,43 +974,43 @@ class TestFragment : Fragment() {
         var c2tY = 0
 
         when (currentTestDirection) {
-            "L_Up" -> {
-                c2tX = centerX - calibrateWidth - Center2Target
-                c2tY = centerY - calibrateWidth - Center2Target
-                setTargetRandomPosition(c2tX, c2tY)
-            }
-            "L_Up_Right" -> {
-                c2tX = centerX - calibrateWidth + Center2Target
-                c2tY = centerY - calibrateWidth - Center2Target
-                setTargetRandomPosition(c2tX, c2tY)
-            }
+            /*  "L_Up" -> {
+                  c2tX = centerX - calibrateWidth - Center2Target
+                  c2tY = centerY - calibrateWidth - Center2Target
+                  setTargetRandomPosition(c2tX, c2tY)
+              }
+              "L_Up_Right" -> {
+                  c2tX = centerX - calibrateWidth + Center2Target
+                  c2tY = centerY - calibrateWidth - Center2Target
+                  setTargetRandomPosition(c2tX, c2tY)
+              }
+              "R_Up" -> {
+                  c2tX = centerX - calibrateWidth + Center2Target
+                  c2tY = centerY - calibrateWidth - Center2Target
+                  setTargetRandomPosition(c2tX, c2tY)
+              }
+              "R_Up_Left" -> {
+                  c2tX = centerX - calibrateWidth - Center2Target
+                  c2tY = centerY - calibrateWidth - Center2Target
+                  setTargetRandomPosition(c2tX, c2tY)
+              }*/
+
             "R_Up" -> {
-                c2tX = centerX - calibrateWidth + Center2Target
-                c2tY = centerY - calibrateWidth - Center2Target
+                c2tX = centerX - calibrateWidth - Center2Target
+                c2tY = centerY - calibrateWidth + Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
             "R_Up_Left" -> {
-                c2tX = centerX - calibrateWidth - Center2Target
-                c2tY = centerY - calibrateWidth - Center2Target
-                setTargetRandomPosition(c2tX, c2tY)
-            }
-
-            "L_Down" -> {
-                c2tX = centerX - calibrateWidth - Center2Target
-                c2tY = centerY - calibrateWidth + Center2Target
-                setTargetRandomPosition(c2tX, c2tY)
-            }
-            "L_Down_Right" -> {
                 c2tX = centerX - calibrateWidth + Center2Target
                 c2tY = centerY - calibrateWidth + Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
-            "R_Down" -> {
+            "L_Up" -> {
                 c2tX = centerX - calibrateWidth + Center2Target
                 c2tY = centerY - calibrateWidth + Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
             }
-            "R_Down_Left" -> {
+            "L_Up_Right" -> {
                 c2tX = centerX - calibrateWidth - Center2Target
                 c2tY = centerY - calibrateWidth + Center2Target
                 setTargetRandomPosition(c2tX, c2tY)
@@ -1433,11 +1439,11 @@ class TestFragment : Fragment() {
         //計算向量: 以startPosition為基準/原點
         //Vector( test2Response ) = Vector( start2Response ) - Vector( start2Test )
 
-        //start2Test = Test(x,y) - Start(x,y)
+        //start2Test(x,y) = Test(x,y) - Start(x,y)
         var start2TestX = testPositionX - startPositionX
         var start2TestY = testPositionY - startPositionY
 
-        //start2Response = Response(x,y) - Start(x,y)
+        //start2Response(x,y) = Response(x,y) - Start(x,y)
         var start2ResponseX = responsePositionX - startPositionX
         var start2ResponseY = responsePositionY - startPositionY
 
@@ -1445,12 +1451,45 @@ class TestFragment : Fragment() {
         var test2ResponseAP = start2ResponseY - start2TestY
         var test2ResponseML = start2ResponseX - start2TestX
 
-        //Relative Error: AP、ML
-        var relativeErrorAP = test2ResponseAP
-        var relativeErrorML = test2ResponseML
+
         //Absolute Error: AP、ML、T2R(AP^2+ML^2)^1/2
         var absoluteErrorAP = kotlin.math.abs(test2ResponseAP)
         var absoluteErrorML = kotlin.math.abs(test2ResponseML)
+
+        //Relative Error: AP、ML
+        var relativeErrorAP = test2ResponseAP
+        var relativeErrorML = test2ResponseML
+
+        //1105校正relativeError正負號
+        when {
+            test2ResponseAP  < 0 -> {
+                //performanceDescriptionAP = "Underestimated"
+                relativeErrorAP = -absoluteErrorAP
+            }
+            test2ResponseAP  > 0 -> {
+                //performanceDescriptionAP = "Overestimated"
+                relativeErrorAP = absoluteErrorAP
+            }
+            test2ResponseAP  == 0f -> {
+                //performanceDescriptionAP = "Perfect Matched"
+                relativeErrorAP = absoluteErrorAP
+            }
+        }
+
+        when {
+            test2ResponseML < 0 -> {
+                //performanceDescriptionML = "Right Deviated"
+                relativeErrorML = absoluteErrorML
+            }
+            test2ResponseML > 0 -> {
+                //performanceDescriptionML = "Left  Deviated"
+                relativeErrorML = -absoluteErrorML
+            }
+            test2ResponseML == 0f -> {
+                //performanceDescriptionML = "Perfect Matched"
+                relativeErrorML = absoluteErrorML
+            }
+        }
 
         val a = test2ResponseAP.toDouble()
         val b = test2ResponseML.toDouble()
@@ -1465,7 +1504,7 @@ class TestFragment : Fragment() {
             absoluteErrorT2R
         )
         // Variable Error: AP、ML、(AP^2+ML^2)^1/2  >> 需每個方向全部測完才能算 >> 在這邊先不算
-    }  //計算測驗分數
+    }  //計算測驗分數  1105校正正負號
 
     fun clearScoreList() {
         scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
@@ -1473,93 +1512,38 @@ class TestFragment : Fragment() {
 
     fun displayScoreInText(inputScoreList: List<Float>, flag: Int) {
         val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
-
         var performanceDescriptionAP: String = ""  //Y軸
         var performanceDescriptionML: String = ""  //X軸
-
-
-        //受試者測出發題目:
-        val far2NearList = arrayListOf<String>("L_Down", "L_Down_Right", "R_Down", "R_Down_Left")
-        //施測者測出發題目:
-        val near2FarList = arrayListOf<String>("L_Up", "L_Up_Right", "R_Up", "R_Up_Left")
-
-        var reverseFlag = 0
-
-        if (far2NearList.contains(currentTestDirection)) {
-            reverseFlag = 1
-        } else if (near2FarList.contains(currentTestDirection)) {
-            reverseFlag = 0
-        }
-
-
-        when (reverseFlag) {
-            1 -> {
-                when {
-                    inputScoreList[0] < 0 -> {
-                        //performanceDescriptionAP = "Underestimated"
-                        performanceDescriptionAP = "少於指定目標位置"
-                    }
-                    inputScoreList[0] > 0 -> {
-                        //performanceDescriptionAP = "Overestimated"
-                        performanceDescriptionAP = "多於指定目標位置"
-                    }
-                    inputScoreList[0] == 0f -> {
-                        //performanceDescriptionAP = "Perfect Matched"
-                        performanceDescriptionAP = "等於指定目標位置"
-                    }
-                }
-
-                when {
-                    inputScoreList[1] < 0 -> {
-                        //performanceDescriptionML = "Right Deviated"
-                        performanceDescriptionML = "右偏指定目標位置"
-                    }
-                    inputScoreList[1] > 0 -> {
-                        //performanceDescriptionML = "Left  Deviated"
-                        performanceDescriptionML = "左偏指定目標位置"
-                    }
-                    inputScoreList[1] == 0f -> {
-                        //performanceDescriptionML = "Perfect Matched"
-                        performanceDescriptionML = "等於指定目標位置"
-                    }
-                }
+        when {
+            inputScoreList[0] < 0 -> {
+                //performanceDescriptionAP = "Underestimated"
+                performanceDescriptionAP = "少於指定目標位置"
             }
-            0 -> {
-                when {
-                    inputScoreList[0] > 0 -> {
-                        //performanceDescriptionAP = "Underestimated"
-                        performanceDescriptionAP = "少於指定目標位置"
-                    }
-                    inputScoreList[0] < 0 -> {
-                        //performanceDescriptionAP = "Overestimated"
-                        performanceDescriptionAP = "多於指定目標位置"
-                    }
-                    inputScoreList[0] == 0f -> {
-                        //performanceDescriptionAP = "Perfect Matched"
-                        performanceDescriptionAP = "等於指定目標位置"
-                    }
-                }
-
-                when {
-                    inputScoreList[1] > 0 -> {
-                        //performanceDescriptionML = "Right Deviated"
-                        performanceDescriptionML = "右偏指定目標位置"
-                    }
-                    inputScoreList[1] < 0 -> {
-                        //performanceDescriptionML = "Left  Deviated"
-                        performanceDescriptionML = "左偏指定目標位置"
-                    }
-                    inputScoreList[1] == 0f -> {
-                        //performanceDescriptionML = "Perfect Matched"
-                        performanceDescriptionML = "等於指定目標位置"
-                    }
-                }
+            inputScoreList[0] > 0 -> {
+                //performanceDescriptionAP = "Overestimated"
+                performanceDescriptionAP = "多於指定目標位置"
             }
-        }
-
+            inputScoreList[0] == 0f -> {
+                //performanceDescriptionAP = "Perfect Matched"
+                performanceDescriptionAP = "等於指定目標位置"
+            }
+        }  //performanceDescriptionAP
+        when {
+            inputScoreList[1] > 0 -> {
+                //performanceDescriptionML = "Right Deviated"
+                performanceDescriptionML = "右偏指定目標位置"
+            }
+            inputScoreList[1] < 0 -> {
+                //performanceDescriptionML = "Left  Deviated"
+                performanceDescriptionML = "左偏指定目標位置"
+            }
+            inputScoreList[1] == 0f -> {
+                //performanceDescriptionML = "Perfect Matched"
+                performanceDescriptionML = "等於指定目標位置"
+            }
+        }  //performanceDescriptionML
 // + String.format("%.2f", startX) + ",Y= "+String.format("%.2f", startY)
 // /////// 將表現分數取小數點
-
         when (flag) {
             1 -> {
                 /*
@@ -1608,7 +1592,7 @@ class TestFragment : Fragment() {
                 Score.text = modifyString
             }
         }
-    }  //用於描述測驗表現
+    }  //用於描述測驗表現: 1105去除轉換+-判斷式
 
     fun savePracticePerformanceToCSV() {
         //call 整理8trialData

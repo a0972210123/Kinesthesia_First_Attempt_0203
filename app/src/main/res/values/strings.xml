@@ -139,15 +139,21 @@
 
     <string-array name="direction_list">
         <item>請選方向</item>
-        <item>舊-左下至左上</item>
-        <item>舊-左下至右上</item>
-        <item>舊-右下至右上</item>
-        <item>舊-右下至左上</item>
-        <item>新-左上至左下</item>
+        <item>右下至右上</item>
+        <item>右下至左上</item>
+        <item>左下至左上</item>
+        <item>左下至右上</item>
+    </string-array>
+<!--
+    <item>舊-左下至左上</item>
+    <item>舊-左下至右上</item>
+    <item>舊-右下至右上</item>
+    <item>舊-右下至左上</item>
+       <item>新-左上至左下</item>
         <item>新-左上至右下</item>
         <item>新-右上至右下</item>
         <item>新-右上至左下</item>
-    </string-array>
+        -->
 
     <string-array name="trial_count_list">
         <item>請選次數</item>
