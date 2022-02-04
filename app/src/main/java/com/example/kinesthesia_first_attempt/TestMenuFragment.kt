@@ -92,6 +92,12 @@ class TestMenuFragment : Fragment() {
         findNavController().navigate(R.id.action_testMenuFragment_to_additionFragment)
     }
 
+    fun goToNondominant() {
+        Toast.makeText(activity, "進入非慣用手測驗", Toast.LENGTH_SHORT).show()
+        //使用以下code來抓取navController，用findNavController().navigate()，並輸入"動作的ID"。也就是要執行的nav動作(要和nav_graph.xml相同
+        findNavController().navigate(R.id.action_testMenuFragment_to_nondominantFragment)
+    }
+
 
 
     fun goToAuto() {

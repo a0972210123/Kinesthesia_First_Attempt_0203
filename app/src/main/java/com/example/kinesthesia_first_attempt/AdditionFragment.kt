@@ -148,7 +148,7 @@ class AdditionFragment : Fragment() {
     fun saveInAirDataToCSV() {
         val outputInAirData = inAirData.toString().replace("\r", "").split("\n")
         //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
-        val outputFileName = "Addition_${currentTestContext}_${currentTestDirection}_InAir_Trial_$currentTrial.csv"
+        val outputFileName = "Dominant_Addition_${currentTestContext}_${currentTestDirection}_InAir_Trial_$currentTrial.csv"
         // 存檔: name,List,flag
         outputInAirCsv(outputFileName, outputInAirData, 0)
     }
@@ -1573,7 +1573,7 @@ class AdditionFragment : Fragment() {
         }
     }  //用於描述測驗表現: 1105去除轉換+-判斷式
 
-    fun savePracticePerformanceToCSV() {
+    fun savePerformanceToCSV() {
         //call 整理8trialData
         arrayListOf5Trial = combineList()
         //call function 將List排進buffer
@@ -1592,7 +1592,7 @@ class AdditionFragment : Fragment() {
 
         //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
         val outputFileName =
-            "Addition_" + currentTestContext + "_" + currentTestDirection + "_" + timeStampMillis + ".csv"
+            "Dominant_Addition_" + currentTestContext + "_" + currentTestDirection + "_" + timeStampMillis + ".csv"
 
         // 存檔: name,List,flag
         outputCsv(outputFileName, outputPositionData, 0)
@@ -1665,7 +1665,7 @@ class AdditionFragment : Fragment() {
         if (buttonPressedCountsInATrial == 5) {
             millisInFuture = 0
         } else {
-            millisInFuture = 1000 //暫時改
+            millisInFuture = 4000 //暫時改
         }
         //計時器宣告
         val timer = object : CountDownTimer(millisInFuture, 1000) {
@@ -1723,7 +1723,7 @@ class AdditionFragment : Fragment() {
                 .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
 
                 .setNegativeButton(getString(R.string.addition_test_dialog_next_condition)) { _, _ ->
-                    savePracticePerformanceToCSV()//儲存測驗表現
+                    savePerformanceToCSV()//儲存測驗表現
                     clearRecord()  // 清除測驗表現
                     formalTrialCount.text = "測驗次數: $currentTrial / $maxTrailDesire "
                     manageVisibility(1)
@@ -1731,7 +1731,7 @@ class AdditionFragment : Fragment() {
                 }
 
                 .setPositiveButton(getString(R.string.test_dialog_back_to_menu)) { _, _ ->
-                    savePracticePerformanceToCSV()//儲存測驗表現
+                    savePerformanceToCSV()//儲存測驗表現
                     clearRecord()  // 清除測驗表現
                     //formalTrialCount.text = "測驗次數: $currentTrial / $maxTrailDesire "
                     //manageVisibility(1)

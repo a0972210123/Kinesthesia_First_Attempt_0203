@@ -22,7 +22,6 @@ import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.FileOutputStream
-import java.util.*
 import kotlin.math.sqrt
 
 //全域變數宣告，不然無法讀取到class給的資料
@@ -798,12 +797,6 @@ class PracticeFragment : Fragment() {
 
         //確認是否需要倒數  millisInFuture
         var millisInFuture: Long = 4000
-
-        if (buttonPressedCountsInATrial == 5) {
-            millisInFuture = 0
-        } else {
-            millisInFuture = 1000 //暫時改
-        }
 
         if (buttonPressedCountsInATrial == 5) {
             millisInFuture = 0

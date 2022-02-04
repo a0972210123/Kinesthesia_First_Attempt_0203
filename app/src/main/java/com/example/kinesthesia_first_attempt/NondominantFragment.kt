@@ -18,18 +18,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.kinesthesia_first_attempt.databinding.FragmentTestBinding
+
+import com.example.kinesthesia_first_attempt.databinding.FragmentNondominantBinding
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 
-class TestFragment : Fragment() {
+class NondominantFragment : Fragment() {
     private val sharedViewModel: MainViewModel by activityViewModels()
-    private lateinit var binding: FragmentTestBinding
+    private lateinit var binding: FragmentNondominantBinding
     private lateinit var mContext_demo: Context
     lateinit var directionSpinner: Spinner
     lateinit var trialInputSpinner: Spinner
@@ -48,7 +51,7 @@ class TestFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_test, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_nondominant, container, false)
         return binding.root
     }
 
@@ -59,8 +62,8 @@ class TestFragment : Fragment() {
         binding?.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
-            testFragment = this@TestFragment //使用listenser binding，用UI button 在xml中設定onclick
-        }
+            nondominantFragment = this@NondominantFragment //使用listenser binding，用UI button 在xml中設定onclick
+    }
 
 
         val currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)
@@ -122,7 +125,7 @@ class TestFragment : Fragment() {
         launchContextSpinner()
 
         //設應測驗次數 for 補測  > 正式測驗刪掉
-        //launchTrialInputSpinner()
+        launchTrialInputSpinner()
 
         //launch第一次避免crush
         checkContextAndLaunchView(currentTestContext)
@@ -130,7 +133,6 @@ class TestFragment : Fragment() {
 
 
     /////////存INAIR
-
     fun arrangeInAirData() {
         inAirData.append(systemTimestamp)
         inAirData.append(",")
@@ -147,7 +149,7 @@ class TestFragment : Fragment() {
     fun saveInAirDataToCSV() {
         val outputInAirData = inAirData.toString().replace("\r", "").split("\n")
         //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
-        val outputFileName = "Dominant_Formal_${currentTestContext}_${currentTestDirection}_InAir_Trial_$currentTrial.csv"
+        val outputFileName = "Nondominant_${currentTestContext}_${currentTestDirection}_InAir_Trial_$currentTrial.csv"
         // 存檔: name,List,flag
         outputInAirCsv(outputFileName, outputInAirData, 0)
     }
@@ -191,9 +193,7 @@ class TestFragment : Fragment() {
         tipPressure = 0f
         inAirData.setLength(0)
     }  //歸零Inair相關參數
-
     /////////存INAIR
-
 
     //以下三種spinner
     fun launchDirectionSpinner() {
@@ -288,15 +288,15 @@ class TestFragment : Fragment() {
 
     //測驗次數上限變數
     // trialCount
-    val maxTrialLimit = 5
-    //val maxTrialLimit = 1
-    var maxTrailDesire: Int = maxTrialLimit
+    var maxTrailDesire: Int = 5
     val trialCountList = arrayListOf<String>("請選次數", "5", "4", "3", "2", "1")
 
 
     //測驗方向變數
     var currentTestDirection: String = ""
-   /* val directionList = arrayListOf<String>(
+    //val directionList = arrayListOf<String>("請選方向", "L2L", "L2R", "R2R", "R2L")
+
+/*    val directionList = arrayListOf<String>(
         "請選方向",
         "L_Up",
         "L_Up_Right",
@@ -307,13 +307,16 @@ class TestFragment : Fragment() {
         "R_Down",
         "R_Down_Left",
     )*/
-   val directionList = arrayListOf<String>(
-       "請選方向",
-       "R_Up",       //<item>右下至右上</item>
-       "R_Up_Left",  // <item>右下至左上</item>
-       "L_Up",       //<item>左下至左上</item>
-       "L_Up_Right", //<item>左下至右上</item>
-   )
+
+    val directionList = arrayListOf<String>(
+        "請選方向",
+        "R_Up",       //<item>右下至右上</item>
+        "R_Up_Left",  // <item>右下至左上</item>
+        "L_Up",       //<item>左下至左上</item>
+        "L_Up_Right", //<item>左下至右上</item>
+    )
+
+
     var TestingFinishedList = arrayListOf<String>()
 
     //測驗方式
@@ -354,8 +357,7 @@ class TestFragment : Fragment() {
     //螢幕寬、高
     val w = Resources.getSystem().displayMetrics.widthPixels    //網路資料值 =2800，程式計算值=2800
     val h = Resources.getSystem().displayMetrics.heightPixels   //網路資料值 =1752，程式計算值=1650
-    val pixelDensity = Resources.getSystem().displayMetrics.densityDpi
-    //資料值為 266 >>抓系統 為340
+    val pixelDensity = Resources.getSystem().displayMetrics.densityDpi //資料值為 266 >>抓系統 為340
 
     val centerX = w / 2  //1400
     val centerY = h / 2  //825
@@ -392,7 +394,6 @@ class TestFragment : Fragment() {
 
     val titleCalibrate = viewAdjustDp2Pixel(widthOfTitle)
 
-
     val TandSCalibrate = viewAdjustDp2Pixel(widthOfTandS)
     val penTandSCalibrate = viewAdjustDp2Pixel(cantextPenWidthOfTandS)
 
@@ -410,6 +411,7 @@ class TestFragment : Fragment() {
     lateinit var downArrow: ImageView
     lateinit var downLeftArrow: ImageView
     lateinit var downRightArrow: ImageView
+
 
     fun checkContextAndLaunchView(context: String) {
         var tempContext = context
@@ -848,7 +850,6 @@ class TestFragment : Fragment() {
         }
     }
 
-
     fun setTrialLimit(trialLimitInput: String) {
         when (trialLimitInput) {
             "請選次數" -> {
@@ -893,19 +894,23 @@ class TestFragment : Fragment() {
         val directionChecked = checkDirectionInput()
         if (contextChecked == 1) {
             if (directionChecked == 1) {
-                TestingFinishedList.add(currentTestDirection)
+                //TestingFinishedList.add(currentTestDirection)
                 //finishedcontextList.add(currentTestContext) >>改到測完所有方向
                 randomThePosition()
                 setTargetPosition()
                 changeText()
-                Toast.makeText(activity, "開始進行 $currentTestDirection 測驗", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    activity,
+                    "開始補測 $currentTestContext $currentTestDirection",
+                    Toast.LENGTH_SHORT
+                ).show()
                 manageVisibility(0)  //顯示觸控板及記錄紐
             }
         }
     }    //確認選擇方向、情境、並更新測驗紀錄    //移植補測後 刪掉判斷是否有選過
 
     fun checkContextInput(): Int {
-        checkContextTested()//避免bug可以跳出
+        //checkContextTested()//避免bug可以跳出
         var flag = 0
         if (currentTestContext == contextList[0]) {
             Toast.makeText(activity, "測驗情境尚未設定", Toast.LENGTH_SHORT).show()
@@ -916,12 +921,13 @@ class TestFragment : Fragment() {
                 //finishedcontextList.add(currentTestContext)
                 flag = 1
             }
+            flag = 1  //直接移出 就算測過/選過也關係
         }
         return flag
     }
 
     fun checkDirectionInput(): Int {
-        checkDirectionTested()  //避免bug可以跳出
+        //checkDirectionTested()  //避免bug可以跳出
         var flag = 0
         if (currentTestDirection == directionList[0]) {
             Toast.makeText(activity, "測驗方向尚未設定", Toast.LENGTH_SHORT).show()
@@ -935,6 +941,7 @@ class TestFragment : Fragment() {
                 //TestingFinishedList.add(currentTestDirection)
                 flag = 1
             }
+            flag = 1 //直接移出 就算測過/選過也關係
         }
         return flag
     }
@@ -1031,15 +1038,16 @@ class TestFragment : Fragment() {
 
     fun checkDirectionTested() {
         contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
-        //目前暫定需要八種全測
         val checkList = arrayListOf<String>(
             "L_Up",
             "L_Up_Right",
             "R_Up",
             "R_Up_Left",
+            "L_Down",
+            "L_Down_Right",
+            "R_Down",
+            "R_Down_Left"
         )
-
-
         //當四種都測完
         if (TestingFinishedList.toSet() == checkList.toSet()) {
             MaterialAlertDialogBuilder(requireContext())
@@ -1058,31 +1066,7 @@ class TestFragment : Fragment() {
                 }
                 .show() //creates and then displays the alert dialog.
         }
-    }//判斷是否所有方向都測過
-
-    fun checkDirectionTested2() {
-        contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
-        //目前暫定需要八種全測
-        val checkList = arrayListOf<String>("L_Down", "L_Down_Right", "R_Down", "R_Down_Left")
-        //當四種都測完
-        if (TestingFinishedList.toSet() == checkList.toSet()) {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
-                .setMessage(
-                    getString(R.string.test_dialog_message_finished_all_direction)
-                ) //Set the message to show the data
-                .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
-                .setPositiveButton(getString(R.string.test_dialog_next_context)) { _, _ ->
-                    finishedContextList.add(currentTestContext)
-                    TestingFinishedList = arrayListOf<String>() //清除List >> 準備測另種情境
-                    contextSpinner.visibility = View.VISIBLE
-                    Toast.makeText(activity, "更換情境", Toast.LENGTH_SHORT).show()
-                    //checkContextTested() //確認兩種情境是否測驗完成
-
-                }
-                .show() //creates and then displays the alert dialog.
-        }
-    }//判斷是否所有方向都測過 備用只測後四種
+    } //判斷是否所有方向都測過 //1105前舊版本 要刪掉
 
     fun manageVisibility(flag: Int) {
         //找到相關的View
@@ -1114,7 +1098,6 @@ class TestFragment : Fragment() {
                 //隱藏方向選擇VIEW
                 trialInputSpinner.visibility = View.INVISIBLE
                 contextSpinner.visibility = View.INVISIBLE
-
                 directionSpinner.visibility = View.INVISIBLE
                 selectButton.visibility = View.INVISIBLE
             }
@@ -1166,14 +1149,14 @@ class TestFragment : Fragment() {
         }  //計算測驗表現 (RE*2，AE*3)  //更新text內容
 
         if (buttonPressedCountsInATrial == 5) {
-
             //0912測試存InAir
             saveInAirDataToCSV()
             clearInAir()
             //
 
+
             addTrialsCount()           // 完成一次測驗練習
-            if (trialsCount == 5) { //第五trail結束不用再設目標
+            if (trialsCount == maxTrailDesire) { //第五trail結束不用再設目標
             } else {
                 setTargetPosition()// 重設目標位置
             }
@@ -1599,9 +1582,18 @@ class TestFragment : Fragment() {
         //切割buffer
         val outputPositionData = positionData.toString().replace("\r", "").split("\n")
 
+        val timeStamp: String //避免資料夾個案編號資料重複的額外後接編號
+        val timeStampFormatter =
+            SimpleDateFormat("HH_mm_ss", Locale.getDefault()) //H 時 在一天中 (0~23) // m 分 // s 秒
+        val timeStampCalendar = Calendar.getInstance()
+        timeStamp =
+            timeStampFormatter.format(timeStampCalendar.time).toString() //當日時間  //需傳到viewmodel
+
+        val timeStampMillis = System.currentTimeMillis()
 
         //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
-        val outputFileName = "Dominant_Formal_"+ currentTestContext + "_" + currentTestDirection + ".csv"
+        val outputFileName =
+            "Nondominant_" + currentTestContext + "_" + currentTestDirection + "_" + timeStampMillis + ".csv"
 
         // 存檔: name,List,flag
         outputCsv(outputFileName, outputPositionData, 0)
@@ -1654,7 +1646,7 @@ class TestFragment : Fragment() {
         output.setLength(0) //clean buffer
         Toast.makeText(
             activity,
-            "正式測驗:$currentTestContext $currentTestDirection 儲存成功",
+            "非慣用手測驗:$currentTestContext $currentTestDirection 儲存成功",
             Toast.LENGTH_SHORT
         )
             .show()
@@ -1722,21 +1714,30 @@ class TestFragment : Fragment() {
         val formalTrialCount = requireView().findViewById<TextView>(R.id.trial_count)
 
         if (trialsCount >= maxTrailDesire) {
-            checkDirectionTested() // 確認完成所有測驗方向
+            //checkDirectionTested() // 確認完成所有測驗方向
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+                .setTitle(getString(R.string.nondominant_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
                 .setMessage(
-                    getString(R.string.test_dialog_message)
+                    getString(R.string.nondominant_dialog_message)
                 ) //Set the message to show the data
                 .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
 
-                .setPositiveButton(getString(R.string.test_dialog_next_condition)) { _, _ ->
+                .setNegativeButton(getString(R.string.nondominant_dialog_next_condition)) { _, _ ->
                     savePerformanceToCSV()//儲存測驗表現
                     clearRecord()  // 清除測驗表現
                     formalTrialCount.text = "測驗次數: $currentTrial / $maxTrailDesire "
                     manageVisibility(1)
-                    Toast.makeText(activity, "更換情境", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "更換情境或方向", Toast.LENGTH_SHORT).show()
+                }
+
+                .setPositiveButton(getString(R.string.test_dialog_back_to_menu)) { _, _ ->
+                    savePerformanceToCSV()//儲存測驗表現
+                    clearRecord()  // 清除測驗表現
+                    //formalTrialCount.text = "測驗次數: $currentTrial / $maxTrailDesire "
+                    //manageVisibility(1)
+                    Toast.makeText(activity, "回到選單", Toast.LENGTH_SHORT).show()
+                    goBackToMenu()
                 }
                 .show() //creates and then displays the alert dialog.
         }
@@ -1744,7 +1745,7 @@ class TestFragment : Fragment() {
 
     fun goBackToMenu() {
         Toast.makeText(activity, "回到測驗選單", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_testFragment_to_testMenuFragment)
+        findNavController().navigate(R.id.action_nondominantFragment_to_testMenuFragment)
     }
 
     private fun hideBottomUIMenu() {
@@ -1760,7 +1761,7 @@ class TestFragment : Fragment() {
                     or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_FULLSCREEN)
             decorView.systemUiVisibility = uiOptions
         }
-    }
+    }  //觸控時會重新顯示
 
     private fun showBottomUIMenu() {
         //恢復普通狀態
@@ -1773,7 +1774,7 @@ class TestFragment : Fragment() {
             val uiOptions: Int = View.SCREEN_STATE_OFF
             decorView.systemUiVisibility = uiOptions
         }
-    }
+    } //觸控時會重新顯示
 
     //https://stackoverflow.com/questions/37380587/android-how-to-hide-the-system-ui-properly
     private fun hideSystemUI() {
@@ -1799,5 +1800,6 @@ class TestFragment : Fragment() {
         newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY.inv()
         decorView.systemUiVisibility = newUiOptions
     }
+
 
 } //Fragment End

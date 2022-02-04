@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/testMenuFragment">
+    app:startDestination="@id/coverFragment">
 
 
     <fragment
@@ -44,6 +44,9 @@
         <action
             android:id="@+id/action_testMenuFragment_to_autorecordFragment"
             app:destination="@id/autorecordFragment" />
+        <action
+            android:id="@+id/action_testMenuFragment_to_nondominantFragment"
+            app:destination="@id/nondominantFragment" />
     </fragment>
 
 
@@ -87,6 +90,14 @@
         android:label="AutorecordFragment" >
         <action
             android:id="@+id/action_autorecordFragment_to_testMenuFragment"
+            app:destination="@id/testMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nondominantFragment"
+        android:name="com.example.kinesthesia_first_attempt.NondominantFragment"
+        android:label="NondominantFragment" >
+        <action
+            android:id="@+id/action_nondominantFragment_to_testMenuFragment"
             app:destination="@id/testMenuFragment" />
     </fragment>
 

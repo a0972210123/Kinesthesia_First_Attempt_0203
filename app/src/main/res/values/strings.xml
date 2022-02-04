@@ -99,7 +99,13 @@
 
     <string name="addition_test_dialog_title">補充測驗</string>
     <string name="addition_test_dialog_message">已完成本次補測內容</string>
-    <string name="addition_test_dialog_next_condition">更換選項</string>
+    <string name="addition_test_dialog_next_condition">更換補測選項</string>
+
+    <string name="nondominant_dialog_title">非慣用手測驗</string>
+    <string name="nondominant_dialog_message">已完成本次非慣用手測驗內容</string>
+    <string name="nondominant_dialog_next_condition">更換測驗選項</string>
+
+
 
 
     <string name="test_dialog_title">正式測驗</string>
@@ -144,7 +150,7 @@
         <item>左下至左上</item>
         <item>左下至右上</item>
     </string-array>
-<!--
+    <!--
     <item>舊-左下至左上</item>
     <item>舊-左下至右上</item>
     <item>舊-右下至右上</item>
