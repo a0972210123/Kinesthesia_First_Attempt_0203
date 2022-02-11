@@ -1150,9 +1150,10 @@ class NondominantFragment : Fragment() {
 
         if (buttonPressedCountsInATrial == 5) {
             //0912測試存InAir
-            saveInAirDataToCSV()
+            if (currentTestContext == "Pen"){
+                saveInAirDataToCSV()
+            }
             clearInAir()
-            //
 
 
             addTrialsCount()           // 完成一次測驗練習

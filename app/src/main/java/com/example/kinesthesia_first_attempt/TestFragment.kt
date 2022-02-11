@@ -1167,10 +1167,10 @@ class TestFragment : Fragment() {
 
         if (buttonPressedCountsInATrial == 5) {
 
-            //0912測試存InAir
-            saveInAirDataToCSV()
+            if (currentTestContext == "Pen"){
+                saveInAirDataToCSV()
+            }
             clearInAir()
-            //
 
             addTrialsCount()           // 完成一次測驗練習
             if (trialsCount == 5) { //第五trail結束不用再設目標
