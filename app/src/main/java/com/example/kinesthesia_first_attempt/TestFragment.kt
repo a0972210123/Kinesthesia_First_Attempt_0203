@@ -181,7 +181,7 @@ class TestFragment : Fragment() {
         os.flush()
         os.close()
         output.setLength(0) //clean buffer
-        Toast.makeText(activity, "InAir_Trial$currentTrial 儲存成功", Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, "${currentTestContext}_${currentTestDirection}_InAir_Trial$currentTrial 儲存成功", Toast.LENGTH_SHORT).show()
         //Log.d("data", "outCSV Success")
     }  // sample from HW
 
@@ -1053,7 +1053,7 @@ class TestFragment : Fragment() {
                     TestingFinishedList = arrayListOf<String>() //清除List >> 準備測另種情境
                     contextSpinner.visibility = View.VISIBLE
                     Toast.makeText(activity, "更換情境", Toast.LENGTH_SHORT).show()
-                    //checkContextTested() //確認兩種情境是否測驗完成
+                    checkContextTested() //確認兩種情境是否測驗完成
 
                 }
                 .show() //creates and then displays the alert dialog.

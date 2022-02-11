@@ -273,7 +273,7 @@ class PracticeFragment : Fragment() {
         os.flush()
         os.close()
         output.setLength(0) //clean buffer
-        Toast.makeText(activity, "InAir_Trial$currentTrial 儲存成功", Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, "InAir_Trial_$currentTrial 儲存成功", Toast.LENGTH_SHORT).show()
         //Log.d("data", "outCSV Success")
     }  // sample from HW
 
@@ -774,10 +774,11 @@ class PracticeFragment : Fragment() {
         if (buttonPressedCountsInATrial == 5) {
 
             //0912測試存InAir
-            saveInAirDataToCSV()
+                if (currentTestContext == "Pen"){
+                    saveInAirDataToCSV()
+                }
             clearInAir()
             //
-
 
             addTrialsCount()           // 完成一次測驗練習
             saveCurrentTrialRecord()   //將單次反應存入LIST(包含分數計算)

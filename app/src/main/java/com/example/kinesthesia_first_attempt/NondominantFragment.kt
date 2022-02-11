@@ -183,7 +183,7 @@ class NondominantFragment : Fragment() {
         os.flush()
         os.close()
         output.setLength(0) //clean buffer
-        Toast.makeText(activity, "InAir_Trial$currentTrial 儲存成功", Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, "${currentTestContext}_${currentTestDirection}_InAir_Trial$currentTrial 儲存成功", Toast.LENGTH_SHORT).show()
         //Log.d("data", "outCSV Success")
     }  // sample from HW
 
