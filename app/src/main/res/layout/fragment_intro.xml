@@ -19,65 +19,66 @@
         tools:context="IntroFragment">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/app_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/side_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/app_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/margin_between_elements"
-                android:text="平板化運動覺測驗開發"
-                android:textSize="34sp"
-                app:layout_constraintBottom_toTopOf="@id/cover_image_view" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/margin_between_elements"
+            android:text="平板化運動覺測驗開發"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@id/cover_image_view"
+            app:layout_constraintEnd_toEndOf="@+id/cover_image_view"
+            app:layout_constraintStart_toStartOf="@+id/cover_image_view" />
 
             <ImageView
                 android:id="@+id/cover_image_view"
                 android:layout_width="@dimen/image_size"
                 android:layout_height="@dimen/image_size"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/margin_between_elements"
+                android:layout_marginTop="90dp"
                 android:importantForAccessibility="no"
                 android:scaleType="center"
-                app:srcCompat="@drawable/cupcake" />
+                app:srcCompat="@drawable/canva_logo_0211_250dp"
 
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/view_pager"
-                android:layout_width="500dp"
-                android:layout_height="250dp"
-                android:layout_gravity="center_horizontal"
-                app:layout_constraintTop_toBottomOf="@id/cover_image_view"
-                tools:layout_editor_absoluteX="0dp">
-
-            </androidx.viewpager2.widget.ViewPager2>
-
-
-            <Button
-                android:id="@+id/instruction_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="32dp"
-                android:onClick="@{() -> introFragment.goToMenu()}"
-                android:text="開始"
-                android:textSize="30sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
 
                 />
 
 
-        </LinearLayout>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="500dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/cover_image_view"
+            app:layout_constraintStart_toStartOf="@+id/cover_image_view"
+            app:layout_constraintTop_toBottomOf="@id/cover_image_view">
+
+        </androidx.viewpager2.widget.ViewPager2>
+
+
+        <Button
+            android:id="@+id/instruction_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:onClick="@{() -> introFragment.goToMenu()}"
+            android:text="開始"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@+id/view_pager" />
+
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -29,14 +29,13 @@
             android:layout_marginBottom="100dp"
 
 
-
             android:contentDescription="@string/demo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
 
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/cupcake" />
+            app:srcCompat="@drawable/canva_logo_0211_250dp" />
 
 
         <Button
@@ -72,7 +71,7 @@
             android:layout_width="80dp"
             android:layout_height="65dp"
 
-            android:layout_marginEnd="100dp"
+            android:layout_marginEnd="50dp"
             android:layout_marginBottom="400dp"
             android:gravity="start|center_vertical"
             android:text="@string/demo_name"

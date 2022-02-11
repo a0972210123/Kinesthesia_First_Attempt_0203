@@ -40,7 +40,7 @@
                 android:layout_marginTop="@dimen/margin_between_elements"
                 android:importantForAccessibility="no"
                 android:scaleType="center"
-                app:srcCompat="@drawable/cupcake" />
+                app:srcCompat="@drawable/canva_logo_0211_250dp" />
 
 
             <Button

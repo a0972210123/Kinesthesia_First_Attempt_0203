@@ -6,10 +6,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.147" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/arrow_upward.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/canva_logo_0211_250dp.xml" value="0.135" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/circle_arrow_up.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/circle_target.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/ic_baseline_arrow_circle_up_24.xml" value="0.24078212290502793" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/ic_launcher_0209_background.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/ic_launcher_background.xml" value="0.147" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/ic_launcher_canva_logo_0211_background.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/ic_launcher_canva_logo_0211_foreground.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/north_150.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/north_50.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/north_east_150.xml" value="0.1" />
@@ -27,14 +33,18 @@
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/drawable/target_50.xml" value="0.1" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_addition.xml" value="0.2" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_autorecord.xml" value="0.24134078212290502" />
-        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_cover.xml" value="0.1" />
-        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_demographic.xml" value="0.2" />
-        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_intro.xml" value="0.2075" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_cover.xml" value="0.264" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_demographic.xml" value="0.4" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_intro.xml" value="0.264" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_nondominant.xml" value="0.21642857142857144" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_practice.xml" value="0.2830357142857143" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_test.xml" value="0.21739130434782608" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/fragment_test_menu.xml" value="0.264" />
         <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/layout/item_page.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.168" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/mipmap-anydpi-v26/ic_launcher_0209_round.xml" value="0.2355" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/mipmap-anydpi-v26/ic_launcher_canva_logo_0211.xml" value="0.1" />
+        <entry key="..\:/Users/wiwi4/AndroidStudioProjects/Kinesthesia_First_Attempt/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
       </map>
     </option>
   </component>

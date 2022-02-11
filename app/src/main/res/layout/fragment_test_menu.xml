@@ -19,13 +19,13 @@
             android:layout_width="@dimen/image_size"
             android:layout_height="@dimen/image_size"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="100dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="90dp"
             android:importantForAccessibility="no"
             android:scaleType="center"
-            app:srcCompat="@drawable/cupcake" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/canva_logo_0211_250dp" />
 
         <TextView
             android:id="@+id/task_selection_instruction"
@@ -47,7 +47,7 @@
             android:layout_marginEnd="32dp"
             android:onClick="@{() -> testMenuFragment.goToPractice()}"
 
-            android:text="練習題"
+            android:text="練習測驗"
 
             android:textSize="36sp"
             app:layout_constraintEnd_toStartOf="@+id/addition_task"
@@ -57,14 +57,12 @@
             android:id="@+id/formal_task"
             android:layout_width="@dimen/btn_width"
             android:layout_height="@dimen/btn_height"
-            android:layout_marginTop="32dp"
 
             android:onClick="@{() -> testMenuFragment.goToFormal()}"
             android:text="慣用手  正式測驗"
             android:textSize="36sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/task_selection_instruction" />
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toTopOf="@+id/textView2" />
 
 
         <Button
@@ -72,11 +70,10 @@
             android:layout_width="@dimen/btn_width"
             android:layout_height="@dimen/btn_height"
 
-            android:layout_marginEnd="32dp"
             android:onClick="@{() -> testMenuFragment.goToAddition()}"
             android:text="慣用手  補充測驗"
             android:textSize="36sp"
-            app:layout_constraintEnd_toStartOf="@+id/formal_task"
+            app:layout_constraintEnd_toStartOf="@+id/textView2"
             app:layout_constraintTop_toTopOf="@+id/formal_task" />
 
         <Button
@@ -86,10 +83,19 @@
             android:layout_marginStart="32dp"
 
             android:onClick="@{() -> testMenuFragment.goToNondominant()}"
-            android:text="非慣用手測驗"
+            android:text="非慣用手正式測驗"
             android:textSize="36sp"
             app:layout_constraintStart_toEndOf="@+id/formal_task"
             app:layout_constraintTop_toTopOf="@+id/formal_task" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="32dp"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/task_selection_instruction"
+            app:layout_constraintStart_toStartOf="@+id/task_selection_instruction"
+            app:layout_constraintTop_toBottomOf="@+id/task_selection_instruction" />
 
 
         <!--

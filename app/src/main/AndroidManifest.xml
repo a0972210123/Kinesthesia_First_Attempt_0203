@@ -6,12 +6,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_canva_logo_0211"
         android:label="@string/app_name"
         android:screenOrientation="landscape"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_canva_logo_0211_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Kinesthesia_First_Attempt">
+        android:theme="@style/Theme.kinesthesia_First_Attempt">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -8,7 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-
     <!-- From cupcake-->
     <color name="pink_400">#FFEC407A</color>
     <color name="pink_600">#FFD81B60</color>
@@ -16,6 +15,13 @@
     <color name="purple_400">#FFAB47BC</color>
     <!-- From cupcake-->
 
+    <!-- From logo-->
+    <color name="main_blue">#004aad</color>
+    <color name="main_blue_light">#5475e0</color>
+    <color name="main_blue_dark">#00247d</color>
+    <color name="main_yellow">#FFDE59</color>
+    <color name="main_red">#FF5757</color>
+    <!-- From logo-->
 
     <!--  From handwriting -->
     <color name="colorPrimary2">#6200EE</color>
@@ -25,8 +31,6 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="background">#415D95</color>
     <!-- From handwriting-->
-
-
 
 
 </resources>
