@@ -15,9 +15,6 @@ private const val RESPONSE_DOT_SIZE = 3.00
 const val MAX_PRACTICE_TRIAL = 8
 const val MAX_FORMAL_TRIAL = 5
 
-
-
-
 //
 
 class MainViewModel : ViewModel() {
@@ -68,9 +65,6 @@ class MainViewModel : ViewModel() {
     //測驗表現資料
     //absoluteError relativeError variableError  TrialsCounts  testList
     // x.y座標等等
-
-
-
 
 
     // function段落，與按鈕、app logic、變數更動相關的method/function
