@@ -5,6 +5,10 @@
     tools:visibility="visible">
 
     <data>
+        <!--  xml中匯入UniversalFunctions.Kt，備用，之後需要改 pressbutton & confirmSelection-->
+        <variable
+            name="universalFunction"
+            type="com.example.kinesthesia_first_attempt.UniversalFunctionsKt" />
 
         <variable
             name="practiceFragment"
@@ -13,7 +17,6 @@
         <variable
             name="viewModel"
             type="com.example.kinesthesia_first_attempt.ui.main.MainViewModel" />
-
 
         <variable
             name="maxPracticeTrial"
@@ -220,14 +223,13 @@
             app:layout_constraintStart_toEndOf="@id/trialInput_list"
             app:layout_constraintTop_toTopOf="@id/trialInput_list" />
 
-
+        <!-- android:onClick="@{() -> practiceFragment.confirmSelection()}"-->
+        <!-- android:onClick="@{() -> universalFunction.u_confirmSelection()}"-->
         <Button
             android:id="@+id/confirm_trial"
             android:layout_width="200dp"
             android:layout_height="50dp"
-
             android:onClick="@{() -> practiceFragment.confirmSelection()}"
-
             android:text="@string/select_direction"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -311,6 +313,21 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
+        <ImageView
+            android:id="@+id/random_target"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="150dp"
+
+            android:visibility="gone"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:srcCompat="@drawable/random_target_50"
+            app:tint="@color/pink_950" />
         <!-- 以下測試-->
 
 

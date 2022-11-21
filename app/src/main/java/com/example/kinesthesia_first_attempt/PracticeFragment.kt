@@ -2,13 +2,8 @@ package com.example.kinesthesia_first_attempt
 
 
 import android.annotation.SuppressLint
-
-
 import android.content.Context
-import android.media.AudioManager
-import android.media.ToneGenerator
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,9 +18,6 @@ import com.example.kinesthesia_first_attempt.databinding.FragmentPracticeBinding
 import com.example.kinesthesia_first_attempt.ui.main.MAX_PRACTICE_TRIAL
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.io.File
-import java.io.FileOutputStream
-import kotlin.math.sqrt
 
 //全域變數宣告，不然無法讀取到class給的資料
 
@@ -48,93 +40,38 @@ class PracticeFragment : Fragment() {
     private lateinit var binding: FragmentPracticeBinding
 
     // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
-    // Todo:11/15測試成功，之後要貼到每個fragment開頭
-    private lateinit var  start: TextView
-    private lateinit var  test: TextView
-    private lateinit var  rest: TextView
-    private lateinit var  response: TextView
-    private lateinit var  formalTrialCount: TextView     //測驗次數textView
-    private lateinit var  recordingButton: Button        //找到測驗按鈕
-    private lateinit var  instructionText: TextView      //找到指導語textView
-    // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
-    // Todo:11/15測試成功，之後要貼到每個fragment開頭
 
+    // Todo:11/15測試成功，之後要貼到每個fragment開頭
+    lateinit var  start: TextView
+    lateinit var  test: TextView
+    lateinit var  rest: TextView
+    lateinit var  response: TextView
+    lateinit var  trialCountView: TextView     //測驗次數textView
+    lateinit var  recordingButton: Button        //找到測驗按鈕
+    lateinit var  instructionText: TextView      //找到指導語textView
+// Todo:11/15測試成功，之後要貼到每個fragment開頭
     lateinit var mContext_demo: Context
     lateinit var trialInputSpinner: Spinner
     lateinit var contextSpinner: Spinner
-
-//    lateinit var startView: ImageView
-//    lateinit var targetView: ImageView
-//    lateinit var downArrow: ImageView
-
     // Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
     lateinit var fingerTarget: ImageView
-    lateinit var fingerStarPoint: ImageView
+    lateinit var fingerStartPoint: ImageView
     lateinit var fingerDownArrow: ImageView
 
     lateinit var penTarget: ImageView
     lateinit var penStartPoint: ImageView
     lateinit var penDownArrow: ImageView
-    // Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
-
-
-
-
-    //測驗相關變數宣告
-//    var buttonPressedCountsInATrial: Int = 0  //按鈕次數
-//    var practiceTrialsCount: Int = 0  //已練習次數
-//    var trialCount: Int = 0
-//    var currentTrial: Int = 1  //當前Trial
-//    var practiceTime: Int = 0
-
-    // 測驗表現
-//    var startPositionX: Float = 0f
-//    var startPositionY: Float = 0f
-//    var testPositionX: Float = 0f
-//    var testPositionY: Float = 0f
-//    var restPositionX: Float = 0f
-//    var restPositionY: Float = 0f
-//    var responsePositionX: Float = 0f
-//    var responsePositionY: Float = 0f
-
-    // 存檔相關變數宣告
-//    val positionData = StringBuffer()
-//
-//    //顯示表現用暫存LIST
-//    var scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
-//
-//    lateinit var arrayListOf8Trial: ArrayList<List<Float>>
-//    var trial1list =
-//        listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f) //四次表現(X/Y) + 5個表現參數  = 13
-//    var trial2list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-//    var trial3list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-//    var trial4list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-//    var trial5list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-//    var trial6list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-//    var trial7list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-//    var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-
-
-
-
-
-    //測驗方式
-    //var currentTestContext: String = ""
-    //val contextList = arrayListOf<String>("請選情境", "Finger", "Pen")
-    //var testCondition: String = "Practice"
-
-
-    //測驗次數上限變數
-    // trialCount
-    //var maxTrailDesire: Int = 8
-    //val practiceTrialCountList = arrayListOf<String>("8", "7", "6", "5", "4", "3", "2", "1")
-
-    // 記錄當下手指位置，並管理測驗流程
-    // recordPosition功能描述
-    // 1.將XY存入對應情境的變數中
-    // 2.log.d中印出對應情境的資料
-    //var trialCondition = listOf<String>("Start Position", "Test Position", "Rest Position", "Response Position")
-    //var condition: String = ""
+// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
+    // 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
+    lateinit var currentPosition: TextView
+    lateinit var inAirText: TextView
+    lateinit var touchBoard: TouchBoard
+    lateinit var Score: TextView
+    // 原本 checktime 中沒有提前宣告的view
+    lateinit var countAndHint: TextView
+    //manageVisibility 中沒有提前宣告的view
+    lateinit var selectButton:Button
+    lateinit var randomTargetView: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -143,9 +80,8 @@ class PracticeFragment : Fragment() {
         val decorView = requireActivity().window.decorView
         u_hideSystemUI(decorView) //11/11 測試
         // hideSystemUI() //修改前
-
+        testCondition = testConditionList[0] //  val testConditionList = listOf<String>("Practice","Formal")
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -154,7 +90,7 @@ class PracticeFragment : Fragment() {
         //val fragmentBinding = FragmentPracticeBinding.inflate(inflater, container, false)
         //binding = fragmentBinding
         //return fragmentBinding.root
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_practice, container, false)
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_practice, container, false)
         //binding.lifecycleOwner = this
         return binding.root
 
@@ -171,45 +107,53 @@ class PracticeFragment : Fragment() {
             maxPracticeTrial = MAX_PRACTICE_TRIAL //用於更新練習次數文字
         }
 
-        // Todo: 11/15調整，View宣告位置
+        // 11/15調整，View宣告位置
         // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
         start = requireView()?.findViewById<TextView>(R.id.performance_start_position)
         test = requireView()?.findViewById<TextView>(R.id.performance_test_position)
         rest = requireView()?.findViewById<TextView>(R.id.performance_rest_position)
         response = requireView()?.findViewById<TextView>(R.id.performance_response_position) //測驗次數textView
-        formalTrialCount = requireView()?.findViewById<TextView>(R.id.trial_count) //找到測驗按鈕
+        trialCountView = requireView()?.findViewById<TextView>(R.id.trial_count) //找到測驗按鈕
         recordingButton = requireView()?.findViewById<Button>(R.id.record_position) //找到指導語textView
         instructionText = requireView()?.findViewById<TextView>(R.id.instruction_demonstration)
         // 宣告位置調整參考資料：https://medium.com/globant/why-oncreate-of-activity-and-oncreateview-of-fragment-is-not-needed-anymore-6cdfc331102
         // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
-        // Todo: 11/15調整，View宣告位置
+        //11/15調整，View宣告位置
 
-        // Todo: 11/15調整，Context & Spinner宣告位置
+        // 11/15調整，Context & Spinner宣告位置
         mContext_demo = requireActivity().applicationContext
         trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
         contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
         // Todo:>>> 待新增測驗方法Spinner (VAP2AP & AP2AP & PP2AP)
-        // Todo: 11/15調整，Context & Spinner宣告位置
+        // 11/15調整，Context & Spinner宣告位置
 
 
-        // Todo: 11/15調整，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
+        //11/15調整，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
         fingerTarget = requireView().findViewById<ImageView>(R.id.target)
-        fingerStarPoint = requireView().findViewById<ImageView>(R.id.start_point)
+        fingerStartPoint = requireView().findViewById<ImageView>(R.id.start_point)
         fingerDownArrow = requireView().findViewById<ImageView>(R.id.down_arrow)
-
 
         penTarget = requireView().findViewById<ImageView>(R.id.pen_target)
         penStartPoint = requireView().findViewById<ImageView>(R.id.pen_start_point)
         penDownArrow = requireView().findViewById<ImageView>(R.id.pen_down_arrow)
-        // Todo: 11/15調整，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
+        // 11/15調整，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
 
+        //11/21 計時用 text view
+        countAndHint = requireView().findViewById<TextView>(R.id.text1)
+        //11/21 計時用 text view
 
-        val currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)
+        //11/21 manageVisibility
+        selectButton = requireView().findViewById(R.id.confirm_trial) as Button
+        randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
+        //trialCount = requireView().findViewById<TextView>(R.id.trial_count)
+        //11/21 manageVisibility
+
+        currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)  //11/17 優化
         currentPosition.text =
-            ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
+            ("目前位置： X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
 
         //* new
-        val inAirText = requireView().findViewById<TextView>(R.id.in_air_testing)
+        inAirText = requireView().findViewById<TextView>(R.id.in_air_testing) //11/17 優化
         inAirText.text =
             ("目前InAir :" + "\n" +
                     "timeStamp = $systemTimestamp" + "\n" +
@@ -218,7 +162,7 @@ class PracticeFragment : Fragment() {
         //* new
 
 
-        val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
+        touchBoard = requireView().findViewById(R.id.view) as TouchBoard //11/17 優化
 
         //* new 下筆時的紀錄
         touchBoard.setOnTouchListener { _, _ ->
@@ -228,7 +172,7 @@ class PracticeFragment : Fragment() {
             }
 
             currentPosition.text =
-                ("目前位置 : X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                ("目前位置： X= " + String.format("%.2f", startX) + ",Y= " + String.format(
                     "%.2f",
                     startY
                 ))
@@ -270,11 +214,13 @@ class PracticeFragment : Fragment() {
 
         //更新文字view
         //changeText()
-        u_changeText(start,test,rest,response,formalTrialCount, recordingButton,instructionText,currentTrial,maxTrailDesire,condition)
+        u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
+            start,test,rest,response,
+            recordingButton)
         // TODO: 11/15 onViewCreated先呼叫views，再CALL u_change_Text之後要確認是否有問題
 
 
-        val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
+        Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score) //11/17 優化
         val modifyString: String = ("表現概述" + "\n" +
                 "整體誤差距離: " + "" + "\n" +
                 "前後方向表現: " + "" + "\n" +
@@ -293,9 +239,21 @@ class PracticeFragment : Fragment() {
         //launchContextSpinner()
         //checkContextAndLaunchView(currentTestContext)
         // 11/15 改為global Spinner
-        u_launchTrialInputSpinner(mContext_demo,trialInputSpinner,practiceTrialCountList)
-        u_launchContextSpinner(mContext_demo,contextSpinner,contextList,fingerTarget,fingerStarPoint,fingerDownArrow,penTarget,penStartPoint,penDownArrow)
-        u_checkContextAndLaunchView(currentTestContext,fingerTarget,fingerStarPoint,fingerDownArrow,penTarget,penStartPoint,penDownArrow)
+        u_launchTrialInputSpinner(mContext_demo,practiceTrialCountList,trialInputSpinner)
+        u_launchContextSpinner(mContext_demo,contextList,contextSpinner,
+            fingerTarget,
+            fingerStartPoint,
+            fingerDownArrow,
+            penTarget,
+            penStartPoint,
+            penDownArrow)
+        u_checkContextAndLaunchView(currentTestContext,
+            fingerTarget,
+            fingerStartPoint,
+            fingerDownArrow,
+            penTarget,
+            penStartPoint,
+            penDownArrow)
     }
 
 
@@ -390,7 +348,7 @@ class PracticeFragment : Fragment() {
         }
     } */
 
-    fun clearCurrentTrialRecord() {
+    /*fun clearCurrentTrialRecord() {
         startPositionX = 0f
         startPositionY = 0f
         testPositionX = 0f
@@ -402,15 +360,16 @@ class PracticeFragment : Fragment() {
         condition = ""
         startX = 0f
         startY = 0f
-    }
+    }*/
 
     /* fun addTrialsCount(){
         practiceTrialsCount++
         currentTrial++
     } */ //11/11更換
 
-    fun saveTrialToList(): List<Float> {
-        val tempScore = calculateTrialScoreP()  //計算當前trial表現Error
+    /* fun saveTrialToList(): List<Float> {
+        val tempScore = u_calculateTrialScoreP()  // 11/21 global
+        //val tempScore = calculateTrialScoreP()  //計算當前trial表現Error
         // 將當前儲存的trialData轉換成List
         return listOf<Float>(
             startPositionX,
@@ -427,9 +386,9 @@ class PracticeFragment : Fragment() {
             tempScore[3],  //AE ML
             tempScore[4]   //AE T2R
         )
-    }
+    } */
 
-    fun recordPosition() {
+    /* fun recordPosition() {
         when (buttonPressedCountsInATrial) {
             1 -> {
                 condition = trialCondition[0]
@@ -461,16 +420,16 @@ class PracticeFragment : Fragment() {
                 startY = 0f
             }
         }
-    }
+    }*/   // 11/17 修改成global function
 
-    fun reset8Trial() {
+    /* fun reset8Trial() {
         for (n in 0..7) {
-            arrayListOf8Trial[n] = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+            arrayListOf8Trial[n] = listOf<Float>(0.0f,0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f)
         }
-    }
+    } */
 
     // 將單次反應存入LIST
-    fun saveCurrentTrialRecord() {
+    /*fun saveCurrentTrialRecord() {
         //確認目前practiceTrialsCount
         when (practiceTrialsCount) {
             1 -> {
@@ -498,9 +457,9 @@ class PracticeFragment : Fragment() {
                 trial8list = saveTrialToList()
             }
         }
-    }
+    }*/  // 改 global
 
-    fun combineList(): ArrayList<List<Float>> {
+    /* fun combineList(): ArrayList<List<Float>> {
         return arrayListOf(
             trial1list,
             trial2list,
@@ -511,10 +470,10 @@ class PracticeFragment : Fragment() {
             trial7list,
             trial8list
         )
-    }  //這邊的list 最後要清掉
+    }  //這邊的list 最後要清掉 */
 
     // 將List排進Buffer (還沒加上標)
-    fun arrangeData(TargetStringBuffer: StringBuffer): StringBuffer {
+    /*fun arrangeData(TargetStringBuffer: StringBuffer): StringBuffer {
         for (index in 0..7) {  //選一個trial
             TargetStringBuffer.append(index + 1) //trial
             TargetStringBuffer.append(",")
@@ -547,9 +506,9 @@ class PracticeFragment : Fragment() {
             TargetStringBuffer.append("\r\n")
         }
         return TargetStringBuffer
-    }
+    }*/
 
-    fun calculateTrialScoreP(): List<Float> {
+    /* fun calculateTrialScoreP(): List<Float> {
         //計算向量: 以startPosition為基準/原點
         //Vector( test2Response ) = Vector( start2Response ) - Vector( start2Test )
         //start2Test(x,y) = Test(x,y) - Start(x,y)
@@ -617,9 +576,9 @@ class PracticeFragment : Fragment() {
             absoluteErrorT2R
         )
         // Variable Error: AP、ML、(AP^2+ML^2)^1/2  >> 需每個方向全部測完才能算 >> 在這邊先不算
-    }
+    } */
 
-    fun savePracticePerformanceToCSV() {
+    /* fun savePracticePerformanceToCSV() {
         //call 整理8trialData
         arrayListOf8Trial = combineList()
         //call function 將List排進buffer
@@ -630,9 +589,9 @@ class PracticeFragment : Fragment() {
         val outputFileName = "Practice_Performance_$practiceTime.csv"
         // 存檔: name,List,flag
         outputCsv(outputFileName, outputPositionData, 0)
-    }
+    } */
 
-    fun outputCsv(fileName: String, input: List<String>, flag: Int) {
+    /* fun outputCsv(fileName: String, input: List<String>, flag: Int) {
         //檔案路徑: 目前直接讀在demographic的全域變數，有error再讀viewModel備用
         //val outputPath = binding.viewModel!!.outputFilePath.toString()  //讀取存在viewModel的路徑
         val output = StringBuffer()//必需
@@ -680,7 +639,7 @@ class PracticeFragment : Fragment() {
         output.setLength(0) //clean buffer
         Toast.makeText(mContext_demo , "練習題測驗表現儲存成功", Toast.LENGTH_SHORT).show()
         Log.d("data", "outCSV Success")
-    }  // sample from HW
+    }  // sample from HW */
 
 
 
@@ -788,13 +747,22 @@ class PracticeFragment : Fragment() {
         Toast.makeText(mContext_demo , "開始測驗練習", Toast.LENGTH_SHORT).show()
         //changeText()
         // TODO: 11/15 先呼叫views，再CALL  u_change_Text之後要確認是否有問題
-        u_changeText(start,test,rest,response,formalTrialCount,
-            recordingButton,instructionText,currentTrial,maxTrailDesire,condition)
-
-        manageVisibility(0)  //顯示觸控板及記錄紐
+        u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
+            start,test,rest,response,
+            recordingButton)
+        u_manageVisibility(0,trialCountView,
+            recordingButton,
+            trialInputSpinner,
+            contextSpinner,
+            touchBoard,
+            Score,
+            countAndHint,
+            selectButton,
+            randomTargetView)
+        //manageVisibility(0)  //顯示觸控板及記錄紐
     }
 
-    fun manageVisibility(flag: Int) {
+    /* fun manageVisibility(flag: Int) {
         //找到相關的View
         val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
         trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
@@ -836,27 +804,46 @@ class PracticeFragment : Fragment() {
                 Score.text = "Score"
             }
         }
-    }  //管理測驗相關View顯示、可觸控與否
+    }  //管理測驗相關View顯示、可觸控與否 */
 
+
+    // Todo:  最優先 待更新function:   以及正式測驗中，隨機位置的function們
+    //  recordPosition () ; V
+    //  checkTime(); V
+    //  displayScoreInText(); V
+    //  calculateTrialScoreP(); V 之後還要改輸入 要考量given position
+    //  clearScoreList(); V
+    //  saveCurrentTrialRecord()V ;
+    //  saveTrialToList() V;
+    //  checkPracticeLimit() V;
+    //  以及正式測驗中，隨機位置的function們
     fun pressButton() {
         buttonPressedCountsInATrial++      //每按一次按鈕+1
         Log.d("X/Y/面積/長軸/短軸：inFragment", "$startX  $startY  $bb  $b1  $b2")
-        recordPosition()   //儲存位置，並管理測驗流程
+        u_recordPosition()   //儲存位置，並管理測驗流程，直接讀取全域變數
 
         //changeText()       //更動text   //11/15改為global
-        // Todo: 11/15 測試 global u_changeText，需要給各種 view input
-        u_changeText(start,test,rest,response,formalTrialCount,recordingButton,instructionText,currentTrial,maxTrailDesire,condition)
+        // Todo: 11/15 測試 global u_changeText，需要給各種 view input，可以work
+        u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
+            start,test,rest,response,
+            recordingButton)
 
-
-
-        checkTime()  //計時
+        u_checkTime(recordingButton,countAndHint) // 11/21 改global
+        //checkTime()  //計時
 
         if (buttonPressedCountsInATrial == 4) {
-            scoreListForDisplay = calculateTrialScoreP()   //計算測驗表現 (RE*2，AE*3)
-            displayScoreInText(scoreListForDisplay, 1)       //更新text內容
-            clearScoreList()
+
+            // Todo: 這邊之後要加入 given position來計算
+            scoreListForDisplay = u_calculateTrialScoreP()   //計算測驗表現 (RE*2，AE*3)
+            //scoreListForDisplay = calculateTrialScoreP()  // 11/21 更新為 global
+
+            //displayScoreInText(scoreListForDisplay, 1)       //更新text內容
+            u_displayScoreInText(scoreListForDisplay,1, Score)  //11/21 更新為 global
+            //clearScoreList()
+            u_clearScoreList()
         } else {
-            displayScoreInText(scoreListForDisplay, 0)
+            //displayScoreInText(scoreListForDisplay, 0)
+            u_displayScoreInText(scoreListForDisplay,0, Score)  //11/21 更新為 global
         }
 
 
@@ -864,30 +851,22 @@ class PracticeFragment : Fragment() {
 
             //0912測試存InAir
                 if (currentTestContext == "Pen"){
-                    u_saveInAirDataToCSV(testCondition,inAirData,currentTrial,mContext_demo)
+                    u_saveInAirDataToCSV(testConditionList[0],inAirData,currentTrial,mContext_demo)
                     // saveInAirDataToCSV() 11/11新版，未驗證
                 }
 
             u_clearInAir(inAirData) // 11/11新版，未驗證
             //clearInAir() // 11/11前舊版
 
-            //11/11新版，未驗證
-            //u_addTrialsCount(practiceTrialsCount,currentTrial) // 完成一次測驗練習   //11/11新版，未驗證 >> 11/15拿掉
-            // 11/15先維持最基本寫法
-            practiceTrialsCount++
-            currentTrial++
-
             //11/11前舊版
             //addTrialsCount()
-            saveCurrentTrialRecord()   //將單次反應存入LIST(包含分數計算)
-
+            //saveCurrentTrialRecord()   //將單次反應存入LIST(包含分數計算)
             //clearCurrentTrialRecord()  //清除單次表現、歸零座標、重設測驗情境
-            u_clearCurrentTrialRecord(
-                startPositionX,startPositionY,
-                testPositionX,testPositionY,
-                restPositionX,restPositionY,
-                responsePositionX,responsePositionY,
-                condition) //11/11新版，未驗證
+
+            //11/11新版，未驗證
+            u_addTrialsCount() // 完成一次測驗練習   //11/21
+            u_saveCurrentTrialRecord()
+            u_clearCurrentTrialRecord() //11/11新版，未驗證
 
             checkPracticeLimit()       //檢查是否達到練習次數
             buttonPressedCountsInATrial = 0
@@ -895,7 +874,7 @@ class PracticeFragment : Fragment() {
         return
     }
 
-    fun checkTime() {
+    /* fun checkTime() {
         // 找到關聯的view
         val recordingButton = requireView().findViewById<Button>(R.id.record_position)
         val text1 = requireView().findViewById<TextView>(R.id.text1)
@@ -952,23 +931,34 @@ class PracticeFragment : Fragment() {
             }
         }
         timer.start() //開始計時
-    }
+    } */ // 11/21 改global
 
     // 清除所有參數!，還沒寫完!
-    fun clearRecord() {
+    /* fun clearRecord() {
         clearCurrentTrialRecord() // 四個位置、startX/Y的全域變數
+        trialCount = 0
         practiceTrialsCount = 0   //進入測驗練習後的練習次數
         currentTrial = 1
         reset8Trial()             // 清除所有trial的紀錄
         positionData.setLength(0) //clean buffer
-    }
+    } */
 
+
+    // Todo: 待修正function
+    //  checkPracticeLimit() V
+    //  savePracticePerformanceToCSV()//儲存測驗表現 V
+    //  clearRecord()  // 清除測驗表現>> 還沒寫完 V
+    //  practiceCount.text = "練習次數: $currentTrial / $maxTrailDesire"  V
+    //  manageVisibility(1)   V
+    //  Toast.makeText(requireContext(), "再試一次", Toast.LENGTH_SHORT).show() V
+
+    // 此函式不改成 global，維持原local，但把內部其他funtion改為global
     fun checkPracticeLimit() {
         if (practiceTrialsCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
             practiceTime++  //增加練習次數
             binding.viewModel!!.setPracticeTime(practiceTime) //更新總練習次數
 
-            val practiceCount = requireView().findViewById<TextView>(R.id.trial_count)
+            //formalTrialCount = requireView().findViewById<TextView>(R.id.trial_count)
 
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.practice_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
@@ -978,16 +968,25 @@ class PracticeFragment : Fragment() {
                 .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
 
                 .setNegativeButton(getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
-                    savePracticePerformanceToCSV()//儲存測驗表現
-                    clearRecord()  // 清除測驗表現>> 還沒寫完
-                    practiceCount.text = "練習次數: $currentTrial / $maxTrailDesire"
-                    manageVisibility(1)
+                    u_savePracticePerformanceToCSV()//儲存測驗表現
+                    u_clearRecord()  // 清除測驗表現>> 還沒寫完
+                    trialCountView.text = "練習次數: $currentTrial / $maxTrailDesire"
+                    //u_manageVisibility(1)
+                    u_manageVisibility(1,trialCountView,
+                        recordingButton,
+                        trialInputSpinner,
+                        contextSpinner,
+                        touchBoard,
+                        Score,
+                        countAndHint,
+                        selectButton,
+                        randomTargetView)
                     Toast.makeText(requireContext(), "再試一次", Toast.LENGTH_SHORT).show()
                 }
                 .setPositiveButton(getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
-                    savePracticePerformanceToCSV()// 儲存測驗表現
-                    clearRecord()  // 清除測驗表現>> 還沒寫完
-                    goBackToMenu() // 前往測驗選單
+                    u_savePracticePerformanceToCSV()// 儲存測驗表現
+                    u_clearRecord()  // 清除測驗表現>> 還沒寫完
+                    goBackToMenu() // 前往測驗選單 ( 維持local)
                 }
                 .show() //creates and then displays the alert dialog.
         }
@@ -999,7 +998,7 @@ class PracticeFragment : Fragment() {
     }
 
     // 更新測驗表現、指導語/**/
-    @SuppressLint("SetTextI18n")
+    //@SuppressLint("SetTextI18n")
     /* fun changeText() {
         // 找到測驗表現textView
         val start = requireView().findViewById<TextView>(R.id.performance_start_position)
@@ -1074,11 +1073,11 @@ class PracticeFragment : Fragment() {
 
 
 
-    fun clearScoreList() {
-        scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
-    } //清除測驗分數
+    /* fun clearScoreList() {
+        scoreListForDisplay = listOf<Float>(0.0f, 0.0f, 0.0f, 0.0f, 0.0f)
+    } //清除測驗分數 */
 
-    fun displayScoreInText(inputScoreList: List<Float>, flag: Int) {
+    /* fun displayScoreInText(inputScoreList: List<Float>, flag: Int) {
         val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
 
         var performanceDescriptionAP: String = ""  //Y軸
@@ -1159,7 +1158,7 @@ class PracticeFragment : Fragment() {
                 Score.text = modifyString
             }
         }
-    }  //用於描述測驗表現
+    } */  //用於描述測驗表現  //11/21 改global
 
 
 } // fragment end
