@@ -20,35 +20,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class PracticeFragment : Fragment() {
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentPracticeBinding
-    //lateinit var mContext: Context
-// 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
-//    lateinit var  start: TextView
-//    lateinit var  test: TextView
-//    lateinit var  rest: TextView
-//    lateinit var  response: TextView
-//    lateinit var  trialCountView: TextView     //測驗次數textView
-//    lateinit var  recordingButton: Button        //找到測驗按鈕
-//    lateinit var  instructionText: TextView      //找到指導語textView
-//    lateinit var trialInputSpinner: Spinner
-//    ateinit var contextSpinner: Spinner
-    // Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
-//    lateinit var fingerTarget: ImageView
-//    lateinit var fingerStartPoint: ImageView
-//    lateinit var fingerDownArrow: ImageView
-//    lateinit var penTarget: ImageView
-//    lateinit var penStartPoint: ImageView
-//    lateinit var penDownArrow: ImageView
-// 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
-//    lateinit var currentPosition: TextView
-//    lateinit var inAirText: TextView
-//    lateinit var touchBoard: TouchBoard
-//    lateinit var Score: TextView
-    // 原本 checktime 中沒有提前宣告的view
-//    lateinit var countAndHint: TextView
-    //manageVisibility 中沒有提前宣告的view
-//    lateinit var selectButton:Button
-//    lateinit var randomTargetView: ImageView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +46,6 @@ class PracticeFragment : Fragment() {
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
@@ -103,7 +73,6 @@ class PracticeFragment : Fragment() {
         // Todo:>>> 待新增測驗方法Spinner (VAP2AP & AP2AP & PP2AP)
         // 11/15調整，Context & Spinner宣告位置
 
-
         //11/15調整，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
         fingerTarget = requireView().findViewById<ImageView>(R.id.target)
         fingerStartPoint = requireView().findViewById<ImageView>(R.id.start_point)
@@ -116,27 +85,25 @@ class PracticeFragment : Fragment() {
 
         //11/21 計時用 text view
         countAndHint = requireView().findViewById<TextView>(R.id.text1)
-        //11/21 計時用 text view
 
         //11/21 manageVisibility
         selectButton = requireView().findViewById(R.id.confirm_trial) as Button
         randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
-        //trialCount = requireView().findViewById<TextView>(R.id.trial_count)
-        //11/21 manageVisibility
-
         currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)  //11/17 優化
-        currentPosition.text =
-            ("目前位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
-
-        //* new
         inAirText = requireView().findViewById<TextView>(R.id.in_air_testing) //11/17 優化
-        inAirText.text =
-            ("目前InAir :" + "\n" +
-                    "timeStamp = $systemTimestamp" + "\n" +
-                    "Z = $heightZ " + "\n" +
-                    "tipPressure = $tipPressure")
-        //* new
 
+
+        u_changeInAriText()
+        //Todo: 下面這兩段可以包成 funciton
+//        currentPosition.text =
+//            ("目前位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
+//        //* new
+//        inAirText.text =
+//            ("目前InAir :" + "\n" +
+//                    "timeStamp = $systemTimestamp" + "\n" +
+//                    "Z = $heightZ " + "\n" +
+//                    "tipPressure = $tipPressure")
+//        //* new
 
         touchBoard = requireView().findViewById(R.id.view) as TouchBoard //11/17 優化
 
@@ -146,21 +113,7 @@ class PracticeFragment : Fragment() {
             if (buttonPressedCountsInATrial == 3 && currentTestContext == "Pen") {
                 u_arrangeInAirData()
             }
-
-            //Todo: 將這邊更改view文字的重複 code 改為universal  function
-            currentPosition.text =
-                ("目前位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
-                    "%.2f",
-                    startY
-                ))
-
-            //* new
-            inAirText.text =
-                ("目前InAir :" + "\n" +
-                        "timeStamp = $systemTimestamp" + "\n" +
-                        "Z = $heightZ " + "\n" +
-                        "tipPressure = $tipPressure")
-            //* new
+            u_changeInAriText()
             false
         }
 
@@ -170,19 +123,8 @@ class PracticeFragment : Fragment() {
             if (buttonPressedCountsInATrial == 3 && currentTestContext == "Pen") {
                 u_arrangeInAirData()
             }
+            u_changeInAriText()
 
-            currentPosition.text =
-                ("目前位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
-                    "%.2f",
-                    startY
-                ))
-
-            //* new
-            inAirText.text =
-                ("目前InAir :" + "\n" +
-                        "timeStamp = $systemTimestamp" + "\n" +
-                        "Z = $heightZ " + "\n" +
-                        "tipPressure = $tipPressure")
             false
         }
         //* new

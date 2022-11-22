@@ -184,6 +184,18 @@ fun u_showSystemUI(decorView:View) {
 
 
 //以下InAir相關
+
+fun u_changeInAriText() {
+    currentPosition.text =
+        ("目前位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
+    inAirText.text =
+        ("目前InAir :" + "\n" +
+                "timeStamp = $systemTimestamp" + "\n" +
+                "Z = $heightZ " + "\n" +
+                "tipPressure = $tipPressure")
+}
+
+
 fun u_clearInAir() {
     systemTimestamp = 0  //
     heightZ = 0f
