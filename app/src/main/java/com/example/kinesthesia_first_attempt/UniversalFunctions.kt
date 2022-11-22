@@ -15,18 +15,28 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.sqrt
 
-
-
+// 此Class目前暫時空白，如有資料需要pass給xml，可以放入這邊
 class UniversalFunctions: AppCompatActivity() {
-
 }
 
+//全域變數宣告，不然無法讀取到class給的資料
+var inAirData = StringBuffer()     //new: inair檔案暫存處
+var systemTimestamp: Long = 0      //new: 時間 用於存inair
+var heightZ: Float = 0f            //new: 筆在z軸高度
+var tipPressure: Float = 0f        //new: 筆尖壓力，用於後續分析筆是否在平板上以利裁切資料
+
+var startX: Float = 0f
+var startY: Float = 0f
+
+var bb: Float = 0f
+var b1: Float = 0f
+var b2: Float = 0f
+//全域變數宣告，不然無法讀取到class給的資料
 
 // 常數定義區段 : 此段落放不會改變的參數
 // 例如總測驗次數/練習次數等等，方格大小、等等
-private const val TARGET_BOX_SIZE = 2.00                   //待修改
-private const val RESPONSE_DOT_SIZE = 3.00
-
+const val TARGET_BOX_SIZE = 2.00                   //待修改
+const val RESPONSE_DOT_SIZE = 3.00
 // 最大練習次數 或每個方向的測驗次數
 const val MAX_PRACTICE_TRIAL = 8
 const val MAX_FORMAL_TRIAL = 5
@@ -36,8 +46,8 @@ const val MAX_FORMAL_TRIAL = 5
 
 // 記錄當下手指位置，並管理測驗流程
 // recordPosition功能描述
-// 1.將XY存入對應情境的變數中
-// 2.log.d中印出對應情境的資料
+//// 1.將XY存入對應情境的變數中
+//// 2.log.d中印出對應情境的資料
 var trialCondition = listOf<String>("Start Position", "Test Position", "Rest Position", "Response Position")
 var condition: String = ""
 
@@ -81,8 +91,9 @@ val positionData = StringBuffer()
 var scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
 
 lateinit var arrayListOf8Trial: ArrayList<List<Float>>
-var trial1list =
-    listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f) //四次表現(X/Y) + 5個表現參數  = 13
+
+//Todo:11/22這邊的LIST 之後都要新增 四欄，放 given target / target XY)
+var trial1list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f) //四次表現(X/Y) + 5個表現參數  = 13
 var trial2list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 var trial3list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 var trial4list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
@@ -179,14 +190,14 @@ fun u_showSystemUI(decorView:View) {
 
 
 //以下InAir相關
-fun u_clearInAir(inAirData:StringBuffer) {
+fun u_clearInAir() {
     systemTimestamp = 0  //
     heightZ = 0f
     tipPressure = 0f
     inAirData.setLength(0)
 }  //歸零inair相關參數
 
-fun u_arrangeInAirData(inAirData:StringBuffer) {
+fun u_arrangeInAirData() {
     inAirData.append(systemTimestamp)
     inAirData.append(",")
     inAirData.append(startX)
@@ -388,12 +399,18 @@ fun u_checkTime(recordingButton:Button,countAndHint:TextView) {
 
     //確認是否需要倒數  millisInFuture
     var millisInFuture: Long
+    millisInFuture = 1000
 
-    if (buttonPressedCountsInATrial == 5) {
-        millisInFuture = 0
-    } else {
-        millisInFuture = 4000
+    when (buttonPressedCountsInATrial){
+        0 -> { millisInFuture = 1000 }  //之後要看按鈕次數改回4000
+        1 -> { millisInFuture = 1000 }
+        2 -> { millisInFuture = 1000 }
+        3 -> { millisInFuture = 1000 }
+        4 -> { millisInFuture = 1000 }
+        5 -> { millisInFuture = 0 }
     }
+
+
     //計時器宣告
     val timer = object : CountDownTimer(millisInFuture, 1000) {
         @SuppressLint("SetTextI18n")

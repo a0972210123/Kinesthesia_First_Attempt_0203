@@ -300,6 +300,7 @@
             app:srcCompat="@drawable/pen_target_20" />
 
 
+
         <com.example.kinesthesia_first_attempt.TouchBoard
             android:id="@+id/view"
             android:layout_width="match_parent"
