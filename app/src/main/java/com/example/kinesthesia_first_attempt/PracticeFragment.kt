@@ -17,6 +17,12 @@ import com.example.kinesthesia_first_attempt.ui.main.MAX_PRACTICE_TRIAL
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
+// TODO: 11/22 & 23
+//  ()1. 修改函式的input，嘗試去除View輸入
+//  ()2. 確認XML中能否CALL u_pressButton & u_confirmSelection
+//  ()3. 確認 pressbutton & confirmSelection，是否能改為 GLOBAL
+
+
 class PracticeFragment : Fragment() {
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentPracticeBinding
@@ -39,7 +45,7 @@ class PracticeFragment : Fragment() {
         //return fragmentBinding.root
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_practice, container, false)
         //binding.lifecycleOwner = this
-        return binding.root
+       return binding.root
 
     }
 
@@ -52,7 +58,7 @@ class PracticeFragment : Fragment() {
             practiceFragment = this@PracticeFragment //使用listenser binding，用UI button 在xml中設定onclick
             maxPracticeTrial = MAX_PRACTICE_TRIAL //用於更新練習次數文字
         }
-
+        mContextKIN = requireActivity().applicationContext
         // 11/15調整，View宣告位置
         // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
         start = requireView().findViewById<TextView>(R.id.performance_start_position)
@@ -62,51 +68,33 @@ class PracticeFragment : Fragment() {
         trialCountView = requireView().findViewById<TextView>(R.id.trial_count) //找到測驗按鈕
         recordingButton = requireView().findViewById<Button>(R.id.record_position) //找到指導語textView
         instructionText = requireView().findViewById<TextView>(R.id.instruction_demonstration)
-        // 宣告位置調整參考資料：https://medium.com/globant/why-oncreate-of-activity-and-oncreateview-of-fragment-is-not-needed-anymore-6cdfc331102
-        // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
-        //11/15調整，View宣告位置
 
         // 11/15調整，Context & Spinner宣告位置
-        mContextKIN = requireActivity().applicationContext
         trialInputSpinner = requireView().findViewById<View>(R.id.trialInput_list) as Spinner
         contextSpinner = requireView().findViewById<View>(R.id.context_list) as Spinner
+        // Todo:>>> 待新增測驗方向Spinner
         // Todo:>>> 待新增測驗方法Spinner (VAP2AP & AP2AP & PP2AP)
-        // 11/15調整，Context & Spinner宣告位置
+        // Todo:>>> 測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
 
-        //11/15調整，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
         fingerTarget = requireView().findViewById<ImageView>(R.id.target)
         fingerStartPoint = requireView().findViewById<ImageView>(R.id.start_point)
         fingerDownArrow = requireView().findViewById<ImageView>(R.id.down_arrow)
-
         penTarget = requireView().findViewById<ImageView>(R.id.pen_target)
         penStartPoint = requireView().findViewById<ImageView>(R.id.pen_start_point)
         penDownArrow = requireView().findViewById<ImageView>(R.id.pen_down_arrow)
-        // 11/15調整，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
 
-        //11/21 計時用 text view
-        countAndHint = requireView().findViewById<TextView>(R.id.text1)
+        countAndHint = requireView().findViewById<TextView>(R.id.text1)         //11/21 計時用 text view
 
         //11/21 manageVisibility
         selectButton = requireView().findViewById(R.id.confirm_trial) as Button
         randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
         currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)  //11/17 優化
         inAirText = requireView().findViewById<TextView>(R.id.in_air_testing) //11/17 優化
-
-
-        u_changeInAriText()
-        //Todo: 下面這兩段可以包成 funciton
-//        currentPosition.text =
-//            ("目前位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
-//        //* new
-//        inAirText.text =
-//            ("目前InAir :" + "\n" +
-//                    "timeStamp = $systemTimestamp" + "\n" +
-//                    "Z = $heightZ " + "\n" +
-//                    "tipPressure = $tipPressure")
-//        //* new
-
         touchBoard = requireView().findViewById(R.id.view) as TouchBoard //11/17 優化
+        Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score) //11/17 優化
 
+
+        u_changeInAriText()     // DEFAULT inAir文字
         //* new 下筆時的紀錄
         touchBoard.setOnTouchListener { _, _ ->
 
@@ -124,7 +112,6 @@ class PracticeFragment : Fragment() {
                 u_arrangeInAirData()
             }
             u_changeInAriText()
-
             false
         }
         //* new
@@ -134,27 +121,13 @@ class PracticeFragment : Fragment() {
         u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
             start,test,rest,response,
             recordingButton)
-
-        Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score) //11/17 優化
-        val modifyString: String = ("表現概述" + "\n" +
-                "整體誤差距離: " + "" + "\n" +
-                "前後方向表現: " + "" + "\n" +
-                "左右方向表現: " + "" + "\n" +
-                "\n" +
-                "詳細分數" + "\n" +
-                "Relative Error  AP: " + "" + "\n" +
-                "Relative Error  ML: " + "" + "\n" +
-                "Absolute Error  AP: " + "" + "\n" +
-                "Absolute Error  ML: " + "" + "\n"
-                )
-        Score.text = modifyString
+        u_displayScoreInText(scoreListForDisplay,0, Score)  // flag = 0  顯示預設文字
 
         // Todo: 需要新增一個測驗方法spinner，VAP2AP & AP2AP & PP2AP，並新增根據選擇結果的，view調整判斷式，存檔名稱調整判斷式
         //launchTrialInputSpinner()
         //launchContextSpinner()
         //checkContextAndLaunchView(currentTestContext)
-        // 11/15 改為global Spinner
-        u_launchTrialInputSpinner(mContextKIN,practiceTrialCountList,trialInputSpinner)
+        u_launchTrialInputSpinner(mContextKIN,practiceTrialCountList,trialInputSpinner)         // 11/15 改為global Spinner
         u_launchContextSpinner(mContextKIN,contextList,contextSpinner,
             fingerTarget,
             fingerStartPoint,
@@ -193,18 +166,15 @@ class PracticeFragment : Fragment() {
     }
 
 
-
-    // Todo:  最優先 待更新function:
-    //  calculateTrialScoreP(); V 之後還要改輸入 要考量given position
-    //  checkPracticeLimit() V;
-    //  以及正式測驗中，隨機位置的function們
+    // Todo: calculateTrialScoreP(); V 之後還要改輸入 要考量given position
+    // Todo:  checkPracticeLimit() V;
+    // Todo:  以及正式測驗中，隨機位置的function們
     fun pressButton() {
         buttonPressedCountsInATrial++      //每按一次按鈕+1
         Log.d("X/Y/面積/長軸/短軸：inFragment", "$startX  $startY  $bb  $b1  $b2")
         u_recordPosition()   //儲存位置，並管理測驗流程，直接讀取全域變數
 
         //changeText()       //更動text   //11/15改為global
-        // Todo: 11/15 測試 global u_changeText，需要給各種 view input，可以work
         u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
             start,test,rest,response,
             recordingButton)

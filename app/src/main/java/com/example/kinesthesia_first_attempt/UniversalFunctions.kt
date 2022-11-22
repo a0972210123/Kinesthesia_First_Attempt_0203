@@ -106,6 +106,9 @@ var trial7list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0
 var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 
 
+
+// 宣告位置調整參考資料：https://medium.com/globant/why-oncreate-of-activity-and-oncreateview-of-fragment-is-not-needed-anymore-6cdfc331102
+// 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
 @SuppressLint("StaticFieldLeak") lateinit var  start: TextView
 @SuppressLint("StaticFieldLeak") lateinit var  test: TextView
 @SuppressLint("StaticFieldLeak") lateinit var  rest: TextView
@@ -186,8 +189,10 @@ fun u_showSystemUI(decorView:View) {
 //以下InAir相關
 
 fun u_changeInAriText() {
+    @SuppressLint("SetTextI18n")
     currentPosition.text =
         ("目前位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
+    @SuppressLint("SetTextI18n")
     inAirText.text =
         ("目前InAir :" + "\n" +
                 "timeStamp = $systemTimestamp" + "\n" +
