@@ -1,6 +1,5 @@
 package com.example.kinesthesia_first_attempt
 
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
@@ -19,20 +18,6 @@ import com.example.kinesthesia_first_attempt.ui.main.MAX_PRACTICE_TRIAL
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-//全域變數宣告，不然無法讀取到class給的資料
-//var inAirData = StringBuffer()     //new: inair檔案暫存處
-//var systemTimestamp: Long = 0  //new: 時間 用於存inair
-//var heightZ: Float = 0f        //new: 筆在z軸高度
-//var tipPressure: Float = 0f    //new: 筆尖壓力，用於後續分析筆是否在平板上以利裁切資料
-//
-//var startX: Float = 0f
-//var startY: Float = 0f
-//
-//var bb: Float = 0f
-//var b1: Float = 0f
-//var b2: Float = 0f
-//全域變數宣告，不然無法讀取到class給的資料
-
 class PracticeFragment : Fragment() {
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentPracticeBinding
@@ -47,7 +32,7 @@ class PracticeFragment : Fragment() {
     lateinit var  recordingButton: Button        //找到測驗按鈕
     lateinit var  instructionText: TextView      //找到指導語textView
 // Todo:11/15測試成功，之後要貼到每個fragment開頭
-    lateinit var mContext_demo: Context
+    lateinit var mContext: Context
     lateinit var trialInputSpinner: Spinner
     lateinit var contextSpinner: Spinner
     // Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
@@ -105,21 +90,21 @@ class PracticeFragment : Fragment() {
 
         // 11/15調整，View宣告位置
         // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
-        start = requireView()?.findViewById<TextView>(R.id.performance_start_position)
-        test = requireView()?.findViewById<TextView>(R.id.performance_test_position)
-        rest = requireView()?.findViewById<TextView>(R.id.performance_rest_position)
-        response = requireView()?.findViewById<TextView>(R.id.performance_response_position) //測驗次數textView
-        trialCountView = requireView()?.findViewById<TextView>(R.id.trial_count) //找到測驗按鈕
-        recordingButton = requireView()?.findViewById<Button>(R.id.record_position) //找到指導語textView
-        instructionText = requireView()?.findViewById<TextView>(R.id.instruction_demonstration)
+        start = requireView().findViewById<TextView>(R.id.performance_start_position)
+        test = requireView().findViewById<TextView>(R.id.performance_test_position)
+        rest = requireView().findViewById<TextView>(R.id.performance_rest_position)
+        response = requireView().findViewById<TextView>(R.id.performance_response_position) //測驗次數textView
+        trialCountView = requireView().findViewById<TextView>(R.id.trial_count) //找到測驗按鈕
+        recordingButton = requireView().findViewById<Button>(R.id.record_position) //找到指導語textView
+        instructionText = requireView().findViewById<TextView>(R.id.instruction_demonstration)
         // 宣告位置調整參考資料：https://medium.com/globant/why-oncreate-of-activity-and-oncreateview-of-fragment-is-not-needed-anymore-6cdfc331102
         // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
         //11/15調整，View宣告位置
 
         // 11/15調整，Context & Spinner宣告位置
-        mContext_demo = requireActivity().applicationContext
-        trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
-        contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
+        mContext = requireActivity().applicationContext
+        trialInputSpinner = requireView().findViewById<View>(R.id.trialInput_list) as Spinner
+        contextSpinner = requireView().findViewById<View>(R.id.context_list) as Spinner
         // Todo:>>> 待新增測驗方法Spinner (VAP2AP & AP2AP & PP2AP)
         // 11/15調整，Context & Spinner宣告位置
 
@@ -231,8 +216,8 @@ class PracticeFragment : Fragment() {
         //launchContextSpinner()
         //checkContextAndLaunchView(currentTestContext)
         // 11/15 改為global Spinner
-        u_launchTrialInputSpinner(mContext_demo,practiceTrialCountList,trialInputSpinner)
-        u_launchContextSpinner(mContext_demo,contextList,contextSpinner,
+        u_launchTrialInputSpinner(mContext,practiceTrialCountList,trialInputSpinner)
+        u_launchContextSpinner(mContext,contextList,contextSpinner,
             fingerTarget,
             fingerStartPoint,
             fingerDownArrow,
@@ -251,7 +236,7 @@ class PracticeFragment : Fragment() {
 
 
     fun confirmSelection() {
-        Toast.makeText(mContext_demo , "開始測驗練習", Toast.LENGTH_SHORT).show()
+        Toast.makeText(mContext, "開始測驗練習", Toast.LENGTH_SHORT).show()
         //changeText()
         // TODO: 11/15 先呼叫views，再CALL  u_change_Text之後要確認是否有問題
         u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
@@ -309,7 +294,7 @@ class PracticeFragment : Fragment() {
 
             //0912測試存InAir
                 if (currentTestContext == "Pen"){
-                    u_saveInAirDataToCSV(testConditionList[0],inAirData,currentTrial,mContext_demo)
+                    u_saveInAirDataToCSV(testConditionList[0],inAirData,currentTrial,mContext)
                     // saveInAirDataToCSV() 11/11新版，未驗證
                 }
 
@@ -335,6 +320,7 @@ class PracticeFragment : Fragment() {
 
 
     // 此函式不改成 global，維持原local，但把內部其他funtion改為global
+    @SuppressLint("SetTextI18n")
     fun checkPracticeLimit() {
         if (practiceTrialsCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
             practiceTime++  //增加練習次數
@@ -375,7 +361,7 @@ class PracticeFragment : Fragment() {
     }
 
     fun goBackToMenu() {
-        Toast.makeText(mContext_demo , "回到測驗選單", Toast.LENGTH_SHORT).show()
+        Toast.makeText(mContext, "回到測驗選單", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_practiceFragment_to_testMenuFragment)
     }
 
