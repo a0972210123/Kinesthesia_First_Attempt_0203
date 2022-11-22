@@ -24,35 +24,35 @@ class PracticeFragment : Fragment() {
 
     // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
     // Todo:11/21測試成功，之後要貼到每個fragment開頭
-    lateinit var  start: TextView
-    lateinit var  test: TextView
-    lateinit var  rest: TextView
-    lateinit var  response: TextView
-    lateinit var  trialCountView: TextView     //測驗次數textView
-    lateinit var  recordingButton: Button        //找到測驗按鈕
-    lateinit var  instructionText: TextView      //找到指導語textView
+//    lateinit var  start: TextView
+//    lateinit var  test: TextView
+//    lateinit var  rest: TextView
+//    lateinit var  response: TextView
+//    lateinit var  trialCountView: TextView     //測驗次數textView
+//    lateinit var  recordingButton: Button        //找到測驗按鈕
+//    lateinit var  instructionText: TextView      //找到指導語textView
 // Todo:11/15測試成功，之後要貼到每個fragment開頭
     lateinit var mContext: Context
-    lateinit var trialInputSpinner: Spinner
-    lateinit var contextSpinner: Spinner
+    //lateinit var trialInputSpinner: Spinner
+    //lateinit var contextSpinner: Spinner
     // Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
-    lateinit var fingerTarget: ImageView
-    lateinit var fingerStartPoint: ImageView
-    lateinit var fingerDownArrow: ImageView
-    lateinit var penTarget: ImageView
-    lateinit var penStartPoint: ImageView
-    lateinit var penDownArrow: ImageView
+//    lateinit var fingerTarget: ImageView
+//    lateinit var fingerStartPoint: ImageView
+//    lateinit var fingerDownArrow: ImageView
+//    lateinit var penTarget: ImageView
+//    lateinit var penStartPoint: ImageView
+//    lateinit var penDownArrow: ImageView
 // Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
-    // 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
-    lateinit var currentPosition: TextView
-    lateinit var inAirText: TextView
-    lateinit var touchBoard: TouchBoard
-    lateinit var Score: TextView
+//    // 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
+//    lateinit var currentPosition: TextView
+//    lateinit var inAirText: TextView
+//    lateinit var touchBoard: TouchBoard
+//    lateinit var Score: TextView
     // 原本 checktime 中沒有提前宣告的view
-    lateinit var countAndHint: TextView
+//    lateinit var countAndHint: TextView
     //manageVisibility 中沒有提前宣告的view
-    lateinit var selectButton:Button
-    lateinit var randomTargetView: ImageView
+//    lateinit var selectButton:Button
+//    lateinit var randomTargetView: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -131,7 +131,7 @@ class PracticeFragment : Fragment() {
 
         currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)  //11/17 優化
         currentPosition.text =
-            ("目前位置： X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
+            ("目前位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format("%.2f", startY))
 
         //* new
         inAirText = requireView().findViewById<TextView>(R.id.in_air_testing) //11/17 優化
@@ -152,8 +152,9 @@ class PracticeFragment : Fragment() {
                 u_arrangeInAirData()
             }
 
+            //Todo: 將這邊更改view文字的重複 code 改為universal  function
             currentPosition.text =
-                ("目前位置： X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                ("目前位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
                     "%.2f",
                     startY
                 ))
@@ -176,7 +177,7 @@ class PracticeFragment : Fragment() {
             }
 
             currentPosition.text =
-                ("目前位置： X= " + String.format("%.2f", startX) + ",Y= " + String.format(
+                ("目前位置：X= " + String.format("%.2f", startX) + ",Y= " + String.format(
                     "%.2f",
                     startY
                 ))

@@ -19,6 +19,7 @@ import kotlin.math.sqrt
 class UniversalFunctions: AppCompatActivity() {
 }
 
+
 //全域變數宣告，不然無法讀取到class給的資料
 var inAirData = StringBuffer()     //new: inair檔案暫存處
 var systemTimestamp: Long = 0      //new: 時間 用於存inair
@@ -103,45 +104,45 @@ var trial7list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0
 var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 
 //// Todo:11/15測試成功，之後要貼到每個fragment開頭
-//lateinit var  start: TextView
-//lateinit var  test: TextView
-//lateinit var  rest: TextView
-//lateinit var  response: TextView
-//lateinit var  trialCountView: TextView     //測驗次數textView
-//lateinit var  recordingButton: Button        //找到測驗按鈕
-//lateinit var  instructionText: TextView      //找到指導語textView
+@SuppressLint("StaticFieldLeak") lateinit var  start: TextView
+@SuppressLint("StaticFieldLeak") lateinit var  test: TextView
+@SuppressLint("StaticFieldLeak") lateinit var  rest: TextView
+@SuppressLint("StaticFieldLeak") lateinit var  response: TextView
+@SuppressLint("StaticFieldLeak") lateinit var  trialCountView: TextView     //測驗次數textView
+@SuppressLint("StaticFieldLeak") lateinit var  recordingButton: Button        //找到測驗按鈕
+@SuppressLint("StaticFieldLeak") lateinit var  instructionText: TextView      //找到指導語textView
 //// Todo:11/15測試成功，之後要貼到每個fragment開頭
 //
-//lateinit var mContext_demo: Context
-//lateinit var trialInputSpinner: Spinner
-//lateinit var contextSpinner: Spinner
+//@SuppressLint("StaticFieldLeak") lateinit var mContext: Context
+@SuppressLint("StaticFieldLeak") lateinit var trialInputSpinner: Spinner
+@SuppressLint("StaticFieldLeak") lateinit var contextSpinner: Spinner
 //
 //
 //// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
-//lateinit var fingerTarget: ImageView
-//lateinit var fingerStarPoint: ImageView
-//lateinit var fingerDownArrow: ImageView
-//
-//lateinit var penTarget: ImageView
-//lateinit var penStartPoint: ImageView
-//lateinit var penDownArrow: ImageView
+@SuppressLint("StaticFieldLeak") lateinit var fingerTarget: ImageView
+@SuppressLint("StaticFieldLeak") lateinit var fingerStartPoint: ImageView
+@SuppressLint("StaticFieldLeak") lateinit var fingerDownArrow: ImageView
+
+@SuppressLint("StaticFieldLeak") lateinit var penTarget: ImageView
+@SuppressLint("StaticFieldLeak") lateinit var penStartPoint: ImageView
+@SuppressLint("StaticFieldLeak") lateinit var penDownArrow: ImageView
 //// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
 //
 //
 //// 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
-//lateinit var currentPosition: TextView
-//lateinit var inAirText: TextView
-//lateinit var touchBoard: TouchBoard
-//lateinit var Score: TextView
+@SuppressLint("StaticFieldLeak") lateinit var currentPosition: TextView
+@SuppressLint("StaticFieldLeak") lateinit var inAirText: TextView
+lateinit var touchBoard: TouchBoard
+@SuppressLint("StaticFieldLeak") lateinit var Score: TextView
 //// 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
 //
 //// 原本 checktime 中沒有提前宣告的view
-//lateinit var countAndHint: TextView
+@SuppressLint("StaticFieldLeak") lateinit var countAndHint: TextView
 ////
 //
 ////manageVisibility 中沒有提前宣告的view
-//lateinit var selectButton:Button
-//lateinit var randomTargetView: ImageView
+@SuppressLint("StaticFieldLeak") lateinit var selectButton:Button
+@SuppressLint("StaticFieldLeak") lateinit var randomTargetView: ImageView
 ////
 
 
@@ -456,11 +457,11 @@ fun u_checkTime(recordingButton:Button,countAndHint:TextView) {
     timer.start() //開始計時
 }
 
-fun u_confirmSelection(trialCountView:TextView,instructionText:TextView,
-                       start:TextView,test:TextView,rest:TextView,response:TextView,
+fun u_confirmSelection(trialCountView:TextView, instructionText:TextView,
+                       start:TextView, test:TextView, rest:TextView, response:TextView,
                        recordingButton:Button,
-                       trialInputSpinner:Spinner,
-                       contextSpinner:Spinner,
+                       trialInputSpinner: Spinner,
+                       contextSpinner: Spinner,
                        touchBoard:TouchBoard,
                        Score:TextView,
                        countAndHint:TextView,
@@ -924,7 +925,8 @@ fun u_changeText(currentTrial: Int,maxTrailDesire:Int,condition: String,
 }
 
 fun u_launchTrialInputSpinner(mContext:Context,practiceTrialCountList: ArrayList<String>,
-                              trialInputSpinner:Spinner) {
+                              trialInputSpinner: Spinner
+) {
     //mContext_demo = requireActivity().applicationContext
     //trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
     val adapter = ArrayAdapter.createFromResource(
@@ -949,12 +951,11 @@ fun u_launchTrialInputSpinner(mContext:Context,practiceTrialCountList: ArrayList
     }
 }
 
-fun u_setTrialLimit(trialLimitInput: String): () -> Int {
-    var maxTrailDesire = trialLimitInput.toInt()
-    return {maxTrailDesire}
+fun u_setTrialLimit(trialLimitInput: String) {
+    maxTrailDesire = trialLimitInput.toInt()
     }  //可直接移植到補測
 
-fun u_launchContextSpinner(mContext:Context,contextList: ArrayList<String>,contextSpinner:Spinner,
+fun u_launchContextSpinner(mContext:Context, contextList: ArrayList<String>, contextSpinner: Spinner,
                            fingerTarget: ImageView,
                            fingerStartPoint: ImageView,
                            fingerDownArrow: ImageView,

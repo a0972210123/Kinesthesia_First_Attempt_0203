@@ -395,7 +395,6 @@ class TestFragment : Fragment() {
 
     val TandSCalibrate = viewAdjustDp2Pixel(widthOfTandS)
     val penTandSCalibrate = viewAdjustDp2Pixel(cantextPenWidthOfTandS)
-
     var calibrateWidth = TandSCalibrate
 
     //context 相關 ImageView宣告
@@ -1173,10 +1172,12 @@ class TestFragment : Fragment() {
             clearInAir()
 
             addTrialsCount()           // 完成一次測驗練習
+
             if (trialsCount == 5) { //第五trail結束不用再設目標
             } else {
                 setTargetPosition()// 重設目標位置
             }
+
             saveCurrentTrialRecord()   //將單次反應存入LIST(包含分數計算)
             clearCurrentTrialRecord()  //清除單次表現、歸零座標、重設測驗情境
             checkTrialLimit()       //檢查是否達到練習次數
