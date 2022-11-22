@@ -19,6 +19,8 @@ import kotlin.math.sqrt
 class UniversalFunctions: AppCompatActivity() {
 }
 
+ @SuppressLint("StaticFieldLeak") lateinit var mContextKIN: Context
+
 
 //全域變數宣告，不然無法讀取到class給的資料
 var inAirData = StringBuffer()     //new: inair檔案暫存處
@@ -103,7 +105,7 @@ var trial6list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0
 var trial7list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 
-//// Todo:11/15測試成功，之後要貼到每個fragment開頭
+
 @SuppressLint("StaticFieldLeak") lateinit var  start: TextView
 @SuppressLint("StaticFieldLeak") lateinit var  test: TextView
 @SuppressLint("StaticFieldLeak") lateinit var  rest: TextView
@@ -111,13 +113,9 @@ var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0
 @SuppressLint("StaticFieldLeak") lateinit var  trialCountView: TextView     //測驗次數textView
 @SuppressLint("StaticFieldLeak") lateinit var  recordingButton: Button        //找到測驗按鈕
 @SuppressLint("StaticFieldLeak") lateinit var  instructionText: TextView      //找到指導語textView
-//// Todo:11/15測試成功，之後要貼到每個fragment開頭
-//
-//@SuppressLint("StaticFieldLeak") lateinit var mContext: Context
 @SuppressLint("StaticFieldLeak") lateinit var trialInputSpinner: Spinner
 @SuppressLint("StaticFieldLeak") lateinit var contextSpinner: Spinner
-//
-//
+
 //// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
 @SuppressLint("StaticFieldLeak") lateinit var fingerTarget: ImageView
 @SuppressLint("StaticFieldLeak") lateinit var fingerStartPoint: ImageView
@@ -127,19 +125,14 @@ var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0
 @SuppressLint("StaticFieldLeak") lateinit var penStartPoint: ImageView
 @SuppressLint("StaticFieldLeak") lateinit var penDownArrow: ImageView
 //// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
-//
-//
+
 //// 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
 @SuppressLint("StaticFieldLeak") lateinit var currentPosition: TextView
 @SuppressLint("StaticFieldLeak") lateinit var inAirText: TextView
-lateinit var touchBoard: TouchBoard
+@SuppressLint("StaticFieldLeak") lateinit var touchBoard: TouchBoard
 @SuppressLint("StaticFieldLeak") lateinit var Score: TextView
-//// 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
-//
 //// 原本 checktime 中沒有提前宣告的view
 @SuppressLint("StaticFieldLeak") lateinit var countAndHint: TextView
-////
-//
 ////manageVisibility 中沒有提前宣告的view
 @SuppressLint("StaticFieldLeak") lateinit var selectButton:Button
 @SuppressLint("StaticFieldLeak") lateinit var randomTargetView: ImageView

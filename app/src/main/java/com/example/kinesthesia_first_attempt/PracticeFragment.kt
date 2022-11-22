@@ -1,7 +1,6 @@
 package com.example.kinesthesia_first_attempt
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,9 +20,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class PracticeFragment : Fragment() {
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentPracticeBinding
-
-    // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
-    // Todo:11/21測試成功，之後要貼到每個fragment開頭
+    //lateinit var mContext: Context
+// 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
 //    lateinit var  start: TextView
 //    lateinit var  test: TextView
 //    lateinit var  rest: TextView
@@ -31,10 +29,8 @@ class PracticeFragment : Fragment() {
 //    lateinit var  trialCountView: TextView     //測驗次數textView
 //    lateinit var  recordingButton: Button        //找到測驗按鈕
 //    lateinit var  instructionText: TextView      //找到指導語textView
-// Todo:11/15測試成功，之後要貼到每個fragment開頭
-    lateinit var mContext: Context
-    //lateinit var trialInputSpinner: Spinner
-    //lateinit var contextSpinner: Spinner
+//    lateinit var trialInputSpinner: Spinner
+//    ateinit var contextSpinner: Spinner
     // Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
 //    lateinit var fingerTarget: ImageView
 //    lateinit var fingerStartPoint: ImageView
@@ -42,8 +38,7 @@ class PracticeFragment : Fragment() {
 //    lateinit var penTarget: ImageView
 //    lateinit var penStartPoint: ImageView
 //    lateinit var penDownArrow: ImageView
-// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
-//    // 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
+// 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
 //    lateinit var currentPosition: TextView
 //    lateinit var inAirText: TextView
 //    lateinit var touchBoard: TouchBoard
@@ -102,7 +97,7 @@ class PracticeFragment : Fragment() {
         //11/15調整，View宣告位置
 
         // 11/15調整，Context & Spinner宣告位置
-        mContext = requireActivity().applicationContext
+        mContextKIN = requireActivity().applicationContext
         trialInputSpinner = requireView().findViewById<View>(R.id.trialInput_list) as Spinner
         contextSpinner = requireView().findViewById<View>(R.id.context_list) as Spinner
         // Todo:>>> 待新增測驗方法Spinner (VAP2AP & AP2AP & PP2AP)
@@ -217,8 +212,8 @@ class PracticeFragment : Fragment() {
         //launchContextSpinner()
         //checkContextAndLaunchView(currentTestContext)
         // 11/15 改為global Spinner
-        u_launchTrialInputSpinner(mContext,practiceTrialCountList,trialInputSpinner)
-        u_launchContextSpinner(mContext,contextList,contextSpinner,
+        u_launchTrialInputSpinner(mContextKIN,practiceTrialCountList,trialInputSpinner)
+        u_launchContextSpinner(mContextKIN,contextList,contextSpinner,
             fingerTarget,
             fingerStartPoint,
             fingerDownArrow,
@@ -237,7 +232,7 @@ class PracticeFragment : Fragment() {
 
 
     fun confirmSelection() {
-        Toast.makeText(mContext, "開始測驗練習", Toast.LENGTH_SHORT).show()
+        Toast.makeText(mContextKIN, "開始測驗練習", Toast.LENGTH_SHORT).show()
         //changeText()
         // TODO: 11/15 先呼叫views，再CALL  u_change_Text之後要確認是否有問題
         u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
@@ -295,7 +290,7 @@ class PracticeFragment : Fragment() {
 
             //0912測試存InAir
                 if (currentTestContext == "Pen"){
-                    u_saveInAirDataToCSV(testConditionList[0],inAirData,currentTrial,mContext)
+                    u_saveInAirDataToCSV(testConditionList[0],inAirData,currentTrial,mContextKIN)
                     // saveInAirDataToCSV() 11/11新版，未驗證
                 }
 
@@ -362,7 +357,7 @@ class PracticeFragment : Fragment() {
     }
 
     fun goBackToMenu() {
-        Toast.makeText(mContext, "回到測驗選單", Toast.LENGTH_SHORT).show()
+        Toast.makeText(mContextKIN, "回到測驗選單", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_practiceFragment_to_testMenuFragment)
     }
 
