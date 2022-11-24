@@ -7,15 +7,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-// 常數定義區段 : 此段落放不會改變的參數，例如總測驗次數/練習次數等等，方格大小、等等
-
-private const val TARGET_BOX_SIZE = 2.00 //待修改
-private const val RESPONSE_DOT_SIZE = 3.00
-
-const val MAX_PRACTICE_TRIAL = 8
-const val MAX_FORMAL_TRIAL = 5
-
-//
 
 class MainViewModel : ViewModel() {
 

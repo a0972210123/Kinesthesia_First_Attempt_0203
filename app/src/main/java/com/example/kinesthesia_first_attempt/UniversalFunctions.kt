@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -19,7 +21,8 @@ import kotlin.math.sqrt
 class UniversalFunctions: AppCompatActivity() {
 }
 
- @SuppressLint("StaticFieldLeak") lateinit var mContextKIN: Context
+
+@SuppressLint("StaticFieldLeak") lateinit var mContextKIN: Context
 
 
 //全域變數宣告，不然無法讀取到class給的資料
@@ -140,6 +143,13 @@ var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0
 @SuppressLint("StaticFieldLeak") lateinit var selectButton:Button
 @SuppressLint("StaticFieldLeak") lateinit var randomTargetView: ImageView
 ////
+@SuppressLint("StaticFieldLeak") lateinit var navControllerKIN: NavController    //必須，用於從public function呼叫navControllerKIN
+
+
+
+
+
+
 
 
 //以下嘗試放通用的function，供各個fragment使用
@@ -221,16 +231,16 @@ fun u_arrangeInAirData() {
     inAirData.append("\r\n")
 }
 
-fun u_saveInAirDataToCSV(testCondition:String,inAirData:StringBuffer,currentTrial:Int,mContext: Context) {
+fun u_saveInAirDataToCSV(inAirData:StringBuffer) {
     val outputInAirData = inAirData.toString().replace("\r", "").split("\n")
     //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
     val outputFileName = "{$testCondition}_InAir_Trial_$currentTrial.csv"
     // 存檔: name,List,flag
     // Todo: 新增判斷式，若沒有檔名輸入，則存成TESTING
-    u_outputInAirCsv(outputFileName, outputInAirData,0,testCondition,currentTrial,mContext)
+    u_outputInAirCsv(outputFileName, outputInAirData,0)
 }
 
-fun u_outputInAirCsv(fileName: String, input: List<String>, flag: Int,testCondition:String,currentTrial:Int,mContext: Context) {
+fun u_outputInAirCsv(fileName: String, input: List<String>, flag: Int) {
     //檔案路徑: 目前直接讀在demographic的全域變數，有error再讀viewModel備用
     //val outputPath = binding.viewModel!!.outputFilePath.toString()  //讀取存在viewModel的路徑
     val output = StringBuffer()//必需
@@ -260,7 +270,7 @@ fun u_outputInAirCsv(fileName: String, input: List<String>, flag: Int,testCondit
     os.flush()
     os.close()
     output.setLength(0) //clean buffer
-    Toast.makeText( mContext, "{$testCondition}_InAir_Trial_$currentTrial 儲存成功", Toast.LENGTH_SHORT).show()
+    Toast.makeText( mContextKIN, "{$testCondition}_InAir_Trial_$currentTrial 儲存成功", Toast.LENGTH_SHORT).show()
     //Log.d("data", "outCSV Success")
 }  // sample from HW
 //以上InAir相關
@@ -369,14 +379,14 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
         output.append("\r\n")
     }
 
-
+    // TODO: 需要新增沒有檔名時的判斷式，直接存在固定的資料夾
     val file = File(filePathStr, fileName)
     val os = FileOutputStream(file, true)   // 這邊給的字串要有檔案類型
     os.write(output.toString().toByteArray())
     os.flush()
     os.close()
     output.setLength(0) //clean buffer
-    Toast.makeText( mContext, "練習題測驗表現儲存成功", Toast.LENGTH_SHORT).show()
+    Toast.makeText( mContextKIN, "練習題測驗表現儲存成功", Toast.LENGTH_SHORT).show()
     Log.d("data", "outCSV Success")
 }  // sample from HW
 
@@ -392,6 +402,69 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
 
 
 //以下測驗流程管理相關
+// Todo: calculateTrialScoreP(); V 之後還要改輸入 要考量given position
+// Todo:  checkPracticeLimit() V;
+// Todo:  以及正式測驗中，隨機位置的function們
+
+fun u_pressButton() {
+    buttonPressedCountsInATrial++      //每按一次按鈕+1
+    Log.d("X/Y/面積/長軸/短軸：inFragment", "$startX  $startY  $bb  $b1  $b2")
+    u_recordPosition()   //儲存位置，並管理測驗流程，直接讀取全域變數
+
+    u_changeText()       //更動text   //11/23改為global
+//        u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
+//            start,test,rest,response,
+//            recordingButton)
+
+    u_checkTime() // 11/21 改global
+    //checkTime()  //計時
+
+    if (buttonPressedCountsInATrial == 4) {
+
+        // Todo: 這邊之後要加入 given position來計算
+        scoreListForDisplay = u_calculateTrialScoreP()   //計算測驗表現 (RE*2，AE*3)
+        //scoreListForDisplay = calculateTrialScoreP()  // 11/21 更新為 global
+
+        //displayScoreInText(scoreListForDisplay, 1)       //更新text內容
+        u_displayScoreInText(scoreListForDisplay,1, Score)  //11/21 更新為 global
+        //clearScoreList()
+        u_clearScoreList()
+    } else {
+        //displayScoreInText(scoreListForDisplay, 0)
+        u_displayScoreInText(scoreListForDisplay,0, Score)  //11/21 更新為 global
+    }
+
+
+    if (buttonPressedCountsInATrial == 5) {
+
+        //0912測試存InAir
+        if (currentTestContext == "Pen"){
+            u_saveInAirDataToCSV(inAirData)
+            // saveInAirDataToCSV() 11/11新版，未驗證
+        }
+
+        u_clearInAir() // 11/21
+        //clearInAir() // 11/11前舊版
+
+        //11/11前舊版
+        //addTrialsCount()
+        //saveCurrentTrialRecord()   //將單次反應存入LIST(包含分數計算)
+        //clearCurrentTrialRecord()  //清除單次表現、歸零座標、重設測驗情境
+
+        //11/11新版，未驗證
+        u_addTrialsCount() // 完成一次測驗練習   //11/21
+        u_saveCurrentTrialRecord()
+        u_clearCurrentTrialRecord() //11/11新版，未驗證
+
+        //TODO: 確認這邊u_checkPracticeLimit運作正常後，把xml中pressbutton改為 u_pressButton
+
+        u_checkPracticeLimit()       //檢查是否達到練習次數
+        buttonPressedCountsInATrial = 0
+    }
+    return
+}
+
+
 
 
 
@@ -401,7 +474,7 @@ fun u_addTrialsCount(){
     currentTrial++
 }
 
-fun u_checkTime(recordingButton:Button,countAndHint:TextView) {
+fun u_checkTime() {
     // 找到關聯的view
     //val recordingButton = requireView().findViewById<Button>(R.id.record_position)
     //val text1 = requireView().findViewById<TextView>(R.id.text1)
@@ -420,7 +493,6 @@ fun u_checkTime(recordingButton:Button,countAndHint:TextView) {
         4 -> { millisInFuture = 1000 }
         5 -> { millisInFuture = 0 }
     }
-
 
     //計時器宣告
     val timer = object : CountDownTimer(millisInFuture, 1000) {
@@ -467,34 +539,77 @@ fun u_checkTime(recordingButton:Button,countAndHint:TextView) {
     timer.start() //開始計時
 }
 
-fun u_confirmSelection(trialCountView:TextView, instructionText:TextView,
-                       start:TextView, test:TextView, rest:TextView, response:TextView,
-                       recordingButton:Button,
-                       trialInputSpinner: Spinner,
-                       contextSpinner: Spinner,
-                       touchBoard:TouchBoard,
-                       Score:TextView,
-                       countAndHint:TextView,
-                       selectButton:Button,
-                       randomTargetView:ImageView
-                       ) {
+fun u_confirmSelection() {
     // TODO: 11/21 正式測驗還包含其他判斷式，需要新增
     // TODO: 11/21 此function 由XML中 運用 fragment binding呼叫，要到每一個對應的xml中，匯入 UniversalFunction
 
-    Toast.makeText(mContext , "開始測驗練習", Toast.LENGTH_SHORT).show()
-    u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
-        start,test,rest,response,
-        recordingButton)
-    u_manageVisibility(0,trialCountView,
-        recordingButton,
-        trialInputSpinner,
-        contextSpinner,
-        touchBoard,
-        Score,
-        countAndHint,
-        selectButton,
-        randomTargetView)
+    Toast.makeText(mContextKIN , "開始測驗練習", Toast.LENGTH_SHORT).show()
+//    u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
+//        start,test,rest,response,
+//        recordingButton)
+    u_changeText()
+
+    u_manageVisibility(0)
+//    u_manageVisibility(0,trialCountView,
+//        recordingButton,
+//        trialInputSpinner,
+//        contextSpinner,
+//        touchBoard,
+//        Score,
+//        countAndHint,
+//        selectButton,
+//        randomTargetView)
 }
+
+
+// 此函式不改成 global，維持原local，但把內部其他funtion改為global
+
+//TODO: 確認u_checkPracticeLimit這邊是否可以用getString，或要改其他方法
+
+@SuppressLint("SetTextI18n")
+fun u_checkPracticeLimit() {
+    if (practiceTrialsCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
+        practiceTime++  //增加練習完成次數
+        updatePracticeTimeToViewModel()
+
+//        MaterialAlertDialogBuilder(mContextKIN)
+//            .setTitle(getString(R.string.practice_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+//            .setMessage(getString(R.string.practice_dialog_message)) //Set the message to show the data
+//            .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
+//
+//            .setNegativeButton(getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
+//                u_savePracticePerformanceToCSV()//儲存測驗表現
+//                u_clearRecord()  // 清除測驗表現>> 還沒寫完
+//                trialCountView.text = "練習次數: $currentTrial / $maxTrailDesire"
+//                u_manageVisibility(1)
+//                Toast.makeText(mContextKIN, "再試一次", Toast.LENGTH_SHORT).show()
+//            }
+//            .setPositiveButton(getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
+//                u_savePracticePerformanceToCSV()// 儲存測驗表現
+//                u_clearRecord()  // 清除測驗表現>> 還沒寫完
+//                u_goBackToMenu()// 前往測驗選單 ( 維持local) >>可以寫判斷式　改成when根據測驗頁面，換指令　
+//            }
+//            .show() //creates and then displays the alert dialog.
+    }
+}
+
+
+fun u_goBackToMenu() {
+    Toast.makeText(mContextKIN, "回到測驗選單", Toast.LENGTH_SHORT).show()
+     //TODO: 後續 需要根據各情境，調整判斷式，才能正確回到頁面
+
+    when (testCondition){
+        "Practice" -> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_practiceFragment_to_testMenuFragment)
+        }
+
+        }
+
+}
+
+
+
+
 
 
 //以下位置記錄相關
@@ -781,8 +896,6 @@ fun u_saveTrialToList(positionList:FloatArray): List<Float> {
     )
 }
 
-
-
 fun u_calculateTrialScoreP(): List<Float> {
     //Todo: 11/11 這邊的分數計算，可能要重新調整(given position)，因為起點/目標的給法不同
     //Todo: 11/21 也要新增 true given position 的輸入/
@@ -866,10 +979,7 @@ fun u_clearScoreList() {
 
 // View管理相關
 @SuppressLint("SetTextI18n")
-fun u_changeText(currentTrial: Int,maxTrailDesire:Int,condition: String,
-                 trialCountView:TextView,instructionText:TextView,
-                 start:TextView,test:TextView,rest:TextView,response:TextView,
-                 recordingButton:Button) {
+fun u_changeText() {
 
     trialCountView.text = "測驗次數: $currentTrial / $maxTrailDesire"
 
@@ -934,13 +1044,11 @@ fun u_changeText(currentTrial: Int,maxTrailDesire:Int,condition: String,
     }
 }
 
-fun u_launchTrialInputSpinner(mContext:Context,practiceTrialCountList: ArrayList<String>,
-                              trialInputSpinner: Spinner
-) {
+fun u_launchTrialInputSpinner() {
     //mContext_demo = requireActivity().applicationContext
     //trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
     val adapter = ArrayAdapter.createFromResource(
-        mContext,
+        mContextKIN,
         R.array.practice_trial_count_list,
         android.R.layout.simple_spinner_dropdown_item
     )
@@ -965,17 +1073,11 @@ fun u_setTrialLimit(trialLimitInput: String) {
     maxTrailDesire = trialLimitInput.toInt()
     }  //可直接移植到補測
 
-fun u_launchContextSpinner(mContext:Context, contextList: ArrayList<String>, contextSpinner: Spinner,
-                           fingerTarget: ImageView,
-                           fingerStartPoint: ImageView,
-                           fingerDownArrow: ImageView,
-                           penTarget: ImageView,
-                           penStartPoint: ImageView,
-                           penDownArrow: ImageView) {
+fun u_launchContextSpinner() {
     //mContext_demo = requireActivity().applicationContext
     //contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
     val adapter = ArrayAdapter.createFromResource(
-        mContext,
+        mContextKIN,
         R.array.context_list,
         android.R.layout.simple_spinner_dropdown_item
     )
@@ -987,12 +1089,7 @@ fun u_launchContextSpinner(mContext:Context, contextList: ArrayList<String>, con
             position: Int,
             id: Long
         ) {
-            u_setContext(contextList[position],mContext,fingerTarget,
-                fingerStartPoint,
-                fingerDownArrow,
-                penTarget,
-                penStartPoint,
-                penDownArrow)
+            u_setContext(contextList[position])
         }
 
         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -1001,42 +1098,23 @@ fun u_launchContextSpinner(mContext:Context, contextList: ArrayList<String>, con
     }
 }
 
-fun u_setContext(contextInput: String, mContext:Context, fingerTarget: ImageView,
-                 fingerStartPoint: ImageView,
-                 fingerDownArrow: ImageView,
-                 penTarget: ImageView,
-                 penStartPoint: ImageView,
-                 penDownArrow: ImageView) {
+fun u_setContext(contextInput: String) {
     currentTestContext = contextInput
     when (contextInput) {
         "請選情境" -> {
-            Toast.makeText(mContext, "請選擇測驗情境", Toast.LENGTH_SHORT).show()
+            Toast.makeText(mContextKIN, "請選擇測驗情境", Toast.LENGTH_SHORT).show()
         }
         "Finger" -> {
         }
         "Pen" -> {
         }
     }
-    u_checkContextAndLaunchView(currentTestContext,
-        fingerTarget,
-        fingerStartPoint,
-        fingerDownArrow,
-        penTarget,
-        penStartPoint,
-        penDownArrow) //更換ImageView宣告內容
+    u_checkContextAndLaunchView(currentTestContext) //更換ImageView宣告內容
 }
 
 
-//u_checkContextAndLaunchView(currentTestContext,fingerTarget,fingerStarPoint,fingerDownArrow,penTarget,penStartPoint,penDownArrow)
-
 // Todo, 此function 到正式測驗後，要寫新的，可以多放斜向箭頭
-fun u_checkContextAndLaunchView(context: String,
-                                fingerTarget: ImageView,
-                                fingerStartPoint: ImageView,
-                                fingerDownArrow: ImageView,
-                                penTarget: ImageView,
-                                penStartPoint: ImageView,
-                              penDownArrow: ImageView) {
+fun u_checkContextAndLaunchView(context: String) {
 
     var tempContext = context
     when (context) {
@@ -1077,21 +1155,15 @@ fun u_checkContextAndLaunchView(context: String,
 
 } //輸入currentContext
 
+fun updatePracticeTimeToViewModel(){
+    if (practiceTrialsCount >= maxTrailDesire) {
+        MainViewModel().setPracticeTime(practiceTime)
+    }
+}
 
 
-/*u_manageVisibility(0,touchBoard,trialInputSpinner,contextSpinner,selectButton,countAndHint,recordingButton,trialCount,Score,randomTargetView)*/
 
-
-fun u_manageVisibility(flag: Int,
-                       trialCountView: TextView,
-                       recordingButton: Button,
-                       trialInputSpinner: Spinner,
-                       contextSpinner: Spinner,
-                       touchBoard: TouchBoard,
-                       Score: TextView,
-                       countAndHint: TextView,
-                       selectButton:Button,
-                       randomTargetView: ImageView) {
+fun u_manageVisibility(flag: Int) {
 
     //Todo: 要新增 是正式測驗或練習題的判斷式，來決定要不要處理該view的顯示 如 randomtarget/trialInputSpinner/
     if (testCondition == "Practice") {
@@ -1099,22 +1171,6 @@ fun u_manageVisibility(flag: Int,
     } else {
         trialInputSpinner.visibility = View.INVISIBLE
     }
-
-    //找到相關的View
-    //val touchBoard = requireView().findViewById(R.id.view) as TouchBoard
-    //val trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner  //正式測驗不用找
-    //val contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
-
-    //val selectButton = requireView().findViewById(R.id.confirm_trial) as Button /正式測驗不用找
-    //val countAndHint = requireView().findViewById<TextView>(R.id.text1)
-
-    //val recordingButton = requireView().findViewById<Button>(R.id.record_position)
-    //val trialCountView = requireView().findViewById<TextView>(R.id.trial_count)
-    //val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
-    //val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)  //正式測驗要找
-
-
-
 
 
     when (flag) {
@@ -1147,32 +1203,5 @@ fun u_manageVisibility(flag: Int,
 }  //管理測驗相關View顯示、可觸控與否
 
 
-//start: TextView
-//test: TextView
-//rest: TextView
-//response: TextView
-//trialCountView: TextView     //測驗次數textView
-//recordingButton: Button        //找到測驗按鈕
-//instructionText: TextView      //找到指導語textView
-//
-//mContext_demo: Context
-//trialInputSpinner: Spinner
-//contextSpinner: Spinner
-//
-//fingerTarget: ImageView
-//ingerStartPoint: ImageView
-//fingerDownArrow: ImageView
-//penTarget: ImageView
-//penStartPoint: ImageView
-//penDownArrow: ImageView
-//
-//currentPosition: TextView
-//inAirText: TextView
-//touchBoard: TouchBoard
-//Score: TextView
-//countAndHint: TextView
-//selectButton:Button
-//randomTargetView: ImageView
-//
-//
+
 

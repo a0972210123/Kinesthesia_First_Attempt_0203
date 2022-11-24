@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:visibility="visible">
 
+    <!--  xml中匯入UniversalFunctions.Kt，備用，之後需要改 pressbutton & confirmSelection-->
     <data>
-        <!--  xml中匯入UniversalFunctions.Kt，備用，之後需要改 pressbutton & confirmSelection-->
         <variable
             name="universalFunction"
             type="com.example.kinesthesia_first_attempt.UniversalFunctionsKt" />
@@ -229,7 +229,7 @@
             android:id="@+id/confirm_trial"
             android:layout_width="200dp"
             android:layout_height="50dp"
-            android:onClick="@{() -> practiceFragment.confirmSelection()}"
+            android:onClick="@{() -> universalFunction.u_confirmSelection()}"
             android:text="@string/select_direction"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
