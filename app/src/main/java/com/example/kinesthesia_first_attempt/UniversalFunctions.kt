@@ -11,6 +11,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -570,26 +571,26 @@ fun u_confirmSelection() {
 fun u_checkPracticeLimit() {
     if (practiceTrialsCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
         practiceTime++  //增加練習完成次數
-        updatePracticeTimeToViewModel()
+        u_updatePracticeTimeToViewModel()
 
-//        MaterialAlertDialogBuilder(mContextKIN)
-//            .setTitle(getString(R.string.practice_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
-//            .setMessage(getString(R.string.practice_dialog_message)) //Set the message to show the data
-//            .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
-//
-//            .setNegativeButton(getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
-//                u_savePracticePerformanceToCSV()//儲存測驗表現
-//                u_clearRecord()  // 清除測驗表現>> 還沒寫完
-//                trialCountView.text = "練習次數: $currentTrial / $maxTrailDesire"
-//                u_manageVisibility(1)
-//                Toast.makeText(mContextKIN, "再試一次", Toast.LENGTH_SHORT).show()
-//            }
-//            .setPositiveButton(getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
-//                u_savePracticePerformanceToCSV()// 儲存測驗表現
-//                u_clearRecord()  // 清除測驗表現>> 還沒寫完
-//                u_goBackToMenu()// 前往測驗選單 ( 維持local) >>可以寫判斷式　改成when根據測驗頁面，換指令　
-//            }
-//            .show() //creates and then displays the alert dialog.
+        MaterialAlertDialogBuilder(mContextKIN)
+            .setTitle(mContextKIN.resources.getString(R.string.practice_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+            .setMessage(mContextKIN.resources.getString(R.string.practice_dialog_message)) //Set the message to show the data
+            .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
+
+            .setNegativeButton(mContextKIN.resources.getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
+                u_savePracticePerformanceToCSV()//儲存測驗表現
+                u_clearRecord()  // 清除測驗表現>> 還沒寫完
+                trialCountView.text = "練習次數: $currentTrial / $maxTrailDesire"
+                u_manageVisibility(1)
+                Toast.makeText(mContextKIN, "再試一次", Toast.LENGTH_SHORT).show()
+            }
+            .setPositiveButton(mContextKIN.resources.getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
+                u_savePracticePerformanceToCSV()// 儲存測驗表現
+                u_clearRecord()  // 清除測驗表現>> 還沒寫完
+                u_goBackToMenu()// 前往測驗選單 ( 維持local) >>可以寫判斷式　改成when根據測驗頁面，換指令　
+            }
+            .show() //creates and then displays the alert dialog.
     }
 }
 
@@ -978,7 +979,7 @@ fun u_clearScoreList() {
 
 
 // View管理相關
-@SuppressLint("SetTextI18n")
+@SuppressLint("SetTextI18n", "RestrictedApi")
 fun u_changeText() {
 
     trialCountView.text = "測驗次數: $currentTrial / $maxTrailDesire"
@@ -1021,8 +1022,9 @@ fun u_changeText() {
                 "%.2f",
                 startY
             )
-            //recordingButton.text = getString(R.string.next_trial)
-            recordingButton.text = "Save Trial"
+
+            recordingButton.text = mContextKIN.resources.getString(R.string.next_trial)
+            //recordingButton.text = "Save Trial"
 
             recordingButton.textSize = 24.toFloat()
             instructionText.text = instructionList[4]
@@ -1032,8 +1034,8 @@ fun u_changeText() {
             test.text = "目標位置："
             rest.text = "預備位置："
             response.text = "反應位置："
-            //recordingButton.text = getString(R.string.record_position)
-            recordingButton.text = "紀錄位置"
+            recordingButton.text = mContextKIN.resources.getString(R.string.record_position)
+            //recordingButton.text = "紀錄位置"
 
             recordingButton.textSize = 30.toFloat()
 
@@ -1155,7 +1157,7 @@ fun u_checkContextAndLaunchView(context: String) {
 
 } //輸入currentContext
 
-fun updatePracticeTimeToViewModel(){
+fun u_updatePracticeTimeToViewModel(){
     if (practiceTrialsCount >= maxTrailDesire) {
         MainViewModel().setPracticeTime(practiceTime)
     }

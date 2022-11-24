@@ -192,7 +192,8 @@ class PracticeFragment : Fragment() {
             u_saveCurrentTrialRecord()
             u_clearCurrentTrialRecord() //11/11新版，未驗證
 
-            checkPracticeLimit()       //檢查是否達到練習次數
+
+            u_checkPracticeLimit()       //檢查是否達到練習次數
             buttonPressedCountsInATrial = 0
         }
         return
@@ -207,7 +208,7 @@ class PracticeFragment : Fragment() {
         if (practiceTrialsCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
             practiceTime++  //增加練習次數
             //binding.viewModel!!.setPracticeTime(practiceTime) //更新總練習次數
-            updatePracticeTimeToViewModel()
+            u_updatePracticeTimeToViewModel()
 
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(getString(R.string.practice_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
