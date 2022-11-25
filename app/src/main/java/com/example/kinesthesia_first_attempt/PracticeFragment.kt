@@ -2,11 +2,13 @@ package com.example.kinesthesia_first_attempt
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,26 +16,21 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.databinding.FragmentPracticeBinding
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
-// TODO: 11/22 & 23
-//  ()1. 修改函式的input，嘗試去除View輸入
-//  ()2. 確認XML中能否CALL u_pressButton & u_confirmSelection
-//  ()3. 確認 pressbutton 是否能改為 GLOBAL
+//11/24 & 25 進度
+//  (V)1. 修改函式的input，嘗試去除View輸入
+//  (V)2. 確認XML中能否CALL u_pressButton & u_confirmSelection
+//  (V)3. 確認 pressbutton 是否能改為 GLOBAL
 //  (V)4. 確認 gobacktoMenu 可以改為global
 //  (V)5. 確認 confirmSelection，是否能改為 GLOBAL
-//  () 6. 確認 checkpracticeLimit，是否能改為 GLOBAL  >這個改完 才能改pressbutton
-//  () 7. 確認 getString 是否能在public中使用 > 這個改完，才能用checkpracticeLimit
+//  (V) 6. 確認 checkpracticeLimit，是否能改為 GLOBAL  >這個改完 才能改pressbutton
+//  (V) 7. 確認 getString 是否能在public中使用 > 這個改完，才能用checkpracticeLimit
 
-
-
-//var activityKIN = view.getContext() as FragmentActivity
-//var manager: FragmentManager = activity.supportFragmentManager
 
 class PracticeFragment : Fragment() {
-    public val sharedViewModel: MainViewModel by activityViewModels()
-    public lateinit var binding: FragmentPracticeBinding
+    private val sharedViewModel: MainViewModel by activityViewModels()
+    lateinit var binding: FragmentPracticeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +68,8 @@ class PracticeFragment : Fragment() {
 
         navControllerKIN = findNavController() //必須，用於從public function呼叫navControllerKIN
 
+
+        mActivityKIN = requireActivity()
         mContextKIN = requireActivity().applicationContext
         // 11/15調整，View宣告位置
         // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
@@ -138,12 +137,11 @@ class PracticeFragment : Fragment() {
         u_launchContextSpinner()
         u_checkContextAndLaunchView(currentTestContext)
 
-
     }
 
 
 
-   fun pressButton() {
+  /* fun pressButton() {
         buttonPressedCountsInATrial++      //每按一次按鈕+1
         Log.d("X/Y/面積/長軸/短軸：inFragment", "$startX  $startY  $bb  $b1  $b2")
         u_recordPosition()   //儲存位置，並管理測驗流程，直接讀取全域變數
@@ -197,43 +195,9 @@ class PracticeFragment : Fragment() {
             buttonPressedCountsInATrial = 0
         }
         return
-    }
+    }*/
 
 
-
-
-    // 此函式不改成 global，維持原local，但把內部其他funtion改為global
-    @SuppressLint("SetTextI18n")
-   fun checkPracticeLimit() {
-        if (practiceTrialsCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
-            practiceTime++  //增加練習次數
-            //binding.viewModel!!.setPracticeTime(practiceTime) //更新總練習次數
-            u_updatePracticeTimeToViewModel()
-
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.practice_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
-                .setMessage(
-                    getString(R.string.practice_dialog_message)
-                ) //Set the message to show the data
-                .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
-
-                .setNegativeButton(getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
-
-                    u_savePracticePerformanceToCSV()//儲存測驗表現
-                    u_clearRecord()  // 清除測驗表現>> 還沒寫完
-                    trialCountView.text = "練習次數: $currentTrial / $maxTrailDesire"
-                    u_manageVisibility(1)
-
-                    Toast.makeText(requireContext(), "再試一次", Toast.LENGTH_SHORT).show()
-                }
-                .setPositiveButton(getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
-                    u_savePracticePerformanceToCSV()// 儲存測驗表現
-                    u_clearRecord()
-                    u_goBackToMenu()
-                }
-                .show() //creates and then displays the alert dialog.
-        }
-    }
 
 
 } // fragment end

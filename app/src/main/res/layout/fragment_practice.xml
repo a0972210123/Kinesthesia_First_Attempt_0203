@@ -162,7 +162,7 @@
             android:id="@+id/record_position"
             android:layout_width="165dp"
             android:layout_height="80dp"
-            android:onClick="@{() -> practiceFragment.pressButton()}"
+            android:onClick="@{() -> universalFunction.u_pressButton()}"
 
             android:text="@string/record_position"
 
@@ -223,8 +223,6 @@
             app:layout_constraintStart_toEndOf="@id/trialInput_list"
             app:layout_constraintTop_toTopOf="@id/trialInput_list" />
 
-        <!-- android:onClick="@{() -> practiceFragment.confirmSelection()}"-->
-        <!-- android:onClick="@{() -> universalFunction.u_confirmSelection()}"-->
         <Button
             android:id="@+id/confirm_trial"
             android:layout_width="200dp"

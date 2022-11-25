@@ -1,6 +1,7 @@
 package com.example.kinesthesia_first_attempt
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.media.AudioManager
 import android.media.ToneGenerator
@@ -24,6 +25,7 @@ class UniversalFunctions: AppCompatActivity() {
 
 
 @SuppressLint("StaticFieldLeak") lateinit var mContextKIN: Context
+@SuppressLint("StaticFieldLeak") lateinit var mActivityKIN: Activity
 
 
 //全域變數宣告，不然無法讀取到class給的資料
@@ -411,33 +413,24 @@ fun u_pressButton() {
     buttonPressedCountsInATrial++      //每按一次按鈕+1
     Log.d("X/Y/面積/長軸/短軸：inFragment", "$startX  $startY  $bb  $b1  $b2")
     u_recordPosition()   //儲存位置，並管理測驗流程，直接讀取全域變數
-
     u_changeText()       //更動text   //11/23改為global
-//        u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
-//            start,test,rest,response,
-//            recordingButton)
-
-    u_checkTime() // 11/21 改global
-    //checkTime()  //計時
+    u_checkTime()   //計時// 11/21 改global
 
     if (buttonPressedCountsInATrial == 4) {
 
         // Todo: 這邊之後要加入 given position來計算
         scoreListForDisplay = u_calculateTrialScoreP()   //計算測驗表現 (RE*2，AE*3)
-        //scoreListForDisplay = calculateTrialScoreP()  // 11/21 更新為 global
-
-        //displayScoreInText(scoreListForDisplay, 1)       //更新text內容
-        u_displayScoreInText(scoreListForDisplay,1, Score)  //11/21 更新為 global
-        //clearScoreList()
+        u_displayScoreInText(scoreListForDisplay,1, Score)  //更新text內容 //11/21 更新為 global
         u_clearScoreList()
     } else {
-        //displayScoreInText(scoreListForDisplay, 0)
         u_displayScoreInText(scoreListForDisplay,0, Score)  //11/21 更新為 global
     }
 
 
     if (buttonPressedCountsInATrial == 5) {
 
+
+        //TODO: 要驗證 INAir存檔相關程式的輸出，也要嘗試改Finger測驗時，有沒辦法抓到時間&座標，用來算MT
         //0912測試存InAir
         if (currentTestContext == "Pen"){
             u_saveInAirDataToCSV(inAirData)
@@ -445,7 +438,6 @@ fun u_pressButton() {
         }
 
         u_clearInAir() // 11/21
-        //clearInAir() // 11/11前舊版
 
         //11/11前舊版
         //addTrialsCount()
@@ -457,16 +449,11 @@ fun u_pressButton() {
         u_saveCurrentTrialRecord()
         u_clearCurrentTrialRecord() //11/11新版，未驗證
 
-        //TODO: 確認這邊u_checkPracticeLimit運作正常後，把xml中pressbutton改為 u_pressButton
-
         u_checkPracticeLimit()       //檢查是否達到練習次數
         buttonPressedCountsInATrial = 0
     }
     return
 }
-
-
-
 
 
 fun u_addTrialsCount(){
@@ -476,16 +463,13 @@ fun u_addTrialsCount(){
 }
 
 fun u_checkTime() {
-    // 找到關聯的view
-    //val recordingButton = requireView().findViewById<Button>(R.id.record_position)
-    //val text1 = requireView().findViewById<TextView>(R.id.text1)
-    // hide button
     recordingButton.visibility = View.INVISIBLE
 
     //確認是否需要倒數  millisInFuture
     var millisInFuture: Long
     millisInFuture = 1000
 
+    //TODO: 之後要根據測驗需求，調整每個階段的時間
     when (buttonPressedCountsInATrial){
         0 -> { millisInFuture = 1000 }  //之後要看按鈕次數改回4000
         1 -> { millisInFuture = 1000 }
@@ -544,28 +528,15 @@ fun u_confirmSelection() {
     // TODO: 11/21 正式測驗還包含其他判斷式，需要新增
     // TODO: 11/21 此function 由XML中 運用 fragment binding呼叫，要到每一個對應的xml中，匯入 UniversalFunction
 
-    Toast.makeText(mContextKIN , "開始測驗練習", Toast.LENGTH_SHORT).show()
-//    u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
-//        start,test,rest,response,
-//        recordingButton)
-    u_changeText()
 
+
+    u_changeText()
     u_manageVisibility(0)
-//    u_manageVisibility(0,trialCountView,
-//        recordingButton,
-//        trialInputSpinner,
-//        contextSpinner,
-//        touchBoard,
-//        Score,
-//        countAndHint,
-//        selectButton,
-//        randomTargetView)
+
+    Toast.makeText(mContextKIN , "開始測驗練習", Toast.LENGTH_SHORT).show()
 }
 
 
-// 此函式不改成 global，維持原local，但把內部其他funtion改為global
-
-//TODO: 確認u_checkPracticeLimit這邊是否可以用getString，或要改其他方法
 
 @SuppressLint("SetTextI18n")
 fun u_checkPracticeLimit() {
@@ -573,7 +544,7 @@ fun u_checkPracticeLimit() {
         practiceTime++  //增加練習完成次數
         u_updatePracticeTimeToViewModel()
 
-        MaterialAlertDialogBuilder(mContextKIN)
+        MaterialAlertDialogBuilder(mActivityKIN)
             .setTitle(mContextKIN.resources.getString(R.string.practice_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
             .setMessage(mContextKIN.resources.getString(R.string.practice_dialog_message)) //Set the message to show the data
             .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
@@ -743,7 +714,6 @@ fun u_displayScoreInText(inputScoreList: List<Float>, flag: Int, Score:TextView)
 
 fun u_clearCurrentTrialRecord(
 ) {
-    //Todo: 這邊的數值 (var / val)有問題，要確認
     startPositionX = 0.0f
     startPositionY = 0.0f
     testPositionX = 0.0f
