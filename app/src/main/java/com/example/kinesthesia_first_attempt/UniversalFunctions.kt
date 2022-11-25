@@ -20,12 +20,22 @@ import java.util.*
 import kotlin.math.sqrt
 
 // 此Class目前暫時空白，如有資料需要pass給xml，可以放入這邊
-class UniversalFunctions: AppCompatActivity() {
+class UniversalFunctions : AppCompatActivity() {
+
 }
 
+lateinit var  mainViewModel: MainViewModel
 
-@SuppressLint("StaticFieldLeak") lateinit var mContextKIN: Context
-@SuppressLint("StaticFieldLeak") lateinit var mActivityKIN: Activity
+//TODO: 以下三行要貼到其他 fragment中
+
+//<variable
+//name="universalFunction"
+//type="com.example.kinesthesia_first_attempt.UniversalFunctionsKt" />
+
+@SuppressLint("StaticFieldLeak")
+lateinit var mContextKIN: Context
+@SuppressLint("StaticFieldLeak")
+lateinit var mActivityKIN: Activity
 
 
 //全域變數宣告，不然無法讀取到class給的資料
@@ -40,33 +50,31 @@ var startY: Float = 0f
 var bb: Float = 0f
 var b1: Float = 0f
 var b2: Float = 0f
+
+var filePathStr: String = ""
 //全域變數宣告，不然無法讀取到class給的資料
 
 // 常數定義區段 : 此段落放不會改變的參數
 // 例如總測驗次數/練習次數等等，方格大小、等等
 const val TARGET_BOX_SIZE = 2.00                   //待修改
 const val RESPONSE_DOT_SIZE = 3.00
+
 // 最大練習次數 或每個方向的測驗次數
 const val MAX_PRACTICE_TRIAL = 8
 const val MAX_FORMAL_TRIAL = 5
 
 
-//測驗流程
-
-// 記錄當下手指位置，並管理測驗流程
-// recordPosition功能描述
-//// 1.將XY存入對應情境的變數中
-//// 2.log.d中印出對應情境的資料
-var trialCondition = listOf<String>("Start Position", "Test Position", "Rest Position", "Response Position")
+var trialCondition =
+    listOf<String>("Start Position", "Test Position", "Rest Position", "Response Position")
 var condition: String = ""
 
 //測驗選項
 lateinit var testCondition: String  //進到各分頁後 重新宣告
+
 //var testCondition: String = "Practice"
-val testConditionList = listOf<String>("Practice","Formal")
+val testConditionList = listOf<String>("Practice", "Formal")
 
 //練習測驗次數上限變數
-// trialCount
 var maxTrailDesire: Int = 8
 val practiceTrialCountList = arrayListOf<String>("8", "7", "6", "5", "4", "3", "2", "1")
 
@@ -94,15 +102,17 @@ var responsePositionY: Float = 0.0f
 
 
 // 存檔相關變數宣告
-val positionData = StringBuffer()
+var positionData = StringBuffer()
 
 //顯示表現用暫存LIST
 var scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
 
+
 lateinit var arrayListOf8Trial: ArrayList<List<Float>>
 
 //Todo:11/22這邊的LIST 之後都要新增 四欄，放 given target / target XY)
-var trial1list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f) //四次表現(X/Y) + 5個表現參數  = 13
+var trial1list =
+    listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f) //四次表現(X/Y) + 5個表現參數  = 13
 var trial2list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 var trial3list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 var trial4list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
@@ -112,52 +122,70 @@ var trial7list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0
 var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 
 
-
 // 宣告位置調整參考資料：https://medium.com/globant/why-oncreate-of-activity-and-oncreateview-of-fragment-is-not-needed-anymore-6cdfc331102
 // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
-@SuppressLint("StaticFieldLeak") lateinit var  start: TextView
-@SuppressLint("StaticFieldLeak") lateinit var  test: TextView
-@SuppressLint("StaticFieldLeak") lateinit var  rest: TextView
-@SuppressLint("StaticFieldLeak") lateinit var  response: TextView
-@SuppressLint("StaticFieldLeak") lateinit var  trialCountView: TextView     //測驗次數textView
-@SuppressLint("StaticFieldLeak") lateinit var  recordingButton: Button        //找到測驗按鈕
-@SuppressLint("StaticFieldLeak") lateinit var  instructionText: TextView      //找到指導語textView
-@SuppressLint("StaticFieldLeak") lateinit var trialInputSpinner: Spinner
-@SuppressLint("StaticFieldLeak") lateinit var contextSpinner: Spinner
+@SuppressLint("StaticFieldLeak")
+lateinit var start: TextView
+@SuppressLint("StaticFieldLeak")
+lateinit var test: TextView
+@SuppressLint("StaticFieldLeak")
+lateinit var rest: TextView
+@SuppressLint("StaticFieldLeak")
+lateinit var response: TextView
+@SuppressLint("StaticFieldLeak")
+lateinit var trialCountView: TextView     //測驗次數textView
+@SuppressLint("StaticFieldLeak")
+lateinit var recordingButton: Button        //找到測驗按鈕
+@SuppressLint("StaticFieldLeak")
+lateinit var instructionText: TextView      //找到指導語textView
+@SuppressLint("StaticFieldLeak")
+lateinit var trialInputSpinner: Spinner
+@SuppressLint("StaticFieldLeak")
+lateinit var contextSpinner: Spinner
 
 //// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
-@SuppressLint("StaticFieldLeak") lateinit var fingerTarget: ImageView
-@SuppressLint("StaticFieldLeak") lateinit var fingerStartPoint: ImageView
-@SuppressLint("StaticFieldLeak") lateinit var fingerDownArrow: ImageView
+@SuppressLint("StaticFieldLeak")
+lateinit var fingerTarget: ImageView
+@SuppressLint("StaticFieldLeak")
+lateinit var fingerStartPoint: ImageView
+@SuppressLint("StaticFieldLeak")
+lateinit var fingerDownArrow: ImageView
 
-@SuppressLint("StaticFieldLeak") lateinit var penTarget: ImageView
-@SuppressLint("StaticFieldLeak") lateinit var penStartPoint: ImageView
-@SuppressLint("StaticFieldLeak") lateinit var penDownArrow: ImageView
+@SuppressLint("StaticFieldLeak")
+lateinit var penTarget: ImageView
+@SuppressLint("StaticFieldLeak")
+lateinit var penStartPoint: ImageView
+@SuppressLint("StaticFieldLeak")
+lateinit var penDownArrow: ImageView
 //// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
 
 //// 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
-@SuppressLint("StaticFieldLeak") lateinit var currentPosition: TextView
-@SuppressLint("StaticFieldLeak") lateinit var inAirText: TextView
-@SuppressLint("StaticFieldLeak") lateinit var touchBoard: TouchBoard
-@SuppressLint("StaticFieldLeak") lateinit var Score: TextView
+@SuppressLint("StaticFieldLeak")
+lateinit var currentPosition: TextView
+@SuppressLint("StaticFieldLeak")
+lateinit var inAirText: TextView
+@SuppressLint("StaticFieldLeak")
+lateinit var touchBoard: TouchBoard
+@SuppressLint("StaticFieldLeak")
+lateinit var Score: TextView
+
 //// 原本 checktime 中沒有提前宣告的view
-@SuppressLint("StaticFieldLeak") lateinit var countAndHint: TextView
+@SuppressLint("StaticFieldLeak")
+lateinit var countAndHint: TextView
+
 ////manageVisibility 中沒有提前宣告的view
-@SuppressLint("StaticFieldLeak") lateinit var selectButton:Button
-@SuppressLint("StaticFieldLeak") lateinit var randomTargetView: ImageView
+@SuppressLint("StaticFieldLeak")
+lateinit var selectButton: Button
+@SuppressLint("StaticFieldLeak")
+lateinit var randomTargetView: ImageView
+
 ////
-@SuppressLint("StaticFieldLeak") lateinit var navControllerKIN: NavController    //必須，用於從public function呼叫navControllerKIN
-
-
-
-
-
-
+@SuppressLint("StaticFieldLeak")
+lateinit var navControllerKIN: NavController    //必須，用於從public function呼叫navControllerKIN
 
 
 //以下嘗試放通用的function，供各個fragment使用
 
-//val dateOptions = getPickupOptions()
 fun getPickupOptions(): List<String> {
     val options = mutableListOf<String>()
     val formatter = SimpleDateFormat("E MMM d", Locale.getDefault())
@@ -172,7 +200,7 @@ fun getPickupOptions(): List<String> {
 
 // 以下為隱藏/顯示選單用的功能
 //參考資料 : https://stackoverflow.com/questions/37380587/android-how-to-hide-the-system-ui-properly
-fun u_hideSystemUI(decorView:View) {
+fun u_hideSystemUI(decorView: View) {
     //val decorView = requireActivity().window.decorView
     val uiOptions = decorView.systemUiVisibility
     var newUiOptions = uiOptions
@@ -183,7 +211,8 @@ fun u_hideSystemUI(decorView:View) {
     newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
     decorView.systemUiVisibility = newUiOptions
 }
-fun u_showSystemUI(decorView:View) {
+
+fun u_showSystemUI(decorView: View) {
     //val decorView = requireActivity().window.decorView
     val uiOptions = decorView.systemUiVisibility
     var newUiOptions = uiOptions
@@ -195,8 +224,6 @@ fun u_showSystemUI(decorView:View) {
     decorView.systemUiVisibility = newUiOptions
 }
 // 以上為隱藏/顯示選單用的功能
-
-
 
 
 //以下InAir相關
@@ -234,13 +261,13 @@ fun u_arrangeInAirData() {
     inAirData.append("\r\n")
 }
 
-fun u_saveInAirDataToCSV(inAirData:StringBuffer) {
+fun u_saveInAirDataToCSV(inAirData: StringBuffer) {
     val outputInAirData = inAirData.toString().replace("\r", "").split("\n")
     //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
     val outputFileName = "{$testCondition}_InAir_Trial_$currentTrial.csv"
     // 存檔: name,List,flag
     // Todo: 新增判斷式，若沒有檔名輸入，則存成TESTING
-    u_outputInAirCsv(outputFileName, outputInAirData,0)
+    u_outputInAirCsv(outputFileName, outputInAirData, 0)
 }
 
 fun u_outputInAirCsv(fileName: String, input: List<String>, flag: Int) {
@@ -266,14 +293,17 @@ fun u_outputInAirCsv(fileName: String, input: List<String>, flag: Int) {
     }
 
 
-
     val file = File(filePathStr, fileName)
     val os = FileOutputStream(file, true)   // 這邊給的字串要有檔案類型
     os.write(output.toString().toByteArray())
     os.flush()
     os.close()
     output.setLength(0) //clean buffer
-    Toast.makeText( mContextKIN, "{$testCondition}_InAir_Trial_$currentTrial 儲存成功", Toast.LENGTH_SHORT).show()
+    Toast.makeText(
+        mContextKIN,
+        "{$testCondition}_InAir_Trial_$currentTrial 儲存成功",
+        Toast.LENGTH_SHORT
+    ).show()
     //Log.d("data", "outCSV Success")
 }  // sample from HW
 //以上InAir相關
@@ -389,23 +419,15 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
     os.flush()
     os.close()
     output.setLength(0) //clean buffer
-    Toast.makeText( mContextKIN, "練習題測驗表現儲存成功", Toast.LENGTH_SHORT).show()
+    Toast.makeText(mContextKIN, "練習題測驗表現儲存成功", Toast.LENGTH_SHORT).show()
     Log.d("data", "outCSV Success")
 }  // sample from HW
 
 //以上 CSV存檔相關
 
 
-
-
-
-
-
-
-
-
 //以下測驗流程管理相關
-// Todo: calculateTrialScoreP(); V 之後還要改輸入 要考量given position
+// Todo:  calculateTrialScoreP(); V 之後還要改輸入 要考量given position
 // Todo:  checkPracticeLimit() V;
 // Todo:  以及正式測驗中，隨機位置的function們
 
@@ -420,10 +442,10 @@ fun u_pressButton() {
 
         // Todo: 這邊之後要加入 given position來計算
         scoreListForDisplay = u_calculateTrialScoreP()   //計算測驗表現 (RE*2，AE*3)
-        u_displayScoreInText(scoreListForDisplay,1, Score)  //更新text內容 //11/21 更新為 global
+        u_displayScoreInText(scoreListForDisplay, 1, Score)  //更新text內容 //11/21 更新為 global
         u_clearScoreList()
     } else {
-        u_displayScoreInText(scoreListForDisplay,0, Score)  //11/21 更新為 global
+        u_displayScoreInText(scoreListForDisplay, 0, Score)  //11/21 更新為 global
     }
 
 
@@ -432,7 +454,7 @@ fun u_pressButton() {
 
         //TODO: 要驗證 INAir存檔相關程式的輸出，也要嘗試改Finger測驗時，有沒辦法抓到時間&座標，用來算MT
         //0912測試存InAir
-        if (currentTestContext == "Pen"){
+        if (currentTestContext == "Pen") {
             u_saveInAirDataToCSV(inAirData)
             // saveInAirDataToCSV() 11/11新版，未驗證
         }
@@ -456,8 +478,8 @@ fun u_pressButton() {
 }
 
 
-fun u_addTrialsCount(){
-    trialCount ++
+fun u_addTrialsCount() {
+    trialCount++
     practiceTrialsCount++
     currentTrial++
 }
@@ -470,13 +492,25 @@ fun u_checkTime() {
     millisInFuture = 1000
 
     //TODO: 之後要根據測驗需求，調整每個階段的時間
-    when (buttonPressedCountsInATrial){
-        0 -> { millisInFuture = 1000 }  //之後要看按鈕次數改回4000
-        1 -> { millisInFuture = 1000 }
-        2 -> { millisInFuture = 1000 }
-        3 -> { millisInFuture = 1000 }
-        4 -> { millisInFuture = 1000 }
-        5 -> { millisInFuture = 0 }
+    when (buttonPressedCountsInATrial) {
+        0 -> {
+            millisInFuture = 1000
+        }  //之後要看按鈕次數改回4000
+        1 -> {
+            millisInFuture = 1000
+        }
+        2 -> {
+            millisInFuture = 1000
+        }
+        3 -> {
+            millisInFuture = 1000
+        }
+        4 -> {
+            millisInFuture = 1000
+        }
+        5 -> {
+            millisInFuture = 0
+        }
     }
 
     //計時器宣告
@@ -529,13 +563,11 @@ fun u_confirmSelection() {
     // TODO: 11/21 此function 由XML中 運用 fragment binding呼叫，要到每一個對應的xml中，匯入 UniversalFunction
 
 
-
     u_changeText()
     u_manageVisibility(0)
 
-    Toast.makeText(mContextKIN , "開始測驗練習", Toast.LENGTH_SHORT).show()
+    Toast.makeText(mContextKIN, "開始測驗練習", Toast.LENGTH_SHORT).show()
 }
-
 
 
 @SuppressLint("SetTextI18n")
@@ -568,20 +600,16 @@ fun u_checkPracticeLimit() {
 
 fun u_goBackToMenu() {
     Toast.makeText(mContextKIN, "回到測驗選單", Toast.LENGTH_SHORT).show()
-     //TODO: 後續 需要根據各情境，調整判斷式，才能正確回到頁面
+    //TODO: 後續 需要根據各情境，調整判斷式，才能正確回到頁面
 
-    when (testCondition){
+    when (testCondition) {
         "Practice" -> {
             navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_practiceFragment_to_testMenuFragment)
         }
 
-        }
+    }
 
 }
-
-
-
-
 
 
 //以下位置記錄相關
@@ -627,8 +655,7 @@ fun u_recordPosition() {
 }
 
 
-
-fun u_displayScoreInText(inputScoreList: List<Float>, flag: Int, Score:TextView) {
+fun u_displayScoreInText(inputScoreList: List<Float>, flag: Int, Score: TextView) {
     //val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
 
     var performanceDescriptionAP: String = ""  //Y軸
@@ -730,7 +757,21 @@ fun u_clearCurrentTrialRecord(
 
 fun u_reset8Trial() {
     for (n in 0..7) {
-        arrayListOf8Trial[n] = listOf<Float>(0.0f,0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f)
+        arrayListOf8Trial[n] = listOf<Float>(
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f
+        )
     }
 }
 
@@ -742,8 +783,6 @@ fun u_clearRecord() {
     u_reset8Trial()             // 清除所有trial的紀錄
     positionData.setLength(0) //clean buffer
 }
-
-
 
 
 // 將單次反應存入LIST
@@ -799,7 +838,6 @@ fun u_saveTrialToList(): List<Float> {
 }
 
 
-
 //Todo: 存檔參數的長度要調整 trial1list (1-8)
 //Todo: 存檔excel輸出的標題要調整 新增四欄
 
@@ -807,13 +845,14 @@ fun u_saveTrialToList(): List<Float> {
 // 1-8為受試者實際平板上觸摸的點
 // 9-12為程式給定的座標點
 // 這9-10座標位置，要從前面的程式碼抓出來
-fun u_comineRawDataToFloatList(startPositionX: Float, startPositionY: Float,
-                               testPositionX: Float, testPositionY: Float,
-                               restPositionX: Float, restPositionY: Float,
-                               responsePositionX: Float, responsePositionY: Float,
-                               trueGivenStartPositionX: Float,trueGivenStartPositionY: Float,
-                               trueGivenTargetPositionX: Float,trueGivenTargetPositionY: Float
-                               ): List<Float> {
+fun u_comineRawDataToFloatList(
+    startPositionX: Float, startPositionY: Float,
+    testPositionX: Float, testPositionY: Float,
+    restPositionX: Float, restPositionY: Float,
+    responsePositionX: Float, responsePositionY: Float,
+    trueGivenStartPositionX: Float, trueGivenStartPositionY: Float,
+    trueGivenTargetPositionX: Float, trueGivenTargetPositionY: Float
+): List<Float> {
     return listOf<Float>(
         startPositionX,
         startPositionY,
@@ -830,7 +869,7 @@ fun u_comineRawDataToFloatList(startPositionX: Float, startPositionY: Float,
     )
 }
 
-fun u_saveTrialToList(positionList:FloatArray): List<Float> {
+fun u_saveTrialToList(positionList: FloatArray): List<Float> {
     var startPositionX = positionList[1]
     var startPositionY = positionList[2]
     var testPositionX = positionList[3]
@@ -870,10 +909,10 @@ fun u_saveTrialToList(positionList:FloatArray): List<Float> {
 fun u_calculateTrialScoreP(): List<Float> {
     //Todo: 11/11 這邊的分數計算，可能要重新調整(given position)，因為起點/目標的給法不同
     //Todo: 11/21 也要新增 true given position 的輸入/
-  //var trueGivenStartPositionX = positionList[9]
-  //var trueGivenStartPositionY = positionList[10]
-  //var trueGivenTargetPositionX = positionList[11]
-  //var trueGivenTargetPositionY = positionList[12]
+    //var trueGivenStartPositionX = positionList[9]
+    //var trueGivenStartPositionY = positionList[10]
+    //var trueGivenTargetPositionX = positionList[11]
+    //var trueGivenTargetPositionY = positionList[12]
     //計算向量: 以startPosition為基準/原點
     //Vector( test2Response ) = Vector( start2Response ) - Vector( start2Test )
     //start2Test(x,y) = Test(x,y) - Start(x,y)
@@ -899,15 +938,15 @@ fun u_calculateTrialScoreP(): List<Float> {
 
     //1105校正relativeError正負號
     when {
-        test2ResponseAP  < 0 -> {
+        test2ResponseAP < 0 -> {
             //performanceDescriptionAP = "Underestimated"
             relativeErrorAP = -absoluteErrorAP
         }
-        test2ResponseAP  > 0 -> {
+        test2ResponseAP > 0 -> {
             //performanceDescriptionAP = "Overestimated"
             relativeErrorAP = absoluteErrorAP
         }
-        test2ResponseAP  == 0f -> {
+        test2ResponseAP == 0f -> {
             //performanceDescriptionAP = "Perfect Matched"
             relativeErrorAP = absoluteErrorAP
         }
@@ -1036,14 +1075,14 @@ fun u_launchTrialInputSpinner() {
         }
 
         override fun onNothingSelected(parent: AdapterView<*>?) {
-            //TODO("Not yet implemented")
+            //TO-DO("Not yet implemented")
         }
     }
 }
 
 fun u_setTrialLimit(trialLimitInput: String) {
     maxTrailDesire = trialLimitInput.toInt()
-    }  //可直接移植到補測
+}  //可直接移植到補測
 
 fun u_launchContextSpinner() {
     //mContext_demo = requireActivity().applicationContext
@@ -1065,7 +1104,7 @@ fun u_launchContextSpinner() {
         }
 
         override fun onNothingSelected(parent: AdapterView<*>?) {
-            //TODO("Not yet implemented")
+            //TO-DO("Not yet implemented")
         }
     }
 }
@@ -1106,9 +1145,9 @@ fun u_checkContextAndLaunchView(context: String) {
     //清掉前一個情境的view
     when (tempContext) {
         "Pen" -> {
-            penTarget.visibility =  View.VISIBLE
-            penStartPoint.visibility =  View.VISIBLE
-            penDownArrow.visibility =  View.VISIBLE
+            penTarget.visibility = View.VISIBLE
+            penStartPoint.visibility = View.VISIBLE
+            penDownArrow.visibility = View.VISIBLE
 
             fingerTarget.visibility = View.GONE
             fingerStartPoint.visibility = View.GONE
@@ -1120,19 +1159,18 @@ fun u_checkContextAndLaunchView(context: String) {
             penDownArrow.visibility = View.GONE
 
             fingerTarget.visibility = View.VISIBLE
-            fingerStartPoint.visibility  = View.VISIBLE
-            fingerDownArrow.visibility  = View.VISIBLE
+            fingerStartPoint.visibility = View.VISIBLE
+            fingerDownArrow.visibility = View.VISIBLE
         }
     }
 
 } //輸入currentContext
 
-fun u_updatePracticeTimeToViewModel(){
+fun u_updatePracticeTimeToViewModel() {
     if (practiceTrialsCount >= maxTrailDesire) {
-        MainViewModel().setPracticeTime(practiceTime)
+        mainViewModel.setPracticeTime(practiceTime)
     }
 }
-
 
 
 fun u_manageVisibility(flag: Int) {
@@ -1175,5 +1213,160 @@ fun u_manageVisibility(flag: Int) {
 }  //管理測驗相關View顯示、可觸控與否
 
 
+// TODO: 進入各頁面前確認有存檔路徑 或 default
+fun u_checkDemographicInputAndUpdateDefault(mActivityKIN: Activity, mContextKIN: Context) {
+    //1.檢查viewModel中demographic資料
+    //2.確認所有輸入都非空白
+    //3.提供default數值 (TEST)
+
+    //val mainViewModel =  MainViewModel()
+
+    if (mainViewModel.outputFilePath.value.isNullOrEmpty()) {
+        Toast.makeText(mContextKIN, "存檔路徑不存在，開始設定預設路徑", Toast.LENGTH_SHORT).show()
+
+        mainViewModel.setName("virtualSubject")
+        mainViewModel.setClientCode("00000000")
+        mainViewModel.setBirthdate("MM/dd/yyyy")
+        val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        mainViewModel.setTestDate(formatter.format(Calendar.getInstance().time).toString()) //當日日期
+        mainViewModel.setHandedness("TEST") // 右 or 左
+        mainViewModel.setGrade("TEST")// 1-6
+        mainViewModel.setSex("TEST") // 男 or 女
+        mainViewModel.setCity("TEST")
+        u_showCurrentDemographicInputDialog(mActivityKIN, mContextKIN,mainViewModel)
+
+        } else {
+            filePathStr =  mainViewModel.outputFilePath.value.toString()
+            Toast.makeText(mContextKIN, "存檔路徑存在", Toast.LENGTH_SHORT).show()
+        }
+
+    }
 
 
+    fun u_showCurrentDemographicInputDialog(mActivityKIN: Activity, mContextKIN: Context, mainViewModel:MainViewModel) {
+        MaterialAlertDialogBuilder(mActivityKIN)
+            .setTitle(mContextKIN.resources.getString(R.string.demographic_dialog)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+            .setMessage(
+                mContextKIN.resources.getString(R.string.your_name, mainViewModel.name.value)
+                        + "\n" + mContextKIN.resources.getString(
+                    R.string.your_sex,
+                    mainViewModel.sex.value
+                )
+                        + "\n" + mContextKIN.resources.getString(
+                    R.string.your_birthdate,
+                    mainViewModel.birthdate.value
+                )
+                        + "\n" + mContextKIN.resources.getString(
+                    R.string.your_testDate,
+                    mainViewModel.testDate.value
+                )
+                        + "\n" + mContextKIN.resources.getString(
+                    R.string.your_handedness,
+                    mainViewModel.handedness.value
+                )
+                        + "\n" + mContextKIN.resources.getString(
+                    R.string.your_grade,
+                    mainViewModel.grade.value
+                )
+                        + "\n" + mContextKIN.resources.getString(
+                    R.string.your_city,
+                    mainViewModel.city.value
+                )
+                        + "\n" + mContextKIN.resources.getString(
+                    R.string.your_code,
+                    mainViewModel.clientCode.value
+                )
+            ) //Set the message to show the data
+
+            .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
+            .setNegativeButton(mContextKIN.resources.getString(R.string.modify_input)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
+                mainViewModel.resetDemographicInput()
+            }
+            .setPositiveButton(mContextKIN.resources.getString(R.string.confirm_input)) { _, _ ->
+                u_saveDemographic()
+            }
+            .show() //creates and then displays the alert dialog.
+    }
+
+
+    //TODO:設定預設的test存檔路徑，避免CRASH
+    fun u_saveDemographic() {
+        // 整理人口學資料段落
+        val outputName =
+            mContextKIN.resources.getString(R.string.your_name,  mainViewModel.name.value)
+        val outputSex =
+            mContextKIN.resources.getString(R.string.your_sex,  mainViewModel.sex.value)
+        val outputBirthdate = mContextKIN.resources.getString(
+            R.string.your_birthdate,
+            mainViewModel.birthdate.value
+        )
+        val outputTestDate =
+            mContextKIN.resources.getString(R.string.your_testDate,  mainViewModel.testDate.value)
+        val outputHand = mContextKIN.resources.getString(
+            R.string.your_handedness,
+            mainViewModel.handedness.value
+        )
+        val outputGrade =
+            mContextKIN.resources.getString(R.string.your_grade,  mainViewModel.grade.value)
+        val outputCity =
+            mContextKIN.resources.getString(R.string.your_city,  mainViewModel.city.value)
+        val outputCode =
+            mContextKIN.resources.getString(R.string.your_code,  mainViewModel.clientCode.value)
+
+        val emp = "\n"  //換行字串 "\n"
+        val txtFile: File  //創建檔案
+        val filePathConstructCode =  mainViewModel.clientCode.value.toString()
+
+        val timeStamp: String //避免資料夾個案編號資料重複的額外後接編號
+        val timeStampFormatter =
+            SimpleDateFormat("HH_mm_ss", Locale.getDefault()) //H 時 在一天中 (0~23) // m 分 // s 秒
+        val timeStampCalendar = Calendar.getInstance()
+        timeStamp =
+            timeStampFormatter.format(timeStampCalendar.time).toString() //當日時間  //需傳到viewmodel
+
+        /////建立檔案資料夾段落
+
+        //資料夾名稱/路徑
+        val filePath = File(mActivityKIN.getExternalFilesDir("").toString(), filePathConstructCode)
+        val backupFilePath = File(
+            mActivityKIN.getExternalFilesDir("").toString(),
+            filePathConstructCode + "_" + timeStamp
+        )
+
+        //檢查目前個案標號是否使用過，建立資料夾並建立txt檔
+        if (filePath.exists()) {
+            Toast.makeText(mContextKIN, "這個編號已經使用過了，將自動產生新資料夾", Toast.LENGTH_SHORT).show()
+            backupFilePath.mkdir()
+            txtFile =
+                File(backupFilePath, filePathConstructCode + "_demographic_" + timeStamp + ".txt")
+            filePathStr = backupFilePath.path  //更新全域變數，用於後續存檔(此段產生的資料夾名稱不同)
+        } else {
+            filePath.mkdir()
+            txtFile = File(filePath, filePathConstructCode + "_demographic_" + ".txt")
+            filePathStr = filePath.path      //更新全域變數，用於後續存檔
+        }
+        //更新檔案路徑
+        mainViewModel.setFilePath(filePathStr)
+
+        //儲存基本資料檔案
+        val out = FileOutputStream(txtFile, true)
+        out.write(outputName.toByteArray())
+        out.write(emp.toByteArray())
+        out.write(outputSex.toByteArray())
+        out.write(emp.toByteArray())
+        out.write(outputBirthdate.toByteArray())
+        out.write(emp.toByteArray())
+        out.write(outputTestDate.toByteArray())
+        out.write(emp.toByteArray())
+        out.write(outputHand.toByteArray())
+        out.write(emp.toByteArray())
+        out.write(outputGrade.toByteArray())
+        out.write(emp.toByteArray())
+        out.write(outputCity.toByteArray())
+        out.write(emp.toByteArray())
+        out.write(outputCode.toByteArray())
+        out.flush()
+        out.close()
+        Toast.makeText(mContextKIN, "Demographic Data Save Success", Toast.LENGTH_SHORT).show()
+
+    }  // 存檔function END

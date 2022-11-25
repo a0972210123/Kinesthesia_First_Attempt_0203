@@ -1,6 +1,7 @@
 package com.example.kinesthesia_first_attempt
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.databinding.FragmentTestMenuBinding
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -36,15 +32,16 @@ class TestMenuFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        showSystemUI()
-
+        val decorView = requireActivity().window.decorView
+        u_showSystemUI(decorView)
+        Log.d("testMainViewModel", "TestMenuFragment onCreate!")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("testMainViewModel", "TestMenuFragment onCreateView!")
         //val fragmentBinding = FragmentTestMenuBinding.inflate(inflater, container, false)
         //binding = fragmentBinding
         //return fragmentBinding.root
@@ -61,6 +58,8 @@ class TestMenuFragment : Fragment() {
             //sendButton.setOnClickListener { sendOrder() }
             testMenuFragment = this@TestMenuFragment //使用listenser binding，用UI button 在xml中設定onclick
         }
+
+        Log.d("testMainViewModel", "TestMenuFragment created!")
     }
 
 
@@ -99,42 +98,15 @@ class TestMenuFragment : Fragment() {
     }
 
 
-
     fun goToAuto() {
         Toast.makeText(activity, "進入自動記錄", Toast.LENGTH_SHORT).show()
         //使用以下code來抓取navController，用findNavController().navigate()，並輸入"動作的ID"。也就是要執行的nav動作(要和nav_graph.xml相同
         findNavController().navigate(R.id. action_testMenuFragment_to_autorecordFragment)
     }
 
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         //binding = null
     }
 
-    //https://stackoverflow.com/questions/37380587/android-how-to-hide-the-system-ui-properly
-    private fun hideSystemUI() {
-        val decorView = requireActivity().window.decorView
-        val uiOptions = decorView.systemUiVisibility
-        var newUiOptions = uiOptions
-        newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_LOW_PROFILE
-        newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_FULLSCREEN
-        newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE
-        newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        decorView.systemUiVisibility = newUiOptions
-    }
-
-    private fun showSystemUI() {
-        val decorView = requireActivity().window.decorView
-        val uiOptions = decorView.systemUiVisibility
-        var newUiOptions = uiOptions
-        newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_LOW_PROFILE.inv()
-        newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_FULLSCREEN.inv()
-        newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION.inv()
-        newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_IMMERSIVE.inv()
-        newUiOptions = newUiOptions and View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY.inv()
-        decorView.systemUiVisibility = newUiOptions
-    }
 }

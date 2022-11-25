@@ -1,5 +1,6 @@
 package com.example.kinesthesia_first_attempt.ui.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,10 +10,18 @@ import java.util.*
 
 
 class MainViewModel : ViewModel() {
+    init {
+        Log.d("MainViewModel", "MainViewModel created!")
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("MainViewModel", "MainViewModel destroyed!")
+    }
 
     // 放入所有要記錄的變數: 如人口學資料
 
-    private var _outputFilePath = MutableLiveData<String>("")
+    var _outputFilePath = MutableLiveData<String>("")
     val outputFilePath: LiveData<String> = _outputFilePath
 
     fun setFilePath(PathInput: String) {
@@ -20,36 +29,35 @@ class MainViewModel : ViewModel() {
     }
 
 
-    private var _totalPracticeTime = MutableLiveData<Int>(0)
+    var _totalPracticeTime = MutableLiveData<Int>(0)
     val totalPracticeTime: LiveData<Int> = _totalPracticeTime
 
     fun setPracticeTime(Input:Int) {
         _totalPracticeTime.value = Input
     }
 
-
-    private val _name = MutableLiveData<String>("")
+    private var _name = MutableLiveData<String>("")
     val name: LiveData<String> = _name
 
-    private val _sex = MutableLiveData<String>("")
+    private var _sex = MutableLiveData<String>("")
     val sex: LiveData<String> = _sex
 
-    private val _handedness = MutableLiveData<String>("")
+    private var _handedness = MutableLiveData<String>("")
     val handedness: LiveData<String> = _handedness
 
-    private val _grade = MutableLiveData<String>("")
+    private var _grade = MutableLiveData<String>("")
     val grade: LiveData<String> = _grade
 
-    private val _birthdate = MutableLiveData<String>("")
+    private var _birthdate = MutableLiveData<String>("")
     val birthdate: LiveData<String> = _birthdate
 
-    private val _testDate = MutableLiveData<String>("")
+    private var _testDate = MutableLiveData<String>("")
     val testDate: LiveData<String> = _testDate
 
-    private val _city = MutableLiveData<String>("")
+    private var _city = MutableLiveData<String>("")
     val city: LiveData<String> = _city
 
-    private val _clientCode = MutableLiveData<String>("")
+    private var _clientCode = MutableLiveData<String>("")
     val clientCode: LiveData<String> = _clientCode
 
 

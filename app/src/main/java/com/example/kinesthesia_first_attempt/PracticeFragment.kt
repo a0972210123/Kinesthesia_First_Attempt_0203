@@ -2,6 +2,7 @@ package com.example.kinesthesia_first_attempt
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,17 +18,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.databinding.FragmentPracticeBinding
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 
-
-//11/24 & 25 進度
-//  (V)1. 修改函式的input，嘗試去除View輸入
-//  (V)2. 確認XML中能否CALL u_pressButton & u_confirmSelection
-//  (V)3. 確認 pressbutton 是否能改為 GLOBAL
-//  (V)4. 確認 gobacktoMenu 可以改為global
-//  (V)5. 確認 confirmSelection，是否能改為 GLOBAL
-//  (V) 6. 確認 checkpracticeLimit，是否能改為 GLOBAL  >這個改完 才能改pressbutton
-//  (V) 7. 確認 getString 是否能在public中使用 > 這個改完，才能用checkpracticeLimit
-
-
 class PracticeFragment : Fragment() {
     private val sharedViewModel: MainViewModel by activityViewModels()
     lateinit var binding: FragmentPracticeBinding
@@ -40,7 +30,8 @@ class PracticeFragment : Fragment() {
         // hideSystemUI() //修改前
         testCondition = testConditionList[0] //  val testConditionList = listOf<String>("Practice","Formal")
 
-    }
+    }//onCreate end
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +44,7 @@ class PracticeFragment : Fragment() {
         //binding.lifecycleOwner = this
        return binding.root
 
-    }
+    } //onCreateView end
 
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,11 +57,14 @@ class PracticeFragment : Fragment() {
         }
 
 
+
         navControllerKIN = findNavController() //必須，用於從public function呼叫navControllerKIN
 
-
+        //以下三行為 global function需要的input
+        mainViewModel = sharedViewModel  // 這行是為了讓public可以讀到ViewModel 且不需要重新 initiate
         mActivityKIN = requireActivity()
         mContextKIN = requireActivity().applicationContext
+
         // 11/15調整，View宣告位置
         // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
         start = requireView().findViewById<TextView>(R.id.performance_start_position)
@@ -137,67 +131,11 @@ class PracticeFragment : Fragment() {
         u_launchContextSpinner()
         u_checkContextAndLaunchView(currentTestContext)
 
-    }
+        // 確認人口學資料
+        u_checkDemographicInputAndUpdateDefault(mActivityKIN,mContextKIN)
 
-
-
-  /* fun pressButton() {
-        buttonPressedCountsInATrial++      //每按一次按鈕+1
-        Log.d("X/Y/面積/長軸/短軸：inFragment", "$startX  $startY  $bb  $b1  $b2")
-        u_recordPosition()   //儲存位置，並管理測驗流程，直接讀取全域變數
-        u_changeText()       //更動text   //11/23改為global
-//        u_changeText(currentTrial,maxTrailDesire,condition,trialCountView,instructionText,
-//            start,test,rest,response,
-//            recordingButton)
-
-        u_checkTime() // 11/21 改global
-        //checkTime()  //計時
-
-        if (buttonPressedCountsInATrial == 4) {
-
-            // Todo: 這邊之後要加入 given position來計算
-            scoreListForDisplay = u_calculateTrialScoreP()   //計算測驗表現 (RE*2，AE*3)
-            //scoreListForDisplay = calculateTrialScoreP()  // 11/21 更新為 global
-
-            //displayScoreInText(scoreListForDisplay, 1)       //更新text內容
-            u_displayScoreInText(scoreListForDisplay,1, Score)  //11/21 更新為 global
-            //clearScoreList()
-            u_clearScoreList()
-        } else {
-            //displayScoreInText(scoreListForDisplay, 0)
-            u_displayScoreInText(scoreListForDisplay,0, Score)  //11/21 更新為 global
-        }
-
-
-        if (buttonPressedCountsInATrial == 5) {
-
-            //0912測試存InAir
-                if (currentTestContext == "Pen"){
-                    u_saveInAirDataToCSV(inAirData)
-                    // saveInAirDataToCSV() 11/11新版，未驗證
-                }
-
-            u_clearInAir() // 11/21
-            //clearInAir() // 11/11前舊版
-
-            //11/11前舊版
-            //addTrialsCount()
-            //saveCurrentTrialRecord()   //將單次反應存入LIST(包含分數計算)
-            //clearCurrentTrialRecord()  //清除單次表現、歸零座標、重設測驗情境
-
-            //11/11新版，未驗證
-            u_addTrialsCount() // 完成一次測驗練習   //11/21
-            u_saveCurrentTrialRecord()
-            u_clearCurrentTrialRecord() //11/11新版，未驗證
-
-
-            u_checkPracticeLimit()       //檢查是否達到練習次數
-            buttonPressedCountsInATrial = 0
-        }
-        return
-    }*/
-
-
+        Log.d("PracticeFragment", "PracticeFragment created!")
+    } //onViewCreated end
 
 
 } // fragment end

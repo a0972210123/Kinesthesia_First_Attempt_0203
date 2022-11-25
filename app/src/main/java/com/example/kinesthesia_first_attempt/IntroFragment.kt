@@ -1,5 +1,6 @@
 package com.example.kinesthesia_first_attempt
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,12 +18,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.kinesthesia_first_attempt.databinding.FragmentIntroBinding
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 /**
  * A simple [Fragment] subclass.
  * Use the [IntroFragment.newInstance] factory method to
@@ -30,9 +25,9 @@ private const val ARG_PARAM2 = "param2"
  */
 
 //testing
-var mContext: Context? = null
-var mButton: Button? = null
-lateinit var mInstruction: TextView
+@SuppressLint("StaticFieldLeak") var mContext: Context? = null
+@SuppressLint("StaticFieldLeak") var mButton: Button? = null
+@SuppressLint("StaticFieldLeak") lateinit var mInstruction: TextView
 var TestingInstructionText : String = ""
 lateinit var mViewPager: ViewPager2  //test1
 
@@ -56,18 +51,14 @@ class IntroFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //val fragmentBinding = FragmentIntroBinding.inflate(inflater, container, false)
-        //binding = fragmentBinding
-
         binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_intro, container, false)
-
         return binding.root
-        //return fragmentBinding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.apply {
+        binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
             introFragment = this@IntroFragment //使用listenser binding，用UI button 在xml中設定onclick
@@ -76,10 +67,6 @@ class IntroFragment : Fragment() {
         // view一定要在這邊call，不然會crash
         mButton = requireView().findViewById<View>(R.id.instruction_next) as Button  //要移到onviewcreated
         mViewPager = requireView()!!.findViewById<View>(R.id.view_pager) as ViewPager2
-        //mviewPager2 = requireView()!!.findViewById<ViewPager2>(R.id.view_pager)  //test2
-
-        //setOnClick也在這
-        //binding?.sendButton.setOnClickListener { sendOrder() }
 
         //以下測試pageradapter
         mContext = getActivity()?.getApplicationContext()
@@ -108,8 +95,6 @@ class IntroFragment : Fragment() {
                 }
             })
         }
-
-        //android:text="@{introFragment.instructionList[introFragment.indexForList]}"
 
 /*
         //方法2

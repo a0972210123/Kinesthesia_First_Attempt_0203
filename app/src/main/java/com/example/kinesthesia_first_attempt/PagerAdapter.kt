@@ -29,13 +29,11 @@ class PagerAdapter : RecyclerView.Adapter<PagerAdapter.PagerViewHolder>() {
     // 計算陣列大小
     //override fun getItemCount(): Int = colorArray.size
 
-
     //將需要滑動的頁面載入
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PagerViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_page,parent, false)
         )
-
 
     // 載入頁面中的View
     class PagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -30,6 +30,7 @@ import kotlin.math.sqrt
 class TestFragment : Fragment() {
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentTestBinding
+
     private lateinit var mContext_demo: Context
     lateinit var directionSpinner: Spinner
     lateinit var trialInputSpinner: Spinner

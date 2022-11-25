@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 //ref: https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/712473/#outline__2_1
 
-class MyAdapter : RecyclerView.Adapter<MyAdapter.PagerViewHolder>() {
+class MyAdapter_nonUsed : RecyclerView.Adapter<MyAdapter_nonUsed.PagerViewHolder>() {
     private var mList: List<Int> = ArrayList()
 
 

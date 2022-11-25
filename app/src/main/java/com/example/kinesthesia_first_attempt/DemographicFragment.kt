@@ -21,14 +21,11 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
-// 變數宣告
-var filePathStr: String = ""
 
 class DemographicFragment : Fragment() {
 
 
     lateinit var mContext_demo: Context
-    lateinit var city: Spinner
     lateinit var birthdate: EditText
     val cityList = arrayListOf(
         "請選擇城市",
@@ -37,11 +34,7 @@ class DemographicFragment : Fragment() {
     )
 
     lateinit var citySpinner: Spinner
-
     private val sharedViewModel: MainViewModel by activityViewModels()
-
-    //private lateinit var viewModel: MainViewModel
-    //private var binding: FragmentDemographicBinding? = null
     private lateinit var binding: FragmentDemographicBinding
 
 
@@ -53,9 +46,6 @@ class DemographicFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //val fragmentBinding = FragmentDemographicBinding.inflate(inflater, container, false)
-        //binding = fragmentBinding
-        //return fragmentBinding.root
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_demographic, container, false)
         return binding.root
     }
@@ -63,10 +53,9 @@ class DemographicFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.apply {
+        binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
-            //sendButton.setOnClickListener { sendOrder() }
             demographicFragment =
                 this@DemographicFragment //使用listenser binding，用UI button 在xml中設定onclick
         }
@@ -83,8 +72,6 @@ class DemographicFragment : Fragment() {
         //以上生日選擇及測驗日期選擇
 
     } //OnViewCreated End
-
-
 
 
     fun launchCitySpinner() {
@@ -125,8 +112,8 @@ class DemographicFragment : Fragment() {
 
     // 生日或是測驗日期選擇
     fun dateSelection() {
-        binding?.birthDate?.inputType = InputType.TYPE_NULL
-        binding?.birthDate?.setOnClickListener {
+        binding.birthDate.inputType = InputType.TYPE_NULL
+        binding.birthDate.setOnClickListener {
             val c = Calendar.getInstance()
             val year = c.get(Calendar.YEAR)
             val month = c.get(Calendar.MONTH)
@@ -201,8 +188,9 @@ class DemographicFragment : Fragment() {
     //<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     //<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    fun saveDemographic() {
 
+    //TODO:設定預設的test存檔路徑，避免CRASH
+    fun saveDemographic() {
         // 整理人口學資料段落
         val outputName = getString(R.string.your_name, binding.viewModel?.name?.value)
         val outputSex = getString(R.string.your_sex, binding.viewModel?.sex?.value)
@@ -221,7 +209,6 @@ class DemographicFragment : Fragment() {
         val timeStampFormatter = SimpleDateFormat("HH_mm_ss", Locale.getDefault()) //H 時 在一天中 (0~23) // m 分 // s 秒
         val timeStampCalendar = Calendar.getInstance()
         timeStamp =  timeStampFormatter.format(timeStampCalendar.time).toString() //當日時間  //需傳到viewmodel
-
 
         /////建立檔案資料夾段落
 

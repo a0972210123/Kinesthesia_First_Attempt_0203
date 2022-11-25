@@ -1,10 +1,13 @@
 package com.example.kinesthesia_first_attempt
 
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 
 class MainActivity : AppCompatActivity(R.layout.main_activity) {
 
@@ -17,6 +20,7 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
 
     private lateinit var navController: NavController  // 將navController 設定為變數，使其可以被其他method使用
 
+    public val demographicViewModel: MainViewModel by viewModels { defaultViewModelProviderFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) { //修改一開始onCreate時要準備的layout內容
         super.onCreate(savedInstanceState)
@@ -31,13 +35,12 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
 
         //setContentView(R.layout.main_activity)
 
-
         //if (savedInstanceState == null) {
        //     supportFragmentManager.beginTransaction()
         //        .replace(R.id.container, CoverFragment.newInstance())
         //        .commitNow()
       //  }
-
+        Log.d("MainActivity", "MainActivity created!")
     }
 
     //test
@@ -51,6 +54,7 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
     override fun onSupportNavigateUp(): Boolean {
         return  navController.navigateUp() || super.onSupportNavigateUp()
     }  //up button指 螢幕下方的返回鍵  而不是APP 本身的actionbar
+
 
 
 
