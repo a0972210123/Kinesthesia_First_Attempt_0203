@@ -56,8 +56,6 @@ class PracticeFragment : Fragment() {
             maxPracticeTrial = MAX_PRACTICE_TRIAL //用於更新練習次數文字
         }
 
-
-
         navControllerKIN = findNavController() //必須，用於從public function呼叫navControllerKIN
 
         //以下三行為 global function需要的input
@@ -65,20 +63,21 @@ class PracticeFragment : Fragment() {
         mActivityKIN = requireActivity()
         mContextKIN = requireActivity().applicationContext
 
-        // 11/15調整，View宣告位置
-        // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
         start = requireView().findViewById<TextView>(R.id.performance_start_position)
         test = requireView().findViewById<TextView>(R.id.performance_test_position)
         rest = requireView().findViewById<TextView>(R.id.performance_rest_position)
-        response = requireView().findViewById<TextView>(R.id.performance_response_position) //測驗次數textView
+        response =
+            requireView().findViewById<TextView>(R.id.performance_response_position) //測驗次數textView
         trialCountView = requireView().findViewById<TextView>(R.id.trial_count) //找到測驗按鈕
         recordingButton = requireView().findViewById<Button>(R.id.record_position) //找到指導語textView
         instructionText = requireView().findViewById<TextView>(R.id.instruction_demonstration)
 
+
         // 11/15調整，Context & Spinner宣告位置
         trialInputSpinner = requireView().findViewById<View>(R.id.trialInput_list) as Spinner
         contextSpinner = requireView().findViewById<View>(R.id.context_list) as Spinner
-        // Todo:>>> 待新增測驗方向Spinner
+        directionSpinner = requireView().findViewById<View>(R.id.direction_list) as Spinner
+
         // Todo:>>> 待新增測驗方法Spinner (VAP2AP & AP2AP & PP2AP)
         // Todo:>>> 測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
 
@@ -89,15 +88,44 @@ class PracticeFragment : Fragment() {
         penStartPoint = requireView().findViewById<ImageView>(R.id.pen_start_point)
         penDownArrow = requireView().findViewById<ImageView>(R.id.pen_down_arrow)
 
-        countAndHint = requireView().findViewById<TextView>(R.id.text1)         //11/21 計時用 text view
+        //// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
+        penUpArrow = requireView().findViewById<ImageView>(R.id.pen_up_arrow)
+        penUpLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_left)
+        penUpRightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_right)
+        penDownLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_down_left)
+        penDownRightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_down_right)
+
+        fingerUpArrow = requireView().findViewById<ImageView>(R.id.up_arrow)
+        fingerUpLeftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_up_left)
+        fingerUpRightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_up_right)
+        fingerDownLeftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_down_left)
+        fingerDownRightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_down_right)
+// 箭頭
+        fingerRandomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
+        penRandomTargetView = requireView().findViewById<ImageView>(R.id.pen_random_target)
+
+        countAndHint =
+            requireView().findViewById<TextView>(R.id.text1)         //11/21 計時用 text view
 
         //11/21 manageVisibility
         selectButton = requireView().findViewById(R.id.confirm_trial) as Button
-        randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
-        currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)  //11/17 優化
+        currentPosition =
+            requireView().findViewById<TextView>(R.id.current_position_field)  //11/17 優化
         inAirText = requireView().findViewById<TextView>(R.id.in_air_testing) //11/17 優化
         touchBoard = requireView().findViewById(R.id.view) as TouchBoard //11/17 優化
-        Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score) //11/17 優化
+        Score =
+            requireView().findViewById<TextView>(R.id.performance_current_trial_score) //11/17 優化
+
+        // Todo:>>> //11/28 新增表現分數標題
+        performanceTitle = requireView().findViewById<TextView>(R.id.performance_title)
+
+        titleParams = performanceTitle.layoutParams as ViewGroup.MarginLayoutParams
+
+        penTargetParams = penTarget.layoutParams as ViewGroup.MarginLayoutParams
+        penStartParams = penStartPoint.layoutParams as ViewGroup.MarginLayoutParams
+        fingerTargetParams = fingerTarget.layoutParams as ViewGroup.MarginLayoutParams
+        fingerStartParams = fingerStartPoint.layoutParams as ViewGroup.MarginLayoutParams
+        // // Todo:>>> //11/28 新增表現分數標題
 
 
         u_changeInAriText()     // DEFAULT inAir文字
@@ -134,7 +162,7 @@ class PracticeFragment : Fragment() {
         // 確認人口學資料
         u_checkDemographicInputAndUpdateDefault(mActivityKIN,mContextKIN)
 
-        Log.d("PracticeFragment", "PracticeFragment created!")
+        Log.d("lifeCycle", "PracticeFragment created!")
     } //onViewCreated end
 
 
