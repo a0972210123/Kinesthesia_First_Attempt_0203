@@ -141,6 +141,9 @@
     <string name="trial_count">測驗次數:</string>
     <string name="client_direction">受測者座位方向</string>
     <string name="examiner_direction">施測者座位方向</string>
+    <string name="hint_plz_chooz_direction">請選方向</string>
+    <string name="hint_plz_set_trials">請選次數</string>
+    <string name="hint_plz_chooz_context">請選情境</string>
 
 
     <string-array name="direction_list">

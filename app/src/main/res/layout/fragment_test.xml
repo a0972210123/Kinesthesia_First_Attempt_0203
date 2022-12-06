@@ -184,10 +184,10 @@
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:addStatesFromChildren="false"
+                android:contentDescription="@string/hint_plz_chooz_direction"
                 app:layout_constraintEnd_toEndOf="@+id/confirm_trial"
                 app:layout_constraintStart_toEndOf="@id/context_list"
                 app:layout_constraintTop_toTopOf="@+id/context_list" />
-
 
             <Spinner
                 android:id="@+id/trialInput_list"
@@ -195,6 +195,7 @@
                 android:layout_height="50dp"
                 android:addStatesFromChildren="false"
                 android:visibility="gone"
+                android:contentDescription="@string/hint_plz_set_trials"
                 app:layout_constraintEnd_toStartOf="@id/context_list"
                 app:layout_constraintTop_toTopOf="@+id/context_list" />
 
@@ -203,10 +204,10 @@
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:addStatesFromChildren="false"
-                app:layout_constraintStart_toStartOf="@+id/confirm_trial"
-                app:layout_constraintEnd_toStartOf="@+id/direction_list"
+                android:contentDescription="@string/hint_plz_chooz_context"
                 app:layout_constraintBottom_toTopOf="@+id/confirm_trial"
-                tools:layout_editor_absoluteY="10dp" />
+                app:layout_constraintEnd_toStartOf="@+id/direction_list"
+                app:layout_constraintStart_toStartOf="@+id/confirm_trial" />
 
             <Button
                 android:id="@+id/confirm_trial"
@@ -225,7 +226,7 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/material_on_background_disabled"
+                android:background="@drawable/background_color"
                 android:visibility="invisible"
 
                 app:layout_constraintBottom_toBottomOf="parent"
