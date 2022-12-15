@@ -116,16 +116,14 @@ class PracticeFragment : Fragment() {
         Score =
             requireView().findViewById<TextView>(R.id.performance_current_trial_score) //11/17 優化
 
-        // Todo:>>> //11/28 新增表現分數標題
         performanceTitle = requireView().findViewById<TextView>(R.id.performance_title)
 
         titleParams = performanceTitle.layoutParams as ViewGroup.MarginLayoutParams
-
         penTargetParams = penTarget.layoutParams as ViewGroup.MarginLayoutParams
         penStartParams = penStartPoint.layoutParams as ViewGroup.MarginLayoutParams
         fingerTargetParams = fingerTarget.layoutParams as ViewGroup.MarginLayoutParams
         fingerStartParams = fingerStartPoint.layoutParams as ViewGroup.MarginLayoutParams
-        // // Todo:>>> //11/28 新增表現分數標題
+
 
 
         u_changeInAriText()     // DEFAULT inAir文字

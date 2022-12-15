@@ -30,38 +30,9 @@ class UniversalFunctions : AppCompatActivity() {
 // TESTFRAGMENT 待整理
 ///////////////////////////////////////////////////////////
 
-
-
-
 //測驗方式
 //var currentTestContext: String = ""
 //val contextList = arrayListOf<String>("請選情境", "Finger", "Pen")
-var finishedContextList = arrayListOf<String>()
-
-
-//測驗方向變數
-var currentTestDirection: String = ""
-
-/* val directionList = arrayListOf<String>(
-     "請選方向",
-     "L_Up",
-     "L_Up_Right",
-     "R_Up",
-     "R_Up_Left",
-     "L_Down",
-     "L_Down_Right",
-     "R_Down",
-     "R_Down_Left",
- )*/
-val directionList = arrayListOf<String>(
-    "請選方向",
-    "R_Up",       //<item>右下至右上</item>
-    "R_Up_Left",  // <item>右下至左上</item>
-    "L_Up",       //<item>左下至左上</item>
-    "L_Up_Right", //<item>左下至右上</item>
-)
-var TestingFinishedList = arrayListOf<String>()
-
 
 //版面相關變數宣告
 //隨機位置相關變數宣告 (每一輪只有5Trial)
@@ -179,7 +150,6 @@ fun calculateScreenParams(
 
 
 //TODO: 以下三行要貼到其他 fragment中
-
 //<variable
 //name="universalFunction"
 //type="com.example.kinesthesia_first_attempt.UniversalFunctionsKt" />
@@ -226,14 +196,38 @@ var trialCondition =
 var condition: String = ""
 
 //測驗選項
-lateinit var testCondition: String  //進到各分頁後 重新宣告
-
 //var testCondition: String = "Practice"
 val testConditionList = listOf<String>("Practice", "Formal")
+lateinit var testCondition: String  //進到各分頁後 重新宣告
 
 val practiceTrialCountList = arrayListOf<String>("8", "7", "6", "5", "4", "3", "2", "1")
 
 //測驗方式
+
+//測驗方向變數
+/* val directionList = arrayListOf<String>(
+     "請選方向",
+     "L_Up",
+     "L_Up_Right",
+     "R_Up",
+     "R_Up_Left",
+     "L_Down",
+     "L_Down_Right",
+     "R_Down",
+     "R_Down_Left",
+ )*/
+val directionList = arrayListOf<String>(
+    "請選方向",
+    "R_Up",       //<item>右下至右上</item>
+    "R_Up_Left",  // <item>右下至左上</item>
+    "L_Up",       //<item>左下至左上</item>
+    "L_Up_Right", //<item>左下至右上</item>
+)
+var currentTestDirection: String = ""
+
+var TestingFinishedList = arrayListOf<String>()
+var finishedContextList = arrayListOf<String>()
+
 var currentTestContext: String = ""
 val contextList = arrayListOf<String>("請選情境", "Finger", "Pen")
 
@@ -316,7 +310,7 @@ lateinit var trialInputSpinner: Spinner
 @SuppressLint("StaticFieldLeak")
 lateinit var contextSpinner: Spinner
 
-//// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
+//此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
 @SuppressLint("StaticFieldLeak")
 lateinit var fingerTarget: ImageView
 
@@ -335,7 +329,7 @@ lateinit var penStartPoint: ImageView
 @SuppressLint("StaticFieldLeak")
 lateinit var penDownArrow: ImageView
 
-//// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
+//此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
 @SuppressLint("StaticFieldLeak")
 lateinit var penUpArrow: ImageView
 
@@ -382,7 +376,7 @@ lateinit var fingerRandomTargetView: ImageView
 lateinit var penRandomTargetView: ImageView
 
 
-//Todo: 正式測驗中ImageView，參數宣告，用於調整VIEW 位置用
+//正式測驗中ImageView，參數宣告，用於調整VIEW 位置用
 lateinit var penTargetParams: ViewGroup.MarginLayoutParams
 lateinit var penStartParams: ViewGroup.MarginLayoutParams
 lateinit var fingerTargetParams: ViewGroup.MarginLayoutParams
@@ -615,41 +609,33 @@ fun u_arrangeData(TargetStringBuffer: StringBuffer,targetList:ArrayList<List<Flo
     return TargetStringBuffer
 }
 
-fun u_savePracticePerformanceToCSV() {
-    //call 整理8trialData
-    arrayListOfTrials = u_combineList()
-    //call function 將List排進buffer
-    u_arrangeData(positionData,arrayListOfTrials)
-    //切割buffer
-    val outputPositionData = positionData.toString().replace("\r", "").split("\n")
-    //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
-    // val outputFileName = "Practice_Performance_$pra
-    // cticeTime.csv"
-    val outputFileName = testCondition +"_Performance_$practiceTime"+".csv"
-    // 存檔: name,List,flag
-    u_outputCsv(outputFileName, outputPositionData, 0)
-}
-
-//TODO: 修改存檔檔名判斷式，
 fun u_savePerformanceToCSV() {
     //call combineList 整理trialData
     arrayListOfTrials = u_combineList()
-
     //call function 將List排進buffer
     u_arrangeData(positionData,arrayListOfTrials)
     //切割buffer
     val outputPositionData = positionData.toString().replace("\r", "").split("\n")
 
     //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
+    //TODO: 修改存檔檔名判斷式 ( 非慣用手、補測、自動化、刺激給法，這些都要更新)
 
-    //TODO: 修改存檔檔名判斷式
-    val outputFileName =
-        "Dominant_"+ testCondition + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
+    var outputFileName = ""
+
+    when(testCondition){
+        testConditionList[0]->{
+            outputFileName = testCondition +"_Performance_$practiceTime"+".csv"
+        }
+        testConditionList[1]->{
+            outputFileName =
+                "Dominant_"+ testCondition + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
+        }
+    }
+
 
     // 存檔: name,List,flag
     u_outputCsv(outputFileName, outputPositionData, 0)
 }   //存檔要改成Direction名稱
-
 
 fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
     //檔案路徑: 目前直接讀在demographic的全域變數，有error再讀viewModel備用
@@ -700,13 +686,12 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
     Toast.makeText(mContextKIN, "$testCondition x $currentTestContext x $currentTestDirection 測驗表現儲存成功", Toast.LENGTH_SHORT).show()
     Log.d("data", "outCSV Success")
 }  // sample from HW
-
 //以上 CSV存檔相關
+
 
 
 //以下測驗流程管理相關
 // Todo:  calculateTrialScoreP(); V 之後還要改輸入 要考量given position
-// Todo:  checkPracticeLimit() V;
 // Todo:  以及正式測驗中，隨機位置的function們
 
 fun u_pressButton() {
@@ -753,12 +738,11 @@ fun u_pressButton() {
         u_clearCurrentTrialRecord() //11/11新版，未驗證
 
         // TODO:整合 正式測驗以及練習測驗的上限檢測function
-        u_checkPracticeLimit()       //檢查是否達到練習次數
+        u_checkTrialLimit()       //檢查是否達到練習次數
         buttonPressedCountsInATrial = 0
     }
     return
 }
-
 
 fun u_addTrialsCount() {
     trialCount++
@@ -842,6 +826,8 @@ fun u_checkTime() {
 
 
 //確認選擇方向、情境、並更新測驗紀錄    //移植補測後 刪掉判斷是否有選過
+//TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
+//TODO: u_confirmSelection　這邊需要增加一個新函式（製作測驗順序隨機列表，每次測驗結束，只要還沒測完ＬＩＳＴ，就再觸發這邊，才能自動化測驗
 fun u_confirmSelection() {
     // TODO: 11/21 正式測驗還包含其他判斷式，需要新增
     // TODO: 11/21 此function 由XML中 運用 fragment binding呼叫，要到每一個對應的xml中，匯入 UniversalFunction
@@ -980,13 +966,10 @@ fun u_checkDirectionTested2() {
     }
 }//判斷是否所有方向都測過 備用只測後四種
 
-// TODO:整合 正式測驗以及練習測驗的上限檢測function，要改FUNCTION名稱
-//checkTrialLimit()
-
 @SuppressLint("SetTextI18n")
-fun u_checkPracticeLimit() {
-
+fun u_checkTrialLimit() {
     var tempCount = 0
+    // 確認 目前condition，設定參數
     when (testCondition) {
         testConditionList[0] -> {
             tempCount = practiceTrialsCount
@@ -1010,14 +993,16 @@ fun u_checkPracticeLimit() {
                     .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
 
                     .setNegativeButton(mContextKIN.resources.getString(R.string.practice_dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
-                        u_savePracticePerformanceToCSV()//儲存測驗表現
+                        //u_savePracticePerformanceToCSV()//儲存測驗表現
+                        u_savePerformanceToCSV()
                         u_clearRecord()  // 清除測驗表現>> 還沒寫完
                         trialCountView.text = "練習次數: $currentTrial / $maxTrailDesire"
                         u_manageVisibility(1)
                         Toast.makeText(mContextKIN, "再試一次", Toast.LENGTH_SHORT).show()
                     }
                     .setPositiveButton(mContextKIN.resources.getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
-                        u_savePracticePerformanceToCSV()// 儲存測驗表現
+                        //u_savePracticePerformanceToCSV()// 儲存測驗表現
+                        u_savePerformanceToCSV()
                         u_clearRecord()  // 清除測驗表現>> 還沒寫完
                         u_goBackToMenu()// 前往測驗選單 ( 維持local) >>可以寫判斷式　改成when根據測驗頁面，換指令　
                     }
@@ -1050,7 +1035,6 @@ fun u_checkPracticeLimit() {
     }
 }
 
-
 fun u_goBackToMenu() {
     Toast.makeText(mContextKIN, "回到測驗選單", Toast.LENGTH_SHORT).show()
     //TODO: 後續 需要根據各情境，調整判斷式，才能正確回到頁面
@@ -1074,7 +1058,6 @@ fun u_goBackToMenu() {
 // TODO: 要新增 trueGivenStartPositionX & trueGivenStartPositionY
 // TODO: 要新增 trueGivenTargetPositionX & trueGivenTargetPositionY
 // TODO: 下面所有的 position 應該要新整成一個 float list
-
 
 // 此函數只處理紀錄位置，不處理位置的隨機分配 & 目標位置給定，不給輸入，直接取用全域變數
 fun u_recordPosition() {
@@ -1610,7 +1593,6 @@ fun u_launchContextSpinner() {
     }
 }
 
-
 fun u_setTargetPosition() {
     var c2tX = 0
     var c2tY = 0
@@ -2090,6 +2072,8 @@ fun u_clearViews() {
 
 
 // Todo, 此function 到正式測驗後，要寫新的，可以多放斜向箭頭
+// Todo, 練習測驗 view只放部分
+// Todo, 新的不同刺激給法頁面，view出現時機要修改，
 fun u_checkContextAndLaunchView(context: String) {
 
     var tempContext = context
@@ -2219,12 +2203,13 @@ fun u_checkContextAndLaunchView(context: String) {
 
 } //輸入currentContext
 
+
+
 fun u_updatePracticeTimeToViewModel() {
     if (practiceTrialsCount >= maxTrailDesire) {
         mainViewModel.setPracticeTime(practiceTime)
     }
 }
-
 
 fun u_manageVisibility(flag: Int) {
 
@@ -2240,8 +2225,6 @@ fun u_manageVisibility(flag: Int) {
             selectButton.visibility = View.INVISIBLE
             contextSpinner.visibility = View.INVISIBLE
             directionSpinner.visibility = View.INVISIBLE
-
-
         }
 
         1 -> {
@@ -2275,7 +2258,6 @@ fun u_manageVisibility(flag: Int) {
 }//管理測驗相關View顯示、可觸控與否
 
 
-// TODO: 進入各頁面前確認有存檔路徑 或 default
 fun u_checkDemographicInputAndUpdateDefault(mActivityKIN: Activity, mContextKIN: Context) {
     //1.檢查viewModel中demographic資料
     //2.確認所有輸入都非空白
@@ -2303,7 +2285,6 @@ fun u_checkDemographicInputAndUpdateDefault(mActivityKIN: Activity, mContextKIN:
     }
 
 }
-
 
 fun u_showCurrentDemographicInputDialog(
     mActivityKIN: Activity,
@@ -2353,7 +2334,6 @@ fun u_showCurrentDemographicInputDialog(
         }
         .show() //creates and then displays the alert dialog.
 }
-
 
 //TODO:設定預設的test存檔路徑，避免CRASH
 fun u_saveDemographic() {

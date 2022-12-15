@@ -169,7 +169,7 @@
                 android:id="@+id/record_position"
                 android:layout_width="165dp"
                 android:layout_height="80dp"
-                android:onClick="@{() -> testFragment.pressButton()}"
+                android:onClick="@{() -> universalFunction.u_pressButton()}"
                 android:text="@string/record_position"
                 android:textSize="30sp"
                 android:visibility="gone"
