@@ -28,7 +28,7 @@ class TestFragment : Fragment() {
         u_hideSystemUI(decorView)
         testCondition =
             testConditionList[1] //  val testConditionList = listOf<String>("Practice","Formal")
-        u_setTrialLimit(testCondition)
+        u_setTrialLimit("5")
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -74,8 +74,6 @@ class TestFragment : Fragment() {
         directionSpinner = requireView().findViewById<View>(R.id.direction_list) as Spinner
 
         // Todo:>>> 待新增測驗方法Spinner (VAP2AP & AP2AP & PP2AP)
-        // Todo:>>> 測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
-
         fingerTarget = requireView().findViewById<ImageView>(R.id.target)
         fingerStartPoint = requireView().findViewById<ImageView>(R.id.start_point)
         fingerDownArrow = requireView().findViewById<ImageView>(R.id.down_arrow)
@@ -83,7 +81,7 @@ class TestFragment : Fragment() {
         penStartPoint = requireView().findViewById<ImageView>(R.id.pen_start_point)
         penDownArrow = requireView().findViewById<ImageView>(R.id.pen_down_arrow)
 
-        //// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
+        //此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
         penUpArrow = requireView().findViewById<ImageView>(R.id.pen_up_arrow)
         penUpLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_left)
         penUpRightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_right)
@@ -109,16 +107,14 @@ class TestFragment : Fragment() {
         touchBoard = requireView().findViewById(R.id.view) as TouchBoard //11/17 優化
         Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score) //11/17 優化
 
-
-        // Todo:>>> //11/28 新增表現分數標題
+        //11/28 新增表現分數標題
         performanceTitle = requireView().findViewById<TextView>(R.id.performance_title)
-
         titleParams = performanceTitle.layoutParams as ViewGroup.MarginLayoutParams
         penTargetParams = penTarget.layoutParams as ViewGroup.MarginLayoutParams
         penStartParams = penStartPoint.layoutParams as ViewGroup.MarginLayoutParams
         fingerTargetParams = fingerTarget.layoutParams as ViewGroup.MarginLayoutParams
         fingerStartParams = fingerStartPoint.layoutParams as ViewGroup.MarginLayoutParams
-        // // Todo:>>> //11/28 新增表現分數標題
+
 
 
         u_changeInAriText()     // DEFAULT inAir文字
@@ -148,16 +144,13 @@ class TestFragment : Fragment() {
         u_changeText()
         u_displayScoreInText(scoreListForDisplay, 0, Score)  // flag = 0  顯示預設文字
 
-        // Todo: 需要新增判斷式>>>>避免叫出不必要的spinner
-
+        // Todo: 需要新增判斷式>>>>避免叫出不必要的spinner >> TrialInputSpinner for 補測、練習  > 正式不需要
         // Todo: 需要新增一個測驗方法spinner，VAP2AP & AP2AP & PP2AP，並新增根據選擇結果的，view調整判斷式，存檔名稱調整判斷式
-        // Todo://TrialInputSpinner for 補測、練習  > 正式測驗刪掉
+
         u_launchTrialInputSpinner()
         u_launchDirectionSpinner()
         u_launchContextSpinner()   //設定測驗情境(手指或握筆) > 必須
 
-
-        // Todo://要確認斜箭頭顯示正確
         u_checkContextAndLaunchView(com.example.kinesthesia_first_attempt.currentTestContext)
 
         // 確認人口學資料

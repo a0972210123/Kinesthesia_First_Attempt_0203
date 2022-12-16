@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Kinesthesia_First_Attempt</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
@@ -94,48 +93,36 @@
     <string name="practice_dialog_title">測驗練習</string>
     <string name="practice_dialog_message">已完成基本練習次數</string>
     <string name="practice_dialog_try_again">再試一次</string>
-    <string name="practice_dialog_back_to_menu">前往選單</string>
 
-
-    <string name="addition_test_dialog_title">補充測驗</string>
-    <string name="addition_test_dialog_message">已完成本次補測內容</string>
-    <string name="addition_test_dialog_next_condition">更換補測選項</string>
+    <string name="addition_dialog_title">補充測驗</string>
+    <string name="addition_dialog_message">已完成本次補測內容</string>
+    <string name="dialog_try_again">再試一次</string>
+    <string name="addition_dialog_next_condition">更換補測選項</string>
+    <string name="dialog_back_to_menu">前往選單</string>
 
     <string name="nondominant_dialog_title">非慣用手測驗</string>
     <string name="nondominant_dialog_message">已完成本次非慣用手測驗內容</string>
     <string name="nondominant_dialog_next_condition">更換測驗選項</string>
 
 
-
-
     <string name="test_dialog_title">正式測驗</string>
     <string name="test_dialog_message">已完成本方向測驗次數</string>
-
     <string name="test_dialog_message_finished_all_direction">已完成所有測驗方向</string>
     <string name="test_dialog_message_finished_all_context">已完成所有測驗情境</string>
-
-
     <string name="test_dialog_next_context">更換情境</string>
     <string name="test_dialog_next_condition">更換方向</string>
-    <string name="test_dialog_back_to_menu">前往選單</string>
 
 
     <string name="current_position">Current Position: X= f% Y= f%</string>
-
-
     <string name="start_position">Start Position: X=d% Y=d%</string>
     <string name="test_position">Test Position:  X=d% Y=d%</string>
     <string name="rest_position">Rest Position: X=d% Y=d%</string>
     <string name="response_position">Response Position: X=d% Y=d%</string>
 
-
     <string name="select_direction">確認選擇</string>
-
     <string name="record_position">紀錄位置</string>
     <string name="next_trial">Save Trial</string>
-
     <string name="instruction_title">步驟說明</string>
-
     <string name="practice_count">練習次數:</string>
 
     <string name="trial_count">測驗次數:</string>

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="universalFunction"
+            type="com.example.kinesthesia_first_attempt.UniversalFunctionsKt" />
         <variable
             name="nondominantFragment"
             type="com.example.kinesthesia_first_attempt.NondominantFragment" />
@@ -44,14 +46,11 @@
             android:id="@+id/current_position_field"
             android:layout_width="400dp"
             android:layout_height="30dp"
-
             android:text="Current Position: X=0.0, Y=0.0 "
-
             android:textSize="@dimen/performance_text_size"
-
             app:layout_constraintEnd_toEndOf="@+id/performance_title"
             app:layout_constraintStart_toStartOf="@+id/performance_title"
-            app:layout_constraintTop_toBottomOf="@+id/performance_title" />
+            app:layout_constraintTop_toBottomOf="@+id/in_air_testing" />
 
 
         <TextView
@@ -168,7 +167,7 @@
             android:id="@+id/record_position"
             android:layout_width="165dp"
             android:layout_height="80dp"
-            android:onClick="@{() -> nondominantFragment.pressButton()}"
+            android:onClick="@{() -> universalFunction.u_pressButton()}"
             android:text="@string/record_position"
             android:textSize="30sp"
             android:visibility="gone"
@@ -183,6 +182,7 @@
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:addStatesFromChildren="false"
+            android:contentDescription="@string/hint_plz_chooz_direction"
             app:layout_constraintStart_toEndOf="@id/context_list"
             app:layout_constraintTop_toTopOf="@+id/context_list" />
 
@@ -192,6 +192,7 @@
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:addStatesFromChildren="false"
+            android:contentDescription="@string/hint_plz_set_trials"
             app:layout_constraintEnd_toStartOf="@id/context_list"
             app:layout_constraintTop_toTopOf="@+id/context_list" />
 
@@ -200,19 +201,20 @@
             android:id="@+id/context_list"
             android:layout_width="200dp"
             android:layout_height="50dp"
+            android:contentDescription="@string/hint_plz_chooz_context"
             android:addStatesFromChildren="false"
-            app:layout_constraintBottom_toTopOf="@+id/select_direction"
-            app:layout_constraintEnd_toEndOf="@id/select_direction"
-            app:layout_constraintStart_toStartOf="@id/select_direction" />
+            app:layout_constraintBottom_toTopOf="@+id/confirm_trial"
+            app:layout_constraintEnd_toEndOf="@id/confirm_trial"
+            app:layout_constraintStart_toStartOf="@id/confirm_trial" />
 
 
         <Button
-            android:id="@+id/select_direction"
+            android:id="@+id/confirm_trial"
             android:layout_width="200dp"
             android:layout_height="50dp"
 
             android:layout_marginTop="60dp"
-            android:onClick="@{() -> nondominantFragment.confirmSelection()}"
+            android:onClick="@{() -> universalFunction.u_confirmSelection()}"
             android:text="@string/select_direction"
 
             android:textSize="18sp"
@@ -224,10 +226,8 @@
         <com.example.kinesthesia_first_attempt.TouchBoard
             android:id="@+id/view"
             android:layout_width="match_parent"
-
-
             android:layout_height="match_parent"
-            android:background="@color/material_on_background_disabled"
+            android:background="@drawable/background_color"
             android:visibility="invisible"
 
             app:layout_constraintBottom_toBottomOf="parent"
@@ -237,6 +237,16 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
             tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/in_air_testing"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:text="InAir Data Testing"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintTop_toBottomOf="@+id/performance_title"
+            app:layout_constraintEnd_toEndOf="@+id/performance_title"
+            app:layout_constraintStart_toStartOf="@+id/performance_title" />
 
         <ImageView
             android:id="@+id/target"

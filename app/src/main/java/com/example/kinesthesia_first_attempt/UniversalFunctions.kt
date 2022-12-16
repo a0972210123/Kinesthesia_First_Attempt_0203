@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
@@ -148,6 +149,8 @@ fun calculateScreenParams(
 
 ///////////////////////////////////////////////////////////
 
+//TODO: 整理 非慣用手、補測、自動測驗fragment
+
 
 //TODO: 以下三行要貼到其他 fragment中
 //<variable
@@ -197,7 +200,7 @@ var condition: String = ""
 
 //測驗選項
 //var testCondition: String = "Practice"
-val testConditionList = listOf<String>("Practice", "Formal")
+val testConditionList = listOf<String>("Practice", "Formal", "Addition","Non_dominant","AutoRecord")
 lateinit var testCondition: String  //進到各分頁後 重新宣告
 
 val practiceTrialCountList = arrayListOf<String>("8", "7", "6", "5", "4", "3", "2", "1")
@@ -497,9 +500,34 @@ fun u_arrangeInAirData() {
 fun u_saveInAirDataToCSV(inAirData: StringBuffer) {
     val outputInAirData = inAirData.toString().replace("\r", "").split("\n")
     //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
-    val outputFileName = "{$testCondition}_InAir_Trial_$currentTrial.csv"
+    var outputFileName = ""
+
+
     // 存檔: name,List,flag
     // Todo: 新增判斷式，若沒有檔名輸入，則存成TESTING
+
+    when(testCondition){
+        testConditionList[0]->{
+            outputFileName = testCondition + "_" + currentTestContext +"_Performance_$practiceTime"+"_InAirTrial_"+currentTrial.toString()+".csv"
+        }
+        testConditionList[1]->{
+            outputFileName =
+                "Dominant_"+ testCondition + "_" + currentTestContext + "_" + currentTestDirection+"_InAirTrial_"+currentTrial.toString()+".csv"
+        }
+        testConditionList[2]->{
+            outputFileName =
+                "Dominant_"+ testCondition + "_" + currentTestContext + "_" + currentTestDirection+"_InAirTrial_"+currentTrial.toString()+".csv"
+        }
+
+        testConditionList[3]->{
+            outputFileName =
+                "nonDominant_"+ testCondition + "_" + currentTestContext + "_" + currentTestDirection+"_InAirTrial_"+currentTrial.toString()+".csv"
+        }
+
+    }
+
+
+
     u_outputInAirCsv(outputFileName, outputInAirData, 0)
 }
 
@@ -568,6 +596,31 @@ fun u_combineList(): ArrayList<List<Float>> {
                 trial5list,
             )
         }
+        testConditionList[2]->{
+            tempList = arrayListOf(
+                trial1list,
+                trial2list,
+                trial3list,
+                trial4list,
+                trial5list,
+                trial6list,
+                trial7list,
+                trial8list
+            )
+        }
+        testConditionList[3]->{
+            tempList = arrayListOf(
+                trial1list,
+                trial2list,
+                trial3list,
+                trial4list,
+                trial5list,
+                trial6list,
+                trial7list,
+                trial8list
+            )
+        }
+
     }
     return tempList
 }
@@ -624,12 +677,21 @@ fun u_savePerformanceToCSV() {
 
     when(testCondition){
         testConditionList[0]->{
-            outputFileName = testCondition +"_Performance_$practiceTime"+".csv"
+            outputFileName = testCondition + "_" + currentTestContext  +"_Performance_$practiceTime"+".csv"
         }
         testConditionList[1]->{
             outputFileName =
                 "Dominant_"+ testCondition + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
         }
+        testConditionList[2]->{
+            outputFileName =
+                "Dominant_"+ testCondition + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
+        }
+        testConditionList[3]->{
+            outputFileName =
+                "nonDominant_"+ testCondition + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
+        }
+
     }
 
 
@@ -732,6 +794,19 @@ fun u_pressButton() {
                     u_setTargetPosition()// 重設目標位置
                 }
             }
+            testConditionList[2] ->{
+                if (trialCount == 5) { //第五trail結束不用再設目標
+                } else {
+                    u_setTargetPosition()// 重設目標位置
+                }
+            }
+            testConditionList[3] ->{
+                if (trialCount == 5) { //第五trail結束不用再設目標
+                } else {
+                    u_setTargetPosition()// 重設目標位置
+                }
+            }
+
         }
 
         u_saveCurrentTrialRecord()
@@ -829,25 +904,23 @@ fun u_checkTime() {
 //TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
 //TODO: u_confirmSelection　這邊需要增加一個新函式（製作測驗順序隨機列表，每次測驗結束，只要還沒測完ＬＩＳＴ，就再觸發這邊，才能自動化測驗
 fun u_confirmSelection() {
-    // TODO: 11/21 正式測驗還包含其他判斷式，需要新增
-    // TODO: 11/21 此function 由XML中 運用 fragment binding呼叫，要到每一個對應的xml中，匯入 UniversalFunction
-    val contextChecked = u_checkContextInput()
-    val directionChecked = u_checkDirectionInput()
-
-    if (contextChecked == 1) {
-        if (directionChecked == 1) {
-            TestingFinishedList.add(currentTestDirection)
-            //finishedcontextList.add(currentTestContext) >>改到測完所有方向
-            u_randomThePosition()
-            u_setTargetPosition()
-            u_changeText()
-            u_manageVisibility(0)  //顯示觸控板及記錄紐
 
             when (testCondition) {
                 "Practice" -> {
                     Toast.makeText(mContextKIN, "開始測驗練習", Toast.LENGTH_SHORT).show()
                 }
                 "Formal" -> {
+                    val contextChecked = u_checkContextInput()
+                    val directionChecked = u_checkDirectionInput()
+                    if (contextChecked == 1) {
+                        if (directionChecked == 1) {
+                            TestingFinishedList.add(currentTestDirection)
+                            //finishedcontextList.add(currentTestContext) >>改到測完所有方向
+                            u_randomThePosition()
+                            u_setTargetPosition()
+                        }
+                    }
+
                     Toast.makeText(
                         mContextKIN,
                         "開始正式測驗，項目： $currentTestContext & $currentTestDirection ",
@@ -856,8 +929,12 @@ fun u_confirmSelection() {
                 }
             }
 
-        }
-    }
+
+            u_changeText()
+            u_manageVisibility(0)  //顯示觸控板及記錄紐
+
+
+
 }
 
 fun u_checkContextInput(): Int {
@@ -904,7 +981,7 @@ fun u_checkContextTested() {
                 mContextKIN.resources.getString(R.string.test_dialog_message_finished_all_context)
             ) //Set the message to show the data
             .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
-            .setPositiveButton(mContextKIN.resources.getString(R.string.test_dialog_back_to_menu)) { _, _ ->
+            .setPositiveButton(mContextKIN.resources.getString(R.string.dialog_back_to_menu)) { _, _ ->
                 Toast.makeText(mContextKIN, "請查驗資料或補充測驗", Toast.LENGTH_SHORT).show()
                 finishedContextList = arrayListOf<String>()
                 u_goBackToMenu()
@@ -973,12 +1050,22 @@ fun u_checkTrialLimit() {
     when (testCondition) {
         testConditionList[0] -> {
             tempCount = practiceTrialsCount
-            maxTrailDesire = MAX_PRACTICE_TRIAL
+            //maxTrailDesire = MAX_PRACTICE_TRIAL
         }
         testConditionList[1] -> {
             tempCount = trialCount
             maxTrailDesire = MAX_FORMAL_TRIAL
         }
+        testConditionList[2] -> { //Addition
+            tempCount  = trialCount
+            //maxTrailDesire = MAX_PRACTICE_TRIAL
+        }
+        testConditionList[3] -> { //Addition
+            tempCount  = trialCount
+            //maxTrailDesire = MAX_PRACTICE_TRIAL
+        }
+
+
     }
 
     if (tempCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
@@ -1000,7 +1087,7 @@ fun u_checkTrialLimit() {
                         u_manageVisibility(1)
                         Toast.makeText(mContextKIN, "再試一次", Toast.LENGTH_SHORT).show()
                     }
-                    .setPositiveButton(mContextKIN.resources.getString(R.string.practice_dialog_back_to_menu)) { _, _ ->
+                    .setPositiveButton(mContextKIN.resources.getString(R.string.dialog_back_to_menu)) { _, _ ->
                         //u_savePracticePerformanceToCSV()// 儲存測驗表現
                         u_savePerformanceToCSV()
                         u_clearRecord()  // 清除測驗表現>> 還沒寫完
@@ -1011,7 +1098,6 @@ fun u_checkTrialLimit() {
 
             testConditionList[1] -> {
                 u_checkDirectionTested() // 確認完成所有測驗方向
-
                 MaterialAlertDialogBuilder(mActivityKIN)
                     .setTitle(mContextKIN.resources.getString(R.string.test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
                     .setMessage(
@@ -1030,6 +1116,54 @@ fun u_checkTrialLimit() {
                     }
                     .show() //creates and then displays the alert dialog.
             }
+
+            testConditionList[2] ->{
+
+                MaterialAlertDialogBuilder(mActivityKIN)
+                    .setTitle(mContextKIN.resources.getString(R.string.addition_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+                    .setMessage(mContextKIN.resources.getString(R.string.addition_dialog_message)) //Set the message to show the data
+                    .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
+                    .setNegativeButton(mContextKIN.resources.getString(R.string.dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
+                        //u_savePracticePerformanceToCSV()//儲存測驗表現
+                        u_savePerformanceToCSV()
+                        u_clearRecord()  // 清除測驗表現>> 還沒寫完
+                        trialCountView.text = "練習次數: $currentTrial / $maxTrailDesire"
+                        u_manageVisibility(1)
+                        Toast.makeText(mContextKIN, "再試一次", Toast.LENGTH_SHORT).show()
+                    }
+                    .setPositiveButton(mContextKIN.resources.getString(R.string.dialog_back_to_menu)) { _, _ ->
+                        //u_savePracticePerformanceToCSV()// 儲存測驗表現
+                        u_savePerformanceToCSV()
+                        u_clearRecord()  // 清除測驗表現>> 還沒寫完
+                        u_goBackToMenu()// 前往測驗選單 ( 維持local) >>可以寫判斷式　改成when根據測驗頁面，換指令　
+                    }
+                    .show() //creates and then displays the alert dialog.
+            }
+
+            testConditionList[3] ->{
+
+                MaterialAlertDialogBuilder(mActivityKIN)
+                    .setTitle(mContextKIN.resources.getString(R.string.nondominant_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+                    .setMessage(mContextKIN.resources.getString(R.string.nondominant_dialog_message)) //Set the message to show the data
+                    .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
+                    .setNegativeButton(mContextKIN.resources.getString(R.string.dialog_try_again)) { _, _ ->  //Add two text buttons EXIT and PLAY AGAIN using the methods
+                        //u_savePracticePerformanceToCSV()//儲存測驗表現
+                        u_savePerformanceToCSV()
+                        u_clearRecord()  // 清除測驗表現>> 還沒寫完
+                        trialCountView.text = "練習次數: $currentTrial / $maxTrailDesire"
+                        u_manageVisibility(1)
+                        Toast.makeText(mContextKIN, "再試一次", Toast.LENGTH_SHORT).show()
+                    }
+                    .setPositiveButton(mContextKIN.resources.getString(R.string.dialog_back_to_menu)) { _, _ ->
+                        //u_savePracticePerformanceToCSV()// 儲存測驗表現
+                        u_savePerformanceToCSV()
+                        u_clearRecord()  // 清除測驗表現>> 還沒寫完
+                        u_goBackToMenu()//
+                    }
+                    .show() //creates and then displays the alert dialog.
+            }
+
+
         }
 
     }
@@ -1040,12 +1174,20 @@ fun u_goBackToMenu() {
     //TODO: 後續 需要根據各情境，調整判斷式，才能正確回到頁面
 
     when (testCondition) {
-        "Practice" -> {
+        testConditionList[0] -> {
             navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_practiceFragment_to_testMenuFragment)
         }
 
-        "Formal" -> {
+        testConditionList[1]  -> {
             navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_testFragment_to_testMenuFragment)
+        }
+
+        testConditionList[2]  -> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_additionFragment_to_testMenuFragment)
+        }
+
+        testConditionList[3]  -> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_nondominantFragment_to_testMenuFragment)
         }
 
     }
@@ -1203,6 +1345,12 @@ fun u_resetTrials(){
         testConditionList[1] ->{
             u_reset5Trial()
         }
+        testConditionList[2] ->{
+            u_reset8Trial()
+        }
+        testConditionList[3] ->{
+            u_reset8Trial()
+        }
     }
 }
 
@@ -1248,15 +1396,18 @@ fun u_clearRecord() {
 fun u_saveCurrentTrialRecord() {
     //確認目前practiceTrialsCount
     var tempCount = 0
-    when (testCondition) {
-        testConditionList[0] -> {
-            tempCount = practiceTrialsCount
-        }
-        testConditionList[1] -> {
-            tempCount = trialCount
-            maxTrailDesire = MAX_FORMAL_TRIAL
-        }
-    }
+//    when (testCondition) {
+//        testConditionList[0] -> {
+//            tempCount = practiceTrialsCount
+//        }
+//        testConditionList[1] -> {
+//            tempCount = trialCount
+//            maxTrailDesire = MAX_FORMAL_TRIAL
+//        }
+//        testConditionList[2] ->{
+//            tempCount = trialCount
+//        }
+//    }
 
     when (tempCount) {
         1 -> {
@@ -1551,21 +1702,52 @@ fun u_launchTrialInputSpinner() {
 
 fun u_setTrialLimit(trialLimitInput: String) {
 
+    //val testConditionList = listOf<String>("Practice", "Formal", "Addition","Non_dominant","Dominant","AutoRecord")
     when (testCondition) {
-        "Practice" -> {
+        testConditionList[0] -> { //practice
             when (trialLimitInput) {
                 "請選次數" -> {
                     maxTrailDesire = 1
-                    Toast.makeText(mContextKIN, "請輸入練習次數，預設為1次", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(mContextKIN, "請輸入次數，預設為 1 次", Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     maxTrailDesire = trialLimitInput.toInt()
                 }
             }
         }
-        "Formal" -> {
+        testConditionList[1] -> {  //formal
             maxTrailDesire = MAX_FORMAL_TRIAL
         }
+        testConditionList[2] -> {  //Addition
+            when (trialLimitInput) {
+                "請選次數" -> {
+                    maxTrailDesire = 1
+                    Toast.makeText(mContextKIN, "請輸入次數，預設為 1 次", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    maxTrailDesire = trialLimitInput.toInt()
+                }
+            }
+        }
+        testConditionList[3] -> {  //Non_dominant
+            when (trialLimitInput) {
+                "請選次數" -> {
+                    maxTrailDesire = 1
+                    Toast.makeText(mContextKIN, "請輸入次數，預設為 1 次", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    maxTrailDesire = trialLimitInput.toInt()
+                }
+            }
+        }
+
+
+        testConditionList[4] -> {  //AutoRecord
+            maxTrailDesire = MAX_FORMAL_TRIAL
+        }
+
+
+
     }
 
 }  //可直接移植到補測
@@ -2134,7 +2316,14 @@ fun u_checkContextAndLaunchView(context: String) {
                         }
                     }
                 }
+                //testConditionList = listOf<String>("Practice", "Formal", "Addition","Non_dominant","Dominant","AutoRecord")
                 testConditionList[1]->{
+                    u_setDirection(currentTestDirection)
+                }
+                testConditionList[2]->{
+                    u_setDirection(currentTestDirection)
+                }
+                testConditionList[3]->{
                     u_setDirection(currentTestDirection)
                 }
             }
@@ -2183,6 +2372,12 @@ fun u_checkContextAndLaunchView(context: String) {
                 testConditionList[1]->{
                     u_setDirection(currentTestDirection)
                 }
+                testConditionList[2]->{
+                    u_setDirection(currentTestDirection)
+                }
+                testConditionList[3]->{
+                    u_setDirection(currentTestDirection)
+                }
             }
             ///////////////////////////////////////////
             calibrateWidth = TandSCalibrate
@@ -2190,14 +2385,23 @@ fun u_checkContextAndLaunchView(context: String) {
     }
 
 
+    /// 正式測驗/練習測驗/其他頁面最大差別
+    when(testCondition){
+        testConditionList[0]->{
+            trialInputSpinner.visibility = View.VISIBLE
+            fingerRandomTargetView.visibility = View.GONE
+            penRandomTargetView.visibility = View.GONE
+        }
+        testConditionList[1]->{
+            trialInputSpinner.visibility = View.GONE
+        }
+        testConditionList[2]->{
+            trialInputSpinner.visibility = View.VISIBLE
+        }
+        testConditionList[3]->{
+            trialInputSpinner.visibility = View.VISIBLE
+        }
 
-    /// 正式測驗頷練習測驗最大差別
-    if (testCondition == "Practice") {
-        trialInputSpinner.visibility = View.VISIBLE
-        fingerRandomTargetView.visibility = View.GONE
-        penRandomTargetView.visibility = View.GONE
-    } else {
-        trialInputSpinner.visibility = View.GONE
     }
 
 
@@ -2258,11 +2462,11 @@ fun u_manageVisibility(flag: Int) {
 }//管理測驗相關View顯示、可觸控與否
 
 
+// 進入各頁面前確認有存檔路徑 或 default
 fun u_checkDemographicInputAndUpdateDefault(mActivityKIN: Activity, mContextKIN: Context) {
     //1.檢查viewModel中demographic資料
     //2.確認所有輸入都非空白
     //3.提供default數值 (TEST)
-
     //val mainViewModel =  MainViewModel()
 
     if (mainViewModel.outputFilePath.value.isNullOrEmpty()) {

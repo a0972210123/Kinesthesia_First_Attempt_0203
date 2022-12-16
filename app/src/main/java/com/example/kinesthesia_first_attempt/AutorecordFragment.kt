@@ -140,7 +140,7 @@ class AutorecordFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
+
             }
         }
         //以上:z; 方向選單CODE: arrayList已經移置string ,name: direction_list
@@ -166,7 +166,7 @@ class AutorecordFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
+
             }
         }
     }
@@ -191,7 +191,7 @@ class AutorecordFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
+
             }
         }
     }
@@ -684,7 +684,7 @@ class AutorecordFragment : Fragment() {
                     getString(R.string.test_dialog_message_finished_all_context)
                 ) //Set the message to show the data
                 .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
-                .setPositiveButton(getString(R.string.test_dialog_back_to_menu)) { _, _ ->
+                .setPositiveButton(getString(R.string.dialog_back_to_menu)) { _, _ ->
                     Toast.makeText(activity, "請查驗資料或補充測驗", Toast.LENGTH_SHORT).show()
                     finishedContextList = arrayListOf<String>()
                     goBackToMenu()
@@ -1322,13 +1322,13 @@ class AutorecordFragment : Fragment() {
             //checkDirectionTested() // 確認完成所有測驗方向
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.addition_test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+                .setTitle(getString(R.string.addition_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
                 .setMessage(
-                    getString(R.string.addition_test_dialog_message)
+                    getString(R.string.addition_dialog_message)
                 ) //Set the message to show the data
                 .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
 
-                .setNegativeButton(getString(R.string.addition_test_dialog_next_condition)) { _, _ ->
+                .setNegativeButton(getString(R.string.addition_dialog_next_condition)) { _, _ ->
                     savePracticePerformanceToCSV()//儲存測驗表現
                     clearRecord()  // 清除測驗表現
                     formalTrialCount.text = "測驗次數: $currentTrial / $maxTrailDesire "
@@ -1336,7 +1336,7 @@ class AutorecordFragment : Fragment() {
                     Toast.makeText(activity, "更換情境或方向", Toast.LENGTH_SHORT).show()
                 }
 
-                .setPositiveButton(getString(R.string.test_dialog_back_to_menu)) { _, _ ->
+                .setPositiveButton(getString(R.string.dialog_back_to_menu)) { _, _ ->
                     savePracticePerformanceToCSV()//儲存測驗表現
                     clearRecord()  // 清除測驗表現
                     //formalTrialCount.text = "測驗次數: $currentTrial / $maxTrailDesire "

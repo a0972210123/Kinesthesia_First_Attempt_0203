@@ -49,10 +49,9 @@
             android:layout_height="wrap_content"
             android:text="InAir Data Testing"
             android:textSize="@dimen/performance_text_size"
-            app:layout_constraintBottom_toTopOf="@+id/instruction_title"
-            app:layout_constraintEnd_toEndOf="@+id/instruction_title"
-            app:layout_constraintStart_toStartOf="@+id/instruction_title" />
-
+            app:layout_constraintTop_toBottomOf="@+id/performance_title"
+            app:layout_constraintEnd_toEndOf="@+id/performance_title"
+            app:layout_constraintStart_toStartOf="@+id/performance_title" />
 
         <TextView
             android:id="@+id/instruction_title"
@@ -109,7 +108,7 @@
             android:textSize="@dimen/performance_text_size"
             app:layout_constraintEnd_toEndOf="@+id/performance_title"
             app:layout_constraintStart_toStartOf="@+id/performance_title"
-            app:layout_constraintTop_toBottomOf="@+id/performance_title" />
+            app:layout_constraintTop_toBottomOf="@+id/in_air_testing" />
 
 
         <TextView

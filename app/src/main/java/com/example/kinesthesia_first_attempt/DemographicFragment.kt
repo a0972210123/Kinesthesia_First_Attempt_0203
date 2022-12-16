@@ -94,7 +94,7 @@ class DemographicFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                //TODO("Not yet implemented")
+
             }
         }
     }
@@ -188,8 +188,6 @@ class DemographicFragment : Fragment() {
     //<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     //<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
-    //TODO:設定預設的test存檔路徑，避免CRASH
     fun saveDemographic() {
         // 整理人口學資料段落
         val outputName = getString(R.string.your_name, binding.viewModel?.name?.value)

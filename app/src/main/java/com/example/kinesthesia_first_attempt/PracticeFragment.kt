@@ -29,7 +29,9 @@ class PracticeFragment : Fragment() {
         u_hideSystemUI(decorView) //11/11 測試
         // hideSystemUI() //修改前
         testCondition = testConditionList[0] //  val testConditionList = listOf<String>("Practice","Formal")
-
+        // 進入新測驗時，先清掉，避免干擾
+        TestingFinishedList = arrayListOf<String>()
+        finishedContextList = arrayListOf<String>()
     }//onCreate end
 
 

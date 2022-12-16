@@ -26,10 +26,6 @@ class TestMenuFragment : Fragment() {
     private lateinit var binding: FragmentTestMenuBinding
 
 
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val decorView = requireActivity().window.decorView
@@ -52,14 +48,14 @@ class TestMenuFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.apply {
+        binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
             //sendButton.setOnClickListener { sendOrder() }
             testMenuFragment = this@TestMenuFragment //使用listenser binding，用UI button 在xml中設定onclick
         }
 
-        Log.d("testMainViewModel", "TestMenuFragment created!")
+        Log.d("lifecycle", "TestMenuFragment created!")
     }
 
 
@@ -74,8 +70,6 @@ class TestMenuFragment : Fragment() {
         //使用以下code來抓取navController，用findNavController().navigate()，並輸入"動作的ID"。也就是要執行的nav動作(要和nav_graph.xml相同
         findNavController().navigate(R.id.action_testMenuFragment_to_practiceFragment)
     }
-
-
 
 
     fun goToFormal() {
