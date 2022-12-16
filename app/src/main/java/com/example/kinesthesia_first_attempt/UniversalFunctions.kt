@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
@@ -1396,18 +1395,23 @@ fun u_clearRecord() {
 fun u_saveCurrentTrialRecord() {
     //確認目前practiceTrialsCount
     var tempCount = 0
-//    when (testCondition) {
-//        testConditionList[0] -> {
-//            tempCount = practiceTrialsCount
-//        }
-//        testConditionList[1] -> {
-//            tempCount = trialCount
-//            maxTrailDesire = MAX_FORMAL_TRIAL
-//        }
-//        testConditionList[2] ->{
-//            tempCount = trialCount
-//        }
-//    }
+    when (testCondition) {
+        testConditionList[0] -> {
+            tempCount = practiceTrialsCount
+        }
+        testConditionList[1] -> {
+            tempCount = trialCount
+        }
+        testConditionList[2] ->{
+            tempCount = trialCount
+        }
+        testConditionList[3] -> {
+            tempCount = trialCount
+        }
+        testConditionList[4] ->{
+            tempCount = trialCount
+        }
+    }
 
     when (tempCount) {
         1 -> {
@@ -1466,7 +1470,7 @@ fun u_saveTrialToList(): List<Float> {
 // 1-8為受試者實際平板上觸摸的點
 // 9-12為程式給定的座標點
 // 這9-10座標位置，要從前面的程式碼抓出來
-fun u_comineRawDataToFloatList(
+fun u_combineRawDataToFloatList(
     startPositionX: Float, startPositionY: Float,
     testPositionX: Float, testPositionY: Float,
     restPositionX: Float, restPositionY: Float,
@@ -1614,7 +1618,7 @@ fun u_changeText() {
 
     trialCountView.text = "測驗次數: $currentTrial / $maxTrailDesire"
 
-    // Todo: 指導語部分之後可以改到 Rstring中，也記得要改成新的指導語 ( VAP2AP, AP2AP, PP2AP)
+    // Todo: 指導語部分之後可以改到 R-string中，也記得要改成新的指導語 ( VAP2AP, AP2AP, PP2AP)
     val instructionList = arrayListOf(
         "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動至 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
         "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動到 目標位置 上，" + "\n" + "確認動作停止後按下紀錄。",
@@ -1848,7 +1852,7 @@ fun u_setTargetRandomPosition(c2tX: Int, c2tY: Int) {
     )
 }  //在方向參數基礎上，加上隨機位置參數
 
-// 此funciton 應在 confrim selection中呼叫
+// 此function 應在 confirm selection中呼叫
 fun u_randomThePosition() {
     //這邊會決定出來的數值範圍寬度
     val tempWidth = ((-targetBoxSize / 2)..(targetBoxSize / 2) step targetStep).shuffled()
@@ -2572,7 +2576,7 @@ fun u_saveDemographic() {
         SimpleDateFormat("HH_mm_ss", Locale.getDefault()) //H 時 在一天中 (0~23) // m 分 // s 秒
     val timeStampCalendar = Calendar.getInstance()
     timeStamp =
-        timeStampFormatter.format(timeStampCalendar.time).toString() //當日時間  //需傳到viewmodel
+        timeStampFormatter.format(timeStampCalendar.time).toString() //當日時間  //需傳到viewModel
 
     /////建立檔案資料夾段落
 
