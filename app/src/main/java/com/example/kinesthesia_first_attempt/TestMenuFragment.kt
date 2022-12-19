@@ -31,6 +31,7 @@ class TestMenuFragment : Fragment() {
         val decorView = requireActivity().window.decorView
         u_showSystemUI(decorView)
         Log.d("testMainViewModel", "TestMenuFragment onCreate!")
+        //printScreenParameters ()
     }
 
     override fun onCreateView(

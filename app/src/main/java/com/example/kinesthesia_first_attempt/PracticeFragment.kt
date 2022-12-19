@@ -28,10 +28,13 @@ class PracticeFragment : Fragment() {
         val decorView = requireActivity().window.decorView
         u_hideSystemUI(decorView) //11/11 測試
         // hideSystemUI() //修改前
-        testCondition = testConditionList[0] //  val testConditionList = listOf<String>("Practice","Formal")
+        testCondition =
+            testConditionList[0] //  val testConditionList = listOf<String>("Practice","Formal")
         // 進入新測驗時，先清掉，避免干擾
         TestingFinishedList = arrayListOf<String>()
         finishedContextList = arrayListOf<String>()
+
+        printScreenParameters()
     }//onCreate end
 
 
@@ -42,9 +45,9 @@ class PracticeFragment : Fragment() {
         //val fragmentBinding = FragmentPracticeBinding.inflate(inflater, container, false)
         //binding = fragmentBinding
         //return fragmentBinding.root
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_practice, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_practice, container, false)
         //binding.lifecycleOwner = this
-       return binding.root
+        return binding.root
 
     } //onCreateView end
 
@@ -90,7 +93,7 @@ class PracticeFragment : Fragment() {
         penStartPoint = requireView().findViewById<ImageView>(R.id.pen_start_point)
         penDownArrow = requireView().findViewById<ImageView>(R.id.pen_down_arrow)
 
-        //// Todo: 此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
+        //此段重要，為測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
         penUpArrow = requireView().findViewById<ImageView>(R.id.pen_up_arrow)
         penUpLeftArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_left)
         penUpRightArrow = requireView().findViewById<ImageView>(R.id.pen_arrow_to_up_right)
@@ -127,6 +130,9 @@ class PracticeFragment : Fragment() {
         fingerStartParams = fingerStartPoint.layoutParams as ViewGroup.MarginLayoutParams
 
 
+        //TODO: 確認最後要用哪一種格子
+        TargetArea = requireView().findViewById<ImageView>(R.id.target_square_black)
+        u_setSquareOfTargetArea()
 
         u_changeInAriText()     // DEFAULT inAir文字
         //* new 下筆時的紀錄
@@ -152,7 +158,7 @@ class PracticeFragment : Fragment() {
 
         //更新文字view
         u_changeText()
-        u_displayScoreInText(scoreListForDisplay,0, Score)  // flag = 0  顯示預設文字
+        u_displayScoreInText(scoreListForDisplay, 0, Score)  // flag = 0  顯示預設文字
 
         // Todo: 需要新增一個測驗方法spinner，VAP2AP & AP2AP & PP2AP，並新增根據選擇結果的，view調整判斷式，存檔名稱調整判斷式
         u_launchTrialInputSpinner()
@@ -160,7 +166,7 @@ class PracticeFragment : Fragment() {
         u_checkContextAndLaunchView(currentTestContext)
 
         // 確認人口學資料
-        u_checkDemographicInputAndUpdateDefault(mActivityKIN,mContextKIN)
+        u_checkDemographicInputAndUpdateDefault(mActivityKIN, mContextKIN)
 
         Log.d("lifeCycle", "PracticeFragment created!")
     } //onViewCreated end

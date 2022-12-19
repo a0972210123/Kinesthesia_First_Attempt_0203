@@ -1,5 +1,6 @@
 package com.example.kinesthesia_first_attempt
 
+
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -8,8 +9,10 @@ import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.CountDownTimer
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -21,6 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.pow
 import kotlin.math.sqrt
+
 
 // 此Class目前暫時空白，如有資料需要pass給xml，可以放入這邊
 class UniversalFunctions : AppCompatActivity() {
@@ -40,16 +44,15 @@ var randWidth = IntArray(5)
 var randHeight = IntArray(5)
 
 //螢幕寬、高
-val w = Resources.getSystem().displayMetrics.widthPixels    //網路資料值 =2800，程式計算值=2800
-val h = Resources.getSystem().displayMetrics.heightPixels   //網路資料值 =1752，程式計算值=1650
-val pixelDensity = Resources.getSystem().displayMetrics.densityDpi
-//資料值為 266 >>抓系統 為340
+val w = Resources.getSystem().displayMetrics.widthPixels    //網路資料值 =2800，程式計算值=2800 //The absolute width of the available display size in pixels.
+val h = Resources.getSystem().displayMetrics.heightPixels  //網路資料值 =1752，程式計算值=1650 //The absolute height of the available display size in pixels.
 
-val centerX = w / 2  //1400
-val centerY = h / 2  //825
-
+val centerCoordinateX = w/2   //1400
+val centerCoordinateY = h/2  //825
+val pixelDensity = Resources.getSystem().displayMetrics.densityDpi //340
 //(螢幕實際長度(mm), 螢幕實際寬度(mm),螢幕長度dp,螢幕寬度dp, x(mm/pixel))
 //可嘗試用程式計算值帶入 w or h
+
 val screenParameters = calculateScreenParams(w, h, 314.96, pixelDensity)
 val screenLengthMM = screenParameters[0]
 val screenWidthMM = screenParameters[1]
@@ -57,38 +60,124 @@ val screenLengthIn2dp = screenParameters[2]
 val screenWidthIn2dp = screenParameters[3]
 val mmPerPixel = screenParameters[4]       //(mm/pixel)
 
+val pixelPerMm = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1f,  Resources.getSystem().displayMetrics)  //10.011417
+
+
+
+
+fun printScreenParameters (){
+    // TODO: 重新用 android程式 抓需要的參數
+// https://medium.com/analytics-vidhya/what-is-the-difference-between-px-dip-dp-and-sp-e4351fefa685
+// https://itecnote.com/tecnote/android-convert-mm-to-pixels/
+// https://developer.android.com/reference/android/util/TypedValue#applyDimension(int,%20float,%20android.util.DisplayMetrics)
+// https://developer.android.com/reference/android/util/DisplayMetrics#fields_1
+// https://magiclen.org/android-screen/
+
+    var screenDensity_fromResources = Resources.getSystem().displayMetrics.density // = currentDpi/160  = 2.125
+    var screenDensityDpi_fromResources = Resources.getSystem().displayMetrics.densityDpi //= currentDpi = 340
+
+    val ScreenWidth_fromResourcesXdpi  = Resources.getSystem().displayMetrics.xdpi  // xdpi : physical pixels per inch of the screen in the X dimension.  //254.29
+    val ScreenHeight_fromResourcesYdpi =  Resources.getSystem().displayMetrics.ydpi // ydpi : physical pixels per inch of the screen in the Y dimension.  //261.47
+
+    val XpixelPerMm_fromxdpi = (Resources.getSystem().displayMetrics.xdpi)/25.4    //10.011417058509167
+    val YpixelPerMm_fromxdpi = (Resources.getSystem().displayMetrics.ydpi)/25.4    //10.294094536248155
+
+
+    // 1dp = 1/160 inch = 0.00625 inch (always true)
+    // 1dp = 0.00625 * 25.4 mm  (always true)
+    // 1dp = 0.00625 * 25.4 * 10.011417058509167 px = 1.58931245804 px
+
+    // 1 inch =  254.29 or 261.47 px  (this tablet)
+    // 1 inch =  25.4 mm (always true)
+    // 25.4 mm = 254.29 or 261.49 px (this tablet)
+    // 1mm = 10.011417058509167  or  10.294094536248155 px (this tablet)
+
+    // 1 dp = (1 /160) * 25.4 * (xdpi or ydpi / 25.4) pixel
+
+    // 340/160 = 2.125 px = 1 dp   > sqrt(2.125) = 1.457
+    // 254.29/160 = 1.5893125 px  = 1 dp   > sqrt = 1.25
+    // 261.47/160 = 1.63125 px = 1 dp    > sqrt = 1.27
+
+    // 5/3.6 = 1.3888889
+
+
+    Log.d("ScreenParameters","absolute width (pixel)"+":"+ w.toString()) //2800
+    Log.d("ScreenParameters","absolute height (pixel)"+":"+ h.toString()) //1650
+    Log.d("ScreenParameters","==============================================================================")
+
+    Log.d("ScreenParameters","centerX"+":"+ centerCoordinateX.toString()) //2800
+    Log.d("ScreenParameters","centerY"+":"+ centerCoordinateY.toString()) //1650
+    Log.d("ScreenParameters","==============================================================================")
+
+
+    Log.d("ScreenParameters","X dimesion (pixel/inch)"+":"+ ScreenWidth_fromResourcesXdpi.toString()) //254.29
+    Log.d("ScreenParameters","Y dimesion (pixel/inch)"+":"+ ScreenHeight_fromResourcesYdpi.toString()) //261.47
+    Log.d("ScreenParameters","==============================================================================")
+
+    Log.d("ScreenParameters","applyDimension _ pixelPerMm(pixel/mm)"+":"+ pixelPerMm.toString()) //10.011417
+    Log.d("ScreenParameters","XpixelPerMm_fromxdpi _ pixelPerMm(pixel/mm)"+":"+ XpixelPerMm_fromxdpi.toString()) //10.011417058509167
+    Log.d("ScreenParameters","YpixelPerMm_fromxdpi  _ pixelPerMm(pixel/mm)"+":"+ YpixelPerMm_fromxdpi.toString())  //10.294094536248155
+    Log.d("ScreenParameters","==============================================================================")
+
+    Log.d("ScreenParameters","screenDensity_fromResources"+":"+ screenDensity_fromResources.toString()) //2.125
+    Log.d("ScreenParameters","screenDensityDpi_fromResources"+":"+ screenDensityDpi_fromResources.toString())   //340
+
+    Log.d("ScreenParameters","==============================================================================")
+    Log.d("ScreenParameters","currentUsing_pixelPerMm(pixel/mm)"+":"+ (1/mmPerPixel).toString())    // 10.318770637541276
+    Log.d("ScreenParameters","currentUsing_mmPerPixel(mm/pixel)"+":"+ mmPerPixel.toString())  // 0.09691076923076923
+
+}
+
+
+
 //換算單位段落
 //由於 1. xml中僅接受輸入dp 2. fragment中call layoutParams時使用的單位為pixel
 //若要確認排版位置一致，或是設定指定長度，需要進行換算
+
+// 常數定義區段 : 此段落放不會改變的參數
+// 例如總測驗次數/練習次數等等，方格大小、等等
+//const val TARGET_BOX_SIZE = 2.00                   //待修改
+//const val RESPONSE_DOT_SIZE = 3.00
+
 val desireStart2TargetLengthInMM: Int = 100   //先設定10公分
 val desiretargetBoxSizeInMM: Int = 20  //先設定2公分
 val desiretargetStepInMM: Int = 5  //以5mm間隔
 
 // mm >>  pixel
 val targetBoxSize =
-    (desiretargetBoxSizeInMM / mmPerPixel).toInt()   //先設定 5公分  //暫定 >> 需要計算實際長度 vs pixel
-val targetStep = (desiretargetStepInMM / mmPerPixel).toInt()
+    (desiretargetBoxSizeInMM * pixelPerMm).toInt()   //先設定 2公分  //暫定 >> 需要計算實際長度 vs pixel
+val targetStep = (desiretargetStepInMM * pixelPerMm).toInt()
 
-val Center2Target = ((desireStart2TargetLengthInMM / 2) / mmPerPixel).toInt()
-val Center2Start = ((desireStart2TargetLengthInMM / 2) / mmPerPixel).toInt()
+val Center2Target = ((desireStart2TargetLengthInMM / 2) * pixelPerMm).toInt()
+val Center2Start = ((desireStart2TargetLengthInMM / 2) * pixelPerMm).toInt()
 
 // dp = (width in pixels * 160) / screen density
 // pixel = (dp * screen density)/160
-val widthOfTitle = 400
-val widthOfTandS = 50 //dp
+val widthOfTitle = 400 //dp
+val widthOfTandS = 50  //dp   finger Context
 val cantextPenWidthOfTandS = 20 //dp
 
-val titleCalibrate = viewAdjustDp2Pixel(widthOfTitle)
+val titleCalibrate = viewAdjustDp2Pixel(widthOfTitle)/2
 
 // T= target S= Start
-val TandSCalibrate = viewAdjustDp2Pixel(widthOfTandS)
-val penTandSCalibrate = viewAdjustDp2Pixel(cantextPenWidthOfTandS)
+val TandSCalibrate = viewAdjustDp2Pixel(widthOfTandS)/2
+val penTandSCalibrate = viewAdjustDp2Pixel(cantextPenWidthOfTandS)/2
 var calibrateWidth = TandSCalibrate
 
 
 fun viewAdjustDp2Pixel(dpWidthOfView: Int): Int {
-    return (((dpWidthOfView / 2) * pixelDensity) / 160).toInt()
+    return dpWidthOfView * (pixelDensity / 160).toInt()
+    //px =  dp * (dpi / 160)
+    //dp = (px * 160) / dpi)
 }
+
+fun viewAdjustPixel2Dp(pixelWidthOfView: Int):Int{
+    return (pixelWidthOfView *160)/pixelDensity.toInt()
+
+   //px =  dp * (dpi / 160)
+   //dp = (px * 160) / dpi)
+}
+
 
 fun calculateScreenParams(
     resolutionLength: Int,
@@ -133,7 +222,7 @@ fun calculateScreenParams(
 
     val logString =
         "長mm:$screenLengthMM,寬mm:$screenWidthMM,長dp:$screenLengthIn2dp,寬dp:$screenWidthIn2dp,$mmPerPixel(mm/pixel)"
-    Log.d("Screen Information", logString)
+    Log.d("ScreenParameters", logString)
 
     return listOf(
         screenLengthMM,
@@ -146,10 +235,56 @@ fun calculateScreenParams(
 // 輸入螢幕 (長pixel:Int ,寬pixel:Int ,螢幕對角長度(mm):Double, 螢幕pixel密度)
 // 傳回List: (螢幕實際長度(mm), 螢幕實際寬度(mm),螢幕長度dp,螢幕寬度dp, x(mm/pixel))
 
+
+// TODO: 目前設定VIEW寬度會有誤差  給50mm 出來會 3.7cm
+// https://developer.android.com/training/multiscreen/screendensities
+// https://www.altova.com/manual/MobileTogether/mobiletogetherdesigner/mtdobjsfeatures_sizes.html
+// px = dp * (dpi / 160)
+
+val desireWidthOfTargeAreaInMM = 50 //先訂五公分
+val widthOfTargetAreaInPixel = (desireWidthOfTargeAreaInMM * pixelPerMm).toInt()
+val widthOfTargetAreaInDp =  viewAdjustPixel2Dp (widthOfTargetAreaInPixel).toInt()
+val calibrateAreaWidthInPixel = widthOfTargetAreaInPixel/2
+//viewAdjustDp2Pixel()
+
+lateinit var TargetArea: ImageView
+lateinit var TargetAreaParams: ViewGroup.MarginLayoutParams
+
+fun u_setSquareOfTargetArea(){
+    var c2AreaX =0
+    var c2AreaY =0
+
+    if(testCondition == testConditionList[0]){
+        c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel
+        c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
+    } else{
+        // 非練習測驗時，需要調整方向
+    }
+
+    TargetArea.visibility = View.VISIBLE
+
+    TargetAreaParams = TargetArea.layoutParams as ViewGroup.MarginLayoutParams
+    TargetAreaParams.width = widthOfTargetAreaInPixel
+    TargetAreaParams.height = widthOfTargetAreaInPixel
+    TargetAreaParams.setMargins(
+        c2AreaX ,
+        c2AreaY ,
+        0,
+        0
+    )
+
+}
+
+
+
+
+
+
 ///////////////////////////////////////////////////////////
 
-//TODO: 整理 非慣用手、補測、自動測驗fragment
 
+
+//TODO: 整理 非慣用手、補測、自動測驗fragment
 
 //TODO: 以下三行要貼到其他 fragment中
 //<variable
@@ -181,10 +316,6 @@ var b2: Float = 0f
 var filePathStr: String = ""
 //全域變數宣告，不然無法讀取到class給的資料
 
-// 常數定義區段 : 此段落放不會改變的參數
-// 例如總測驗次數/練習次數等等，方格大小、等等
-const val TARGET_BOX_SIZE = 2.00                   //待修改
-const val RESPONSE_DOT_SIZE = 3.00
 
 // 最大練習次數 或每個方向的測驗次數
 const val MAX_PRACTICE_TRIAL = 8
@@ -503,8 +634,6 @@ fun u_saveInAirDataToCSV(inAirData: StringBuffer) {
 
 
     // 存檔: name,List,flag
-    // Todo: 新增判斷式，若沒有檔名輸入，則存成TESTING
-
     when(testCondition){
         testConditionList[0]->{
             outputFileName = testCondition + "_" + currentTestContext +"_Performance_$practiceTime"+"_InAirTrial_"+currentTrial.toString()+".csv"
@@ -671,7 +800,6 @@ fun u_savePerformanceToCSV() {
 
     //檔案名稱 準備fileName: p.s.filePath在outputCsv中已經準備好
     //TODO: 修改存檔檔名判斷式 ( 非慣用手、補測、自動化、刺激給法，這些都要更新)
-
     var outputFileName = ""
 
     when(testCondition){
@@ -737,7 +865,6 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
         output.append("\r\n")
     }
 
-    // TODO: 需要新增沒有檔名時的判斷式，直接存在固定的資料夾
     val file = File(filePathStr, fileName)
     val os = FileOutputStream(file, true)   // 這邊給的字串要有檔案類型
     os.write(output.toString().toByteArray())
@@ -753,7 +880,6 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
 
 //以下測驗流程管理相關
 // Todo:  calculateTrialScoreP(); V 之後還要改輸入 要考量given position
-// Todo:  以及正式測驗中，隨機位置的function們
 
 fun u_pressButton() {
     buttonPressedCountsInATrial++      //每按一次按鈕+1
@@ -811,7 +937,6 @@ fun u_pressButton() {
         u_saveCurrentTrialRecord()
         u_clearCurrentTrialRecord() //11/11新版，未驗證
 
-        // TODO:整合 正式測驗以及練習測驗的上限檢測function
         u_checkTrialLimit()       //檢查是否達到練習次數
         buttonPressedCountsInATrial = 0
     }
@@ -1106,7 +1231,6 @@ fun u_checkTrialLimit() {
 
                     .setPositiveButton(mContextKIN.resources.getString(R.string.test_dialog_next_condition)) { _, _ ->
 
-                        // TODO: 把存檔function整合(12/1-12/05)
                         u_savePerformanceToCSV()//儲存測驗表現
                         u_clearRecord()  // 清除測驗表現
                         trialCountView.text = "測驗次數: $currentTrial / $maxTrailDesire "
@@ -1170,7 +1294,7 @@ fun u_checkTrialLimit() {
 
 fun u_goBackToMenu() {
     Toast.makeText(mContextKIN, "回到測驗選單", Toast.LENGTH_SHORT).show()
-    //TODO: 後續 需要根據各情境，調整判斷式，才能正確回到頁面
+    //TODO: 根據各情境，調整判斷式，才能正確回到頁面
 
     when (testCondition) {
         testConditionList[0] -> {
@@ -1335,7 +1459,7 @@ fun u_clearCurrentTrialRecord(
     startY = 0.0f
 }
 
-// TODO:新增 RESET ARRAYLISTOFTRIALS
+
 fun u_resetTrials(){
     when (testCondition){
         testConditionList[0] ->{
@@ -1785,47 +1909,40 @@ fun u_setTargetPosition() {
 
     when (currentTestDirection) {
         /*  "L_Up" -> {
-              c2tX = centerX - calibrateWidth - Center2Target
-              c2tY = centerY - calibrateWidth - Center2Target
-              setTargetRandomPosition(c2tX, c2tY)
+              c2tX = centerCoordinateX - calibrateWidth - Center2Target
+              c2tY = centerCoordinateY - calibrateWidth - Center2Target
           }
           "L_Up_Right" -> {
-              c2tX = centerX - calibrateWidth + Center2Target
-              c2tY = centerY - calibrateWidth - Center2Target
-              setTargetRandomPosition(c2tX, c2tY)
+              c2tX = centerCoordinateX - calibrateWidth + Center2Target
+              c2tY = centerCoordinateY - calibrateWidth - Center2Target
           }
           "R_Up" -> {
-              c2tX = centerX - calibrateWidth + Center2Target
-              c2tY = centerY - calibrateWidth - Center2Target
-              setTargetRandomPosition(c2tX, c2tY)
+              c2tX = centerCoordinateX - calibrateWidth + Center2Target
+              c2tY = centerCoordinateY - calibrateWidth - Center2Target
           }
           "R_Up_Left" -> {
-              c2tX = centerX - calibrateWidth - Center2Target
-              c2tY = centerY - calibrateWidth - Center2Target
-              setTargetRandomPosition(c2tX, c2tY)
+              c2tX = centerCoordinateX - calibrateWidth - Center2Target
+              c2tY = centerCoordinateY - calibrateWidth - Center2Target
           }*/
 
         "R_Up" -> {
-            c2tX = centerX - calibrateWidth - Center2Target
-            c2tY = centerY - calibrateWidth + Center2Target
-            u_setTargetRandomPosition(c2tX, c2tY)
+            c2tX = centerCoordinateX - calibrateWidth - Center2Target
+            c2tY = centerCoordinateY - calibrateWidth + Center2Target
         }
         "R_Up_Left" -> {
-            c2tX = centerX - calibrateWidth + Center2Target
-            c2tY = centerY - calibrateWidth + Center2Target
-            u_setTargetRandomPosition(c2tX, c2tY)
+            c2tX = centerCoordinateX - calibrateWidth + Center2Target
+            c2tY = centerCoordinateY - calibrateWidth + Center2Target
         }
         "L_Up" -> {
-            c2tX = centerX - calibrateWidth + Center2Target
-            c2tY = centerY - calibrateWidth + Center2Target
-            u_setTargetRandomPosition(c2tX, c2tY)
+            c2tX = centerCoordinateX - calibrateWidth + Center2Target
+            c2tY = centerCoordinateY - calibrateWidth + Center2Target
         }
         "L_Up_Right" -> {
-            c2tX = centerX - calibrateWidth - Center2Target
-            c2tY = centerY - calibrateWidth + Center2Target
-            u_setTargetRandomPosition(c2tX, c2tY)
+            c2tX = centerCoordinateX - calibrateWidth - Center2Target
+            c2tY = centerCoordinateY - calibrateWidth + Center2Target
         }
     }
+    u_setTargetRandomPosition(c2tX, c2tY)
 }   //根據選項決定方向參數pixel
 
 fun u_setTargetRandomPosition(c2tX: Int, c2tY: Int) {
@@ -2079,139 +2196,139 @@ fun u_setDirection(directionInput: String) {
     //調整view位置
     when (currentTestDirection) {
         "請選方向" -> {
-            titleParams.setMargins(centerX - titleCalibrate, centerY - 400, 0, 0)
+            titleParams.setMargins(centerCoordinateX - titleCalibrate, centerCoordinateY - 400, 0, 0)
         }
 
 
         /*  "L_Up" -> {
               targetParams.setMargins(
-                  centerX - calibrateWidth - Center2Target,
-                  centerY - calibrateWidth - Center2Target,
+                  centerCoordinateX - calibrateWidth - Center2Target,
+                  centerCoordinateY - calibrateWidth - Center2Target,
                   0,
                   0
               )
               startParams.setMargins(
-                  centerX - calibrateWidth - Center2Start,
-                  centerY - calibrateWidth + Center2Start,
+                  centerCoordinateX - calibrateWidth - Center2Start,
+                  centerCoordinateY - calibrateWidth + Center2Start,
                   0,
                   0
               )
 
-              titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
+              titleParams.setMargins(ccenterCoordinateX - titleCalibrate + 800, centerCoordinateY - 400, 0, 0)
           }
           "L_Up_Right" -> {
               targetParams.setMargins(
-                  centerX - calibrateWidth + Center2Target,
-                  centerY - calibrateWidth - Center2Target,
+                  centerCoordinateX - calibrateWidth + Center2Target,
+                  centerCoordinateY - calibrateWidth - Center2Target,
                   0,
                   0
               )
               startParams.setMargins(
-                  centerX - calibrateWidth - Center2Start,
-                  centerY - calibrateWidth + Center2Start,
+                  centerCoordinateX - calibrateWidth - Center2Start,
+                  centerCoordinateY - calibrateWidth + Center2Start,
                   0,
                   0
               )
 
-              titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
+              titleParams.setMargins(centerCoordinateX - titleCalibrate + 800, centerCoordinateY - 400, 0, 0)
           }
           "R_Up" -> {
               targetParams.setMargins(
-                  centerX - calibrateWidth + Center2Target,
-                  centerY - calibrateWidth - Center2Target,
+                  centerCoordinateX - calibrateWidth + Center2Target,
+                  centerCoordinateY - calibrateWidth - Center2Target,
                   0,
                   0
               )
               startParams.setMargins(
-                  centerX - calibrateWidth + Center2Start,
-                  centerY - calibrateWidth + Center2Start,
+                  centerCoordinateX - calibrateWidth + Center2Start,
+                  centerCoordinateY - calibrateWidth + Center2Start,
                   0,
                   0
               )
 
-              titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
+              titleParams.setMargins(centerCoordinateX - titleCalibrate - 800, centerCoordinateY - 400, 0, 0)
           }
           "R_Up_Left" -> {
               targetParams.setMargins(
-                  centerX - calibrateWidth - Center2Target,
-                  centerY - calibrateWidth - Center2Target,
+                  centerCoordinateX - calibrateWidth - Center2Target,
+                  centerCoordinateY - calibrateWidth - Center2Target,
                   0,
                   0
               )
               startParams.setMargins(
-                  centerX - calibrateWidth + Center2Target,
-                  centerY - calibrateWidth + Center2Target,
+                  centerCoordinateX - calibrateWidth + Center2Target,
+                  centerCoordinateY - calibrateWidth + Center2Target,
                   0,
                   0
               )
 
-              titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
+              titleParams.setMargins(centerCoordinateX - titleCalibrate - 800, centerCoordinateY - 400, 0, 0)
           }*/
 
         //以下為為受測者方向出發的選項，程式描述為icon對於施測者的方向///
         "R_Up" -> {
             targetParams.setMargins(
-                centerX - calibrateWidth - Center2Target,
-                centerY - calibrateWidth + Center2Target,
+                centerCoordinateX - calibrateWidth - Center2Target,
+                centerCoordinateY - calibrateWidth + Center2Target,
                 0,
                 0
             )
             startParams.setMargins(
-                centerX - calibrateWidth - Center2Start,
-                centerY - calibrateWidth - Center2Start,
+                centerCoordinateX - calibrateWidth - Center2Start,
+                centerCoordinateY - calibrateWidth - Center2Start,
                 0,
                 0
             )
 
-            titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
+            titleParams.setMargins(centerCoordinateX - titleCalibrate + 800, centerCoordinateY - 400, 0, 0)
         }
         "R_Up_Left" -> {
             targetParams.setMargins(
-                centerX - calibrateWidth + Center2Target,
-                centerY - calibrateWidth + Center2Target,
+                centerCoordinateX - calibrateWidth + Center2Target,
+                centerCoordinateY - calibrateWidth + Center2Target,
                 0,
                 0
             )
             startParams.setMargins(
-                centerX - calibrateWidth - Center2Target,
-                centerY - calibrateWidth - Center2Target,
+                centerCoordinateX - calibrateWidth - Center2Target,
+                centerCoordinateY - calibrateWidth - Center2Target,
                 0,
                 0
             )
 
-            titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
+            titleParams.setMargins(centerCoordinateX - titleCalibrate - 800, centerCoordinateY - 400, 0, 0)
         }
         "L_Up" -> {
             targetParams.setMargins(
-                centerX - calibrateWidth + Center2Target,
-                centerY - calibrateWidth + Center2Target,
+                centerCoordinateX - calibrateWidth + Center2Target,
+                centerCoordinateY - calibrateWidth + Center2Target,
                 0,
                 0
             )
             startParams.setMargins(
-                centerX - calibrateWidth + Center2Start,
-                centerY - calibrateWidth - Center2Start,
+                centerCoordinateX - calibrateWidth + Center2Start,
+                centerCoordinateY - calibrateWidth - Center2Start,
                 0,
                 0
             )
 
-            titleParams.setMargins(centerX - titleCalibrate - 800, centerY - 400, 0, 0)
+            titleParams.setMargins(centerCoordinateX - titleCalibrate - 800, centerCoordinateY - 400, 0, 0)
         }
         "L_Up_Right" -> {
             targetParams.setMargins(
-                centerX - calibrateWidth - Center2Target,
-                centerY - calibrateWidth + Center2Target,
+                centerCoordinateX - calibrateWidth - Center2Target,
+                centerCoordinateY - calibrateWidth + Center2Target,
                 0,
                 0
             )
             startParams.setMargins(
-                centerX - calibrateWidth + Center2Start,
-                centerY - calibrateWidth - Center2Start,
+                centerCoordinateX - calibrateWidth + Center2Start,
+                centerCoordinateY - calibrateWidth - Center2Start,
                 0,
                 0
             )
 
-            titleParams.setMargins(centerX - titleCalibrate + 800, centerY - 400, 0, 0)
+            titleParams.setMargins(centerCoordinateX - titleCalibrate + 800, centerCoordinateY - 400, 0, 0)
         }
     }
 }
@@ -2257,8 +2374,7 @@ fun u_clearViews() {
 }
 
 
-// Todo, 此function 到正式測驗後，要寫新的，可以多放斜向箭頭
-// Todo, 練習測驗 view只放部分
+
 // Todo, 新的不同刺激給法頁面，view出現時機要修改，
 fun u_checkContextAndLaunchView(context: String) {
 
@@ -2543,7 +2659,7 @@ fun u_showCurrentDemographicInputDialog(
         .show() //creates and then displays the alert dialog.
 }
 
-//TODO:設定預設的test存檔路徑，避免CRASH
+//設定預設的test存檔路徑，避免CRASH
 fun u_saveDemographic() {
     // 整理人口學資料段落
     val outputName =
