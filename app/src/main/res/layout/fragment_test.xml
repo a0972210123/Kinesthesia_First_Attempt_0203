@@ -184,7 +184,7 @@
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:addStatesFromChildren="false"
-                android:contentDescription="@string/hint_plz_chooz_direction"
+                android:contentDescription="@string/hint_plz_set_direction"
                 app:layout_constraintEnd_toEndOf="@+id/confirm_trial"
                 app:layout_constraintStart_toEndOf="@id/context_list"
                 app:layout_constraintTop_toTopOf="@+id/context_list" />
@@ -204,7 +204,7 @@
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:addStatesFromChildren="false"
-                android:contentDescription="@string/hint_plz_chooz_context"
+                android:contentDescription="@string/hint_plz_set_context"
                 app:layout_constraintBottom_toTopOf="@+id/confirm_trial"
                 app:layout_constraintEnd_toStartOf="@+id/direction_list"
                 app:layout_constraintStart_toStartOf="@+id/confirm_trial" />
@@ -220,6 +220,36 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- 以下測試 目標方框用 view
+-->
+
+            <ImageView
+                android:id="@+id/target_square_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                app:srcCompat="@drawable/square_black" />
+
+            <ImageView
+                android:id="@+id/target_square_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                app:srcCompat="@drawable/square_white" />
+
+
+            <!-- 以上測試 目標方框用 view
+           -->
+
 
 
             <com.example.kinesthesia_first_attempt.TouchBoard
@@ -365,45 +395,39 @@
                 android:id="@+id/pen_target"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:layout_marginStart="500dp"
-                android:layout_marginTop="150dp"
-
+                android:paddingStart="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-
                 app:layout_constraintTop_toTopOf="parent"
-
                 app:srcCompat="@drawable/pen_target_20" />
 
             <ImageView
                 android:id="@+id/pen_start_point"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:layout_marginStart="150dp"
-                android:layout_marginTop="150dp"
-
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-
                 app:layout_constraintTop_toTopOf="parent"
-
+                android:paddingStart="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp"
                 app:srcCompat="@drawable/pen_start_20" />
 
             <ImageView
                 android:id="@+id/pen_random_target"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:layout_marginStart="150dp"
-                android:layout_marginTop="150dp"
-
+                android:paddingStart="15dp"
+                android:paddingTop="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="15dp"
                 android:visibility="gone"
-
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-
                 app:srcCompat="@drawable/pen_random_target_20"
                 app:tint="@color/pink_950" />
 

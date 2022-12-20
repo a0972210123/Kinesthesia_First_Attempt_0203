@@ -115,7 +115,10 @@ class TestFragment : Fragment() {
         fingerTargetParams = fingerTarget.layoutParams as ViewGroup.MarginLayoutParams
         fingerStartParams = fingerStartPoint.layoutParams as ViewGroup.MarginLayoutParams
 
-
+        //TODO: 新增 SPINNER 來控制 >　記得更新存檔名稱
+        TargetArea = requireView().findViewById<ImageView>(R.id.target_square_white)
+        TargetAreaFrame = requireView().findViewById<ImageView>(R.id.target_square_black)
+        //u_setSquareOfTargetArea()
 
         u_changeInAriText()     // DEFAULT inAir文字
         //* new 下筆時的紀錄

@@ -84,7 +84,7 @@ class PracticeFragment : Fragment() {
         directionSpinner = requireView().findViewById<View>(R.id.direction_list) as Spinner
 
         // Todo:>>> 待新增測驗方法Spinner (VAP2AP & AP2AP & PP2AP)
-        // Todo:>>> 測驗方向和目標的View宣告，正式測驗中，需要新增斜向箭頭
+        stimuliTypeSpinner = requireView().findViewById<View>(R.id.stimuliType_list) as Spinner
 
         fingerTarget = requireView().findViewById<ImageView>(R.id.target)
         fingerStartPoint = requireView().findViewById<ImageView>(R.id.start_point)
@@ -130,8 +130,9 @@ class PracticeFragment : Fragment() {
         fingerStartParams = fingerStartPoint.layoutParams as ViewGroup.MarginLayoutParams
 
 
-        //TODO: 確認最後要用哪一種格子
-        TargetArea = requireView().findViewById<ImageView>(R.id.target_square_black)
+        //TODO: 新增 SPINNER 來控制 >　記得更新存檔名稱
+        TargetArea = requireView().findViewById<ImageView>(R.id.target_square_white)
+        TargetAreaFrame = requireView().findViewById<ImageView>(R.id.target_square_black)
         u_setSquareOfTargetArea()
 
         u_changeInAriText()     // DEFAULT inAir文字
@@ -160,9 +161,12 @@ class PracticeFragment : Fragment() {
         u_changeText()
         u_displayScoreInText(scoreListForDisplay, 0, Score)  // flag = 0  顯示預設文字
 
-        // Todo: 需要新增一個測驗方法spinner，VAP2AP & AP2AP & PP2AP，並新增根據選擇結果的，view調整判斷式，存檔名稱調整判斷式
         u_launchTrialInputSpinner()
         u_launchContextSpinner()
+
+        u_launchStimuliTypeSpinner()
+        //TODO: 新增 SPINNER
+
         u_checkContextAndLaunchView(currentTestContext)
 
         // 確認人口學資料
