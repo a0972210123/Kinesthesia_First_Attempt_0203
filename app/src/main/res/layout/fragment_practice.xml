@@ -232,7 +232,7 @@
             android:contentDescription="@string/hint_plz_set_direction"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/confirm_trial"
-            app:layout_constraintStart_toEndOf="@id/context_list"
+            app:layout_constraintStart_toStartOf="@id/context_list"
             app:layout_constraintTop_toTopOf="@+id/context_list" />
 
         <Spinner
@@ -241,7 +241,6 @@
             android:layout_height="50dp"
             android:addStatesFromChildren="false"
             android:contentDescription="@string/hint_plz_set_context"
-            app:layout_constraintEnd_toEndOf="@id/confirm_trial"
             app:layout_constraintStart_toEndOf="@id/trialInput_list"
             app:layout_constraintTop_toTopOf="@id/trialInput_list"
             tools:ignore="SpeakableTextPresentCheck" />
@@ -253,9 +252,8 @@
             android:addStatesFromChildren="false"
             android:contentDescription="@string/hint_plz_set_stimuliType"
             android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="@id/confirm_trial"
-            app:layout_constraintStart_toStartOf="@id/confirm_trial"
-            app:layout_constraintTop_toBottomOf="@id/confirm_trial"
+            app:layout_constraintEnd_toStartOf="@id/trialInput_list"
+            app:layout_constraintTop_toTopOf="@id/trialInput_list"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <Button

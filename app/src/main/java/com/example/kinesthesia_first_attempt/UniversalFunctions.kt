@@ -71,7 +71,7 @@ val pixelPerMm = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1f,  Reso
 
 
 fun printScreenParameters (){
-    // TODO: 重新用 android程式 抓需要的參數
+    //重新用 android程式 抓需要的參數
 // https://medium.com/analytics-vidhya/what-is-the-difference-between-px-dip-dp-and-sp-e4351fefa685
 // https://itecnote.com/tecnote/android-convert-mm-to-pixels/
 // https://developer.android.com/reference/android/util/TypedValue#applyDimension(int,%20float,%20android.util.DisplayMetrics)
@@ -477,6 +477,9 @@ fun u_setSquareOfTargetArea(){
     // resize arrow
 
     // check the input and decide if the Area should be displayed
+    TargetArea.visibility = View.GONE
+    TargetAreaFrame.visibility = View.GONE
+
     val contextChecked = u_checkContextInput()
     val directionChecked = u_checkDirectionInput()
     val stimuliChecked = u_checkStimuliInput()
@@ -486,15 +489,15 @@ fun u_setSquareOfTargetArea(){
                 TargetArea.visibility = View.VISIBLE
                 TargetAreaFrame.visibility = View.VISIBLE
             }else{
-                TargetAreaFrame.visibility = View.GONE
+                TargetArea.visibility = View.GONE
                 TargetAreaFrame.visibility = View.GONE
             }
         } else {
-            TargetAreaFrame.visibility = View.GONE
+            TargetArea.visibility = View.GONE
             TargetAreaFrame.visibility = View.GONE
         }
     }else{
-        TargetAreaFrame.visibility = View.GONE
+        TargetArea.visibility = View.GONE
         TargetAreaFrame.visibility = View.GONE
     }
 }
@@ -549,7 +552,8 @@ var filePathStr: String = ""
 
 // 最大練習次數 或每個方向的測驗次數
 const val MAX_PRACTICE_TRIAL = 8
-const val MAX_FORMAL_TRIAL = 5
+const val MAX_FORMAL_TRIAL = 1 //測試流程用
+//const val MAX_FORMAL_TRIAL = 5
 
 //練習測驗次數上限變數
 var maxTrailDesire = 0
@@ -612,7 +616,6 @@ var restPositionY: Float = 0.0f
 var responsePositionX: Float = 0.0f
 var responsePositionY: Float = 0.0f
 
-
 // 存檔相關變數宣告
 var positionData = StringBuffer()
 
@@ -634,7 +637,6 @@ var trial5list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0
 var trial6list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 var trial7list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-
 
 // 宣告位置調整參考資料：https://medium.com/globant/why-oncreate-of-activity-and-oncreateview-of-fragment-is-not-needed-anymore-6cdfc331102
 // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
@@ -661,9 +663,6 @@ lateinit var instructionText: TextView      //找到指導語textView
 
 @SuppressLint("StaticFieldLeak")
 lateinit var performanceTitle: TextView
-
-//val performanceTitle = requireView().findViewById<TextView>(R.id.performance_title)
-
 
 @SuppressLint("StaticFieldLeak")
 lateinit var directionSpinner: Spinner
@@ -775,7 +774,6 @@ lateinit var countAndHint: TextView
 @SuppressLint("StaticFieldLeak")
 lateinit var selectButton: Button
 
-
 ////
 @SuppressLint("StaticFieldLeak")
 lateinit var navControllerKIN: NavController    //必須，用於從public function呼叫navControllerKIN
@@ -836,7 +834,6 @@ fun u_changeInAriText() {
                 "Z = $heightZ " + "\n" +
                 "tipPressure = $tipPressure")
 }
-
 
 fun u_clearInAir() {
     systemTimestamp = 0  //
@@ -1262,35 +1259,38 @@ fun u_confirmSelection() {
             when (testCondition) {
                 testConditionList[0] -> {
                     Toast.makeText(mContextKIN, "開始測驗練習", Toast.LENGTH_SHORT).show()
+                    u_changeText()
+                    u_manageVisibility(0)  //顯示觸控板及記錄紐
                 }
                 testConditionList[1] -> {
+                    val stimuliChecked = u_checkStimuliInput()
                     val contextChecked = u_checkContextInput()
                     val directionChecked = u_checkDirectionInput()
-                    val stimuliChecked = u_checkStimuliInput()
 
-                    if (stimuliChecked ==1) {
+                    if (stimuliChecked == 1) {
                         if (contextChecked == 1) {
                             if (directionChecked == 1) {
                                 TestingFinishedList.add(currentTestDirection)
                                 //finishedcontextList.add(currentTestContext) >>改到測完所有方向
                                 u_randomThePosition()
                                 u_setTargetPosition()
+
+                                u_changeText()
+                                u_manageVisibility(0)  //顯示觸控板及記錄紐
+                                Toast.makeText(
+                                    mContextKIN,
+                                    "開始測驗，項目： $stimuliType & $currentTestContext & $currentTestDirection ",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
-                    Toast.makeText(
-                        mContextKIN,
-                        "開始測驗，項目： $stimuliType & $currentTestContext & $currentTestDirection ",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
                 //TODO: 確認新頁面要檢核的項目
-                testConditionList[2]->{}
-                testConditionList[3]->{}
-                testConditionList[4]->{}
+                testConditionList[2] -> {}
+                testConditionList[3] -> {}
+                testConditionList[4] -> {}
             }
-            u_changeText()
-            u_manageVisibility(0)  //顯示觸控板及記錄紐
 }
 
 fun u_checkContextInput(): Int {
@@ -1342,21 +1342,23 @@ fun u_checkStimuliInput(): Int {
     return flag
 }
 
+
 fun u_checkContextTested() {
     val checkList = arrayListOf<String>("Finger", "Pen")
     if (finishedContextList.toSet() == checkList.toSet()) {
-        //finishedcontextList = arrayListOf<String>() //清除List >> 準備測另種情境
+        finishedStimuliList.add(stimuliType)
+
         MaterialAlertDialogBuilder(mActivityKIN)
             .setTitle(mContextKIN.resources.getString(R.string.test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
             .setMessage(
                 mContextKIN.resources.getString(R.string.test_dialog_message_finished_all_context)
             ) //Set the message to show the data
             .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
-            .setPositiveButton(mContextKIN.resources.getString(R.string.dialog_back_to_menu)) { _, _ ->
-                Toast.makeText(mContextKIN, "已完成該刺激方式中，兩種測驗情境，請更換測驗刺激", Toast.LENGTH_SHORT).show()
+            .setPositiveButton(mContextKIN.resources.getString(R.string.test_dialog_next_stimuli)) { _, _ ->
                 finishedContextList = arrayListOf<String>()
-                finishedStimuliList.add(stimuliType)
-
+                u_manageVisibility(1)
+                Toast.makeText(mContextKIN, "已完成該刺激方式中，兩種測驗情境，請更換測驗刺激", Toast.LENGTH_SHORT).show()
+                u_checkStimuliTested()
                 //u_goBackToMenu()
             }
             .show() //creates and then displays the alert dialog.
@@ -1364,7 +1366,6 @@ fun u_checkContextTested() {
 }
 
 fun u_checkDirectionTested() {
-    //contextSpinner = requireView()!!.findViewById<View>(R.id.context_list) as Spinner
     //目前暫定需要八種全測
     val checkList = arrayListOf<String>(
         "L_Up",
@@ -1375,6 +1376,7 @@ fun u_checkDirectionTested() {
 
     //當四種都測完
     if (TestingFinishedList.toSet() == checkList.toSet()) {
+        finishedContextList.add(currentTestContext)
         MaterialAlertDialogBuilder(mActivityKIN)
             .setTitle(mContextKIN.resources.getString(R.string.test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
             .setMessage(
@@ -1382,11 +1384,11 @@ fun u_checkDirectionTested() {
             ) //Set the message to show the data
             .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
             .setPositiveButton(mContextKIN.resources.getString(R.string.test_dialog_next_context)) { _, _ ->
-                finishedContextList.add(currentTestContext)
+               // finishedContextList.add(currentTestContext)
                 TestingFinishedList = arrayListOf<String>() //清除List >> 準備測另種情境
-                contextSpinner.visibility = View.VISIBLE
+                u_manageVisibility(1)
                 Toast.makeText(mContextKIN, "已完成該測驗情境中之所有測驗方向，請更換情境", Toast.LENGTH_SHORT).show()
-                u_checkContextTested() //確認兩種情境是否測驗完成
+                u_checkContextTested()
             }
             .show() //creates and then displays the alert dialog.
     }
@@ -1428,15 +1430,14 @@ fun u_checkStimuliTested(){
             .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
             .setPositiveButton(mContextKIN.resources.getString(R.string.dialog_back_to_menu)) { _, _ ->
                 Toast.makeText(mContextKIN, "請查驗資料或補充測驗", Toast.LENGTH_SHORT).show()
-                TestingFinishedList = arrayListOf<String>()
-                finishedContextList = arrayListOf<String>()
-                finishedStimuliList = arrayListOf<String>()
+                TestingFinishedList = arrayListOf<String>() //方向
+                finishedContextList = arrayListOf<String>() //情境
+                finishedStimuliList = arrayListOf<String>() //刺激
                 u_goBackToMenu()
             }
             .show() //creates and then displays the alert dialog.
     }
 }
-
 
 @SuppressLint("SetTextI18n")
 fun u_checkTrialLimit() {
@@ -1492,7 +1493,6 @@ fun u_checkTrialLimit() {
             }
 
             testConditionList[1] -> {
-                u_checkDirectionTested() // 確認完成所有測驗方向
                 MaterialAlertDialogBuilder(mActivityKIN)
                     .setTitle(mContextKIN.resources.getString(R.string.test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
                     .setMessage(
@@ -1501,12 +1501,12 @@ fun u_checkTrialLimit() {
                     .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
 
                     .setPositiveButton(mContextKIN.resources.getString(R.string.test_dialog_next_condition)) { _, _ ->
-
                         u_savePerformanceToCSV()//儲存測驗表現
                         u_clearRecord()  // 清除測驗表現
                         trialCountView.text = "測驗次數: $currentTrial / $maxTrailDesire "
                         u_manageVisibility(1)
-                        Toast.makeText(mContextKIN, "更換情境", Toast.LENGTH_SHORT).show()
+                        u_checkDirectionTested() // 確認完成所有測驗方向
+                        Toast.makeText(mContextKIN, "更換方向", Toast.LENGTH_SHORT).show()
                     }
                     .show() //creates and then displays the alert dialog.
             }
@@ -1588,13 +1588,7 @@ fun u_goBackToMenu() {
 
 }
 
-
 //以下位置記錄相關
-// TODO: 注意後面所有 位置紀錄 & 檔案輸出，都要更新這四個參數
-// TODO: 要新增 trueGivenStartPositionX & trueGivenStartPositionY
-// TODO: 要新增 trueGivenTargetPositionX & trueGivenTargetPositionY
-// TODO: 下面所有的 position 應該要新整成一個 float list
-
 // 此函數只處理紀錄位置，不處理位置的隨機分配 & 目標位置給定，不給輸入，直接取用全域變數
 fun u_recordPosition() {
     when (buttonPressedCountsInATrial) {
@@ -1713,6 +1707,15 @@ fun u_displayScoreInText(inputScoreList: List<Float>, flag: Int, Score: TextView
         }
     }
 }  //用於描述測驗表現
+
+
+fun getGivenPosition(){
+    // TODO: 要新增 trueGivenStartPositionX & trueGivenStartPositionY
+    // TODO: 要新增 trueGivenTargetPositionX & trueGivenTargetPositionY
+    // TODO: 注意後面所有 位置紀錄 & 檔案輸出，都要更新這四個參數
+    // TODO: 下面所有的 position 應該要新整成一個 float list
+    // TODO: 或是先另外存一個襠名相同(情境代號註記)的EXCEL
+}
 
 
 fun u_clearCurrentTrialRecord(
@@ -2210,6 +2213,44 @@ fun u_setTargetPosition() {
             c2tY = centerCoordinateY - calibrateWidth + Center2Target
         }
     }
+
+
+    lateinit var targetView: ImageView
+    // 根據當前情境，指派測驗參數
+    when (currentTestContext) {
+        "Pen" -> {
+            targetView = penTarget
+        }
+        "Finger" -> {
+            targetView = fingerTarget
+        }
+        else -> {
+            targetView = fingerTarget
+        }  //沒有選擇時，預設為手指
+    }
+
+    if(testCondition== testConditionList[0]){
+        //練習測中 不隱藏預設目標
+    }else{
+        //其他情境中，隱藏預設目標只顯示隨機目標
+        when (stimuliType) {
+            stimuliList[0] -> {
+            }
+            stimuliList[1] -> { //VAP2AP
+                // 顯示隨機的目標，不顯示方格，不顯示灰目標 >> 在setTarget 寫判斷式
+                targetView.visibility = View.INVISIBLE //隱藏預設目標
+            }
+            stimuliList[2] -> { //AP2AP
+                targetView.visibility = View.INVISIBLE //隱藏預設目標
+                // 顯示方格，不顯示任何目標 >> 在setTarget 寫判斷式
+            }
+            stimuliList[3] -> { //PP2AP
+                // 顯示隨機的目標，不顯示方格，不顯示灰目標 >> 在setTarget 寫判斷式
+                targetView.visibility = View.INVISIBLE //隱藏預設目標
+            }
+        }
+    }
+
     u_setTargetRandomPosition(c2tX, c2tY)
 }   //根據選項決定方向參數pixel
 
@@ -2224,7 +2265,13 @@ fun u_setTargetRandomPosition(c2tX: Int, c2tY: Int) {
             randomTarget = fingerRandomTargetView
         }
     }
-    randomTarget.visibility = View.VISIBLE
+
+    if(stimuliType == stimuliList[2]){
+        randomTarget.visibility = View.INVISIBLE
+    }else{
+        randomTarget.visibility = View.VISIBLE
+    }
+
 
     //val randomTargetView = requireView().findViewById<ImageView>(R.id.random_target)
     randomTargetParams = randomTarget.layoutParams as ViewGroup.MarginLayoutParams
@@ -2246,6 +2293,17 @@ fun u_randomThePosition() {
     randWidth = tempWidth.subList(0, 5).toIntArray()
     randHeight = tempHeight.subList(0, 5).toIntArray()
 }   //需要調整數值範圍
+
+//TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
+fun u_randomTheAutoTestList(){
+
+}
+
+fun executeAutoTestList(){
+    //TODO: 模仿 confirm selection
+    //TODO: 結合 checkXXXtested
+    //TODO: 確認完各種參數後 > 直接訂出目前要測的參數 > call confrimSelection 開始正式測驗
+}
 
 
 //以下三種spinner
@@ -2274,7 +2332,7 @@ fun u_launchDirectionSpinner() {
     //以上:z; 方向選單CODE: arrayList已經移置string ,name: direction_list
 }
 
-//TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
+
 fun u_setDirection(directionInput: String) {
     currentTestDirection = directionInput  //儲存目前選擇方向
     u_clearViews()
@@ -2629,8 +2687,29 @@ fun u_setDirection(directionInput: String) {
         }
     }
 
-}
+    if(testCondition== testConditionList[0]){
+        //練習測中 不隱藏預設目標
+    }else{
+        //其他情境中，預覽畫面，只有AP2AP 隱藏預設目標
+        when (stimuliType) {
+            stimuliList[0] -> {
+            }
+            stimuliList[1] -> { //VAP2AP
+                // 顯示隨機的目標，不顯示方格，不顯示灰目標 >> 在setTarget 寫判斷式
+                //targetView.visibility = View.INVISIBLE //隱藏預設目標
+            }
+            stimuliList[2] -> { //AP2AP
+                targetView.visibility = View.INVISIBLE //隱藏預設目標
+                // 顯示方格，不顯示任何目標 >> 在setTarget 寫判斷式
+            }
+            stimuliList[3] -> { //PP2AP
+                // 顯示隨機的目標，不顯示方格，不顯示灰目標 >> 在setTarget 寫判斷式
+                //targetView.visibility = View.INVISIBLE //隱藏預設目標
+            }
+        }
+    }
 
+}
 
 fun u_setContext(contextInput: String) {
     currentTestContext = contextInput
@@ -2648,7 +2727,6 @@ fun u_setContext(contextInput: String) {
     u_checkContextAndLaunchView(currentTestContext) //更換ImageView宣告內容
     u_setDirection(currentTestDirection)
 }
-
 
 fun u_clearViews() {
     fingerTarget.visibility = View.GONE
@@ -2672,9 +2750,6 @@ fun u_clearViews() {
     penDownRightArrow.visibility = View.GONE
 }
 
-
-
-// Todo, 新的不同刺激給法頁面，view出現時機要修改，
 fun u_checkContextAndLaunchView(context: String) {
     u_clearViews()
     u_setSquareOfTargetArea()
@@ -2829,8 +2904,6 @@ fun u_checkContextAndLaunchView(context: String) {
 
 } //輸入currentContext
 
-
-
 fun u_updatePracticeTimeToViewModel() {
     if (practiceTrialsCount >= maxTrailDesire) {
         mainViewModel.setPracticeTime(practiceTime)
@@ -2883,7 +2956,6 @@ fun u_manageVisibility(flag: Int) {
     }
 
 }//管理測驗相關View顯示、可觸控與否
-
 
 // 進入各頁面前確認有存檔路徑 或 default
 fun u_checkDemographicInputAndUpdateDefault(mActivityKIN: Activity, mContextKIN: Context) {
