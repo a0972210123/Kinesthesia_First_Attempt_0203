@@ -26,18 +26,12 @@ import java.util.*
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-
 // 此Class目前暫時空白，如有資料需要pass給xml，可以放入這邊
 class UniversalFunctions : AppCompatActivity() {
 
 }
 
-// TESTFRAGMENT 待整理
-///////////////////////////////////////////////////////////
 
-//測驗方式
-//var currentTestContext: String = ""
-//val contextList = arrayListOf<String>("請選情境", "Finger", "Pen")
 
 //版面相關變數宣告
 //隨機位置相關變數宣告 (每一輪只有5Trial)
@@ -68,7 +62,6 @@ val screenWidthIn2dp = screenParameters[3]
 val mmPerPixel = screenParameters[4]       //(mm/pixel)
 
 val pixelPerMm = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1f,  Resources.getSystem().displayMetrics)  //10.011417
-
 
 fun printScreenParameters (){
     //重新用 android程式 抓需要的參數
@@ -197,7 +190,6 @@ fun viewAdjustPixel2Dp(pixelWidthOfView: Int):Int{
    //dp = (px * 160) / dpi)
 }
 
-
 fun calculateScreenParams(
     resolutionLength: Int,
     resolutionWidth: Int,
@@ -278,232 +270,6 @@ lateinit var TargetArea: ImageView
 lateinit var TargetAreaFrame: ImageView
 @SuppressLint("StaticFieldLeak")
 lateinit var stimuliTypeSpinner: Spinner
-
-
-// TODO: 這些之後要改到SPINNER
-var stimuliList = arrayListOf<String>("請選刺激","VAP2AP","AP2AP","PP2AP")
-var stimuliType = stimuliList [0]
-
-fun u_launchStimuliTypeSpinner(){
-    val adapter = ArrayAdapter.createFromResource(
-        mContextKIN,
-        R.array.stimuliType_list,
-        android.R.layout.simple_spinner_dropdown_item
-    )
-    stimuliTypeSpinner.adapter = adapter
-    stimuliTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(
-            parent: AdapterView<*>?,
-            view: View?,
-            position: Int,
-            id: Long
-        ) {
-            u_setStimuliType(stimuliList[position])
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            //TO-DO("Not yet implemented")
-        }
-    }
-}
-
-fun u_setStimuliType(stimuliInput:String){
-    stimuliType = stimuliInput
-    u_clearViews()
-    when (stimuliType) {
-        stimuliList[0] -> {
-            Toast.makeText(mContextKIN, "請選擇測驗刺激", Toast.LENGTH_SHORT).show()
-        }
-        stimuliList[1] -> { //VAP2AP
-            // 顯示隨機的目標，不顯示方格，不顯示灰目標 >> 在setTarget 寫判斷式
-        }
-        stimuliList[2] -> { //AP2AP
-            // 顯示方格，不顯示任何目標 >> 在setTarget 寫判斷式
-        }
-        stimuliList[3] -> { //PP2AP
-            // 顯示隨機的目標，不顯示方格，不顯示灰目標 >> 在setTarget 寫判斷式
-        }
-    }
-    u_setSquareOfTargetArea()
-    u_checkContextAndLaunchView(currentTestContext) //更換ImageView宣告內容
-    u_setDirection(currentTestDirection)
-}
-
-fun u_setSquareOfTargetArea(){
-    var c2AreaX =0
-    var c2AreaY =0
-    var c2FrameX =0
-    var c2FrameY =0
-    var arrowSize: Int //default
-
-    lateinit var upArrow: ImageView
-    lateinit var upLeftArrow: ImageView
-    lateinit var upRightArrow: ImageView
-
-    lateinit var downArrow: ImageView
-    lateinit var downLeftArrow: ImageView
-    lateinit var downRightArrow: ImageView
-
-    if(stimuliType == stimuliList[2]){
-        arrowSize = 720
-
-        if(testCondition == testConditionList[0]){
-            c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel
-            c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
-            c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel
-            c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
-        } else{ //其他測驗中，依據方項選擇，選擇正確的目標框位置
-            when (currentTestDirection) {
-//                  "L_Up" -> {
-//                      c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel - Center2Target
-//                      c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel - Center2Target
-//                      c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel - Center2Target
-//                      c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel - Center2Target
-//                  }
-//                  "L_Up_Right" -> {
-//                      c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel + Center2Target
-//                      c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel - Center2Target
-//                      c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel + Center2Target
-//                      c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel - Center2Target
-//                  }
-//                  "R_Up" -> {
-//                      c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel + Center2Target
-//                      c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel - Center2Target
-//                      c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel + Center2Target
-//                      c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel - Center2Target
-//                  }
-//                  "R_Up_Left" -> {
-//                      c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel - Center2Target
-//                      c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel - Center2Target
-//                      c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel - Center2Target
-//                      c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel - Center2Target
-//                  }
-                //以下為為受測者方向出發的選項，程式描述為icon對於施測者的方向///
-                "R_Up" -> {
-                    c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel - Center2Target
-                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
-                    c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel - Center2Target
-                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
-                }
-                "R_Up_Left" -> {
-                    c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel + Center2Target
-                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
-                    c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel + Center2Target
-                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
-                }
-                "L_Up" -> {
-                    c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel + Center2Target
-                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
-                    c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel + Center2Target
-                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
-                }
-                "L_Up_Right" -> {
-                    c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel - Center2Target
-                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
-                    c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel - Center2Target
-                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
-                }
-            }
-        }
-
-        //指定框框位置
-        //TargetArea.visibility = View.VISIBLE
-        TargetArea.layoutParams.width = widthOfTargetAreaInPixel
-        TargetArea.layoutParams.height = widthOfTargetAreaInPixel
-        (TargetArea.layoutParams as ViewGroup.MarginLayoutParams).setMargins(
-            c2AreaX ,
-            c2AreaY ,
-            0,
-            0
-        )
-        //TargetAreaFrame.visibility = View.VISIBLE
-        TargetAreaFrame.layoutParams.width = widthOfFrameInPixel
-        TargetAreaFrame.layoutParams.height = widthOfFrameInPixel
-        (TargetAreaFrame.layoutParams as ViewGroup.MarginLayoutParams).setMargins(
-            c2FrameX ,
-            c2FrameY ,
-            0,
-            0
-        )
-
-    }else{ //stimuliType ~= stimuliList[2]
-        arrowSize = 900
-        //Do nothing
-    }
-
-    // select arrow
-    when (currentTestContext){
-        contextList[1]->{//finger
-            upArrow = fingerUpArrow
-            upLeftArrow = fingerUpLeftArrow
-            upRightArrow = fingerUpRightArrow
-
-            downArrow = fingerDownArrow
-            downLeftArrow = fingerDownLeftArrow
-            downRightArrow = fingerDownRightArrow
-        }
-        contextList[2]->{//pen
-            upArrow = penUpArrow
-            upLeftArrow = penUpLeftArrow
-            upRightArrow = penUpRightArrow
-
-            downArrow = penDownArrow
-            downLeftArrow = penDownLeftArrow
-            downRightArrow = penDownRightArrow
-        }
-        else->{//default finger
-            upArrow = fingerUpArrow
-            upLeftArrow = fingerUpLeftArrow
-            upRightArrow = fingerUpRightArrow
-
-            downArrow = fingerDownArrow
-            downLeftArrow = fingerDownLeftArrow
-            downRightArrow = fingerDownRightArrow
-        }
-    }
-    // resize arrow
-    upArrow.layoutParams.width = arrowSize
-    upLeftArrow.layoutParams.width = arrowSize
-    upRightArrow.layoutParams.width = arrowSize
-    downArrow.layoutParams.width = arrowSize
-    downLeftArrow.layoutParams.width = arrowSize
-    downRightArrow.layoutParams.width = arrowSize
-    upArrow.layoutParams.height = arrowSize
-    upLeftArrow.layoutParams.height= arrowSize
-    upRightArrow.layoutParams.height= arrowSize
-    downArrow.layoutParams.height = arrowSize
-    downLeftArrow.layoutParams.height = arrowSize
-    downRightArrow.layoutParams.height = arrowSize
-    // resize arrow
-
-    // check the input and decide if the Area should be displayed
-    TargetArea.visibility = View.GONE
-    TargetAreaFrame.visibility = View.GONE
-
-    val contextChecked = u_checkContextInput()
-    val directionChecked = u_checkDirectionInput()
-    val stimuliChecked = u_checkStimuliInput()
-    if (stimuliChecked==1) {
-        if (contextChecked + directionChecked >=1) {
-            if(stimuliType ==stimuliList[2]){
-                TargetArea.visibility = View.VISIBLE
-                TargetAreaFrame.visibility = View.VISIBLE
-            }else{
-                TargetArea.visibility = View.GONE
-                TargetAreaFrame.visibility = View.GONE
-            }
-        } else {
-            TargetArea.visibility = View.GONE
-            TargetAreaFrame.visibility = View.GONE
-        }
-    }else{
-        TargetArea.visibility = View.GONE
-        TargetAreaFrame.visibility = View.GONE
-    }
-}
-
-
-//TODO: 整理 非慣用手、補測、自動測驗fragment
 
 //TODO: 以下三行要貼到其他 fragment中
 //<variable
@@ -598,6 +364,10 @@ var finishedStimuliList = arrayListOf<String>()
 
 var currentTestContext: String = ""
 val contextList = arrayListOf<String>("請選情境", "Finger", "Pen")
+
+var stimuliList = arrayListOf<String>("請選刺激","VAP2AP","AP2AP","PP2AP")
+var stimuliType = stimuliList [0]
+
 
 //測驗相關變數宣告
 var buttonPressedCountsInATrial: Int = 0  //按鈕次數
@@ -725,19 +495,11 @@ lateinit var fingerDownLeftArrow: ImageView
 @SuppressLint("StaticFieldLeak")
 lateinit var fingerDownRightArrow: ImageView
 
-// 箭頭
-//val hideUpArrow = requireView().findViewById<ImageView>(R.id.up_arrow)
-//val hideUpLeftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_up_left)
-//val hideUpRightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_up_right)
-//val hideDownArrow = requireView().findViewById<ImageView>(R.id.down_arrow)
-//val hideDownLeftArrow = requireView().findViewById<ImageView>(R.id.arrow_to_down_left)
-//val hideDownRightArrow = requireView().findViewById<ImageView>(R.id.arrow_to_down_right)
 @SuppressLint("StaticFieldLeak")
 lateinit var fingerRandomTargetView: ImageView
 
 @SuppressLint("StaticFieldLeak")
 lateinit var penRandomTargetView: ImageView
-
 
 //正式測驗中ImageView，參數宣告，用於調整VIEW 位置用
 lateinit var penTargetParams: ViewGroup.MarginLayoutParams
@@ -747,13 +509,8 @@ lateinit var fingerStartParams: ViewGroup.MarginLayoutParams
 
 lateinit var titleParams: ViewGroup.MarginLayoutParams
 lateinit var randomTargetParams: ViewGroup.MarginLayoutParams
-//val targetParams = targetView.layoutParams as ViewGroup.MarginLayoutParams
-//val startParams = startView.layoutParams as ViewGroup.MarginLayoutParams
-//val titleParams = performanceTitle.layoutParams as ViewGroup.MarginLayoutParams
-//val randomTargetParams = randomTargetView.layoutParams as ViewGroup.MarginLayoutParams
 
 
-//// 11/17 將原本onViewCreated中 沒有提前宣告的view 抓出來，減少後續需要呼叫時要重複call的問題
 @SuppressLint("StaticFieldLeak")
 lateinit var currentPosition: TextView
 
@@ -774,13 +531,11 @@ lateinit var countAndHint: TextView
 @SuppressLint("StaticFieldLeak")
 lateinit var selectButton: Button
 
-////
 @SuppressLint("StaticFieldLeak")
 lateinit var navControllerKIN: NavController    //必須，用於從public function呼叫navControllerKIN
 
 
 //以下嘗試放通用的function，供各個fragment使用
-
 fun getPickupOptions(): List<String> {
     val options = mutableListOf<String>()
     val formatter = SimpleDateFormat("E MMM d", Locale.getDefault())
@@ -793,6 +548,7 @@ fun getPickupOptions(): List<String> {
     return options
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 以下為隱藏/顯示選單用的功能
 //參考資料 : https://stackoverflow.com/questions/37380587/android-how-to-hide-the-system-ui-properly
 fun u_hideSystemUI(decorView: View) {
@@ -806,7 +562,6 @@ fun u_hideSystemUI(decorView: View) {
     newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
     decorView.systemUiVisibility = newUiOptions
 }
-
 fun u_showSystemUI(decorView: View) {
     //val decorView = requireActivity().window.decorView
     val uiOptions = decorView.systemUiVisibility
@@ -819,10 +574,10 @@ fun u_showSystemUI(decorView: View) {
     decorView.systemUiVisibility = newUiOptions
 }
 // 以上為隱藏/顯示選單用的功能
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //以下InAir相關
-
 fun u_changeInAriText() {
     @SuppressLint("SetTextI18n")
     currentPosition.text =
@@ -924,10 +679,10 @@ fun u_outputInAirCsv(fileName: String, input: List<String>, flag: Int) {
     //Log.d("data", "outCSV Success")
 }  // sample from HW
 //以上InAir相關
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //以下 CSV & 存檔相關
-
 fun u_combineList(): ArrayList<List<Float>> {
     lateinit var tempList: ArrayList<List<Float>>
     when (testCondition){
@@ -1102,9 +857,9 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
     Log.d("data", "outCSV Success")
 }  // sample from HW
 //以上 CSV存檔相關
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //以下測驗流程管理相關
 // Todo:  calculateTrialScoreP(); V 之後還要改輸入 要考量given position
 
@@ -1250,7 +1005,6 @@ fun u_checkTime() {
     timer.start() //開始計時
 }
 
-
 //確認選擇方向、情境、並更新測驗紀錄    //移植補測後 刪掉判斷是否有選過
 //TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
 //TODO: u_confirmSelection　這邊需要增加一個新函式（製作測驗順序隨機列表，每次測驗結束，只要還沒測完ＬＩＳＴ，就再觸發這邊，才能自動化測驗
@@ -1341,7 +1095,6 @@ fun u_checkStimuliInput(): Int {
     }
     return flag
 }
-
 
 fun u_checkContextTested() {
     val checkList = arrayListOf<String>("Finger", "Pen")
@@ -1563,161 +1316,16 @@ fun u_checkTrialLimit() {
     }
 }
 
-fun u_goBackToMenu() {
-    Toast.makeText(mContextKIN, "回到測驗選單", Toast.LENGTH_SHORT).show()
-    //TODO: 根據各情境，調整判斷式，才能正確回到頁面
-
-    when (testCondition) {
-        testConditionList[0] -> {
-            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_practiceFragment_to_testMenuFragment)
-        }
-
-        testConditionList[1]  -> {
-            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_testFragment_to_testMenuFragment)
-        }
-
-        testConditionList[2]  -> {
-            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_additionFragment_to_testMenuFragment)
-        }
-
-        testConditionList[3]  -> {
-            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_nondominantFragment_to_testMenuFragment)
-        }
-
+fun u_updatePracticeTimeToViewModel() {
+    if (practiceTrialsCount >= maxTrailDesire) {
+        mainViewModel.setPracticeTime(practiceTime)
     }
-
-}
-
-//以下位置記錄相關
-// 此函數只處理紀錄位置，不處理位置的隨機分配 & 目標位置給定，不給輸入，直接取用全域變數
-fun u_recordPosition() {
-    when (buttonPressedCountsInATrial) {
-        1 -> {
-            condition = trialCondition[0]
-            startPositionX = startX
-            startPositionY = startY
-            Log.d(condition, "$startPositionX  $startPositionY ")
-        }
-        2 -> {
-            condition = trialCondition[1]
-            testPositionX = startX
-            testPositionY = startY
-            Log.d(condition, "$testPositionX  $testPositionY ")
-        }
-        3 -> {
-            condition = trialCondition[2]
-            restPositionX = startX
-            restPositionY = startY
-            Log.d(condition, "$restPositionX  $restPositionY  ")
-        }
-        4 -> {
-            condition = trialCondition[3]
-            responsePositionX = startX
-            responsePositionY = startY
-            Log.d(condition, "$responsePositionX  $responsePositionY  ")
-        }
-        5 -> {
-            condition = ""
-            startX = 0.0f
-            startY = 0.0f
-        }
-    }
-}
+} //儲存練習次數
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-fun u_displayScoreInText(inputScoreList: List<Float>, flag: Int, Score: TextView) {
-    //val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
-
-    var performanceDescriptionAP: String = ""  //Y軸
-    var performanceDescriptionML: String = ""  //X軸
-    when {
-        inputScoreList[0] < 0 -> {
-            //performanceDescriptionAP = "Underestimated"
-            performanceDescriptionAP = "少於指定目標位置"
-        }
-        inputScoreList[0] > 0 -> {
-            //performanceDescriptionAP = "Overestimated"
-            performanceDescriptionAP = "多於指定目標位置"
-        }
-        inputScoreList[0] == 0f -> {
-            //performanceDescriptionAP = "Perfect Matched"
-            performanceDescriptionAP = "等於指定目標位置"
-        }
-    }  //performanceDescriptionAP
-    when {
-        inputScoreList[1] > 0 -> {
-            //performanceDescriptionML = "Right Deviated"
-            performanceDescriptionML = "右偏指定目標位置"
-        }
-        inputScoreList[1] < 0 -> {
-            //performanceDescriptionML = "Left  Deviated"
-            performanceDescriptionML = "左偏指定目標位置"
-        }
-        inputScoreList[1] == 0f -> {
-            //performanceDescriptionML = "Perfect Matched"
-            performanceDescriptionML = "等於指定目標位置"
-        }
-    }  //performanceDescriptionML
-    when (flag) {
-        1 -> {
-            /*
-            val modifyString: String = ("Score" + "\n" +
-                    "Anterior-Posterior: " + performanceDescriptionAP + "\n" +
-                    "Medial - Lateral: " + performanceDescriptionML + "\n" +
-                    "Relative Error  AP: " + inputScoreList[0].toString() + "\n" +
-                    "Relative Error  ML: " + inputScoreList[1].toString() + "\n" +
-                    "Absolute Error  AP: " + inputScoreList[2].toString() + "\n" +
-                    "Absolute Error  ML: " + inputScoreList[3].toString() + "\n" +
-                    "Absolute Error T2R: " + inputScoreList[4].toString())
-             */
-            val modifyString: String = ("表現概述" + "\n" +
-                    "整體誤差距離: " + String.format("%.2f", inputScoreList[4]) + "\n" +
-                    "前後方向表現: " + performanceDescriptionAP + "\n" +
-                    "左右方向表現: " + performanceDescriptionML + "\n" +
-                    "\n" +
-                    "詳細分數" + "\n" +
-                    "Relative Error  AP: " + String.format("%.2f", inputScoreList[0]) + "\n" +
-                    "Relative Error  ML: " + String.format("%.2f", inputScoreList[1]) + "\n" +
-                    "Absolute Error  AP: " + String.format("%.2f", inputScoreList[2]) + "\n" +
-                    "Absolute Error  ML: " + String.format("%.2f", inputScoreList[3]) + "\n"
-                    )
-            Score.text = modifyString
-        }
-        0 -> {
-            /*  val modifyString: String = ("Score" + "\n" +
-                      "Anterior-Posterior: " + "" + "\n" +
-                      "Medial - Lateral: " + "" + "\n" +
-                      "Relative Error  AP: " + "" + "\n" +
-                      "Relative Error  ML: " + "" + "\n" +
-                      "Absolute Error  AP: " + "" + "\n" +
-                      "Absolute Error  ML: " + "" + "\n" +
-                      "Absolute Error T2R: " + "")*/
-            val modifyString: String = ("表現概述" + "\n" +
-                    "整體誤差距離: " + "" + "\n" +
-                    "前後方向表現: " + "" + "\n" +
-                    "左右方向表現: " + "" + "\n" +
-                    "\n" +
-                    "詳細分數" + "\n" +
-                    "Relative Error  AP: " + "" + "\n" +
-                    "Relative Error  ML: " + "" + "\n" +
-                    "Absolute Error  AP: " + "" + "\n" +
-                    "Absolute Error  ML: " + "" + "\n"
-                    )
-            Score.text = modifyString
-        }
-    }
-}  //用於描述測驗表現
-
-
-fun getGivenPosition(){
-    // TODO: 要新增 trueGivenStartPositionX & trueGivenStartPositionY
-    // TODO: 要新增 trueGivenTargetPositionX & trueGivenTargetPositionY
-    // TODO: 注意後面所有 位置紀錄 & 檔案輸出，都要更新這四個參數
-    // TODO: 下面所有的 position 應該要新整成一個 float list
-    // TODO: 或是先另外存一個襠名相同(情境代號註記)的EXCEL
-}
-
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//清除測驗表現資料
 fun u_clearCurrentTrialRecord(
 ) {
     startPositionX = 0.0f
@@ -1732,7 +1340,6 @@ fun u_clearCurrentTrialRecord(
     startX = 0.0f
     startY = 0.0f
 }
-
 
 fun u_resetTrials(){
     when (testCondition){
@@ -1786,7 +1393,13 @@ fun u_clearRecord() {
     positionData.setLength(0) //clean buffer
 }
 
+fun u_clearScoreList() {
+    scoreListForDisplay = listOf<Float>(0.0f, 0.0f, 0.0f, 0.0f, 0.0f)
+} //清除用來顯示的測驗表現分數List
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 將單次反應存入LIST
 fun u_saveCurrentTrialRecord() {
     //確認目前practiceTrialsCount
@@ -1857,7 +1470,6 @@ fun u_saveTrialToList(): List<Float> {
         tempScore[4]   //AE T2R
     )
 }
-
 
 //Todo: 存檔參數的長度要調整 trial1list (1-8)
 //Todo: 存檔excel輸出的標題要調整 新增四欄
@@ -2003,12 +1615,357 @@ fun u_calculateTrialScoreP(): List<Float> {
     // Variable Error: AP、ML、(AP^2+ML^2)^1/2  >> 需每個方向全部測完才能算 >> 在這邊先不算
 }
 
-fun u_clearScoreList() {
-    scoreListForDisplay = listOf<Float>(0.0f, 0.0f, 0.0f, 0.0f, 0.0f)
-} //清除用來顯示的測驗表現分數List
+
+//以下位置記錄相關
+// 此函數只處理紀錄位置，不處理位置的隨機分配 & 目標位置給定，不給輸入，直接取用全域變數
+fun u_recordPosition() {
+    when (buttonPressedCountsInATrial) {
+        1 -> {
+            condition = trialCondition[0]
+            startPositionX = startX
+            startPositionY = startY
+            Log.d(condition, "$startPositionX  $startPositionY ")
+        }
+        2 -> {
+            condition = trialCondition[1]
+            testPositionX = startX
+            testPositionY = startY
+            Log.d(condition, "$testPositionX  $testPositionY ")
+        }
+        3 -> {
+            condition = trialCondition[2]
+            restPositionX = startX
+            restPositionY = startY
+            Log.d(condition, "$restPositionX  $restPositionY  ")
+        }
+        4 -> {
+            condition = trialCondition[3]
+            responsePositionX = startX
+            responsePositionY = startY
+            Log.d(condition, "$responsePositionX  $responsePositionY  ")
+        }
+        5 -> {
+            condition = ""
+            startX = 0.0f
+            startY = 0.0f
+        }
+    }
+}
+
+fun u_displayScoreInText(inputScoreList: List<Float>, flag: Int, Score: TextView) {
+    //val Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score)
+
+    var performanceDescriptionAP: String = ""  //Y軸
+    var performanceDescriptionML: String = ""  //X軸
+    when {
+        inputScoreList[0] < 0 -> {
+            //performanceDescriptionAP = "Underestimated"
+            performanceDescriptionAP = "少於指定目標位置"
+        }
+        inputScoreList[0] > 0 -> {
+            //performanceDescriptionAP = "Overestimated"
+            performanceDescriptionAP = "多於指定目標位置"
+        }
+        inputScoreList[0] == 0f -> {
+            //performanceDescriptionAP = "Perfect Matched"
+            performanceDescriptionAP = "等於指定目標位置"
+        }
+    }  //performanceDescriptionAP
+    when {
+        inputScoreList[1] > 0 -> {
+            //performanceDescriptionML = "Right Deviated"
+            performanceDescriptionML = "右偏指定目標位置"
+        }
+        inputScoreList[1] < 0 -> {
+            //performanceDescriptionML = "Left  Deviated"
+            performanceDescriptionML = "左偏指定目標位置"
+        }
+        inputScoreList[1] == 0f -> {
+            //performanceDescriptionML = "Perfect Matched"
+            performanceDescriptionML = "等於指定目標位置"
+        }
+    }  //performanceDescriptionML
+    when (flag) {
+        1 -> {
+            /*
+            val modifyString: String = ("Score" + "\n" +
+                    "Anterior-Posterior: " + performanceDescriptionAP + "\n" +
+                    "Medial - Lateral: " + performanceDescriptionML + "\n" +
+                    "Relative Error  AP: " + inputScoreList[0].toString() + "\n" +
+                    "Relative Error  ML: " + inputScoreList[1].toString() + "\n" +
+                    "Absolute Error  AP: " + inputScoreList[2].toString() + "\n" +
+                    "Absolute Error  ML: " + inputScoreList[3].toString() + "\n" +
+                    "Absolute Error T2R: " + inputScoreList[4].toString())
+             */
+            val modifyString: String = ("表現概述" + "\n" +
+                    "整體誤差距離: " + String.format("%.2f", inputScoreList[4]) + "\n" +
+                    "前後方向表現: " + performanceDescriptionAP + "\n" +
+                    "左右方向表現: " + performanceDescriptionML + "\n" +
+                    "\n" +
+                    "詳細分數" + "\n" +
+                    "Relative Error  AP: " + String.format("%.2f", inputScoreList[0]) + "\n" +
+                    "Relative Error  ML: " + String.format("%.2f", inputScoreList[1]) + "\n" +
+                    "Absolute Error  AP: " + String.format("%.2f", inputScoreList[2]) + "\n" +
+                    "Absolute Error  ML: " + String.format("%.2f", inputScoreList[3]) + "\n"
+                    )
+            Score.text = modifyString
+        }
+        0 -> {
+            /*  val modifyString: String = ("Score" + "\n" +
+                      "Anterior-Posterior: " + "" + "\n" +
+                      "Medial - Lateral: " + "" + "\n" +
+                      "Relative Error  AP: " + "" + "\n" +
+                      "Relative Error  ML: " + "" + "\n" +
+                      "Absolute Error  AP: " + "" + "\n" +
+                      "Absolute Error  ML: " + "" + "\n" +
+                      "Absolute Error T2R: " + "")*/
+            val modifyString: String = ("表現概述" + "\n" +
+                    "整體誤差距離: " + "" + "\n" +
+                    "前後方向表現: " + "" + "\n" +
+                    "左右方向表現: " + "" + "\n" +
+                    "\n" +
+                    "詳細分數" + "\n" +
+                    "Relative Error  AP: " + "" + "\n" +
+                    "Relative Error  ML: " + "" + "\n" +
+                    "Absolute Error  AP: " + "" + "\n" +
+                    "Absolute Error  ML: " + "" + "\n"
+                    )
+            Score.text = modifyString
+        }
+    }
+}  //用於描述測驗表現
+
+fun getGivenPosition(){
+    //TODO: 要新增 trueGivenStartPositionX & trueGivenStartPositionY
+    //TODO: 要新增 trueGivenTargetPositionX & trueGivenTargetPositionY
+    //TODO: 注意後面所有 位置紀錄 & 檔案輸出，都要更新這四個參數
+    //TODO: 下面所有的 position 應該要新整成一個 float list
+    //TODO: 或是先另外存一個襠名相同(情境代號註記)的EXCEL
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//view 顯示管理
+fun u_checkContextAndLaunchView(context: String) {
+    u_clearViews()
+    u_setSquareOfTargetArea()
+    var tempContext = context
+    when (context) {
+        "請選情境" -> {
+            tempContext = "Finger"
+        }  //default 顯示Finger
+        "" -> {
+            tempContext = "Finger"
+        } //default 顯示Finger
+        "Finger" -> {
+            tempContext = "Finger"
+        }
+        "Pen" -> {
+            tempContext = "Pen"
+        }
+    }
 
 
-// View管理相關
+    //清掉前一個情境的view
+    when (tempContext) {
+        "Pen" -> {
+            when (testCondition) {
+                testConditionList[0]->{
+                    when (currentTestContext){
+                        contextList[0]->{
+                            fingerTarget.visibility = View.VISIBLE
+                            fingerStartPoint.visibility = View.VISIBLE
+                            //fingerRandomTargetView.visibility = View.VISIBLE
+                            //fingerUpArrow.visibility = View.VISIBLE
+                            //fingerUpLeftArrow.visibility = View.VISIBLE
+                            //fingerUpRightArrow.visibility = View.VISIBLE
+                            fingerDownArrow.visibility = View.VISIBLE
+                            //fingerDownLeftArrow.visibility = View.VISIBLE
+                            //fingerDownRightArrow.visibility = View.VISIBLE
+                        }
+                        contextList[1]->{
+                            fingerTarget.visibility = View.VISIBLE
+                            fingerStartPoint.visibility = View.VISIBLE
+                            //fingerRandomTargetView.visibility = View.VISIBLE
+                            //fingerUpArrow.visibility = View.VISIBLE
+                            //fingerUpLeftArrow.visibility = View.VISIBLE
+                            //fingerUpRightArrow.visibility = View.VISIBLE
+                            fingerDownArrow.visibility = View.VISIBLE
+                            //fingerDownLeftArrow.visibility = View.VISIBLE
+                            //fingerDownRightArrow.visibility = View.VISIBLE
+                        }
+                        contextList[2]->{
+                            penTarget.visibility = View.VISIBLE
+                            penStartPoint.visibility = View.VISIBLE
+                            //penRandomTargetView.visibility = View.VISIBLE
+                            //penUpArrow.visibility = View.VISIBLE
+                            //penUpLeftArrow.visibility = View.VISIBLE
+                            //penUpRightArrow.visibility = View.VISIBLE
+                            penDownArrow.visibility = View.VISIBLE
+                            //penDownLeftArrow.visibility = View.VISIBLE
+                            //penDownRightArrow.visibility = View.VISIBLE
+                        }
+                    }
+                    u_setDirection(currentTestDirection)
+                }
+                //testConditionList = listOf<String>("Practice", "Formal", "Addition","Non_dominant","Dominant","AutoRecord")
+                testConditionList[1]->{
+                    u_setDirection(currentTestDirection)
+                }
+                testConditionList[2]->{
+                    u_setDirection(currentTestDirection)
+                }
+                testConditionList[3]->{
+                    u_setDirection(currentTestDirection)
+                }
+            }
+            ///////////////////////////////////////////
+            calibrateWidth = penTandSCalibrate
+        }
+        "Finger" -> {
+            when (testCondition) {
+                testConditionList[0]->{
+                    when (currentTestContext){
+                        contextList[0]->{
+                            fingerTarget.visibility = View.VISIBLE
+                            fingerStartPoint.visibility = View.VISIBLE
+                            //fingerRandomTargetView.visibility = View.VISIBLE
+                            //fingerUpArrow.visibility = View.VISIBLE
+                            //fingerUpLeftArrow.visibility = View.VISIBLE
+                            //fingerUpRightArrow.visibility = View.VISIBLE
+                            fingerDownArrow.visibility = View.VISIBLE
+                            //fingerDownLeftArrow.visibility = View.VISIBLE
+                            //fingerDownRightArrow.visibility = View.VISIBLE
+                        }
+                        contextList[1]->{
+                            fingerTarget.visibility = View.VISIBLE
+                            fingerStartPoint.visibility = View.VISIBLE
+                            //fingerRandomTargetView.visibility = View.VISIBLE
+                            //fingerUpArrow.visibility = View.VISIBLE
+                            //fingerUpLeftArrow.visibility = View.VISIBLE
+                            //fingerUpRightArrow.visibility = View.VISIBLE
+                            fingerDownArrow.visibility = View.VISIBLE
+                            //fingerDownLeftArrow.visibility = View.VISIBLE
+                            //fingerDownRightArrow.visibility = View.VISIBLE
+                        }
+                        contextList[2]->{
+                            penTarget.visibility = View.VISIBLE
+                            penStartPoint.visibility = View.VISIBLE
+                            //penRandomTargetView.visibility = View.VISIBLE
+                            //penUpArrow.visibility = View.VISIBLE
+                            //penUpLeftArrow.visibility = View.VISIBLE
+                            //penUpRightArrow.visibility = View.VISIBLE
+                            penDownArrow.visibility = View.VISIBLE
+                            //penDownLeftArrow.visibility = View.VISIBLE
+                            //penDownRightArrow.visibility = View.VISIBLE
+                        }
+                    }
+                    u_setDirection(currentTestDirection)
+                }
+                testConditionList[1]->{
+                    u_setDirection(currentTestDirection)
+                }
+                testConditionList[2]->{
+                    u_setDirection(currentTestDirection)
+                }
+                testConditionList[3]->{
+                    u_setDirection(currentTestDirection)
+                }
+            }
+            ///////////////////////////////////////////
+            calibrateWidth = TandSCalibrate
+        }
+    }
+
+    /// 正式測驗/練習測驗/其他頁面最大差別
+    when(testCondition){
+        testConditionList[0]->{
+            trialInputSpinner.visibility = View.VISIBLE
+            fingerRandomTargetView.visibility = View.GONE
+            penRandomTargetView.visibility = View.GONE
+        }
+        testConditionList[1]->{
+            trialInputSpinner.visibility = View.GONE
+        }
+        testConditionList[2]->{
+            trialInputSpinner.visibility = View.VISIBLE
+        }
+        testConditionList[3]->{
+            trialInputSpinner.visibility = View.VISIBLE
+        }
+
+    }
+
+
+} //輸入currentContext
+
+fun u_manageVisibility(flag: Int) {
+
+    when (flag) {
+        0 -> {
+            //顯示測驗進行VIEW
+            countAndHint.visibility = View.VISIBLE
+            trialCountView.visibility = View.VISIBLE
+            recordingButton.visibility = View.VISIBLE
+            touchBoard.visibility = View.VISIBLE
+            //隱藏方向選擇VIEW
+            trialInputSpinner.visibility = View.INVISIBLE
+            selectButton.visibility = View.INVISIBLE
+            contextSpinner.visibility = View.INVISIBLE
+            directionSpinner.visibility = View.INVISIBLE
+            stimuliTypeSpinner.visibility =View.INVISIBLE
+        }
+
+        1 -> {
+            //隱藏測驗進行VIEW
+            countAndHint.visibility = View.GONE
+            trialCountView.visibility = View.GONE
+            recordingButton.visibility = View.GONE
+            touchBoard.visibility = View.GONE
+            //顯示方向選擇VIEW
+            trialInputSpinner.visibility = View.VISIBLE
+            selectButton.visibility = View.VISIBLE
+            contextSpinner.visibility = View.VISIBLE
+
+            directionSpinner.visibility = View.VISIBLE
+            stimuliTypeSpinner.visibility =View.VISIBLE
+            //
+            Score.text = ""
+        }
+    }
+    when (testCondition) {
+        testConditionList[0] -> {
+            fingerRandomTargetView.visibility = View.GONE
+            penRandomTargetView.visibility = View.GONE
+            directionSpinner.visibility = View.GONE
+        }
+        testConditionList[1] -> {
+            trialInputSpinner.visibility = View.GONE
+        }
+    }
+
+}//管理測驗相關View顯示、可觸控與否
+
+fun u_clearViews() {
+    fingerTarget.visibility = View.GONE
+    fingerStartPoint.visibility = View.GONE
+    fingerRandomTargetView.visibility = View.GONE
+    fingerUpArrow.visibility = View.GONE
+    fingerUpLeftArrow.visibility = View.GONE
+    fingerUpRightArrow.visibility = View.GONE
+    fingerDownArrow.visibility = View.GONE
+    fingerDownLeftArrow.visibility = View.GONE
+    fingerDownRightArrow.visibility = View.GONE
+    ///////////////////////////////////////////
+    penTarget.visibility = View.GONE
+    penStartPoint.visibility = View.GONE
+    penRandomTargetView.visibility = View.GONE
+    penUpArrow.visibility = View.GONE
+    penUpLeftArrow.visibility = View.GONE
+    penUpRightArrow.visibility = View.GONE
+    penDownArrow.visibility = View.GONE
+    penDownLeftArrow.visibility = View.GONE
+    penDownRightArrow.visibility = View.GONE
+} // 清除目標顯示view
+
 @SuppressLint("SetTextI18n", "RestrictedApi")
 fun u_changeText() {
 
@@ -2074,106 +2031,10 @@ fun u_changeText() {
         // https://stackoverflow.com/questions/4253328/getstring-outside-of-a-context-or-activity
     }
 }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-fun u_launchTrialInputSpinner() {
-    //mContext_demo = requireActivity().applicationContext
-    //trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
-    val adapter = ArrayAdapter.createFromResource(
-        mContextKIN,
-        R.array.practice_trial_count_list,
-        android.R.layout.simple_spinner_dropdown_item
-    )
-    trialInputSpinner.adapter = adapter
-    trialInputSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(
-            parent: AdapterView<*>?,
-            view: View?,
-            position: Int,
-            id: Long
-        ) {
-            u_setTrialLimit(practiceTrialCountList[position])
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            //TO-DO("Not yet implemented")
-        }
-    }
-}
-
-fun u_setTrialLimit(trialLimitInput: String) {
-
-    when (testCondition) {
-        testConditionList[0] -> { //practice
-            when (trialLimitInput) {
-                "請選次數" -> {
-                    maxTrailDesire = 1
-                    Toast.makeText(mContextKIN, "請輸入次數，預設為 1 次", Toast.LENGTH_SHORT).show()
-                }
-                else -> {
-                    maxTrailDesire = trialLimitInput.toInt()
-                }
-            }
-        }
-        testConditionList[1] -> {  //formal
-            maxTrailDesire = MAX_FORMAL_TRIAL
-        }
-        testConditionList[2] -> {  //Addition
-            when (trialLimitInput) {
-                "請選次數" -> {
-                    maxTrailDesire = 1
-                    Toast.makeText(mContextKIN, "請輸入次數，預設為 1 次", Toast.LENGTH_SHORT).show()
-                }
-                else -> {
-                    maxTrailDesire = trialLimitInput.toInt()
-                }
-            }
-        }
-        testConditionList[3] -> {  //Non_dominant
-            when (trialLimitInput) {
-                "請選次數" -> {
-                    maxTrailDesire = 1
-                    Toast.makeText(mContextKIN, "請輸入次數，預設為 1 次", Toast.LENGTH_SHORT).show()
-                }
-                else -> {
-                    maxTrailDesire = trialLimitInput.toInt()
-                }
-            }
-        }
-
-
-        testConditionList[4] -> {  //AutoRecord
-            maxTrailDesire = MAX_FORMAL_TRIAL
-        }
-
-
-
-    }
-
-}  //可直接移植到補測
-
-fun u_launchContextSpinner() {
-    val adapter = ArrayAdapter.createFromResource(
-        mContextKIN,
-        R.array.context_list,
-        android.R.layout.simple_spinner_dropdown_item
-    )
-    contextSpinner.adapter = adapter
-    contextSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(
-            parent: AdapterView<*>?,
-            view: View?,
-            position: Int,
-            id: Long
-        ) {
-            u_setContext(contextList[position])
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            //TO-DO("Not yet implemented")
-        }
-    }
-}
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 目標顯示管理
 fun u_setTargetPosition() {
     var c2tX = 0
     var c2tY = 0
@@ -2284,6 +2145,179 @@ fun u_setTargetRandomPosition(c2tX: Int, c2tY: Int) {
     )
 }  //在方向參數基礎上，加上隨機位置參數
 
+fun u_setSquareOfTargetArea(){
+    var c2AreaX =0
+    var c2AreaY =0
+    var c2FrameX =0
+    var c2FrameY =0
+    var arrowSize: Int //default
+
+    lateinit var upArrow: ImageView
+    lateinit var upLeftArrow: ImageView
+    lateinit var upRightArrow: ImageView
+
+    lateinit var downArrow: ImageView
+    lateinit var downLeftArrow: ImageView
+    lateinit var downRightArrow: ImageView
+
+    if(stimuliType == stimuliList[2]){
+        arrowSize = 720
+
+        if(testCondition == testConditionList[0]){
+            c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel
+            c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
+            c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel
+            c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
+        } else{ //其他測驗中，依據方項選擇，選擇正確的目標框位置
+            when (currentTestDirection) {
+//                  "L_Up" -> {
+//                      c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel - Center2Target
+//                      c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel - Center2Target
+//                      c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel - Center2Target
+//                      c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel - Center2Target
+//                  }
+//                  "L_Up_Right" -> {
+//                      c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel + Center2Target
+//                      c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel - Center2Target
+//                      c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel + Center2Target
+//                      c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel - Center2Target
+//                  }
+//                  "R_Up" -> {
+//                      c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel + Center2Target
+//                      c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel - Center2Target
+//                      c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel + Center2Target
+//                      c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel - Center2Target
+//                  }
+//                  "R_Up_Left" -> {
+//                      c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel - Center2Target
+//                      c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel - Center2Target
+//                      c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel - Center2Target
+//                      c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel - Center2Target
+//                  }
+                //以下為為受測者方向出發的選項，程式描述為icon對於施測者的方向///
+                "R_Up" -> {
+                    c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel - Center2Target
+                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
+                    c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel - Center2Target
+                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
+                }
+                "R_Up_Left" -> {
+                    c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel + Center2Target
+                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
+                    c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel + Center2Target
+                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
+                }
+                "L_Up" -> {
+                    c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel + Center2Target
+                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
+                    c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel + Center2Target
+                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
+                }
+                "L_Up_Right" -> {
+                    c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel - Center2Target
+                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
+                    c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel - Center2Target
+                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
+                }
+            }
+        }
+
+        //指定框框位置
+        //TargetArea.visibility = View.VISIBLE
+        TargetArea.layoutParams.width = widthOfTargetAreaInPixel
+        TargetArea.layoutParams.height = widthOfTargetAreaInPixel
+        (TargetArea.layoutParams as ViewGroup.MarginLayoutParams).setMargins(
+            c2AreaX ,
+            c2AreaY ,
+            0,
+            0
+        )
+        //TargetAreaFrame.visibility = View.VISIBLE
+        TargetAreaFrame.layoutParams.width = widthOfFrameInPixel
+        TargetAreaFrame.layoutParams.height = widthOfFrameInPixel
+        (TargetAreaFrame.layoutParams as ViewGroup.MarginLayoutParams).setMargins(
+            c2FrameX ,
+            c2FrameY ,
+            0,
+            0
+        )
+
+    }else{ //stimuliType ~= stimuliList[2]
+        arrowSize = 900
+        //Do nothing
+    }
+
+    // select arrow
+    when (currentTestContext){
+        contextList[1]->{//finger
+            upArrow = fingerUpArrow
+            upLeftArrow = fingerUpLeftArrow
+            upRightArrow = fingerUpRightArrow
+
+            downArrow = fingerDownArrow
+            downLeftArrow = fingerDownLeftArrow
+            downRightArrow = fingerDownRightArrow
+        }
+        contextList[2]->{//pen
+            upArrow = penUpArrow
+            upLeftArrow = penUpLeftArrow
+            upRightArrow = penUpRightArrow
+
+            downArrow = penDownArrow
+            downLeftArrow = penDownLeftArrow
+            downRightArrow = penDownRightArrow
+        }
+        else->{//default finger
+            upArrow = fingerUpArrow
+            upLeftArrow = fingerUpLeftArrow
+            upRightArrow = fingerUpRightArrow
+
+            downArrow = fingerDownArrow
+            downLeftArrow = fingerDownLeftArrow
+            downRightArrow = fingerDownRightArrow
+        }
+    }
+    // resize arrow
+    upArrow.layoutParams.width = arrowSize
+    upLeftArrow.layoutParams.width = arrowSize
+    upRightArrow.layoutParams.width = arrowSize
+    downArrow.layoutParams.width = arrowSize
+    downLeftArrow.layoutParams.width = arrowSize
+    downRightArrow.layoutParams.width = arrowSize
+    upArrow.layoutParams.height = arrowSize
+    upLeftArrow.layoutParams.height= arrowSize
+    upRightArrow.layoutParams.height= arrowSize
+    downArrow.layoutParams.height = arrowSize
+    downLeftArrow.layoutParams.height = arrowSize
+    downRightArrow.layoutParams.height = arrowSize
+    // resize arrow
+
+    // check the input and decide if the Area should be displayed
+    TargetArea.visibility = View.GONE
+    TargetAreaFrame.visibility = View.GONE
+
+    val contextChecked = u_checkContextInput()
+    val directionChecked = u_checkDirectionInput()
+    val stimuliChecked = u_checkStimuliInput()
+    if (stimuliChecked==1) {
+        if (contextChecked + directionChecked >=1) {
+            if(stimuliType ==stimuliList[2]){
+                TargetArea.visibility = View.VISIBLE
+                TargetAreaFrame.visibility = View.VISIBLE
+            }else{
+                TargetArea.visibility = View.GONE
+                TargetAreaFrame.visibility = View.GONE
+            }
+        } else {
+            TargetArea.visibility = View.GONE
+            TargetAreaFrame.visibility = View.GONE
+        }
+    }else{
+        TargetArea.visibility = View.GONE
+        TargetAreaFrame.visibility = View.GONE
+    }
+}
+
 // 此function 應在 confirm selection中呼叫
 fun u_randomThePosition() {
     //這邊會決定出來的數值範圍寬度
@@ -2305,8 +2339,84 @@ fun executeAutoTestList(){
     //TODO: 確認完各種參數後 > 直接訂出目前要測的參數 > call confrimSelection 開始正式測驗
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//spinner 顯示與儲存輸入
+fun u_launchTrialInputSpinner() {
+    //mContext_demo = requireActivity().applicationContext
+    //trialInputSpinner = requireView()!!.findViewById<View>(R.id.trialInput_list) as Spinner
+    val adapter = ArrayAdapter.createFromResource(
+        mContextKIN,
+        R.array.practice_trial_count_list,
+        android.R.layout.simple_spinner_dropdown_item
+    )
+    trialInputSpinner.adapter = adapter
+    trialInputSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>?,
+            view: View?,
+            position: Int,
+            id: Long
+        ) {
+            u_setTrialLimit(practiceTrialCountList[position])
+        }
 
-//以下三種spinner
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            //TO-DO("Not yet implemented")
+        }
+    }
+}
+
+fun u_setTrialLimit(trialLimitInput: String) {
+
+    when (testCondition) {
+        testConditionList[0] -> { //practice
+            when (trialLimitInput) {
+                "請選次數" -> {
+                    maxTrailDesire = 1
+                    Toast.makeText(mContextKIN, "請輸入次數，預設為 1 次", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    maxTrailDesire = trialLimitInput.toInt()
+                }
+            }
+        }
+        testConditionList[1] -> {  //formal
+            maxTrailDesire = MAX_FORMAL_TRIAL
+        }
+        testConditionList[2] -> {  //Addition
+            when (trialLimitInput) {
+                "請選次數" -> {
+                    maxTrailDesire = 1
+                    Toast.makeText(mContextKIN, "請輸入次數，預設為 1 次", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    maxTrailDesire = trialLimitInput.toInt()
+                }
+            }
+        }
+        testConditionList[3] -> {  //Non_dominant
+            when (trialLimitInput) {
+                "請選次數" -> {
+                    maxTrailDesire = 1
+                    Toast.makeText(mContextKIN, "請輸入次數，預設為 1 次", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    maxTrailDesire = trialLimitInput.toInt()
+                }
+            }
+        }
+
+
+        testConditionList[4] -> {  //AutoRecord
+            maxTrailDesire = MAX_FORMAL_TRIAL
+        }
+
+
+
+    }
+
+}  //可直接移植到補測
+
 fun u_launchDirectionSpinner() {
     val adapter = ArrayAdapter.createFromResource(
         mContextKIN,
@@ -2331,7 +2441,6 @@ fun u_launchDirectionSpinner() {
     }
     //以上:z; 方向選單CODE: arrayList已經移置string ,name: direction_list
 }
-
 
 fun u_setDirection(directionInput: String) {
     currentTestDirection = directionInput  //儲存目前選擇方向
@@ -2711,6 +2820,29 @@ fun u_setDirection(directionInput: String) {
 
 }
 
+fun u_launchContextSpinner() {
+    val adapter = ArrayAdapter.createFromResource(
+        mContextKIN,
+        R.array.context_list,
+        android.R.layout.simple_spinner_dropdown_item
+    )
+    contextSpinner.adapter = adapter
+    contextSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>?,
+            view: View?,
+            position: Int,
+            id: Long
+        ) {
+            u_setContext(contextList[position])
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            //TO-DO("Not yet implemented")
+        }
+    }
+}
+
 fun u_setContext(contextInput: String) {
     currentTestContext = contextInput
     when (contextInput) {
@@ -2728,234 +2860,56 @@ fun u_setContext(contextInput: String) {
     u_setDirection(currentTestDirection)
 }
 
-fun u_clearViews() {
-    fingerTarget.visibility = View.GONE
-    fingerStartPoint.visibility = View.GONE
-    fingerRandomTargetView.visibility = View.GONE
-    fingerUpArrow.visibility = View.GONE
-    fingerUpLeftArrow.visibility = View.GONE
-    fingerUpRightArrow.visibility = View.GONE
-    fingerDownArrow.visibility = View.GONE
-    fingerDownLeftArrow.visibility = View.GONE
-    fingerDownRightArrow.visibility = View.GONE
-    ///////////////////////////////////////////
-    penTarget.visibility = View.GONE
-    penStartPoint.visibility = View.GONE
-    penRandomTargetView.visibility = View.GONE
-    penUpArrow.visibility = View.GONE
-    penUpLeftArrow.visibility = View.GONE
-    penUpRightArrow.visibility = View.GONE
-    penDownArrow.visibility = View.GONE
-    penDownLeftArrow.visibility = View.GONE
-    penDownRightArrow.visibility = View.GONE
+fun u_launchStimuliTypeSpinner(){
+    val adapter = ArrayAdapter.createFromResource(
+        mContextKIN,
+        R.array.stimuliType_list,
+        android.R.layout.simple_spinner_dropdown_item
+    )
+    stimuliTypeSpinner.adapter = adapter
+    stimuliTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>?,
+            view: View?,
+            position: Int,
+            id: Long
+        ) {
+            u_setStimuliType(stimuliList[position])
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            //TO-DO("Not yet implemented")
+        }
+    }
 }
 
-fun u_checkContextAndLaunchView(context: String) {
+fun u_setStimuliType(stimuliInput:String){
+    stimuliType = stimuliInput
     u_clearViews()
+    when (stimuliType) {
+        stimuliList[0] -> {
+            Toast.makeText(mContextKIN, "請選擇測驗刺激", Toast.LENGTH_SHORT).show()
+        }
+        stimuliList[1] -> { //VAP2AP
+            // 顯示隨機的目標，不顯示方格，不顯示灰目標 >> 在setTarget 寫判斷式
+        }
+        stimuliList[2] -> { //AP2AP
+            // 顯示方格，不顯示任何目標 >> 在setTarget 寫判斷式
+        }
+        stimuliList[3] -> { //PP2AP
+            // 顯示隨機的目標，不顯示方格，不顯示灰目標 >> 在setTarget 寫判斷式
+        }
+    }
     u_setSquareOfTargetArea()
-    var tempContext = context
-    when (context) {
-        "請選情境" -> {
-            tempContext = "Finger"
-        }  //default 顯示Finger
-        "" -> {
-            tempContext = "Finger"
-        } //default 顯示Finger
-        "Finger" -> {
-            tempContext = "Finger"
-        }
-        "Pen" -> {
-            tempContext = "Pen"
-        }
-    }
-
-
-    //清掉前一個情境的view
-    when (tempContext) {
-        "Pen" -> {
-            when (testCondition) {
-                testConditionList[0]->{
-                    when (currentTestContext){
-                        contextList[0]->{
-                            fingerTarget.visibility = View.VISIBLE
-                            fingerStartPoint.visibility = View.VISIBLE
-                            //fingerRandomTargetView.visibility = View.VISIBLE
-                            //fingerUpArrow.visibility = View.VISIBLE
-                            //fingerUpLeftArrow.visibility = View.VISIBLE
-                            //fingerUpRightArrow.visibility = View.VISIBLE
-                            fingerDownArrow.visibility = View.VISIBLE
-                            //fingerDownLeftArrow.visibility = View.VISIBLE
-                            //fingerDownRightArrow.visibility = View.VISIBLE
-                        }
-                        contextList[1]->{
-                            fingerTarget.visibility = View.VISIBLE
-                            fingerStartPoint.visibility = View.VISIBLE
-                            //fingerRandomTargetView.visibility = View.VISIBLE
-                            //fingerUpArrow.visibility = View.VISIBLE
-                            //fingerUpLeftArrow.visibility = View.VISIBLE
-                            //fingerUpRightArrow.visibility = View.VISIBLE
-                            fingerDownArrow.visibility = View.VISIBLE
-                            //fingerDownLeftArrow.visibility = View.VISIBLE
-                            //fingerDownRightArrow.visibility = View.VISIBLE
-                        }
-                        contextList[2]->{
-                            penTarget.visibility = View.VISIBLE
-                            penStartPoint.visibility = View.VISIBLE
-                            //penRandomTargetView.visibility = View.VISIBLE
-                            //penUpArrow.visibility = View.VISIBLE
-                            //penUpLeftArrow.visibility = View.VISIBLE
-                            //penUpRightArrow.visibility = View.VISIBLE
-                            penDownArrow.visibility = View.VISIBLE
-                            //penDownLeftArrow.visibility = View.VISIBLE
-                            //penDownRightArrow.visibility = View.VISIBLE
-                        }
-                    }
-                    u_setDirection(currentTestDirection)
-                }
-                //testConditionList = listOf<String>("Practice", "Formal", "Addition","Non_dominant","Dominant","AutoRecord")
-                testConditionList[1]->{
-                    u_setDirection(currentTestDirection)
-                }
-                testConditionList[2]->{
-                    u_setDirection(currentTestDirection)
-                }
-                testConditionList[3]->{
-                    u_setDirection(currentTestDirection)
-                }
-            }
-            ///////////////////////////////////////////
-            calibrateWidth = penTandSCalibrate
-        }
-        "Finger" -> {
-            when (testCondition) {
-                testConditionList[0]->{
-                    when (currentTestContext){
-                        contextList[0]->{
-                            fingerTarget.visibility = View.VISIBLE
-                            fingerStartPoint.visibility = View.VISIBLE
-                            //fingerRandomTargetView.visibility = View.VISIBLE
-                            //fingerUpArrow.visibility = View.VISIBLE
-                            //fingerUpLeftArrow.visibility = View.VISIBLE
-                            //fingerUpRightArrow.visibility = View.VISIBLE
-                            fingerDownArrow.visibility = View.VISIBLE
-                            //fingerDownLeftArrow.visibility = View.VISIBLE
-                            //fingerDownRightArrow.visibility = View.VISIBLE
-                        }
-                        contextList[1]->{
-                            fingerTarget.visibility = View.VISIBLE
-                            fingerStartPoint.visibility = View.VISIBLE
-                            //fingerRandomTargetView.visibility = View.VISIBLE
-                            //fingerUpArrow.visibility = View.VISIBLE
-                            //fingerUpLeftArrow.visibility = View.VISIBLE
-                            //fingerUpRightArrow.visibility = View.VISIBLE
-                            fingerDownArrow.visibility = View.VISIBLE
-                            //fingerDownLeftArrow.visibility = View.VISIBLE
-                            //fingerDownRightArrow.visibility = View.VISIBLE
-                        }
-                        contextList[2]->{
-                            penTarget.visibility = View.VISIBLE
-                            penStartPoint.visibility = View.VISIBLE
-                            //penRandomTargetView.visibility = View.VISIBLE
-                            //penUpArrow.visibility = View.VISIBLE
-                            //penUpLeftArrow.visibility = View.VISIBLE
-                            //penUpRightArrow.visibility = View.VISIBLE
-                            penDownArrow.visibility = View.VISIBLE
-                            //penDownLeftArrow.visibility = View.VISIBLE
-                            //penDownRightArrow.visibility = View.VISIBLE
-                        }
-                    }
-                    u_setDirection(currentTestDirection)
-                }
-                testConditionList[1]->{
-                    u_setDirection(currentTestDirection)
-                }
-                testConditionList[2]->{
-                    u_setDirection(currentTestDirection)
-                }
-                testConditionList[3]->{
-                    u_setDirection(currentTestDirection)
-                }
-            }
-            ///////////////////////////////////////////
-            calibrateWidth = TandSCalibrate
-        }
-    }
-
-
-    /// 正式測驗/練習測驗/其他頁面最大差別
-    when(testCondition){
-        testConditionList[0]->{
-            trialInputSpinner.visibility = View.VISIBLE
-            fingerRandomTargetView.visibility = View.GONE
-            penRandomTargetView.visibility = View.GONE
-        }
-        testConditionList[1]->{
-            trialInputSpinner.visibility = View.GONE
-        }
-        testConditionList[2]->{
-            trialInputSpinner.visibility = View.VISIBLE
-        }
-        testConditionList[3]->{
-            trialInputSpinner.visibility = View.VISIBLE
-        }
-
-    }
-
-
-} //輸入currentContext
-
-fun u_updatePracticeTimeToViewModel() {
-    if (practiceTrialsCount >= maxTrailDesire) {
-        mainViewModel.setPracticeTime(practiceTime)
-    }
+    u_checkContextAndLaunchView(currentTestContext) //更換ImageView宣告內容
+    u_setDirection(currentTestDirection)
 }
 
-fun u_manageVisibility(flag: Int) {
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    when (flag) {
-        0 -> {
-            //顯示測驗進行VIEW
-            countAndHint.visibility = View.VISIBLE
-            trialCountView.visibility = View.VISIBLE
-            recordingButton.visibility = View.VISIBLE
-            touchBoard.visibility = View.VISIBLE
-            //隱藏方向選擇VIEW
-            trialInputSpinner.visibility = View.INVISIBLE
-            selectButton.visibility = View.INVISIBLE
-            contextSpinner.visibility = View.INVISIBLE
-            directionSpinner.visibility = View.INVISIBLE
-            stimuliTypeSpinner.visibility =View.INVISIBLE
-        }
 
-        1 -> {
-            //隱藏測驗進行VIEW
-            countAndHint.visibility = View.GONE
-            trialCountView.visibility = View.GONE
-            recordingButton.visibility = View.GONE
-            touchBoard.visibility = View.GONE
-            //顯示方向選擇VIEW
-            trialInputSpinner.visibility = View.VISIBLE
-            selectButton.visibility = View.VISIBLE
-            contextSpinner.visibility = View.VISIBLE
 
-            directionSpinner.visibility = View.VISIBLE
-            stimuliTypeSpinner.visibility =View.VISIBLE
-            //
-            Score.text = ""
-        }
-    }
-    when (testCondition) {
-        testConditionList[0] -> {
-            fingerRandomTargetView.visibility = View.GONE
-            penRandomTargetView.visibility = View.GONE
-            directionSpinner.visibility = View.GONE
-        }
-        testConditionList[1] -> {
-            trialInputSpinner.visibility = View.GONE
-        }
-    }
 
-}//管理測驗相關View顯示、可觸控與否
 
 // 進入各頁面前確認有存檔路徑 或 default
 fun u_checkDemographicInputAndUpdateDefault(mActivityKIN: Activity, mContextKIN: Context) {
@@ -3115,3 +3069,30 @@ fun u_saveDemographic() {
     Toast.makeText(mContextKIN, "Demographic Data Save Success", Toast.LENGTH_SHORT).show()
 
 }  // 存檔function END
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// navigation
+fun u_goBackToMenu() {
+    Toast.makeText(mContextKIN, "回到測驗選單", Toast.LENGTH_SHORT).show()
+    //TODO: 根據各情境，調整判斷式，才能正確回到頁面
+
+    when (testCondition) {
+        testConditionList[0] -> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_practiceFragment_to_testMenuFragment)
+        }
+
+        testConditionList[1]  -> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_testFragment_to_testMenuFragment)
+        }
+
+        testConditionList[2]  -> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_additionFragment_to_testMenuFragment)
+        }
+
+        testConditionList[3]  -> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_nondominantFragment_to_testMenuFragment)
+        }
+
+    }
+
+}
