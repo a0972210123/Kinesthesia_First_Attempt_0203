@@ -72,8 +72,6 @@ class TestFragment : Fragment() {
         trialInputSpinner = requireView().findViewById<View>(R.id.trialInput_list) as Spinner
         contextSpinner = requireView().findViewById<View>(R.id.context_list) as Spinner
         directionSpinner = requireView().findViewById<View>(R.id.direction_list) as Spinner
-
-       // Todo:>>> 待新增測驗方法Spinner (VAP2AP & AP2AP & PP2AP)
         stimuliTypeSpinner = requireView().findViewById<View>(R.id.stimuliType_list) as Spinner
 
 
@@ -118,7 +116,10 @@ class TestFragment : Fragment() {
         fingerTargetParams = fingerTarget.layoutParams as ViewGroup.MarginLayoutParams
         fingerStartParams = fingerStartPoint.layoutParams as ViewGroup.MarginLayoutParams
 
-        //TODO: 新增 SPINNER 來控制 >　記得更新存檔名稱
+        fingerRandomTargetParams = fingerRandomTargetView.layoutParams as ViewGroup.MarginLayoutParams
+        penRandomTargetParams = penRandomTargetView.layoutParams  as ViewGroup.MarginLayoutParams
+
+
         TargetArea = requireView().findViewById<ImageView>(R.id.target_square_white)
         TargetAreaFrame = requireView().findViewById<ImageView>(R.id.target_square_black)
         u_setSquareOfTargetArea()
@@ -153,10 +154,7 @@ class TestFragment : Fragment() {
         u_launchTrialInputSpinner()
         u_launchDirectionSpinner()
         u_launchContextSpinner()   //設定測驗情境(手指或握筆) > 必須
-
         u_launchStimuliTypeSpinner()
-        //TODO: 新增 SPINNER
-
 
         u_checkContextAndLaunchView(com.example.kinesthesia_first_attempt.currentTestContext)
 

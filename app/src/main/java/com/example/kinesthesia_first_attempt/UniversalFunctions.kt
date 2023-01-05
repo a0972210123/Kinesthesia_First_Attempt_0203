@@ -32,24 +32,25 @@ class UniversalFunctions : AppCompatActivity() {
 }
 
 
-
 //版面相關變數宣告
 //隨機位置相關變數宣告 (每一輪只有5Trial)
 var randWidth = IntArray(5)
 var randHeight = IntArray(5)
 
 //螢幕寬、高
-val w = Resources.getSystem().displayMetrics.widthPixels    //網路資料值 =2800，程式計算值=2800 //The absolute width of the available display size in pixels.
-val h = Resources.getSystem().displayMetrics.heightPixels  //網路資料值 =1752，程式計算值=1650 //The absolute height of the available display size in pixels.
+val w =
+    Resources.getSystem().displayMetrics.widthPixels    //網路資料值 =2800，程式計算值=2800 //The absolute width of the available display size in pixels.
+val h =
+    Resources.getSystem().displayMetrics.heightPixels  //網路資料值 =1752，程式計算值=1650 //The absolute height of the available display size in pixels.
 
-val centerCoordinateX = w/2   //1400
-val centerCoordinateY = h/2  //825
+val centerCoordinateX = w / 2   //1400
+val centerCoordinateY = h / 2  //825
 val pixelDensity = Resources.getSystem().displayMetrics.densityDpi //340，APP本身讀到的
 
 val adjustedPixelDensity = 266 //官方數據
 val adjustedScreenParameters = calculateScreenParams(w, h, 314.96, adjustedPixelDensity)
 val adjustedMmPerPixel = adjustedScreenParameters[4]
-val adjustedPixelPerMm = 1/adjustedMmPerPixel
+val adjustedPixelPerMm = 1 / adjustedMmPerPixel
 
 //(螢幕實際長度(mm), 螢幕實際寬度(mm),螢幕長度dp,螢幕寬度dp, x(mm/pixel))
 //可嘗試用程式計算值帶入 w or h
@@ -61,9 +62,13 @@ val screenLengthIn2dp = screenParameters[2]
 val screenWidthIn2dp = screenParameters[3]
 val mmPerPixel = screenParameters[4]       //(mm/pixel)
 
-val pixelPerMm = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1f,  Resources.getSystem().displayMetrics)  //10.011417
+val pixelPerMm = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_MM,
+    1f,
+    Resources.getSystem().displayMetrics
+)  //10.011417
 
-fun printScreenParameters (){
+fun printScreenParameters() {
     //重新用 android程式 抓需要的參數
 // https://medium.com/analytics-vidhya/what-is-the-difference-between-px-dip-dp-and-sp-e4351fefa685
 // https://itecnote.com/tecnote/android-convert-mm-to-pixels/
@@ -71,14 +76,20 @@ fun printScreenParameters (){
 // https://developer.android.com/reference/android/util/DisplayMetrics#fields_1
 // https://magiclen.org/android-screen/
 
-    var screenDensity_fromResources = Resources.getSystem().displayMetrics.density // = currentDpi/160  = 2.125
-    var screenDensityDpi_fromResources = Resources.getSystem().displayMetrics.densityDpi //= currentDpi = 340
+    var screenDensity_fromResources =
+        Resources.getSystem().displayMetrics.density // = currentDpi/160  = 2.125
+    var screenDensityDpi_fromResources =
+        Resources.getSystem().displayMetrics.densityDpi //= currentDpi = 340
 
-    val ScreenWidth_fromResourcesXdpi  = Resources.getSystem().displayMetrics.xdpi  // xdpi : physical pixels per inch of the screen in the X dimension.  //254.29
-    val ScreenHeight_fromResourcesYdpi =  Resources.getSystem().displayMetrics.ydpi // ydpi : physical pixels per inch of the screen in the Y dimension.  //261.47
+    val ScreenWidth_fromResourcesXdpi =
+        Resources.getSystem().displayMetrics.xdpi  // xdpi : physical pixels per inch of the screen in the X dimension.  //254.29
+    val ScreenHeight_fromResourcesYdpi =
+        Resources.getSystem().displayMetrics.ydpi // ydpi : physical pixels per inch of the screen in the Y dimension.  //261.47
 
-    val XpixelPerMm_fromxdpi = (Resources.getSystem().displayMetrics.xdpi)/25.4    //10.011417058509167
-    val YpixelPerMm_fromxdpi = (Resources.getSystem().displayMetrics.ydpi)/25.4    //10.294094536248155
+    val XpixelPerMm_fromxdpi =
+        (Resources.getSystem().displayMetrics.xdpi) / 25.4    //10.011417058509167
+    val YpixelPerMm_fromxdpi =
+        (Resources.getSystem().displayMetrics.ydpi) / 25.4    //10.294094536248155
 
 
     // 1dp = 1/160 inch = 0.00625 inch (always true)
@@ -99,35 +110,86 @@ fun printScreenParameters (){
     // 5/3.6 = 1.3888889 > screen calibration ~ 1.4
 
 
-    Log.d("ScreenParameters","absolute width (pixel)"+":"+ w.toString()) //2800
-    Log.d("ScreenParameters","absolute height (pixel)"+":"+ h.toString()) //1650
-    Log.d("ScreenParameters","==============================================================================")
+    Log.d("ScreenParameters", "absolute width (pixel)" + ":" + w.toString()) //2800
+    Log.d("ScreenParameters", "absolute height (pixel)" + ":" + h.toString()) //1650
+    Log.d(
+        "ScreenParameters",
+        "=============================================================================="
+    )
 
-    Log.d("ScreenParameters","centerX"+":"+ centerCoordinateX.toString()) //2800
-    Log.d("ScreenParameters","centerY"+":"+ centerCoordinateY.toString()) //1650
-    Log.d("ScreenParameters","==============================================================================")
-
-
-    Log.d("ScreenParameters","X dimesion (pixel/inch)"+":"+ ScreenWidth_fromResourcesXdpi.toString()) //254.29
-    Log.d("ScreenParameters","Y dimesion (pixel/inch)"+":"+ ScreenHeight_fromResourcesYdpi.toString()) //261.47
-    Log.d("ScreenParameters","==============================================================================")
-
-    Log.d("ScreenParameters","applyDimension _ pixelPerMm(pixel/mm)"+":"+ pixelPerMm.toString()) //10.011417
-    Log.d("ScreenParameters","XpixelPerMm_fromxdpi _ pixelPerMm(pixel/mm)"+":"+ XpixelPerMm_fromxdpi.toString()) //10.011417058509167
-    Log.d("ScreenParameters","YpixelPerMm_fromxdpi  _ pixelPerMm(pixel/mm)"+":"+ YpixelPerMm_fromxdpi.toString())  //10.294094536248155
-    Log.d("ScreenParameters","==============================================================================")
-
-    Log.d("ScreenParameters","screenDensity_fromResources"+":"+ screenDensity_fromResources.toString()) //2.125
-    Log.d("ScreenParameters","screenDensityDpi_fromResources"+":"+ screenDensityDpi_fromResources.toString())   //340
-
-    Log.d("ScreenParameters","==============================================================================")
-    Log.d("ScreenParameters","currentUsing_pixelPerMm(pixel/mm)"+":"+ (1/mmPerPixel).toString())    // 10.318770637541276
-    Log.d("ScreenParameters","currentUsing_mmPerPixel(mm/pixel)"+":"+ mmPerPixel.toString())  // 0.09691076923076923
+    Log.d("ScreenParameters", "centerX" + ":" + centerCoordinateX.toString()) //2800
+    Log.d("ScreenParameters", "centerY" + ":" + centerCoordinateY.toString()) //1650
+    Log.d(
+        "ScreenParameters",
+        "=============================================================================="
+    )
 
 
-    Log.d("ScreenParameters","==============================================================================")
-    Log.d("ScreenParameters","adjsuted_pixelPerMm(pixel/mm)"+":"+ adjustedPixelPerMm.toString())    // 10.318770637541276
-    Log.d("ScreenParameters","adjsuted_mmPerPixel(mm/pixel)"+":"+ adjustedMmPerPixel.toString())  // .09691076923076923
+    Log.d(
+        "ScreenParameters",
+        "X dimesion (pixel/inch)" + ":" + ScreenWidth_fromResourcesXdpi.toString()
+    ) //254.29
+    Log.d(
+        "ScreenParameters",
+        "Y dimesion (pixel/inch)" + ":" + ScreenHeight_fromResourcesYdpi.toString()
+    ) //261.47
+    Log.d(
+        "ScreenParameters",
+        "=============================================================================="
+    )
+
+    Log.d(
+        "ScreenParameters",
+        "applyDimension _ pixelPerMm(pixel/mm)" + ":" + pixelPerMm.toString()
+    ) //10.011417
+    Log.d(
+        "ScreenParameters",
+        "XpixelPerMm_fromxdpi _ pixelPerMm(pixel/mm)" + ":" + XpixelPerMm_fromxdpi.toString()
+    ) //10.011417058509167
+    Log.d(
+        "ScreenParameters",
+        "YpixelPerMm_fromxdpi  _ pixelPerMm(pixel/mm)" + ":" + YpixelPerMm_fromxdpi.toString()
+    )  //10.294094536248155
+    Log.d(
+        "ScreenParameters",
+        "=============================================================================="
+    )
+
+    Log.d(
+        "ScreenParameters",
+        "screenDensity_fromResources" + ":" + screenDensity_fromResources.toString()
+    ) //2.125
+    Log.d(
+        "ScreenParameters",
+        "screenDensityDpi_fromResources" + ":" + screenDensityDpi_fromResources.toString()
+    )   //340
+
+    Log.d(
+        "ScreenParameters",
+        "=============================================================================="
+    )
+    Log.d(
+        "ScreenParameters",
+        "currentUsing_pixelPerMm(pixel/mm)" + ":" + (1 / mmPerPixel).toString()
+    )    // 10.318770637541276
+    Log.d(
+        "ScreenParameters",
+        "currentUsing_mmPerPixel(mm/pixel)" + ":" + mmPerPixel.toString()
+    )  // 0.09691076923076923
+
+
+    Log.d(
+        "ScreenParameters",
+        "=============================================================================="
+    )
+    Log.d(
+        "ScreenParameters",
+        "adjsuted_pixelPerMm(pixel/mm)" + ":" + adjustedPixelPerMm.toString()
+    )    // 10.318770637541276
+    Log.d(
+        "ScreenParameters",
+        "adjsuted_mmPerPixel(mm/pixel)" + ":" + adjustedMmPerPixel.toString()
+    )  // .09691076923076923
 
 }
 
@@ -145,16 +207,16 @@ val desiretargetBoxSizeInMM: Int = 20  //先設定2公分
 val desiretargetStepInMM: Int = 5  //以5mm間隔
 
 // 新增兩個常數 用來校正 pixel/dp 顯示上的誤差
-val screenCalibration =  1.4 //sqrt(Resources.getSystem().displayMetrics.density) //1.4
-val pixelCalibration = (10/9.5)
+val screenCalibration = 1.4 //sqrt(Resources.getSystem().displayMetrics.density) //1.4
+val pixelCalibration = (10 / 9.5)
 
 // mm >>  pixel
 val targetBoxSize =
     (desiretargetBoxSizeInMM * pixelPerMm * screenCalibration).toInt()   //先設定 2公分  //暫定 >> 需要計算實際長度 vs pixel
 val targetStep = (desiretargetStepInMM * pixelPerMm * screenCalibration).toInt()
 
-val Center2Target = ((desireStart2TargetLengthInMM / 2) * pixelPerMm * pixelCalibration ).toInt()
-val Center2Start = ((desireStart2TargetLengthInMM / 2) * pixelPerMm * pixelCalibration ).toInt()
+val Center2Target = ((desireStart2TargetLengthInMM / 2) * pixelPerMm * pixelCalibration).toInt()
+val Center2Start = ((desireStart2TargetLengthInMM / 2) * pixelPerMm * pixelCalibration).toInt()
 
 // dp = (width in pixels * 160) / screen density
 // pixel = (dp * screen density)/160
@@ -163,7 +225,8 @@ val Center2Start = ((desireStart2TargetLengthInMM / 2) * pixelPerMm * pixelCalib
 val desireWidthOfTitleInMM: Int = 30   //先設定3公分
 val desireWidthOfTandSInMM: Int = 10 //先設定1公分
 val desirePenWidthOfTandSInMM: Int = 3  //以3mm大
-val widthOfTandSInPixel = (desireWidthOfTandSInMM * pixelPerMm * screenCalibration).toInt()   //先設定 2公分  //暫定 >> 需要計算實際長度 vs pixel
+val widthOfTandSInPixel =
+    (desireWidthOfTandSInMM * pixelPerMm * screenCalibration).toInt()   //先設定 2公分  //暫定 >> 需要計算實際長度 vs pixel
 val PenWidthOfTandSInPixel = (desirePenWidthOfTandSInMM * pixelPerMm * screenCalibration).toInt()
 // TODO: 若之後 目標大小要依照公分指定，從這邊修改
 
@@ -171,10 +234,11 @@ val widthOfTitle = 400 //dp
 val widthOfTandS = 50  //dp   finger Context
 val cantextPenWidthOfTandS = 50 //dp  20 + 15padding + 15 padding
 
-val titleCalibrate = viewAdjustDp2Pixel(widthOfTitle)/2
+val titleCalibrate = viewAdjustDp2Pixel(widthOfTitle) / 2
+
 // T= target S= Start
-val TandSCalibrate = viewAdjustDp2Pixel(widthOfTandS)/2
-val penTandSCalibrate = viewAdjustDp2Pixel(cantextPenWidthOfTandS)/2
+val TandSCalibrate = viewAdjustDp2Pixel(widthOfTandS) / 2
+val penTandSCalibrate = viewAdjustDp2Pixel(cantextPenWidthOfTandS) / 2
 var calibrateWidth = TandSCalibrate //default
 
 
@@ -184,10 +248,10 @@ fun viewAdjustDp2Pixel(dpWidthOfView: Int): Int {
     //dp = (px * 160) / dpi)
 }
 
-fun viewAdjustPixel2Dp(pixelWidthOfView: Int):Int{
-    return (pixelWidthOfView *160)/pixelDensity.toInt()
-   //px =  dp * (dpi / 160)
-   //dp = (px * 160) / dpi)
+fun viewAdjustPixel2Dp(pixelWidthOfView: Int): Int {
+    return (pixelWidthOfView * 160) / pixelDensity.toInt()
+    //px =  dp * (dpi / 160)
+    //dp = (px * 160) / dpi)
 }
 
 fun calculateScreenParams(
@@ -256,18 +320,23 @@ val desireWidthOfTargeAreaInMM = 50 //先訂五公分
 val desireWidthOfFrameInMM = 5
 
 val widthOfTargetAreaInPixel = (desireWidthOfTargeAreaInMM * pixelPerMm * screenCalibration).toInt()
+
 //val widthOfTargetAreaInDp =  viewAdjustPixel2Dp (widthOfTargetAreaInPixel).toInt()
-val calibrateAreaWidthInPixel = widthOfTargetAreaInPixel/2
+val calibrateAreaWidthInPixel = widthOfTargetAreaInPixel / 2
 //viewAdjustDp2Pixel()
 
-val widthOfFrameInPixel = ((desireWidthOfTargeAreaInMM+desireWidthOfFrameInMM*2) * pixelPerMm * screenCalibration).toInt()
+val widthOfFrameInPixel =
+    ((desireWidthOfTargeAreaInMM + desireWidthOfFrameInMM * 2) * pixelPerMm * screenCalibration).toInt()
+
 //val widthOfTargetAreaInDp =  viewAdjustPixel2Dp (widthOfTargetAreaInPixel).toInt()
-val calibrateFrameWidthInPixel = widthOfFrameInPixel/2
+val calibrateFrameWidthInPixel = widthOfFrameInPixel / 2
 
 @SuppressLint("StaticFieldLeak")
 lateinit var TargetArea: ImageView
+
 @SuppressLint("StaticFieldLeak")
 lateinit var TargetAreaFrame: ImageView
+
 @SuppressLint("StaticFieldLeak")
 lateinit var stimuliTypeSpinner: Spinner
 
@@ -330,7 +399,8 @@ var condition: String = ""
 
 //測驗選項
 //var testCondition: String = "Practice"
-val testConditionList = listOf<String>("Practice", "Formal", "Addition","Non_dominant","AutoRecord")
+val testConditionList =
+    listOf<String>("Practice", "Formal", "Addition", "Non_dominant", "AutoRecord")
 lateinit var testCondition: String  //進到各分頁後 重新宣告
 
 val practiceTrialCountList = arrayListOf<String>("8", "7", "6", "5", "4", "3", "2", "1")
@@ -365,8 +435,8 @@ var finishedStimuliList = arrayListOf<String>()
 var currentTestContext: String = ""
 val contextList = arrayListOf<String>("請選情境", "Finger", "Pen")
 
-var stimuliList = arrayListOf<String>("請選刺激","VAP2AP","AP2AP","PP2AP")
-var stimuliType = stimuliList [0]
+var stimuliList = arrayListOf<String>("請選刺激", "VAP2AP", "AP2AP", "PP2AP")
+var stimuliType = stimuliList[0]
 
 
 //測驗相關變數宣告
@@ -397,16 +467,15 @@ var scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
 //lateinit var arrayListOf5Trial: ArrayList<List<Float>>
 lateinit var arrayListOfTrials: ArrayList<List<Float>>
 
-//Todo:11/22這邊的LIST 之後都要新增 四欄，放 given target / target XY)
-var trial1list =
-    listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f) //四次表現(X/Y) + 5個表現參數  = 13
-var trial2list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-var trial3list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-var trial4list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-var trial5list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-var trial6list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-var trial7list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
-var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+
+var trial1list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f ) // 4*2 四次表現(X/Y) + 5個表現參數 + 6個given position = 19
+var trial2list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
+var trial3list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
+var trial4list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
+var trial5list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
+var trial6list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
+var trial7list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
+var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
 
 // 宣告位置調整參考資料：https://medium.com/globant/why-oncreate-of-activity-and-oncreateview-of-fragment-is-not-needed-anymore-6cdfc331102
 // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
@@ -508,7 +577,9 @@ lateinit var fingerTargetParams: ViewGroup.MarginLayoutParams
 lateinit var fingerStartParams: ViewGroup.MarginLayoutParams
 
 lateinit var titleParams: ViewGroup.MarginLayoutParams
-lateinit var randomTargetParams: ViewGroup.MarginLayoutParams
+
+lateinit var fingerRandomTargetParams: ViewGroup.MarginLayoutParams
+lateinit var penRandomTargetParams: ViewGroup.MarginLayoutParams
 
 
 @SuppressLint("StaticFieldLeak")
@@ -562,6 +633,7 @@ fun u_hideSystemUI(decorView: View) {
     newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
     decorView.systemUiVisibility = newUiOptions
 }
+
 fun u_showSystemUI(decorView: View) {
     //val decorView = requireActivity().window.decorView
     val uiOptions = decorView.systemUiVisibility
@@ -617,22 +689,23 @@ fun u_saveInAirDataToCSV(inAirData: StringBuffer) {
 
 
     // 存檔: name,List,flag
-    when(testCondition){
-        testConditionList[0]->{
-            outputFileName = testCondition + "_" + stimuliType +"_" + currentTestContext +"_Performance_$practiceTime"+"_InAirTrial_"+currentTrial.toString()+".csv"
-        }
-        testConditionList[1]->{
+    when (testCondition) {
+        testConditionList[0] -> {
             outputFileName =
-                "Dominant_"+ testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection+"_InAirTrial_"+currentTrial.toString()+".csv"
+                testCondition + "_" + stimuliType + "_" + currentTestContext + "_Performance_$practiceTime" + "_InAirTrial_" + currentTrial.toString() + ".csv"
         }
-        testConditionList[2]->{
+        testConditionList[1] -> {
             outputFileName =
-                "Dominant_"+ testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection+"_InAirTrial_"+currentTrial.toString()+".csv"
+                "Dominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_InAirTrial_" + currentTrial.toString() + ".csv"
+        }
+        testConditionList[2] -> {
+            outputFileName =
+                "Dominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_InAirTrial_" + currentTrial.toString() + ".csv"
         }
 
-        testConditionList[3]->{
+        testConditionList[3] -> {
             outputFileName =
-                "nonDominant_"+ testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection+"_InAirTrial_"+currentTrial.toString()+".csv"
+                "nonDominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_InAirTrial_" + currentTrial.toString() + ".csv"
         }
 
     }
@@ -685,8 +758,8 @@ fun u_outputInAirCsv(fileName: String, input: List<String>, flag: Int) {
 //以下 CSV & 存檔相關
 fun u_combineList(): ArrayList<List<Float>> {
     lateinit var tempList: ArrayList<List<Float>>
-    when (testCondition){
-        testConditionList[0]->{
+    when (testCondition) {
+        testConditionList[0] -> {
             tempList = arrayListOf(
                 trial1list,
                 trial2list,
@@ -698,7 +771,7 @@ fun u_combineList(): ArrayList<List<Float>> {
                 trial8list
             )
         }
-        testConditionList[1]->{
+        testConditionList[1] -> {
             tempList = arrayListOf(
                 trial1list,
                 trial2list,
@@ -707,7 +780,7 @@ fun u_combineList(): ArrayList<List<Float>> {
                 trial5list,
             )
         }
-        testConditionList[2]->{
+        testConditionList[2] -> {
             tempList = arrayListOf(
                 trial1list,
                 trial2list,
@@ -719,7 +792,7 @@ fun u_combineList(): ArrayList<List<Float>> {
                 trial8list
             )
         }
-        testConditionList[3]->{
+        testConditionList[3] -> {
             tempList = arrayListOf(
                 trial1list,
                 trial2list,
@@ -736,48 +809,57 @@ fun u_combineList(): ArrayList<List<Float>> {
     return tempList
 }
 
-fun u_arrangeData(TargetStringBuffer: StringBuffer,targetList:ArrayList<List<Float>>): StringBuffer {
+fun u_arrangeData(
+    TargetStringBuffer: StringBuffer,
+    targetList: ArrayList<List<Float>>
+): StringBuffer {
 
-    for (index in 0..((targetList.size)-1)) {  //選一個trial
-        TargetStringBuffer.append(index + 1) //trial
+    for (index in 0..((targetList.size) - 1)) {  //選一個trial
+        TargetStringBuffer.append(index + 1) //輸入trial數
         TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][0])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][1])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][2])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][3])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][4])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][5])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][6])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][7])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][8])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][9])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][10])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][11])
-        TargetStringBuffer.append(",")
-        TargetStringBuffer.append(targetList[index][12])
-        TargetStringBuffer.append(",")
+
+        for (indexCell in 0..(((targetList[index]).size) - 1)) {  //選定trial，讀取該trial 每一格數據
+            TargetStringBuffer.append(targetList[index][indexCell])
+            TargetStringBuffer.append(",")
+        }
+
         TargetStringBuffer.append("\r\n")
     }
-
     return TargetStringBuffer
 }
+
+//        TargetStringBuffer.append(targetList[index][0])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][1])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][2])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][3])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][4])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][5])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][6])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][7])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][8])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][9])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][10])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][11])
+//        TargetStringBuffer.append(",")
+//        TargetStringBuffer.append(targetList[index][12])
+//        TargetStringBuffer.append(",")
 
 fun u_savePerformanceToCSV() {
     //call combineList 整理trialData
     arrayListOfTrials = u_combineList()
     //call function 將List排進buffer
-    u_arrangeData(positionData,arrayListOfTrials)
+    u_arrangeData(positionData, arrayListOfTrials)
     //切割buffer
     val outputPositionData = positionData.toString().replace("\r", "").split("\n")
 
@@ -785,21 +867,22 @@ fun u_savePerformanceToCSV() {
     //TODO: 修改存檔檔名判斷式 ( 非慣用手、補測、自動化、刺激給法，這些都要更新)
     var outputFileName = ""
 
-    when(testCondition){
-        testConditionList[0]->{
-            outputFileName = testCondition +  "_" + stimuliType + "_" + currentTestContext  +"_Performance_$practiceTime"+".csv"
-        }
-        testConditionList[1]->{
+    when (testCondition) {
+        testConditionList[0] -> {
             outputFileName =
-                "Dominant_"+ testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
+                testCondition + "_" + stimuliType + "_" + currentTestContext + "_Performance_$practiceTime" + ".csv"
         }
-        testConditionList[2]->{
+        testConditionList[1] -> {
             outputFileName =
-                "Dominant_"+ testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
+                "Dominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
         }
-        testConditionList[3]->{
+        testConditionList[2] -> {
             outputFileName =
-                "nonDominant_"+ testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
+                "Dominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
+        }
+        testConditionList[3] -> {
+            outputFileName =
+                "nonDominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
         }
 
     }
@@ -829,13 +912,22 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
         "Absolute Error T2R"
     )
 
+    val givenPositionTitleList = listOf(
+        "Given Start Position X", "Given Start Position Y",
+        "Given Target Position X", "Given Target Position Y",
+        "Given Random Target Position X", "Given Random Target Position Y",
+    )
+
     //合併title
     val allTitle: MutableList<String> = mutableListOf()
     allTitle.addAll(titleList)
     allTitle.addAll(scoreTitleList)
+    allTitle.addAll(givenPositionTitleList)
+
+
 
     // 放入標題，使用迴圈，避免前後出現[]
-    for (i in 0..13) {
+    for (i in 0..(allTitle.size-1)) {
         output.append(allTitle[i])
         output.append(",")
     }
@@ -853,7 +945,11 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
     os.flush()
     os.close()
     output.setLength(0) //clean buffer
-    Toast.makeText(mContextKIN, "$stimuliType x $testCondition x $currentTestContext x $currentTestDirection 測驗表現儲存成功", Toast.LENGTH_SHORT).show()
+    Toast.makeText(
+        mContextKIN,
+        "$stimuliType x $testCondition x $currentTestContext x $currentTestDirection 測驗表現儲存成功",
+        Toast.LENGTH_SHORT
+    ).show()
     Log.d("data", "outCSV Success")
 }  // sample from HW
 //以上 CSV存檔相關
@@ -870,9 +966,11 @@ fun u_pressButton() {
     u_changeText()       //更動text   //11/23改為global
     u_checkTime()   //計時// 11/21 改global
 
-    if (buttonPressedCountsInATrial == 4) {
+    if (buttonPressedCountsInATrial == 1){
+        getGivenPosition()  //第1次按鈕時抓given position
+    }
 
-        // Todo: 這邊之後要加入 given position來計算
+    if (buttonPressedCountsInATrial == 4) {
         scoreListForDisplay = u_calculateTrialScoreP()   //計算測驗表現 (RE*2，AE*3)
         u_displayScoreInText(scoreListForDisplay, 1, Score)  //更新text內容 //11/21 更新為 global
         u_clearScoreList()
@@ -880,34 +978,35 @@ fun u_pressButton() {
         u_displayScoreInText(scoreListForDisplay, 0, Score)  //11/21 更新為 global
     }
 
-
     if (buttonPressedCountsInATrial == 5) {
-        //TODO: 要驗證 INAir存檔相關程式的輸出，也要嘗試改Finger測驗時，有沒辦法抓到時間&座標，用來算MT
+
         //0912測試存InAir
         if (currentTestContext == "Pen") {
             u_saveInAirDataToCSV(inAirData) //  11/11新版，未驗證
+            //TODO: 要驗證 INAir存檔相關程式的輸出，也要嘗試改Finger測驗時，有沒辦法抓到時間&座標，用來算MT
         }
+
         u_clearInAir() // 11/21 //11/11新版，未驗證
         u_addTrialsCount() // 完成一次測驗練習   //11/21
 
-        when (testCondition){
-            testConditionList[0] ->{
+        when (testCondition) {
+            testConditionList[0] -> {
                 // 練習題，不需要重設位置
             }
-            testConditionList[1] ->{
+            testConditionList[1] -> {
                 // 正式測驗，除了每一方向的第5次，都要重設位置
                 if (trialCount == 5) { //第五trail結束不用再設目標
                 } else {
                     u_setTargetPosition()// 重設目標位置
                 }
             }
-            testConditionList[2] ->{
+            testConditionList[2] -> {
                 if (trialCount == 5) { //第五trail結束不用再設目標
                 } else {
                     u_setTargetPosition()// 重設目標位置
                 }
             }
-            testConditionList[3] ->{
+            testConditionList[3] -> {
                 if (trialCount == 5) { //第五trail結束不用再設目標
                 } else {
                     u_setTargetPosition()// 重設目標位置
@@ -918,6 +1017,7 @@ fun u_pressButton() {
 
         u_saveCurrentTrialRecord()
         u_clearCurrentTrialRecord() //11/11新版，未驗證
+        clearGivenPosition()
 
         u_checkTrialLimit()       //檢查是否達到練習次數
         buttonPressedCountsInATrial = 0
@@ -992,7 +1092,8 @@ fun u_checkTime() {
             }
 
             //Beep sound
-            val toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 80)
+            //TODO: 之後要改回聲音 預設為80
+            val toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 0)
             if (buttonPressedCountsInATrial == 3) {
                 toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 200)
             } else {
@@ -1009,42 +1110,42 @@ fun u_checkTime() {
 //TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
 //TODO: u_confirmSelection　這邊需要增加一個新函式（製作測驗順序隨機列表，每次測驗結束，只要還沒測完ＬＩＳＴ，就再觸發這邊，才能自動化測驗
 fun u_confirmSelection() {
-   // val testConditionList = listOf<String>("Practice", "Formal", "Addition","Non_dominant","AutoRecord")
-            when (testCondition) {
-                testConditionList[0] -> {
-                    Toast.makeText(mContextKIN, "開始測驗練習", Toast.LENGTH_SHORT).show()
-                    u_changeText()
-                    u_manageVisibility(0)  //顯示觸控板及記錄紐
-                }
-                testConditionList[1] -> {
-                    val stimuliChecked = u_checkStimuliInput()
-                    val contextChecked = u_checkContextInput()
-                    val directionChecked = u_checkDirectionInput()
+    // val testConditionList = listOf<String>("Practice", "Formal", "Addition","Non_dominant","AutoRecord")
+    when (testCondition) {
+        testConditionList[0] -> {
+            Toast.makeText(mContextKIN, "開始測驗練習", Toast.LENGTH_SHORT).show()
+            u_changeText()
+            u_manageVisibility(0)  //顯示觸控板及記錄紐
+        }
+        testConditionList[1] -> {
+            val stimuliChecked = u_checkStimuliInput()
+            val contextChecked = u_checkContextInput()
+            val directionChecked = u_checkDirectionInput()
 
-                    if (stimuliChecked == 1) {
-                        if (contextChecked == 1) {
-                            if (directionChecked == 1) {
-                                TestingFinishedList.add(currentTestDirection)
-                                //finishedcontextList.add(currentTestContext) >>改到測完所有方向
-                                u_randomThePosition()
-                                u_setTargetPosition()
+            if (stimuliChecked == 1) {
+                if (contextChecked == 1) {
+                    if (directionChecked == 1) {
+                        TestingFinishedList.add(currentTestDirection)
+                        //finishedcontextList.add(currentTestContext) >>改到測完所有方向
+                        u_randomThePosition()
+                        u_setTargetPosition()
 
-                                u_changeText()
-                                u_manageVisibility(0)  //顯示觸控板及記錄紐
-                                Toast.makeText(
-                                    mContextKIN,
-                                    "開始測驗，項目： $stimuliType & $currentTestContext & $currentTestDirection ",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
+                        u_changeText()
+                        u_manageVisibility(0)  //顯示觸控板及記錄紐
+                        Toast.makeText(
+                            mContextKIN,
+                            "開始測驗，項目： $stimuliType & $currentTestContext & $currentTestDirection ",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
-                //TODO: 確認新頁面要檢核的項目
-                testConditionList[2] -> {}
-                testConditionList[3] -> {}
-                testConditionList[4] -> {}
             }
+        }
+        //TODO: 確認新頁面要檢核的項目
+        testConditionList[2] -> {}
+        testConditionList[3] -> {}
+        testConditionList[4] -> {}
+    }
 }
 
 fun u_checkContextInput(): Int {
@@ -1137,7 +1238,7 @@ fun u_checkDirectionTested() {
             ) //Set the message to show the data
             .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
             .setPositiveButton(mContextKIN.resources.getString(R.string.test_dialog_next_context)) { _, _ ->
-               // finishedContextList.add(currentTestContext)
+                // finishedContextList.add(currentTestContext)
                 TestingFinishedList = arrayListOf<String>() //清除List >> 準備測另種情境
                 u_manageVisibility(1)
                 Toast.makeText(mContextKIN, "已完成該測驗情境中之所有測驗方向，請更換情境", Toast.LENGTH_SHORT).show()
@@ -1170,9 +1271,9 @@ fun u_checkDirectionTested2() {
     }
 }//判斷是否所有方向都測過 備用只測後四種
 
-fun u_checkStimuliTested(){
+fun u_checkStimuliTested() {
     //TODO: 後續自動化前 要寫判斷是否測過的函式，用手動測試是否能正常運作
-    val checkList = arrayListOf<String>("VAP2AP","AP2AP","PP2AP")
+    val checkList = arrayListOf<String>("VAP2AP", "AP2AP", "PP2AP")
     if (finishedStimuliList.toSet() == checkList.toSet()) {
         //finishedcontextList = arrayListOf<String>() //清除List >> 準備測另種情境
         MaterialAlertDialogBuilder(mActivityKIN)
@@ -1206,11 +1307,11 @@ fun u_checkTrialLimit() {
             maxTrailDesire = MAX_FORMAL_TRIAL
         }
         testConditionList[2] -> { //Addition
-            tempCount  = trialCount
+            tempCount = trialCount
             //maxTrailDesire = MAX_PRACTICE_TRIAL
         }
         testConditionList[3] -> { //Addition
-            tempCount  = trialCount
+            tempCount = trialCount
             //maxTrailDesire = MAX_PRACTICE_TRIAL
         }
 
@@ -1264,7 +1365,7 @@ fun u_checkTrialLimit() {
                     .show() //creates and then displays the alert dialog.
             }
 
-            testConditionList[2] ->{
+            testConditionList[2] -> {
 
                 MaterialAlertDialogBuilder(mActivityKIN)
                     .setTitle(mContextKIN.resources.getString(R.string.addition_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
@@ -1287,7 +1388,7 @@ fun u_checkTrialLimit() {
                     .show() //creates and then displays the alert dialog.
             }
 
-            testConditionList[3] ->{
+            testConditionList[3] -> {
 
                 MaterialAlertDialogBuilder(mActivityKIN)
                     .setTitle(mContextKIN.resources.getString(R.string.nondominant_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
@@ -1341,18 +1442,18 @@ fun u_clearCurrentTrialRecord(
     startY = 0.0f
 }
 
-fun u_resetTrials(){
-    when (testCondition){
-        testConditionList[0] ->{
+fun u_resetTrials() {
+    when (testCondition) {
+        testConditionList[0] -> {
             u_reset8Trial()
         }
-        testConditionList[1] ->{
+        testConditionList[1] -> {
             u_reset5Trial()
         }
-        testConditionList[2] ->{
+        testConditionList[2] -> {
             u_reset8Trial()
         }
-        testConditionList[3] ->{
+        testConditionList[3] -> {
             u_reset8Trial()
         }
     }
@@ -1360,27 +1461,13 @@ fun u_resetTrials(){
 
 fun u_reset8Trial() {
     for (n in 0..((arrayListOfTrials.size) - 1)) {
-        arrayListOfTrials[n] = listOf<Float>(
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f
-        )
+        arrayListOfTrials[n] = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
     }
 }
 
 fun u_reset5Trial() {
     for (n in 0..((arrayListOfTrials.size) - 1)) {
-        arrayListOfTrials[n] = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+        arrayListOfTrials[n] = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
     }
 } //清除5trial
 
@@ -1411,13 +1498,13 @@ fun u_saveCurrentTrialRecord() {
         testConditionList[1] -> {
             tempCount = trialCount
         }
-        testConditionList[2] ->{
+        testConditionList[2] -> {
             tempCount = trialCount
         }
         testConditionList[3] -> {
             tempCount = trialCount
         }
-        testConditionList[4] ->{
+        testConditionList[4] -> {
             tempCount = trialCount
         }
     }
@@ -1467,85 +1554,23 @@ fun u_saveTrialToList(): List<Float> {
         tempScore[1],  //RE ML
         tempScore[2],  //AE AP
         tempScore[3],  //AE ML
-        tempScore[4]   //AE T2R
-    )
-}
-
-//Todo: 存檔參數的長度要調整 trial1list (1-8)
-//Todo: 存檔excel輸出的標題要調整 新增四欄
-
-//Todo:此為11/11新增的fun，需要再新增True Start & Target
-// 1-8為受試者實際平板上觸摸的點
-// 9-12為程式給定的座標點
-// 這9-10座標位置，要從前面的程式碼抓出來
-fun u_combineRawDataToFloatList(
-    startPositionX: Float, startPositionY: Float,
-    testPositionX: Float, testPositionY: Float,
-    restPositionX: Float, restPositionY: Float,
-    responsePositionX: Float, responsePositionY: Float,
-    trueGivenStartPositionX: Float, trueGivenStartPositionY: Float,
-    trueGivenTargetPositionX: Float, trueGivenTargetPositionY: Float
-): List<Float> {
-    return listOf<Float>(
-        startPositionX,
-        startPositionY,
-        testPositionX,
-        testPositionY,
-        restPositionX,
-        restPositionY,
-        responsePositionX,
-        responsePositionY,
-        trueGivenStartPositionX,
-        trueGivenStartPositionY,
-        trueGivenTargetPositionX,
-        trueGivenTargetPositionY
-    )
-}
-
-fun u_saveTrialToList(positionList: FloatArray): List<Float> {
-    var startPositionX = positionList[1]
-    var startPositionY = positionList[2]
-    var testPositionX = positionList[3]
-    var testPositionY = positionList[4]
-    var restPositionX = positionList[5]
-    var restPositionY = positionList[6]
-    var responsePositionX = positionList[7]
-    var responsePositionY = positionList[8]
-    var trueGivenStartPositionX = positionList[9]
-    var trueGivenStartPositionY = positionList[10]
-    var trueGivenTargetPositionX = positionList[11]
-    var trueGivenTargetPositionY = positionList[12]
-
-    val tempScore = u_calculateTrialScoreP()  //計算當前trial表現Error
-    // 將當前儲存的trialData轉換成List
-    return listOf<Float>(
-        startPositionX,
-        startPositionY,
-        testPositionX,
-        testPositionY,
-        restPositionX,
-        restPositionY,
-        responsePositionX,
-        responsePositionY,
-        tempScore[0],  //RE AP
-        tempScore[1],  //RE ML
-        tempScore[2],  //AE AP
-        tempScore[3],  //AE ML
         tempScore[4],   //AE T2R
-        trueGivenStartPositionX,
-        trueGivenStartPositionY,
-        trueGivenTargetPositionX,
-        trueGivenTargetPositionY
+        givenStartPositionX.toFloat(),
+        givenStartPositionY.toFloat(),
+        givenTargetPositionX.toFloat(),
+        givenTargetPositionY.toFloat(),
+        givenRandomTargetPositionX.toFloat(),
+        givenRandomTargetPositionY.toFloat()
     )
+
 }
+
+
 
 fun u_calculateTrialScoreP(): List<Float> {
     //Todo: 11/11 這邊的分數計算，可能要重新調整(given position)，因為起點/目標的給法不同
     //Todo: 11/21 也要新增 true given position 的輸入/
-    //var trueGivenStartPositionX = positionList[9]
-    //var trueGivenStartPositionY = positionList[10]
-    //var trueGivenTargetPositionX = positionList[11]
-    //var trueGivenTargetPositionY = positionList[12]
+
     //計算向量: 以startPosition為基準/原點
     //Vector( test2Response ) = Vector( start2Response ) - Vector( start2Test )
     //start2Test(x,y) = Test(x,y) - Start(x,y)
@@ -1624,25 +1649,25 @@ fun u_recordPosition() {
             condition = trialCondition[0]
             startPositionX = startX
             startPositionY = startY
-            Log.d(condition, "$startPositionX  $startPositionY ")
+            Log.d("positionData $condition", "$startPositionX  $startPositionY")
         }
         2 -> {
             condition = trialCondition[1]
             testPositionX = startX
             testPositionY = startY
-            Log.d(condition, "$testPositionX  $testPositionY ")
+            Log.d("positionData $condition", "$testPositionX  $testPositionY")
         }
         3 -> {
             condition = trialCondition[2]
             restPositionX = startX
             restPositionY = startY
-            Log.d(condition, "$restPositionX  $restPositionY  ")
+            Log.d("positionData $condition", "$restPositionX  $restPositionY")
         }
         4 -> {
             condition = trialCondition[3]
             responsePositionX = startX
             responsePositionY = startY
-            Log.d(condition, "$responsePositionX  $responsePositionY  ")
+            Log.d("positionData $condition", "$responsePositionX  $responsePositionY")
         }
         5 -> {
             condition = ""
@@ -1650,6 +1675,8 @@ fun u_recordPosition() {
             startY = 0.0f
         }
     }
+
+    //getGivenPosition()
 }
 
 fun u_displayScoreInText(inputScoreList: List<Float>, flag: Int, Score: TextView) {
@@ -1735,13 +1762,75 @@ fun u_displayScoreInText(inputScoreList: List<Float>, flag: Int, Score: TextView
     }
 }  //用於描述測驗表現
 
-fun getGivenPosition(){
+
+var givenStartPositionX = 0
+var givenStartPositionY = 0
+var givenTargetPositionX = 0
+var givenTargetPositionY = 0
+var givenRandomTargetPositionX = 0
+var givenRandomTargetPositionY = 0
+
+fun getGivenPosition() {
+    lateinit var targetParams: ViewGroup.MarginLayoutParams
+    lateinit var startParams: ViewGroup.MarginLayoutParams
+    lateinit var randomTargetParams: ViewGroup.MarginLayoutParams
+    var objectWidthCalibration: Int
+
+    // 根據當前情境，指派測驗參數
+    when (currentTestContext) {
+        "Pen" -> {
+            targetParams = penTargetParams
+            startParams = penStartParams
+            randomTargetParams = penRandomTargetParams
+
+            objectWidthCalibration = penTandSCalibrate
+        }
+        "Finger" -> {
+            targetParams = fingerTargetParams
+            startParams = fingerStartParams
+            randomTargetParams = fingerRandomTargetParams
+
+            objectWidthCalibration = TandSCalibrate
+        }
+        else -> {
+            targetParams = fingerTargetParams
+            startParams = fingerStartParams
+            randomTargetParams = fingerRandomTargetParams
+
+            objectWidthCalibration = TandSCalibrate
+        }  //沒有選擇時，預設為手指
+    }
+
+    // givenStartPositionX = startView.layoutParams
+    givenStartPositionX = startParams.leftMargin + objectWidthCalibration
+    givenStartPositionY = startParams.topMargin + objectWidthCalibration
+    givenTargetPositionX = targetParams.leftMargin + objectWidthCalibration
+    givenTargetPositionY = targetParams.topMargin + objectWidthCalibration
+    givenRandomTargetPositionX = randomTargetParams.leftMargin + objectWidthCalibration
+    givenRandomTargetPositionY = randomTargetParams.topMargin + objectWidthCalibration
+
+    Log.d("positionData Given", "givenStartX:$givenStartPositionX  givenStartY:$givenStartPositionY")
+    Log.d("positionData Given", "givenTargetX:$givenTargetPositionX givenTargetY: $givenTargetPositionY")
+    Log.d("positionData Given", "givenRandomTargetX:$givenRandomTargetPositionX givenRandomTargetY: $givenRandomTargetPositionY")
+}
+
+fun clearGivenPosition(){
+   givenStartPositionX = 0
+   givenStartPositionY = 0
+    givenTargetPositionX = 0
+   givenTargetPositionY = 0
+    givenRandomTargetPositionX = 0
+   givenRandomTargetPositionY = 0
+}
+
+fun saveGivenPosition(){
     //TODO: 要新增 trueGivenStartPositionX & trueGivenStartPositionY
     //TODO: 要新增 trueGivenTargetPositionX & trueGivenTargetPositionY
     //TODO: 注意後面所有 位置紀錄 & 檔案輸出，都要更新這四個參數
     //TODO: 下面所有的 position 應該要新整成一個 float list
     //TODO: 或是先另外存一個襠名相同(情境代號註記)的EXCEL
 }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //view 顯示管理
 fun u_checkContextAndLaunchView(context: String) {
@@ -1768,9 +1857,9 @@ fun u_checkContextAndLaunchView(context: String) {
     when (tempContext) {
         "Pen" -> {
             when (testCondition) {
-                testConditionList[0]->{
-                    when (currentTestContext){
-                        contextList[0]->{
+                testConditionList[0] -> {
+                    when (currentTestContext) {
+                        contextList[0] -> {
                             fingerTarget.visibility = View.VISIBLE
                             fingerStartPoint.visibility = View.VISIBLE
                             //fingerRandomTargetView.visibility = View.VISIBLE
@@ -1781,7 +1870,7 @@ fun u_checkContextAndLaunchView(context: String) {
                             //fingerDownLeftArrow.visibility = View.VISIBLE
                             //fingerDownRightArrow.visibility = View.VISIBLE
                         }
-                        contextList[1]->{
+                        contextList[1] -> {
                             fingerTarget.visibility = View.VISIBLE
                             fingerStartPoint.visibility = View.VISIBLE
                             //fingerRandomTargetView.visibility = View.VISIBLE
@@ -1792,7 +1881,7 @@ fun u_checkContextAndLaunchView(context: String) {
                             //fingerDownLeftArrow.visibility = View.VISIBLE
                             //fingerDownRightArrow.visibility = View.VISIBLE
                         }
-                        contextList[2]->{
+                        contextList[2] -> {
                             penTarget.visibility = View.VISIBLE
                             penStartPoint.visibility = View.VISIBLE
                             //penRandomTargetView.visibility = View.VISIBLE
@@ -1807,13 +1896,13 @@ fun u_checkContextAndLaunchView(context: String) {
                     u_setDirection(currentTestDirection)
                 }
                 //testConditionList = listOf<String>("Practice", "Formal", "Addition","Non_dominant","Dominant","AutoRecord")
-                testConditionList[1]->{
+                testConditionList[1] -> {
                     u_setDirection(currentTestDirection)
                 }
-                testConditionList[2]->{
+                testConditionList[2] -> {
                     u_setDirection(currentTestDirection)
                 }
-                testConditionList[3]->{
+                testConditionList[3] -> {
                     u_setDirection(currentTestDirection)
                 }
             }
@@ -1822,9 +1911,9 @@ fun u_checkContextAndLaunchView(context: String) {
         }
         "Finger" -> {
             when (testCondition) {
-                testConditionList[0]->{
-                    when (currentTestContext){
-                        contextList[0]->{
+                testConditionList[0] -> {
+                    when (currentTestContext) {
+                        contextList[0] -> {
                             fingerTarget.visibility = View.VISIBLE
                             fingerStartPoint.visibility = View.VISIBLE
                             //fingerRandomTargetView.visibility = View.VISIBLE
@@ -1835,7 +1924,7 @@ fun u_checkContextAndLaunchView(context: String) {
                             //fingerDownLeftArrow.visibility = View.VISIBLE
                             //fingerDownRightArrow.visibility = View.VISIBLE
                         }
-                        contextList[1]->{
+                        contextList[1] -> {
                             fingerTarget.visibility = View.VISIBLE
                             fingerStartPoint.visibility = View.VISIBLE
                             //fingerRandomTargetView.visibility = View.VISIBLE
@@ -1846,7 +1935,7 @@ fun u_checkContextAndLaunchView(context: String) {
                             //fingerDownLeftArrow.visibility = View.VISIBLE
                             //fingerDownRightArrow.visibility = View.VISIBLE
                         }
-                        contextList[2]->{
+                        contextList[2] -> {
                             penTarget.visibility = View.VISIBLE
                             penStartPoint.visibility = View.VISIBLE
                             //penRandomTargetView.visibility = View.VISIBLE
@@ -1860,13 +1949,13 @@ fun u_checkContextAndLaunchView(context: String) {
                     }
                     u_setDirection(currentTestDirection)
                 }
-                testConditionList[1]->{
+                testConditionList[1] -> {
                     u_setDirection(currentTestDirection)
                 }
-                testConditionList[2]->{
+                testConditionList[2] -> {
                     u_setDirection(currentTestDirection)
                 }
-                testConditionList[3]->{
+                testConditionList[3] -> {
                     u_setDirection(currentTestDirection)
                 }
             }
@@ -1876,19 +1965,19 @@ fun u_checkContextAndLaunchView(context: String) {
     }
 
     /// 正式測驗/練習測驗/其他頁面最大差別
-    when(testCondition){
-        testConditionList[0]->{
+    when (testCondition) {
+        testConditionList[0] -> {
             trialInputSpinner.visibility = View.VISIBLE
             fingerRandomTargetView.visibility = View.GONE
             penRandomTargetView.visibility = View.GONE
         }
-        testConditionList[1]->{
+        testConditionList[1] -> {
             trialInputSpinner.visibility = View.GONE
         }
-        testConditionList[2]->{
+        testConditionList[2] -> {
             trialInputSpinner.visibility = View.VISIBLE
         }
-        testConditionList[3]->{
+        testConditionList[3] -> {
             trialInputSpinner.visibility = View.VISIBLE
         }
 
@@ -1911,7 +2000,7 @@ fun u_manageVisibility(flag: Int) {
             selectButton.visibility = View.INVISIBLE
             contextSpinner.visibility = View.INVISIBLE
             directionSpinner.visibility = View.INVISIBLE
-            stimuliTypeSpinner.visibility =View.INVISIBLE
+            stimuliTypeSpinner.visibility = View.INVISIBLE
         }
 
         1 -> {
@@ -1926,7 +2015,7 @@ fun u_manageVisibility(flag: Int) {
             contextSpinner.visibility = View.VISIBLE
 
             directionSpinner.visibility = View.VISIBLE
-            stimuliTypeSpinner.visibility =View.VISIBLE
+            stimuliTypeSpinner.visibility = View.VISIBLE
             //
             Score.text = ""
         }
@@ -2090,9 +2179,9 @@ fun u_setTargetPosition() {
         }  //沒有選擇時，預設為手指
     }
 
-    if(testCondition== testConditionList[0]){
+    if (testCondition == testConditionList[0]) {
         //練習測中 不隱藏預設目標
-    }else{
+    } else {
         //其他情境中，隱藏預設目標只顯示隨機目標
         when (stimuliType) {
             stimuliList[0] -> {
@@ -2118,6 +2207,7 @@ fun u_setTargetPosition() {
 fun u_setTargetRandomPosition(c2tX: Int, c2tY: Int) {
 
     lateinit var randomTarget: ImageView
+    lateinit var randomTargetParams: ViewGroup.MarginLayoutParams
     when (currentTestContext) {
         "Pen" -> {
             randomTarget = penRandomTargetView
@@ -2127,9 +2217,9 @@ fun u_setTargetRandomPosition(c2tX: Int, c2tY: Int) {
         }
     }
 
-    if(stimuliType == stimuliList[2]){
+    if (stimuliType == stimuliList[2]) {
         randomTarget.visibility = View.INVISIBLE
-    }else{
+    } else {
         randomTarget.visibility = View.VISIBLE
     }
 
@@ -2145,11 +2235,11 @@ fun u_setTargetRandomPosition(c2tX: Int, c2tY: Int) {
     )
 }  //在方向參數基礎上，加上隨機位置參數
 
-fun u_setSquareOfTargetArea(){
-    var c2AreaX =0
-    var c2AreaY =0
-    var c2FrameX =0
-    var c2FrameY =0
+fun u_setSquareOfTargetArea() {
+    var c2AreaX = 0
+    var c2AreaY = 0
+    var c2FrameX = 0
+    var c2FrameY = 0
     var arrowSize: Int //default
 
     lateinit var upArrow: ImageView
@@ -2160,15 +2250,15 @@ fun u_setSquareOfTargetArea(){
     lateinit var downLeftArrow: ImageView
     lateinit var downRightArrow: ImageView
 
-    if(stimuliType == stimuliList[2]){
+    if (stimuliType == stimuliList[2]) {
         arrowSize = 720
 
-        if(testCondition == testConditionList[0]){
+        if (testCondition == testConditionList[0]) {
             c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel
-            c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
+            c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel + Center2Target
             c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel
-            c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
-        } else{ //其他測驗中，依據方項選擇，選擇正確的目標框位置
+            c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel + Center2Target
+        } else { //其他測驗中，依據方項選擇，選擇正確的目標框位置
             when (currentTestDirection) {
 //                  "L_Up" -> {
 //                      c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel - Center2Target
@@ -2197,27 +2287,27 @@ fun u_setSquareOfTargetArea(){
                 //以下為為受測者方向出發的選項，程式描述為icon對於施測者的方向///
                 "R_Up" -> {
                     c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel - Center2Target
-                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
+                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel + Center2Target
                     c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel - Center2Target
-                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
+                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel + Center2Target
                 }
                 "R_Up_Left" -> {
                     c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel + Center2Target
-                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
+                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel + Center2Target
                     c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel + Center2Target
-                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
+                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel + Center2Target
                 }
                 "L_Up" -> {
                     c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel + Center2Target
-                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
+                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel + Center2Target
                     c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel + Center2Target
-                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
+                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel + Center2Target
                 }
                 "L_Up_Right" -> {
                     c2AreaX = centerCoordinateX - calibrateAreaWidthInPixel - Center2Target
-                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel  + Center2Target
+                    c2AreaY = centerCoordinateY - calibrateAreaWidthInPixel + Center2Target
                     c2FrameX = centerCoordinateX - calibrateFrameWidthInPixel - Center2Target
-                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel  + Center2Target
+                    c2FrameY = centerCoordinateY - calibrateFrameWidthInPixel + Center2Target
                 }
             }
         }
@@ -2227,8 +2317,8 @@ fun u_setSquareOfTargetArea(){
         TargetArea.layoutParams.width = widthOfTargetAreaInPixel
         TargetArea.layoutParams.height = widthOfTargetAreaInPixel
         (TargetArea.layoutParams as ViewGroup.MarginLayoutParams).setMargins(
-            c2AreaX ,
-            c2AreaY ,
+            c2AreaX,
+            c2AreaY,
             0,
             0
         )
@@ -2236,20 +2326,20 @@ fun u_setSquareOfTargetArea(){
         TargetAreaFrame.layoutParams.width = widthOfFrameInPixel
         TargetAreaFrame.layoutParams.height = widthOfFrameInPixel
         (TargetAreaFrame.layoutParams as ViewGroup.MarginLayoutParams).setMargins(
-            c2FrameX ,
-            c2FrameY ,
+            c2FrameX,
+            c2FrameY,
             0,
             0
         )
 
-    }else{ //stimuliType ~= stimuliList[2]
+    } else { //stimuliType ~= stimuliList[2]
         arrowSize = 900
         //Do nothing
     }
 
     // select arrow
-    when (currentTestContext){
-        contextList[1]->{//finger
+    when (currentTestContext) {
+        contextList[1] -> {//finger
             upArrow = fingerUpArrow
             upLeftArrow = fingerUpLeftArrow
             upRightArrow = fingerUpRightArrow
@@ -2258,7 +2348,7 @@ fun u_setSquareOfTargetArea(){
             downLeftArrow = fingerDownLeftArrow
             downRightArrow = fingerDownRightArrow
         }
-        contextList[2]->{//pen
+        contextList[2] -> {//pen
             upArrow = penUpArrow
             upLeftArrow = penUpLeftArrow
             upRightArrow = penUpRightArrow
@@ -2267,7 +2357,7 @@ fun u_setSquareOfTargetArea(){
             downLeftArrow = penDownLeftArrow
             downRightArrow = penDownRightArrow
         }
-        else->{//default finger
+        else -> {//default finger
             upArrow = fingerUpArrow
             upLeftArrow = fingerUpLeftArrow
             upRightArrow = fingerUpRightArrow
@@ -2285,8 +2375,8 @@ fun u_setSquareOfTargetArea(){
     downLeftArrow.layoutParams.width = arrowSize
     downRightArrow.layoutParams.width = arrowSize
     upArrow.layoutParams.height = arrowSize
-    upLeftArrow.layoutParams.height= arrowSize
-    upRightArrow.layoutParams.height= arrowSize
+    upLeftArrow.layoutParams.height = arrowSize
+    upRightArrow.layoutParams.height = arrowSize
     downArrow.layoutParams.height = arrowSize
     downLeftArrow.layoutParams.height = arrowSize
     downRightArrow.layoutParams.height = arrowSize
@@ -2299,12 +2389,12 @@ fun u_setSquareOfTargetArea(){
     val contextChecked = u_checkContextInput()
     val directionChecked = u_checkDirectionInput()
     val stimuliChecked = u_checkStimuliInput()
-    if (stimuliChecked==1) {
-        if (contextChecked + directionChecked >=1) {
-            if(stimuliType ==stimuliList[2]){
+    if (stimuliChecked == 1) {
+        if (contextChecked + directionChecked >= 1) {
+            if (stimuliType == stimuliList[2]) {
                 TargetArea.visibility = View.VISIBLE
                 TargetAreaFrame.visibility = View.VISIBLE
-            }else{
+            } else {
                 TargetArea.visibility = View.GONE
                 TargetAreaFrame.visibility = View.GONE
             }
@@ -2312,7 +2402,7 @@ fun u_setSquareOfTargetArea(){
             TargetArea.visibility = View.GONE
             TargetAreaFrame.visibility = View.GONE
         }
-    }else{
+    } else {
         TargetArea.visibility = View.GONE
         TargetAreaFrame.visibility = View.GONE
     }
@@ -2329,11 +2419,11 @@ fun u_randomThePosition() {
 }   //需要調整數值範圍
 
 //TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
-fun u_randomTheAutoTestList(){
+fun u_randomTheAutoTestList() {
 
 }
 
-fun executeAutoTestList(){
+fun executeAutoTestList() {
     //TODO: 模仿 confirm selection
     //TODO: 結合 checkXXXtested
     //TODO: 確認完各種參數後 > 直接訂出目前要測的參數 > call confrimSelection 開始正式測驗
@@ -2410,7 +2500,6 @@ fun u_setTrialLimit(trialLimitInput: String) {
         testConditionList[4] -> {  //AutoRecord
             maxTrailDesire = MAX_FORMAL_TRIAL
         }
-
 
 
     }
@@ -2632,7 +2721,12 @@ fun u_setDirection(directionInput: String) {
     //調整view位置
     when (currentTestDirection) {
         "請選方向" -> {
-            titleParams.setMargins(centerCoordinateX - titleCalibrate, centerCoordinateY - 400, 0, 0)
+            titleParams.setMargins(
+                centerCoordinateX - titleCalibrate,
+                centerCoordinateY - 400,
+                0,
+                0
+            )
         }
 
         /*  "L_Up" -> {
@@ -2715,7 +2809,12 @@ fun u_setDirection(directionInput: String) {
                 0
             )
 
-            titleParams.setMargins(centerCoordinateX - titleCalibrate + 800, centerCoordinateY - 400, 0, 0)
+            titleParams.setMargins(
+                centerCoordinateX - titleCalibrate + 800,
+                centerCoordinateY - 400,
+                0,
+                0
+            )
         }
         "R_Up_Left" -> {
             targetParams.setMargins(
@@ -2731,7 +2830,12 @@ fun u_setDirection(directionInput: String) {
                 0
             )
 
-            titleParams.setMargins(centerCoordinateX - titleCalibrate - 800, centerCoordinateY - 400, 0, 0)
+            titleParams.setMargins(
+                centerCoordinateX - titleCalibrate - 800,
+                centerCoordinateY - 400,
+                0,
+                0
+            )
         }
         "L_Up" -> {
             targetParams.setMargins(
@@ -2747,7 +2851,12 @@ fun u_setDirection(directionInput: String) {
                 0
             )
 
-            titleParams.setMargins(centerCoordinateX - titleCalibrate - 800, centerCoordinateY - 400, 0, 0)
+            titleParams.setMargins(
+                centerCoordinateX - titleCalibrate - 800,
+                centerCoordinateY - 400,
+                0,
+                0
+            )
         }
         "L_Up_Right" -> {
             targetParams.setMargins(
@@ -2763,13 +2872,18 @@ fun u_setDirection(directionInput: String) {
                 0
             )
 
-            titleParams.setMargins(centerCoordinateX - titleCalibrate + 800, centerCoordinateY - 400, 0, 0)
+            titleParams.setMargins(
+                centerCoordinateX - titleCalibrate + 800,
+                centerCoordinateY - 400,
+                0,
+                0
+            )
         }
     }
 
     //避免重新練習時BUG
-    when (testCondition){
-        testConditionList[0]-> {
+    when (testCondition) {
+        testConditionList[0] -> {
             targetView.visibility = View.VISIBLE
             startView.visibility = View.VISIBLE
             upArrow.visibility = View.GONE
@@ -2787,18 +2901,23 @@ fun u_setDirection(directionInput: String) {
                 0
             )
             startParams.setMargins(
-                centerCoordinateX - calibrateWidth ,
+                centerCoordinateX - calibrateWidth,
                 centerCoordinateY - calibrateWidth - Center2Start,
                 0,
                 0
             )
-            titleParams.setMargins(centerCoordinateX - titleCalibrate + 800, centerCoordinateY - 400, 0, 0)
+            titleParams.setMargins(
+                centerCoordinateX - titleCalibrate + 800,
+                centerCoordinateY - 400,
+                0,
+                0
+            )
         }
     }
 
-    if(testCondition== testConditionList[0]){
+    if (testCondition == testConditionList[0]) {
         //練習測中 不隱藏預設目標
-    }else{
+    } else {
         //其他情境中，預覽畫面，只有AP2AP 隱藏預設目標
         when (stimuliType) {
             stimuliList[0] -> {
@@ -2860,7 +2979,7 @@ fun u_setContext(contextInput: String) {
     u_setDirection(currentTestDirection)
 }
 
-fun u_launchStimuliTypeSpinner(){
+fun u_launchStimuliTypeSpinner() {
     val adapter = ArrayAdapter.createFromResource(
         mContextKIN,
         R.array.stimuliType_list,
@@ -2883,7 +3002,7 @@ fun u_launchStimuliTypeSpinner(){
     }
 }
 
-fun u_setStimuliType(stimuliInput:String){
+fun u_setStimuliType(stimuliInput: String) {
     stimuliType = stimuliInput
     u_clearViews()
     when (stimuliType) {
@@ -2906,9 +3025,6 @@ fun u_setStimuliType(stimuliInput:String){
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 
 // 進入各頁面前確認有存檔路徑 或 default
@@ -3081,15 +3197,15 @@ fun u_goBackToMenu() {
             navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_practiceFragment_to_testMenuFragment)
         }
 
-        testConditionList[1]  -> {
+        testConditionList[1] -> {
             navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_testFragment_to_testMenuFragment)
         }
 
-        testConditionList[2]  -> {
+        testConditionList[2] -> {
             navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_additionFragment_to_testMenuFragment)
         }
 
-        testConditionList[3]  -> {
+        testConditionList[3] -> {
             navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_nondominantFragment_to_testMenuFragment)
         }
 
