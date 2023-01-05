@@ -4,6 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="universalFunction"
+            type="com.example.kinesthesia_first_attempt.UniversalFunctionsKt" />
 
         <variable
             name="autorecordFragment"
@@ -20,91 +23,6 @@
         android:layout_height="match_parent"
         tools:context=".AutorecordFragment">
 
-
-        <TextView
-            android:id="@+id/performance_current_trial_score"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-
-            android:rotation="180"
-            android:text="Score"
-
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/performance_response_position"
-            app:layout_constraintEnd_toEndOf="@+id/performance_title"
-            app:layout_constraintStart_toStartOf="@+id/performance_title" />
-
-        <TextView
-            android:id="@+id/current_position_field"
-            android:layout_width="400dp"
-            android:layout_height="30dp"
-            android:rotation="180"
-            android:text="Current Position: X=0.0, Y=0.0 "
-
-            android:textSize="@dimen/performance_text_size"
-
-            app:layout_constraintBottom_toTopOf="@+id/performance_title"
-            app:layout_constraintEnd_toEndOf="@+id/performance_title"
-            app:layout_constraintStart_toStartOf="@+id/performance_title" />
-
-
-        <TextView
-            android:id="@+id/performance_response_position"
-            android:layout_width="400dp"
-            android:layout_height="30dp"
-
-            android:rotation="180"
-            android:text="Response Position"
-
-            android:textSize="@dimen/performance_text_size"
-
-            app:layout_constraintBottom_toTopOf="@+id/performance_test_position"
-            app:layout_constraintEnd_toEndOf="@id/performance_title"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@id/performance_title" />
-
-        <TextView
-            android:id="@+id/performance_test_position"
-            android:layout_width="400dp"
-            android:layout_height="30dp"
-
-            android:rotation="180"
-            android:text="Test Position"
-
-            android:textSize="@dimen/performance_text_size"
-            app:layout_constraintBottom_toTopOf="@+id/performance_rest_position"
-            app:layout_constraintEnd_toEndOf="@id/performance_title"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@id/performance_title" />
-
-        <TextView
-            android:id="@+id/performance_rest_position"
-            android:layout_width="400dp"
-            android:layout_height="30dp"
-
-            android:rotation="180"
-            android:text="Rest Position"
-
-            android:textSize="@dimen/performance_text_size"
-            app:layout_constraintBottom_toTopOf="@+id/performance_start_position"
-            app:layout_constraintEnd_toEndOf="@id/performance_title"
-            app:layout_constraintStart_toStartOf="@id/performance_title" />
-
-        <TextView
-            android:id="@+id/performance_start_position"
-            android:layout_width="400dp"
-            android:layout_height="30dp"
-
-            android:rotation="180"
-            android:text="Start Position"
-
-            android:textSize="@dimen/performance_text_size"
-            app:layout_constraintBottom_toTopOf="@+id/current_position_field"
-
-            app:layout_constraintEnd_toEndOf="@id/performance_title"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@id/performance_title" />
-
         <TextView
             android:id="@+id/performance_title"
             android:layout_width="400dp"
@@ -112,72 +30,153 @@
 
 
             android:layout_marginStart="975px"
-            android:layout_marginTop="825px"
+            android:layout_marginTop="425px"
 
 
             android:gravity="center"
             android:paddingStart="0dp"
-            android:rotation="180"
+
             android:text="測驗表現"
             android:textSize="40sp"
             app:layout_constraintStart_toStartOf="parent"
 
             app:layout_constraintTop_toTopOf="parent" />
 
-
-
-        <Button
-            android:id="@+id/record_position"
-            android:layout_width="165dp"
-            android:layout_height="80dp"
-            android:onClick="@{() -> autorecordFragment.pressButton()}"
-            android:rotation="180"
-
-            android:text="@string/record_position"
-            android:textSize="30sp"
-
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
-            android:id="@+id/text1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/current_position_field"
+            android:layout_width="400dp"
+            android:layout_height="30dp"
 
-            android:rotation="180"
+            android:text="Current Position: X=0.0, Y=0.0 "
 
             android:textSize="@dimen/performance_text_size"
-            app:layout_constraintEnd_toEndOf="@+id/record_position"
-            app:layout_constraintStart_toStartOf="@+id/record_position"
-            app:layout_constraintTop_toBottomOf="@id/record_position" />
+
+            app:layout_constraintEnd_toEndOf="@+id/performance_title"
+            app:layout_constraintStart_toStartOf="@+id/performance_title"
+            app:layout_constraintTop_toBottomOf="@+id/in_air_testing" />
+
 
         <TextView
-            android:id="@+id/trial_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:rotation="180"
-            android:text="@string/trial_count"
-            android:textSize="@dimen/performance_text_size"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@+id/record_position"
-            app:layout_constraintStart_toStartOf="@+id/record_position"
-            app:layout_constraintTop_toBottomOf="@+id/text1" />
+            android:id="@+id/performance_start_position"
+            android:layout_width="400dp"
+            android:layout_height="30dp"
 
+
+            android:text="Start Position"
+
+            android:textSize="@dimen/performance_text_size"
+
+            app:layout_constraintEnd_toEndOf="@id/performance_title"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@id/performance_title"
+            app:layout_constraintTop_toBottomOf="@+id/current_position_field" />
+
+        <TextView
+            android:id="@+id/performance_test_position"
+            android:layout_width="400dp"
+            android:layout_height="30dp"
+
+
+            android:text="Test Position"
+
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintEnd_toEndOf="@id/performance_title"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/performance_title"
+            app:layout_constraintTop_toBottomOf="@+id/performance_start_position" />
+
+
+        <TextView
+            android:id="@+id/performance_rest_position"
+            android:layout_width="400dp"
+            android:layout_height="30dp"
+
+
+            android:text="Rest Position"
+
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintEnd_toEndOf="@id/performance_title"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/performance_title"
+            app:layout_constraintTop_toBottomOf="@+id/performance_test_position" />
+
+        <TextView
+            android:id="@+id/performance_response_position"
+            android:layout_width="400dp"
+            android:layout_height="30dp"
+
+
+            android:text="Response Position"
+
+            android:textSize="@dimen/performance_text_size"
+
+            app:layout_constraintEnd_toEndOf="@id/performance_title"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/performance_title"
+            app:layout_constraintTop_toBottomOf="@+id/performance_rest_position" />
+
+        <TextView
+            android:id="@+id/performance_current_trial_score"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+
+            android:text="Score"
+
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/performance_title"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/performance_title"
+            app:layout_constraintTop_toBottomOf="@+id/performance_response_position" />
 
         <TextView
             android:id="@+id/instruction_demonstration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:rotation="180"
             android:text="請先選擇次數、情境、方向，再按下確認按鈕。"
             android:textSize="20sp"
             android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/text1"
             app:layout_constraintEnd_toEndOf="@id/record_position"
             app:layout_constraintStart_toStartOf="@id/record_position"
-            app:layout_constraintTop_toBottomOf="@+id/trial_count" />
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/performance_text_size"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/trial_count"
+            app:layout_constraintEnd_toEndOf="@+id/record_position"
+            app:layout_constraintStart_toStartOf="@+id/record_position"
+            tools:visibility="visible" />
+
+
+        <TextView
+            android:id="@+id/trial_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/trial_count"
+            android:textSize="@dimen/performance_text_size"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/record_position"
+            app:layout_constraintEnd_toEndOf="@+id/record_position"
+            app:layout_constraintStart_toStartOf="@+id/record_position"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/record_position"
+            android:layout_width="165dp"
+            android:layout_height="80dp"
+            android:onClick="@{() -> universalFunction.u_pressButton()}"
+            android:text="@string/record_position"
+            android:textSize="30sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
 
 
         <Spinner
@@ -189,57 +188,104 @@
             app:layout_constraintStart_toEndOf="@id/context_list"
             app:layout_constraintTop_toTopOf="@+id/context_list" />
 
-
         <Spinner
             android:id="@+id/trialInput_list"
             android:layout_width="200dp"
             android:layout_height="50dp"
-            android:contentDescription="@string/hint_plz_set_trials"
             android:addStatesFromChildren="false"
+            android:visibility="gone"
+            android:contentDescription="@string/hint_plz_set_trials"
             app:layout_constraintEnd_toStartOf="@id/context_list"
             app:layout_constraintTop_toTopOf="@+id/context_list" />
-
 
         <Spinner
             android:id="@+id/context_list"
             android:layout_width="200dp"
             android:layout_height="50dp"
-            android:contentDescription="@string/hint_plz_set_context"
             android:addStatesFromChildren="false"
-            app:layout_constraintBottom_toTopOf="@+id/select_direction"
-            app:layout_constraintEnd_toEndOf="@id/select_direction"
-            app:layout_constraintStart_toStartOf="@id/select_direction" />
+            android:contentDescription="@string/hint_plz_set_context"
+            app:layout_constraintBottom_toTopOf="@+id/confirm_trial"
+            app:layout_constraintEnd_toStartOf="@+id/direction_list"
+            app:layout_constraintStart_toStartOf="@+id/confirm_trial" />
 
-        <Button
-            android:id="@+id/select_direction"
+
+        <Spinner
+            android:id="@+id/stimuliType_list"
             android:layout_width="200dp"
             android:layout_height="50dp"
+            android:addStatesFromChildren="false"
+            android:contentDescription="@string/hint_plz_set_stimuliType"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@id/trialInput_list"
+            app:layout_constraintTop_toTopOf="@id/trialInput_list"
+            tools:ignore="SpeakableTextPresentCheck" />
 
+        <Button
+            android:id="@+id/confirm_trial"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
             android:layout_marginTop="60dp"
-            android:onClick="@{() -> autorecordFragment.confirmSelection()}"
+            android:onClick="@{() -> universalFunction.u_confirmSelection()}"
             android:text="@string/select_direction"
-
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- 以下測試 目標方框用 view
+-->
+
+        <ImageView
+            android:id="@+id/target_square_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:srcCompat="@drawable/square_black" />
+
+        <ImageView
+            android:id="@+id/target_square_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:srcCompat="@drawable/square_white" />
+
+
+        <!-- 以上測試 目標方框用 view
+       -->
+
+
 
         <com.example.kinesthesia_first_attempt.TouchBoard
             android:id="@+id/view"
             android:layout_width="match_parent"
-
             android:layout_height="match_parent"
             android:background="@drawable/background_color"
             android:visibility="invisible"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            app:layout_constraintVertical_bias="0.0" />
 
-
-
+        <TextView
+            android:id="@+id/in_air_testing"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:text="InAir Data Testing"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintTop_toBottomOf="@+id/performance_title"
+            app:layout_constraintEnd_toEndOf="@+id/performance_title"
+            app:layout_constraintStart_toStartOf="@+id/performance_title" />
 
         <ImageView
             android:id="@+id/target"
@@ -249,13 +295,12 @@
             android:layout_marginStart="500dp"
             android:layout_marginTop="150dp"
 
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
+
             app:layout_constraintTop_toTopOf="parent"
 
-            app:srcCompat="@drawable/target_50"
-
-            android:visibility="gone"
-            />
+            app:srcCompat="@drawable/target_50" />
 
         <ImageView
             android:id="@+id/start_point"
@@ -265,15 +310,12 @@
             android:layout_marginStart="150dp"
             android:layout_marginTop="150dp"
 
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
+
             app:layout_constraintTop_toTopOf="parent"
 
-            app:srcCompat="@drawable/start_50"
-
-            android:visibility="gone"
-            />
-
-
+            app:srcCompat="@drawable/start_50" />
 
         <ImageView
             android:id="@+id/random_target"
@@ -291,69 +333,87 @@
             app:srcCompat="@drawable/random_target_50"
             app:tint="@color/pink_950" />
 
-
-
         <ImageView
-            android:id="@+id/arrow_to_right"
+            android:id="@+id/arrow_to_up_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/north_east_150"
-
             android:visibility="gone"
 
-            app:layout_constraintTop_toBottomOf="@id/target"
-            app:layout_constraintEnd_toStartOf="@id/target"
             app:layout_constraintBottom_toTopOf="@id/start_point"
+
+            app:layout_constraintEnd_toStartOf="@id/target"
             app:layout_constraintStart_toEndOf="@id/start_point"
-            />
+            app:layout_constraintTop_toBottomOf="@id/target"
+            app:srcCompat="@drawable/north_east_150" />
 
         <ImageView
-            android:id="@+id/arrow_to_left"
+            android:id="@+id/arrow_to_up_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/north_west_150"
-
             android:visibility="gone"
-
-            app:layout_constraintTop_toBottomOf="@id/target"
-            app:layout_constraintStart_toEndOf="@id/target"
             app:layout_constraintBottom_toTopOf="@id/start_point"
             app:layout_constraintEnd_toStartOf="@id/start_point"
-            />
+            app:layout_constraintStart_toEndOf="@id/target"
+            app:layout_constraintTop_toBottomOf="@id/target"
+            app:srcCompat="@drawable/north_west_150" />
 
         <ImageView
-            android:id="@+id/arrow"
+            android:id="@+id/up_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/north_150"
-
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/start_point"
             app:layout_constraintEnd_toEndOf="@id/start_point"
             app:layout_constraintStart_toStartOf="@id/start_point"
-            app:layout_constraintBottom_toTopOf="@id/start_point"
+            app:srcCompat="@drawable/north_150" />
 
+        <ImageView
+            android:id="@+id/arrow_to_down_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:visibility="gone"
-            />
+            app:layout_constraintBottom_toTopOf="@id/target"
+            app:layout_constraintEnd_toStartOf="@id/target"
+            app:layout_constraintStart_toEndOf="@id/start_point"
+            app:layout_constraintTop_toBottomOf="@id/start_point"
+            app:srcCompat="@drawable/south_east_150" />
 
+        <ImageView
+            android:id="@+id/arrow_to_down_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/target"
+            app:layout_constraintStart_toEndOf="@id/target"
+            app:layout_constraintEnd_toStartOf="@id/start_point"
+            app:layout_constraintTop_toBottomOf="@id/start_point"
+            app:srcCompat="@drawable/south_west_150" />
+
+        <ImageView
+            android:id="@+id/down_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/start_point"
+            app:layout_constraintStart_toStartOf="@id/start_point"
+            app:layout_constraintTop_toBottomOf="@id/start_point"
+            app:srcCompat="@drawable/south_150" />
 
         <!--以下PenContext用-->
-
 
 
         <ImageView
             android:id="@+id/pen_target"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:layout_marginStart="500dp"
-            android:layout_marginTop="150dp"
-
+            android:paddingStart="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="15dp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-
-            app:srcCompat="@drawable/pen_target_20"
-
-            android:visibility="gone"
-            />
+            app:srcCompat="@drawable/pen_target_20" />
 
         <ImageView
             android:id="@+id/pen_start_point"
@@ -366,72 +426,150 @@
             android:paddingTop="15dp"
             android:paddingRight="15dp"
             android:paddingBottom="15dp"
-            app:srcCompat="@drawable/pen_start_20"
-            />
-
-
+            app:srcCompat="@drawable/pen_start_20" />
 
         <ImageView
             android:id="@+id/pen_random_target"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:layout_marginStart="150dp"
-            android:layout_marginTop="150dp"
-
+            android:paddingStart="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="15dp"
             android:visibility="gone"
-
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-
             app:srcCompat="@drawable/pen_random_target_20"
             app:tint="@color/pink_950" />
 
-
-
         <ImageView
-            android:id="@+id/pen_arrow_to_right"
+            android:id="@+id/pen_arrow_to_up_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/north_east_150"
-
             android:visibility="gone"
 
-            app:layout_constraintTop_toBottomOf="@id/pen_target"
+            app:layout_constraintBottom_toTopOf="@id/pen_start_point"
+
             app:layout_constraintEnd_toStartOf="@id/pen_target"
-            app:layout_constraintBottom_toTopOf="@id/pen_start_point"
             app:layout_constraintStart_toEndOf="@id/pen_start_point"
-            />
+            app:layout_constraintTop_toBottomOf="@id/pen_target"
+            app:srcCompat="@drawable/north_east_150" />
 
         <ImageView
-            android:id="@+id/pen_arrow_to_left"
+            android:id="@+id/pen_arrow_to_up_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/north_west_150"
-
             android:visibility="gone"
 
-            app:layout_constraintTop_toBottomOf="@id/pen_target"
-            app:layout_constraintStart_toEndOf="@id/pen_target"
             app:layout_constraintBottom_toTopOf="@id/pen_start_point"
+
             app:layout_constraintEnd_toStartOf="@id/pen_start_point"
-            />
+            app:layout_constraintStart_toEndOf="@id/pen_target"
+            app:layout_constraintTop_toBottomOf="@id/pen_target"
+            app:srcCompat="@drawable/north_west_150" />
 
         <ImageView
-            android:id="@+id/pen_arrow"
+            android:id="@+id/pen_up_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/north_150"
-
             android:layout_marginBottom="15dp"
+
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/pen_start_point"
             app:layout_constraintEnd_toEndOf="@id/pen_start_point"
             app:layout_constraintStart_toStartOf="@id/pen_start_point"
-            app:layout_constraintBottom_toTopOf="@id/pen_start_point"
 
+            app:srcCompat="@drawable/north_150" />
+
+        <ImageView
+            android:id="@+id/pen_arrow_to_down_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:visibility="gone"
-            />
+            app:layout_constraintBottom_toTopOf="@id/pen_target"
+            app:layout_constraintEnd_toStartOf="@id/pen_target"
+
+            app:layout_constraintStart_toEndOf="@id/pen_start_point"
+            app:layout_constraintTop_toBottomOf="@id/pen_start_point"
+            app:srcCompat="@drawable/south_east_150" />
+
+        <ImageView
+            android:id="@+id/pen_arrow_to_down_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/pen_target"
+            app:layout_constraintStart_toEndOf="@id/pen_target"
+            app:layout_constraintEnd_toStartOf="@id/pen_start_point"
+            app:layout_constraintTop_toBottomOf="@id/pen_start_point"
+            app:srcCompat="@drawable/south_west_150" />
+
+        <ImageView
+            android:id="@+id/pen_down_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/pen_start_point"
+            app:layout_constraintStart_toStartOf="@id/pen_start_point"
+            app:layout_constraintTop_toBottomOf="@id/pen_start_point"
+            app:srcCompat="@drawable/south_150" />
 
 
+        <!-- 以下提示受試者/施測者座位方向textView-->
+
+        <TextView
+            android:id="@+id/client_direction_indication_left"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="175px"
+            android:layout_marginTop="10px"
+            android:drawableTop="@drawable/north_25"
+            android:gravity="center"
+            android:text="@string/client_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/client_direction_indication_right"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1775px"
+            android:layout_marginTop="10px"
+            android:drawableTop="@drawable/north_25"
+            android:gravity="center"
+            android:text="@string/client_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/examiner_direction_indication_left"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="175px"
+            android:layout_marginBottom="10px"
+            android:drawableBottom="@drawable/south_25"
+            android:gravity="center"
+            android:text="@string/examiner_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"  />
+
+        <TextView
+            android:id="@+id/examiner_direction_indication_right"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1775px"
+            android:layout_marginBottom="10px"
+            android:drawableBottom="@drawable/south_25"
+            android:gravity="center"
+            android:text="@string/examiner_direction"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- 以上提示受試者/施測者座位方向textView-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

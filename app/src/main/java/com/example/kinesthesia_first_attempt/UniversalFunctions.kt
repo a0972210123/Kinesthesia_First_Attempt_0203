@@ -8,12 +8,11 @@ import android.content.res.Resources
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.CountDownTimer
+import android.os.SystemClock
 import android.service.autofill.Validators.or
 import android.util.Log
 import android.util.TypedValue
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -1389,7 +1388,7 @@ fun u_checkTrialLimit() {
             }
 
             testConditionList[3] -> {
-
+                //TODO:如果要測的話要改成跟正式測驗一樣
                 MaterialAlertDialogBuilder(mActivityKIN)
                     .setTitle(mContextKIN.resources.getString(R.string.nondominant_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
                     .setMessage(mContextKIN.resources.getString(R.string.nondominant_dialog_message)) //Set the message to show the data
@@ -1407,6 +1406,29 @@ fun u_checkTrialLimit() {
                         u_savePerformanceToCSV()
                         u_clearRecord()  // 清除測驗表現>> 還沒寫完
                         u_goBackToMenu()//
+                    }
+                    .show() //creates and then displays the alert dialog.
+            }
+
+            testConditionList[4] -> {
+                MaterialAlertDialogBuilder(mActivityKIN)
+                    .setTitle(mContextKIN.resources.getString(R.string.autoTest_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
+                    .setMessage(
+                        mContextKIN.resources.getString(R.string.test_dialog_message)
+                    ) //Set the message to show the data
+                    .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
+
+                    .setPositiveButton(mContextKIN.resources.getString(R.string.test_dialog_next_condition)) { _, _ ->
+                        u_savePerformanceToCSV()//儲存測驗表現
+                        u_clearRecord()  // 清除測驗表現
+                        trialCountView.text = "測驗次數: $currentTrial / $maxTrailDesire "
+
+                        //TODO: 從這邊繞過選項輸入，直接進入下一次測驗
+                        u_manageVisibility(1)
+
+
+                        u_checkDirectionTested() // 確認完成所有測驗方向
+                        Toast.makeText(mContextKIN, "更換方向", Toast.LENGTH_SHORT).show()
                     }
                     .show() //creates and then displays the alert dialog.
             }
@@ -1565,8 +1587,6 @@ fun u_saveTrialToList(): List<Float> {
 
 }
 
-
-
 fun u_calculateTrialScoreP(): List<Float> {
     //Todo: 11/11 這邊的分數計算，可能要重新調整(given position)，因為起點/目標的給法不同
     //Todo: 11/21 也要新增 true given position 的輸入/
@@ -1639,7 +1659,6 @@ fun u_calculateTrialScoreP(): List<Float> {
     )
     // Variable Error: AP、ML、(AP^2+ML^2)^1/2  >> 需每個方向全部測完才能算 >> 在這邊先不算
 }
-
 
 //以下位置記錄相關
 // 此函數只處理紀錄位置，不處理位置的隨機分配 & 目標位置給定，不給輸入，直接取用全域變數
@@ -2420,6 +2439,36 @@ fun u_randomThePosition() {
 
 //TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
 fun u_randomTheAutoTestList() {
+    // step 1 在進入頁面，決定 刺激/情境/方向 的隨機順序 (要counter balanced)
+    // step 2 將這些順序 暫存在某個 List
+    // step 3 將這些 List 顯示在對話框 並依據測驗進度 標示 [] or [V]
+    // 用 confirmSelection 自動執行目前選擇的結果 > 用目前已經寫好測驗限制判斷式(checktrailLimit等等)，依序判斷目前測驗進度
+    // 並在每次按下positive按鈕時，再次呼叫confirmSelection
+    // >> 或許寫一個新的對話框最快，不要共用之前的判斷對話框
+
+    var stimuliOrder = listOf(0,1,2)
+    var contextOrder = listOf(0,1)
+    var directionOrder = listOf(0,1,2,3)
+
+    val stimuliCheckList = arrayListOf<String>("VAP2AP", "AP2AP", "PP2AP")
+    val contextCheckList = arrayListOf<String>("Finger", "Pen")
+    val directionCheckList = arrayListOf<String>(
+        "L_Up",
+        "L_Up_Right",
+        "R_Up",
+        "R_Up_Left",
+    )
+
+    //TestingFinishedList  //direction
+    //finishedContextList
+    //finishedStimuliList
+
+    if (finishedContextList.toSet() == contextCheckList.toSet()) {
+
+    } else{
+
+    }
+
 
 }
 
@@ -3209,6 +3258,156 @@ fun u_goBackToMenu() {
             navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_nondominantFragment_to_testMenuFragment)
         }
 
+        testConditionList[4] -> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_autorecordFragment_to_testMenuFragment)
+        }
+
+    }
+
+}
+
+
+
+class MyGestureDetectorListener : GestureDetector.OnGestureListener {
+    //https://www.itread01.com/content/1549194854.html
+    //https://developer.android.com/training/gestures/detector
+    //https://developer.android.com/jetpack/compose/gestures
+    private val SWIPE_THRESHOLD: Int = 300
+    private val SWIPE_VELOCITY_THRESHOLD = 300
+
+    var scrollThresholdValue_x = 0f
+    var scrollThresholdValue_y = 0f
+    var onDownTime: Long = 0
+    var onLongPressTime: Long = 0
+    var onScrollTime: Long =0
+    var interval: Long = 0
+
+    var isLongPressed:Boolean = false
+
+    fun resetTime() {
+        onDownTime = 0
+        onLongPressTime = 0
+        interval = 0
+        scrollThresholdValue_x = 0f
+        scrollThresholdValue_y = 0f
+        onScrollTime =0
+    }
+
+    override fun onDown(e: MotionEvent?): Boolean {
+        onDownTime = SystemClock.currentThreadTimeMillis()
+        startX = e!!.x
+        startY = e!!.y
+        Log.d("Gesture", "onDown")
+        return false
+    }
+    override fun onShowPress(e: MotionEvent?) {
+        startX = e!!.x
+        startY = e!!.y
+        Log.d("Gesture", "onShowPress")
+    }
+    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+        startX = 0f
+        startY = 0f
+        Log.d("Gesture", "onSingleTapUp")
+        return false
+    }
+    override fun onScroll(
+        e1: MotionEvent?,
+        e2: MotionEvent?,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
+        // Log.d("Gesture", "onScroll")
+
+        onScrollTime = SystemClock.currentThreadTimeMillis()
+        interval = onScrollTime - onDownTime
+        //Log.d("Gesture", "onScroll: interval = $interval ms")
+        var scrollThresholdValue_x = e2!!.x - e1!!.x
+        var scrollThresholdValue_y = e2!!.y - e1!!.y
+        //Log.d("Gesture", "onScroll: Scroll Threshold Value X=$scrollThresholdValue_x Y=$scrollThresholdValue_y")
+        Log.d("Gesture", "onScroll: Scroll parameters X=$distanceX Y=$distanceY")
+
+        resetTime()
+        //return false
+        return true
+    }
+
+    override fun onLongPress(e: MotionEvent?) {
+        onLongPressTime = SystemClock.currentThreadTimeMillis()
+        interval = onLongPressTime - onDownTime
+        Log.d("Gesture", "onLongPress: interval = $interval ms")
+        resetTime()
+
+        //測試結果: GestureDetector 本身 onLongPress 的時間設定為 10 - 40ms之間，並不穩定，且時長短
+    }
+
+    override fun onFling(
+        e1: MotionEvent?,
+        e2: MotionEvent?,
+        velocityX: Float,
+        velocityY: Float
+    ): Boolean {
+
+        var result: Boolean = false
+
+        try {
+            var diffY = e2!!.y - e1!!.y
+            var diffX = e2!!.x - e1!!.x
+
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffX > 0) {
+                        onSwipeRight();
+                    } else {
+                        onSwipeLeft();
+                    }
+                    result = true;
+                }
+
+            } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                if (diffY > 0) {
+                    onSwipeBottom();
+                } else {
+                    onSwipeTop();
+                }
+                result = true;
+            }
+
+        } catch (exception: Exception) {
+            exception.printStackTrace();
+        }
+
+        Log.d("Gesture", " onFling Confirm")
+        return result
+        //return true
+    }
+
+    fun onSwipeRight() {  Log.d("Gesture", " onFling: Right") }
+
+    fun onSwipeLeft() {  Log.d("Gesture", " onFling: Left")}
+
+    fun onSwipeTop() {  Log.d("Gesture", " onFling: Top")}
+
+    fun onSwipeBottom() { Log.d("Gesture", " onFling: Bottom") }
+
+}
+
+
+class MyOnDoubleTapListener : GestureDetector.OnDoubleTapListener{
+
+    override fun onDoubleTap(event: MotionEvent?): Boolean {
+        Log.d("Gesture", "onDoubleTap: $event")
+        return true
+    }
+
+    override fun onDoubleTapEvent(event: MotionEvent?): Boolean {
+        Log.d("Gesture", "onDoubleTapEvent: $event")
+        return true
+    }
+
+    override fun onSingleTapConfirmed(event: MotionEvent?): Boolean {
+        Log.d("Gesture", "onSingleTapConfirmed: $event")
+        return true
     }
 
 }
