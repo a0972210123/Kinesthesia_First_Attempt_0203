@@ -195,8 +195,6 @@ class AutorecordFragment : Fragment() {
 
         Log.d("lifeCycle", "AutoRecordFragment created!")
     }
-
-
 } //Fragment End
 
 
@@ -206,11 +204,9 @@ class AutorecordFragment : Fragment() {
 // step 3 將這些 List 顯示在對話框 並依據測驗進度 標示 [] or [V]
 // call setStimuli / setcontext / setdirection = 輸入目前的測驗參數，以啟動view
 
-
 // 用 confirmSelection 自動執行目前選擇的結果 > 用目前已經寫好測驗限制判斷式(checktrailLimit等等)，依序判斷目前測驗進度
 // 並在每次按下positive按鈕時，再次呼叫confirmSelection
 // >> 或許寫一個新的對話框最快，不要共用之前的判斷對話框
-
 
 var randomizedStimuliOrder = listOf<Int>(0, 1, 2)
 var randomizedContextOrder = listOf<Int>(0, 1)
@@ -259,7 +255,6 @@ fun u_randomTheAutoTestList() {
     randomizedDirectionOrder = directionOrder.shuffled()
 }
 
-
 //目前的近測驗進度
 var stimuliProgress = 0   //0 1 2
 var contextProgress = 0   //0 1
@@ -299,7 +294,6 @@ fun checkAutoTestProgress() {
             4->{ Log.d("Progress-Context", "超出指定數值，請檢視程式碼錯誤") }
         }
     } else { }
-
 
     u_setStimuliType(stimuliCheckList[randomizedStimuliOrder[stimuliProgress]])
     u_setContext(contextCheckList[randomizedContextOrder[contextProgress]])
