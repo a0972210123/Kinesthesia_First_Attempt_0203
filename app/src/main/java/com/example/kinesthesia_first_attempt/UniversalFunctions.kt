@@ -9,7 +9,6 @@ import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.CountDownTimer
 import android.os.SystemClock
-import android.service.autofill.Validators.or
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
@@ -467,14 +466,41 @@ var scoreListForDisplay = listOf<Float>(0f, 0f, 0f, 0f, 0f)
 lateinit var arrayListOfTrials: ArrayList<List<Float>>
 
 
-var trial1list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f ) // 4*2 四次表現(X/Y) + 5個表現參數 + 6個given position = 19
-var trial2list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
-var trial3list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
-var trial4list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
-var trial5list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
-var trial6list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
-var trial7list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
-var trial8list = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
+var trial1list = listOf<Float>(
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f,
+    0f
+) // 4*2 四次表現(X/Y) + 5個表現參數 + 6個given position = 19
+var trial2list =
+    listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+var trial3list =
+    listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+var trial4list =
+    listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+var trial5list =
+    listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+var trial6list =
+    listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+var trial7list =
+    listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
+var trial8list =
+    listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f)
 
 // 宣告位置調整參考資料：https://medium.com/globant/why-oncreate-of-activity-and-oncreateview-of-fragment-is-not-needed-anymore-6cdfc331102
 // 11/15 View 相關宣告測試，嘗試避免重複宣告 requireView().findViewById
@@ -827,32 +853,6 @@ fun u_arrangeData(
     return TargetStringBuffer
 }
 
-//        TargetStringBuffer.append(targetList[index][0])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][1])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][2])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][3])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][4])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][5])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][6])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][7])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][8])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][9])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][10])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][11])
-//        TargetStringBuffer.append(",")
-//        TargetStringBuffer.append(targetList[index][12])
-//        TargetStringBuffer.append(",")
 
 fun u_savePerformanceToCSV() {
     //call combineList 整理trialData
@@ -924,9 +924,8 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
     allTitle.addAll(givenPositionTitleList)
 
 
-
     // 放入標題，使用迴圈，避免前後出現[]
-    for (i in 0..(allTitle.size-1)) {
+    for (i in 0..(allTitle.size - 1)) {
         output.append(allTitle[i])
         output.append(",")
     }
@@ -956,7 +955,6 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //以下測驗流程管理相關
-// Todo:  calculateTrialScoreP(); V 之後還要改輸入 要考量given position
 
 fun u_pressButton() {
     buttonPressedCountsInATrial++      //每按一次按鈕+1
@@ -965,7 +963,7 @@ fun u_pressButton() {
     u_changeText()       //更動text   //11/23改為global
     u_checkTime()   //計時// 11/21 改global
 
-    if (buttonPressedCountsInATrial == 1){
+    if (buttonPressedCountsInATrial == 1) {
         getGivenPosition()  //第1次按鈕時抓given position
     }
 
@@ -1011,6 +1009,12 @@ fun u_pressButton() {
                     u_setTargetPosition()// 重設目標位置
                 }
             }
+            testConditionList[4] -> {
+                if (trialCount == 5) { //第五trail結束不用再設目標
+                } else {
+                    u_setTargetPosition()// 重設目標位置
+                }
+            }
 
         }
 
@@ -1018,7 +1022,14 @@ fun u_pressButton() {
         u_clearCurrentTrialRecord() //11/11新版，未驗證
         clearGivenPosition()
 
-        u_checkTrialLimit()       //檢查是否達到練習次數
+        if (testCondition == testConditionList[4]){
+            //自動化測驗
+            auto_checkTrialLimit()
+        }else{
+            u_checkTrialLimit()  //檢查是否達到練習次數
+        }
+
+
         buttonPressedCountsInATrial = 0
     }
     return
@@ -1106,8 +1117,7 @@ fun u_checkTime() {
 }
 
 //確認選擇方向、情境、並更新測驗紀錄    //移植補測後 刪掉判斷是否有選過
-//TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
-//TODO: u_confirmSelection　這邊需要增加一個新函式（製作測驗順序隨機列表，每次測驗結束，只要還沒測完ＬＩＳＴ，就再觸發這邊，才能自動化測驗
+
 fun u_confirmSelection() {
     // val testConditionList = listOf<String>("Practice", "Formal", "Addition","Non_dominant","AutoRecord")
     when (testCondition) {
@@ -1124,8 +1134,7 @@ fun u_confirmSelection() {
             if (stimuliChecked == 1) {
                 if (contextChecked == 1) {
                     if (directionChecked == 1) {
-                        TestingFinishedList.add(currentTestDirection)
-                        //finishedcontextList.add(currentTestContext) >>改到測完所有方向
+                        //TestingFinishedList.add(currentTestDirection)
                         u_randomThePosition()
                         u_setTargetPosition()
 
@@ -1143,7 +1152,29 @@ fun u_confirmSelection() {
         //TODO: 確認新頁面要檢核的項目
         testConditionList[2] -> {}
         testConditionList[3] -> {}
-        testConditionList[4] -> {}
+        testConditionList[4] -> {
+            //TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
+            //TODO: u_confirmSelection　這邊需要增加一個新函式（製作測驗順序隨機列表，每次測驗結束，只要還沒測完ＬＩＳＴ，就再觸發這邊，才能自動化測驗
+            //TODO: 新增Auto Test Function
+            // 0. 隱藏Spinner
+            // 1. 產生隨機測驗順序，顯示到對話框 (參考 demographic對話框)
+            // 2. 檢查測驗進度，輸入測驗選項 (仿照 confirmselection 正式測驗
+            // 3. 隨機測驗目標、設定測驗目標
+            // 4. 顯示文字/測驗成績/測驗按鈕
+            // 5. 顯示測驗開始提示
+            u_randomTheAutoTestList()
+            executeAutoTestList()
+
+            u_changeText()
+
+            //  u_manageVisibility(0) 這個應該要包到 executeAutoTestList中 (這邊只會經過一次)
+            u_manageVisibility(0)  //顯示觸控板及記錄紐
+
+            Toast.makeText(
+                mContextKIN,
+                "開始測驗，項目： $stimuliType & $currentTestContext & $currentTestDirection ",
+                Toast.LENGTH_SHORT)
+        }
     }
 }
 
@@ -1232,11 +1263,10 @@ fun u_checkDirectionTested() {
         finishedContextList.add(currentTestContext)
         MaterialAlertDialogBuilder(mActivityKIN)
             .setTitle(mContextKIN.resources.getString(R.string.test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
-            .setMessage(
-                mContextKIN.resources.getString(R.string.test_dialog_message_finished_all_direction)
-            ) //Set the message to show the data
+            .setMessage(mContextKIN.resources.getString(R.string.test_dialog_message_finished_all_direction)) //Set the message to show the data
             .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
-            .setPositiveButton(mContextKIN.resources.getString(R.string.test_dialog_next_context)) { _, _ ->
+            .setPositiveButton(mContextKIN.resources.getString(R.string.test_dialog_next_context))
+            { _, _ ->
                 // finishedContextList.add(currentTestContext)
                 TestingFinishedList = arrayListOf<String>() //清除List >> 準備測另種情境
                 u_manageVisibility(1)
@@ -1313,8 +1343,6 @@ fun u_checkTrialLimit() {
             tempCount = trialCount
             //maxTrailDesire = MAX_PRACTICE_TRIAL
         }
-
-
     }
 
     if (tempCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
@@ -1346,6 +1374,7 @@ fun u_checkTrialLimit() {
             }
 
             testConditionList[1] -> {
+                TestingFinishedList.add(currentTestDirection)
                 MaterialAlertDialogBuilder(mActivityKIN)
                     .setTitle(mContextKIN.resources.getString(R.string.test_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
                     .setMessage(
@@ -1365,7 +1394,7 @@ fun u_checkTrialLimit() {
             }
 
             testConditionList[2] -> {
-
+                TestingFinishedList.add(currentTestDirection)
                 MaterialAlertDialogBuilder(mActivityKIN)
                     .setTitle(mContextKIN.resources.getString(R.string.addition_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
                     .setMessage(mContextKIN.resources.getString(R.string.addition_dialog_message)) //Set the message to show the data
@@ -1388,6 +1417,7 @@ fun u_checkTrialLimit() {
             }
 
             testConditionList[3] -> {
+                TestingFinishedList.add(currentTestDirection)
                 //TODO:如果要測的話要改成跟正式測驗一樣
                 MaterialAlertDialogBuilder(mActivityKIN)
                     .setTitle(mContextKIN.resources.getString(R.string.nondominant_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
@@ -1411,26 +1441,8 @@ fun u_checkTrialLimit() {
             }
 
             testConditionList[4] -> {
-                MaterialAlertDialogBuilder(mActivityKIN)
-                    .setTitle(mContextKIN.resources.getString(R.string.autoTest_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
-                    .setMessage(
-                        mContextKIN.resources.getString(R.string.test_dialog_message)
-                    ) //Set the message to show the data
-                    .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
+                //TODO:回CALL自動化測驗執行，要確認自動化測驗流程沒問題
 
-                    .setPositiveButton(mContextKIN.resources.getString(R.string.test_dialog_next_condition)) { _, _ ->
-                        u_savePerformanceToCSV()//儲存測驗表現
-                        u_clearRecord()  // 清除測驗表現
-                        trialCountView.text = "測驗次數: $currentTrial / $maxTrailDesire "
-
-                        //TODO: 從這邊繞過選項輸入，直接進入下一次測驗
-                        u_manageVisibility(1)
-
-
-                        u_checkDirectionTested() // 確認完成所有測驗方向
-                        Toast.makeText(mContextKIN, "更換方向", Toast.LENGTH_SHORT).show()
-                    }
-                    .show() //creates and then displays the alert dialog.
             }
 
 
@@ -1483,13 +1495,53 @@ fun u_resetTrials() {
 
 fun u_reset8Trial() {
     for (n in 0..((arrayListOfTrials.size) - 1)) {
-        arrayListOfTrials[n] = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
+        arrayListOfTrials[n] = listOf<Float>(
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f
+        )
     }
 }
 
 fun u_reset5Trial() {
     for (n in 0..((arrayListOfTrials.size) - 1)) {
-        arrayListOfTrials[n] = listOf<Float>(0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f )
+        arrayListOfTrials[n] = listOf<Float>(
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f
+        )
     }
 } //清除5trial
 
@@ -1828,21 +1880,30 @@ fun getGivenPosition() {
     givenRandomTargetPositionX = randomTargetParams.leftMargin + objectWidthCalibration
     givenRandomTargetPositionY = randomTargetParams.topMargin + objectWidthCalibration
 
-    Log.d("positionData Given", "givenStartX:$givenStartPositionX  givenStartY:$givenStartPositionY")
-    Log.d("positionData Given", "givenTargetX:$givenTargetPositionX givenTargetY: $givenTargetPositionY")
-    Log.d("positionData Given", "givenRandomTargetX:$givenRandomTargetPositionX givenRandomTargetY: $givenRandomTargetPositionY")
+    Log.d(
+        "positionData Given",
+        "givenStartX:$givenStartPositionX  givenStartY:$givenStartPositionY"
+    )
+    Log.d(
+        "positionData Given",
+        "givenTargetX:$givenTargetPositionX givenTargetY: $givenTargetPositionY"
+    )
+    Log.d(
+        "positionData Given",
+        "givenRandomTargetX:$givenRandomTargetPositionX givenRandomTargetY: $givenRandomTargetPositionY"
+    )
 }
 
-fun clearGivenPosition(){
-   givenStartPositionX = 0
-   givenStartPositionY = 0
+fun clearGivenPosition() {
+    givenStartPositionX = 0
+    givenStartPositionY = 0
     givenTargetPositionX = 0
-   givenTargetPositionY = 0
+    givenTargetPositionY = 0
     givenRandomTargetPositionX = 0
-   givenRandomTargetPositionY = 0
+    givenRandomTargetPositionY = 0
 }
 
-fun saveGivenPosition(){
+fun saveGivenPosition() {
     //TODO: 要新增 trueGivenStartPositionX & trueGivenStartPositionY
     //TODO: 要新增 trueGivenTargetPositionX & trueGivenTargetPositionY
     //TODO: 注意後面所有 位置紀錄 & 檔案輸出，都要更新這四個參數
@@ -2437,46 +2498,6 @@ fun u_randomThePosition() {
     randHeight = tempHeight.subList(0, 5).toIntArray()
 }   //需要調整數值範圍
 
-//TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
-fun u_randomTheAutoTestList() {
-    // step 1 在進入頁面，決定 刺激/情境/方向 的隨機順序 (要counter balanced)
-    // step 2 將這些順序 暫存在某個 List
-    // step 3 將這些 List 顯示在對話框 並依據測驗進度 標示 [] or [V]
-    // 用 confirmSelection 自動執行目前選擇的結果 > 用目前已經寫好測驗限制判斷式(checktrailLimit等等)，依序判斷目前測驗進度
-    // 並在每次按下positive按鈕時，再次呼叫confirmSelection
-    // >> 或許寫一個新的對話框最快，不要共用之前的判斷對話框
-
-    var stimuliOrder = listOf(0,1,2)
-    var contextOrder = listOf(0,1)
-    var directionOrder = listOf(0,1,2,3)
-
-    val stimuliCheckList = arrayListOf<String>("VAP2AP", "AP2AP", "PP2AP")
-    val contextCheckList = arrayListOf<String>("Finger", "Pen")
-    val directionCheckList = arrayListOf<String>(
-        "L_Up",
-        "L_Up_Right",
-        "R_Up",
-        "R_Up_Left",
-    )
-
-    //TestingFinishedList  //direction
-    //finishedContextList
-    //finishedStimuliList
-
-    if (finishedContextList.toSet() == contextCheckList.toSet()) {
-
-    } else{
-
-    }
-
-
-}
-
-fun executeAutoTestList() {
-    //TODO: 模仿 confirm selection
-    //TODO: 結合 checkXXXtested
-    //TODO: 確認完各種參數後 > 直接訂出目前要測的參數 > call confrimSelection 開始正式測驗
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //spinner 顯示與儲存輸入
@@ -3267,7 +3288,6 @@ fun u_goBackToMenu() {
 }
 
 
-
 class MyGestureDetectorListener : GestureDetector.OnGestureListener {
     //https://www.itread01.com/content/1549194854.html
     //https://developer.android.com/training/gestures/detector
@@ -3279,10 +3299,10 @@ class MyGestureDetectorListener : GestureDetector.OnGestureListener {
     var scrollThresholdValue_y = 0f
     var onDownTime: Long = 0
     var onLongPressTime: Long = 0
-    var onScrollTime: Long =0
+    var onScrollTime: Long = 0
     var interval: Long = 0
 
-    var isLongPressed:Boolean = false
+    var isLongPressed: Boolean = false
 
     fun resetTime() {
         onDownTime = 0
@@ -3290,7 +3310,7 @@ class MyGestureDetectorListener : GestureDetector.OnGestureListener {
         interval = 0
         scrollThresholdValue_x = 0f
         scrollThresholdValue_y = 0f
-        onScrollTime =0
+        onScrollTime = 0
     }
 
     override fun onDown(e: MotionEvent?): Boolean {
@@ -3300,17 +3320,20 @@ class MyGestureDetectorListener : GestureDetector.OnGestureListener {
         Log.d("Gesture", "onDown")
         return false
     }
+
     override fun onShowPress(e: MotionEvent?) {
         startX = e!!.x
         startY = e!!.y
         Log.d("Gesture", "onShowPress")
     }
+
     override fun onSingleTapUp(e: MotionEvent?): Boolean {
         startX = 0f
         startY = 0f
         Log.d("Gesture", "onSingleTapUp")
         return false
     }
+
     override fun onScroll(
         e1: MotionEvent?,
         e2: MotionEvent?,
@@ -3382,18 +3405,26 @@ class MyGestureDetectorListener : GestureDetector.OnGestureListener {
         //return true
     }
 
-    fun onSwipeRight() {  Log.d("Gesture", " onFling: Right") }
+    fun onSwipeRight() {
+        Log.d("Gesture", " onFling: Right")
+    }
 
-    fun onSwipeLeft() {  Log.d("Gesture", " onFling: Left")}
+    fun onSwipeLeft() {
+        Log.d("Gesture", " onFling: Left")
+    }
 
-    fun onSwipeTop() {  Log.d("Gesture", " onFling: Top")}
+    fun onSwipeTop() {
+        Log.d("Gesture", " onFling: Top")
+    }
 
-    fun onSwipeBottom() { Log.d("Gesture", " onFling: Bottom") }
+    fun onSwipeBottom() {
+        Log.d("Gesture", " onFling: Bottom")
+    }
 
 }
 
 
-class MyOnDoubleTapListener : GestureDetector.OnDoubleTapListener{
+class MyOnDoubleTapListener : GestureDetector.OnDoubleTapListener {
 
     override fun onDoubleTap(event: MotionEvent?): Boolean {
         Log.d("Gesture", "onDoubleTap: $event")
