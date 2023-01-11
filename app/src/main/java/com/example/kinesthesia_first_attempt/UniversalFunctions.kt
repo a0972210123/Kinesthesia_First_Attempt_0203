@@ -717,7 +717,7 @@ fun u_saveInAirDataToCSV(inAirData: StringBuffer) {
     when (testCondition) {
         testConditionList[0] -> {
             outputFileName =
-                testCondition + "_" + stimuliType + "_" + currentTestContext + "_Performance_$practiceTime" + "_InAirTrial_" + currentTrial.toString() + ".csv"
+                "Dominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_Performance_$practiceTime" + "_InAirTrial_" + currentTrial.toString() + ".csv"
         }
         testConditionList[1] -> {
             outputFileName =
@@ -731,6 +731,11 @@ fun u_saveInAirDataToCSV(inAirData: StringBuffer) {
         testConditionList[3] -> {
             outputFileName =
                 "nonDominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_InAirTrial_" + currentTrial.toString() + ".csv"
+        }
+
+        testConditionList[4] -> {
+            outputFileName =
+                "Dominant_"  + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_InAirTrial_" + currentTrial.toString() + ".csv"
         }
 
     }
@@ -829,6 +834,15 @@ fun u_combineList(): ArrayList<List<Float>> {
                 trial8list
             )
         }
+        testConditionList[4] -> {
+            tempList = arrayListOf(
+                trial1list,
+                trial2list,
+                trial3list,
+                trial4list,
+                trial5list
+            )
+        }
 
     }
     return tempList
@@ -869,7 +883,7 @@ fun u_savePerformanceToCSV() {
     when (testCondition) {
         testConditionList[0] -> {
             outputFileName =
-                testCondition + "_" + stimuliType + "_" + currentTestContext + "_Performance_$practiceTime" + ".csv"
+                "Dominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_Performance_$practiceTime" + ".csv"
         }
         testConditionList[1] -> {
             outputFileName =
@@ -882,6 +896,10 @@ fun u_savePerformanceToCSV() {
         testConditionList[3] -> {
             outputFileName =
                 "nonDominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
+        }
+        testConditionList[4] -> {
+            outputFileName =
+                "Dominant_"  + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
         }
 
     }
@@ -1167,7 +1185,7 @@ fun u_confirmSelection() {
 
             u_changeText()
             //  u_manageVisibility(0) 這個應該要包到 executeAutoTestList中 (這邊只會經過一次)
-            u_manageVisibility(0)  //顯示觸控板及記錄紐
+            //u_manageVisibility(0)  //顯示觸控板及記錄紐
 
             Toast.makeText(
                 mContextKIN,
@@ -1342,6 +1360,9 @@ fun u_checkTrialLimit() {
             tempCount = trialCount
             //maxTrailDesire = MAX_PRACTICE_TRIAL
         }
+        testConditionList[4] ->{
+            //已經另外寫不會用到這邊
+        }
     }
 
     if (tempCount >= maxTrailDesire) {  // practiceTrialsCount > MAX_PRACTICE_TRIAL
@@ -1440,7 +1461,7 @@ fun u_checkTrialLimit() {
             }
 
             testConditionList[4] -> {
-                //TODO:回CALL自動化測驗執行，要確認自動化測驗流程沒問題
+             // 已經另外寫，不會用到這邊
 
             }
 
@@ -1487,6 +1508,9 @@ fun u_resetTrials() {
         }
         testConditionList[3] -> {
             u_reset8Trial()
+        }
+        testConditionList[4] -> {
+            u_reset5Trial()
         }
     }
 }
@@ -1983,6 +2007,10 @@ fun u_checkContextAndLaunchView(context: String) {
                 testConditionList[3] -> {
                     u_setDirection(currentTestDirection)
                 }
+                testConditionList[4] -> {
+                    u_setDirection(currentTestDirection)
+                }
+
             }
             ///////////////////////////////////////////
             calibrateWidth = penTandSCalibrate
@@ -2036,6 +2064,9 @@ fun u_checkContextAndLaunchView(context: String) {
                 testConditionList[3] -> {
                     u_setDirection(currentTestDirection)
                 }
+                testConditionList[4] -> {
+                    u_setDirection(currentTestDirection)
+                }
             }
             ///////////////////////////////////////////
             calibrateWidth = TandSCalibrate
@@ -2057,6 +2088,12 @@ fun u_checkContextAndLaunchView(context: String) {
         }
         testConditionList[3] -> {
             trialInputSpinner.visibility = View.VISIBLE
+        }
+        testConditionList[4] -> {
+            stimuliTypeSpinner.visibility = View.GONE
+            contextSpinner.visibility = View.GONE
+            directionSpinner.visibility = View.GONE
+            trialInputSpinner.visibility = View.GONE
         }
 
     }
@@ -2106,6 +2143,13 @@ fun u_manageVisibility(flag: Int) {
         }
         testConditionList[1] -> {
             trialInputSpinner.visibility = View.GONE
+        }
+
+        testConditionList[4] -> {
+            trialInputSpinner.visibility = View.GONE
+            directionSpinner.visibility = View.GONE
+            contextSpinner.visibility = View.GONE
+            stimuliTypeSpinner.visibility = View.GONE
         }
     }
 
@@ -2563,12 +2607,9 @@ fun u_setTrialLimit(trialLimitInput: String) {
                 }
             }
         }
-
-
         testConditionList[4] -> {  //AutoRecord
             maxTrailDesire = MAX_FORMAL_TRIAL
         }
-
 
     }
 
