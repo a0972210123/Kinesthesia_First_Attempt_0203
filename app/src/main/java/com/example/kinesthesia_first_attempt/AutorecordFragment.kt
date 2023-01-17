@@ -1,21 +1,13 @@
 package com.example.kinesthesia_first_attempt
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
-import android.content.res.Resources
-import android.media.AudioManager
-import android.media.ToneGenerator
-import android.os.Build
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.os.SystemClock.currentThreadTimeMillis
 import android.util.Log
 import android.view.*
-import android.view.View.GONE
 import android.view.View.OnTouchListener
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GestureDetectorCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -27,8 +19,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 
 class AutorecordFragment : Fragment() {
@@ -52,6 +42,7 @@ class AutorecordFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        mContextKIN = requireActivity().applicationContext
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_autorecord, container, false)
         return binding.root
     }
@@ -72,7 +63,7 @@ class AutorecordFragment : Fragment() {
         //以下三行為 global function需要的input
         mainViewModel = sharedViewModel  // 這行是為了讓public可以讀到ViewModel 且不需要重新 initiate
         mActivityKIN = requireActivity()
-        mContextKIN = requireActivity().applicationContext
+        //mContextKIN = requireActivity().applicationContext
 
         start = requireView().findViewById<TextView>(R.id.performance_start_position)
         test = requireView().findViewById<TextView>(R.id.performance_test_position)
@@ -153,6 +144,10 @@ class AutorecordFragment : Fragment() {
             if (com.example.kinesthesia_first_attempt.buttonPressedCountsInATrial == 3 && com.example.kinesthesia_first_attempt.currentTestContext == "Pen") {
                 u_arrangeInAirData()
             }
+
+            if (com.example.kinesthesia_first_attempt.buttonPressedCountsInATrial == 3 && com.example.kinesthesia_first_attempt.currentTestContext == "Finger") {
+                u_arrangeInAirData()
+            }
             u_changeInAriText()
             false
         }
@@ -163,10 +158,17 @@ class AutorecordFragment : Fragment() {
             if (com.example.kinesthesia_first_attempt.buttonPressedCountsInATrial == 3 && com.example.kinesthesia_first_attempt.currentTestContext == "Pen") {
                 u_arrangeInAirData()
             }
+
+            if (com.example.kinesthesia_first_attempt.buttonPressedCountsInATrial == 3 && com.example.kinesthesia_first_attempt.currentTestContext == "Finger") {
+                heightZ = 0f
+                tipPressure = -1f
+                u_arrangeInAirData()
+            }
             u_changeInAriText()
             false
         }
         //* new
+
 
 
         //更新文字view
@@ -483,6 +485,7 @@ fun printProgress() {
 
 
 //設定預設的test存檔路徑，避免CRASH
+@SuppressLint("SuspiciousIndentation")
 fun u_saveTestOrder() {
     // 整理測驗順序資料
 //    val outputName =
@@ -524,9 +527,10 @@ fun u_saveTestOrder() {
     /////建立檔案資料夾段落
     //資料夾名稱/路徑
     val filePath = File(mActivityKIN.getExternalFilesDir("").toString(), filePathConstructCode)
-        filePath.mkdir()
-        txtFile = File(filePath, filePathConstructCode + "_AutoTestOrder_" + ".txt")
-        filePathStr = filePath.path      //更新全域變數，用於後續存檔
+
+    filePath.mkdir()
+    txtFile = File(filePath, filePathConstructCode + "_AutoTestOrder_" + ".txt")
+    filePathStr = filePath.path      //更新全域變數，用於後續存檔
 
     //儲存測驗順序相關參數
     val out = FileOutputStream(txtFile, true)
@@ -549,7 +553,7 @@ fun u_saveTestOrder() {
 //    out.write(outputCode.toByteArray())
     out.flush()
     out.close()
-    Toast.makeText(mContextKIN, "Demographic Data Save Success", Toast.LENGTH_SHORT).show()
+    Toast.makeText(mContextKIN, "AutoTestOrder Save Success", Toast.LENGTH_SHORT).show()
 
 }  // 存檔function END
 

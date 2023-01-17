@@ -42,6 +42,7 @@ class PracticeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        mContextKIN = requireActivity().applicationContext
         //val fragmentBinding = FragmentPracticeBinding.inflate(inflater, container, false)
         //binding = fragmentBinding
         //return fragmentBinding.root
@@ -66,7 +67,7 @@ class PracticeFragment : Fragment() {
         //以下三行為 global function需要的input
         mainViewModel = sharedViewModel  // 這行是為了讓public可以讀到ViewModel 且不需要重新 initiate
         mActivityKIN = requireActivity()
-        mContextKIN = requireActivity().applicationContext
+        //mContextKIN = requireActivity().applicationContext
 
         start = requireView().findViewById<TextView>(R.id.performance_start_position)
         test = requireView().findViewById<TextView>(R.id.performance_test_position)
@@ -82,8 +83,6 @@ class PracticeFragment : Fragment() {
         trialInputSpinner = requireView().findViewById<View>(R.id.trialInput_list) as Spinner
         contextSpinner = requireView().findViewById<View>(R.id.context_list) as Spinner
         directionSpinner = requireView().findViewById<View>(R.id.direction_list) as Spinner
-
-        // Todo:>>> 待新增測驗方法Spinner (VAP2AP & AP2AP & PP2AP)
         stimuliTypeSpinner = requireView().findViewById<View>(R.id.stimuliType_list) as Spinner
 
         fingerTarget = requireView().findViewById<ImageView>(R.id.target)
@@ -129,8 +128,11 @@ class PracticeFragment : Fragment() {
         fingerTargetParams = fingerTarget.layoutParams as ViewGroup.MarginLayoutParams
         fingerStartParams = fingerStartPoint.layoutParams as ViewGroup.MarginLayoutParams
 
+        fingerRandomTargetParams =
+            fingerRandomTargetView.layoutParams as ViewGroup.MarginLayoutParams
+        penRandomTargetParams = penRandomTargetView.layoutParams as ViewGroup.MarginLayoutParams
 
-        //TODO: 新增 SPINNER 來控制 >　記得更新存檔名稱
+
         TargetArea = requireView().findViewById<ImageView>(R.id.target_square_white)
         TargetAreaFrame = requireView().findViewById<ImageView>(R.id.target_square_black)
         u_setSquareOfTargetArea()

@@ -735,7 +735,7 @@ fun u_saveInAirDataToCSV(inAirData: StringBuffer) {
 
         testConditionList[4] -> {
             outputFileName =
-                "Dominant_"  + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_InAirTrial_" + currentTrial.toString() + ".csv"
+                "Dominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_InAirTrial_" + currentTrial.toString() + ".csv"
         }
 
     }
@@ -899,7 +899,7 @@ fun u_savePerformanceToCSV() {
         }
         testConditionList[4] -> {
             outputFileName =
-                "Dominant_"  + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
+                "Dominant_" + testCondition + "_" + stimuliType + "_" + currentTestContext + "_" + currentTestDirection + "_Performance.csv"
         }
 
     }
@@ -985,6 +985,15 @@ fun u_pressButton() {
         getGivenPosition()  //第1次按鈕時抓given position
     }
 
+
+    when(buttonPressedCountsInATrial){
+        0->{hideViewsForVAP2AP (0)}
+        1->{hideViewsForVAP2AP (0)}
+        2->{hideViewsForVAP2AP (0)}
+        3->{hideViewsForVAP2AP (1)}
+    }
+
+
     if (buttonPressedCountsInATrial == 4) {
         scoreListForDisplay = u_calculateTrialScoreP()   //計算測驗表現 (RE*2，AE*3)
         u_displayScoreInText(scoreListForDisplay, 1, Score)  //更新text內容 //11/21 更新為 global
@@ -1040,10 +1049,10 @@ fun u_pressButton() {
         u_clearCurrentTrialRecord() //11/11新版，未驗證
         clearGivenPosition()
 
-        if (testCondition == testConditionList[4]){
+        if (testCondition == testConditionList[4]) {
             //自動化測驗
             auto_checkTrialLimit()
-        }else{
+        } else {
             u_checkTrialLimit()  //檢查是否達到練習次數
         }
 
@@ -1190,7 +1199,8 @@ fun u_confirmSelection() {
             Toast.makeText(
                 mContextKIN,
                 "開始測驗，項目： $stimuliType & $currentTestContext & $currentTestDirection ",
-                Toast.LENGTH_SHORT)
+                Toast.LENGTH_SHORT
+            )
         }
     }
 }
@@ -1360,7 +1370,7 @@ fun u_checkTrialLimit() {
             tempCount = trialCount
             //maxTrailDesire = MAX_PRACTICE_TRIAL
         }
-        testConditionList[4] ->{
+        testConditionList[4] -> {
             //已經另外寫不會用到這邊
         }
     }
@@ -1461,7 +1471,7 @@ fun u_checkTrialLimit() {
             }
 
             testConditionList[4] -> {
-             // 已經另外寫，不會用到這邊
+                // 已經另外寫，不會用到這邊
 
             }
 
@@ -2153,6 +2163,8 @@ fun u_manageVisibility(flag: Int) {
         }
     }
 
+
+    hideViewsForVAP2AP(0)
 }//管理測驗相關View顯示、可觸控與否
 
 fun u_clearViews() {
@@ -2241,6 +2253,37 @@ fun u_changeText() {
         // getString reference >>導致閃退，棄用
         // https://stackoverflow.com/questions/4253328/getstring-outside-of-a-context-or-activity
     }
+}
+
+
+fun hideViewsForVAP2AP(flag: Int) {
+
+    if (stimuliType == "VAP2AP") {
+        when (flag) {
+            0 -> {
+                start.visibility = View.INVISIBLE
+                test.visibility = View.INVISIBLE
+                rest.visibility = View.INVISIBLE
+                response.visibility = View.INVISIBLE
+                currentPosition.visibility = View.INVISIBLE
+                inAirText.visibility = View.INVISIBLE
+                Score.visibility = View.INVISIBLE
+                performanceTitle.visibility = View.INVISIBLE
+
+            }
+            1 -> {
+                start.visibility = View.VISIBLE
+                test.visibility  = View.VISIBLE
+                rest.visibility  = View.VISIBLE
+                response.visibility  = View.VISIBLE
+                currentPosition.visibility  = View.VISIBLE
+                inAirText.visibility  = View.VISIBLE
+                Score.visibility  = View.VISIBLE
+                performanceTitle.visibility  = View.VISIBLE
+            }
+        }
+    }
+
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -3327,157 +3370,4 @@ fun u_goBackToMenu() {
 }
 
 
-class MyGestureDetectorListener : GestureDetector.OnGestureListener {
-    //https://www.itread01.com/content/1549194854.html
-    //https://developer.android.com/training/gestures/detector
-    //https://developer.android.com/jetpack/compose/gestures
-    private val SWIPE_THRESHOLD: Int = 300
-    private val SWIPE_VELOCITY_THRESHOLD = 300
 
-    var scrollThresholdValue_x = 0f
-    var scrollThresholdValue_y = 0f
-    var onDownTime: Long = 0
-    var onLongPressTime: Long = 0
-    var onScrollTime: Long = 0
-    var interval: Long = 0
-
-    var isLongPressed: Boolean = false
-
-    fun resetTime() {
-        onDownTime = 0
-        onLongPressTime = 0
-        interval = 0
-        scrollThresholdValue_x = 0f
-        scrollThresholdValue_y = 0f
-        onScrollTime = 0
-    }
-
-    override fun onDown(e: MotionEvent?): Boolean {
-        onDownTime = SystemClock.currentThreadTimeMillis()
-        startX = e!!.x
-        startY = e!!.y
-        Log.d("Gesture", "onDown")
-        return false
-    }
-
-    override fun onShowPress(e: MotionEvent?) {
-        startX = e!!.x
-        startY = e!!.y
-        Log.d("Gesture", "onShowPress")
-    }
-
-    override fun onSingleTapUp(e: MotionEvent?): Boolean {
-        startX = 0f
-        startY = 0f
-        Log.d("Gesture", "onSingleTapUp")
-        return false
-    }
-
-    override fun onScroll(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
-        distanceX: Float,
-        distanceY: Float
-    ): Boolean {
-        // Log.d("Gesture", "onScroll")
-
-        onScrollTime = SystemClock.currentThreadTimeMillis()
-        interval = onScrollTime - onDownTime
-        //Log.d("Gesture", "onScroll: interval = $interval ms")
-        var scrollThresholdValue_x = e2!!.x - e1!!.x
-        var scrollThresholdValue_y = e2!!.y - e1!!.y
-        //Log.d("Gesture", "onScroll: Scroll Threshold Value X=$scrollThresholdValue_x Y=$scrollThresholdValue_y")
-        Log.d("Gesture", "onScroll: Scroll parameters X=$distanceX Y=$distanceY")
-
-        resetTime()
-        //return false
-        return true
-    }
-
-    override fun onLongPress(e: MotionEvent?) {
-        onLongPressTime = SystemClock.currentThreadTimeMillis()
-        interval = onLongPressTime - onDownTime
-        Log.d("Gesture", "onLongPress: interval = $interval ms")
-        resetTime()
-
-        //測試結果: GestureDetector 本身 onLongPress 的時間設定為 10 - 40ms之間，並不穩定，且時長短
-    }
-
-    override fun onFling(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
-        velocityX: Float,
-        velocityY: Float
-    ): Boolean {
-
-        var result: Boolean = false
-
-        try {
-            var diffY = e2!!.y - e1!!.y
-            var diffX = e2!!.x - e1!!.x
-
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                    if (diffX > 0) {
-                        onSwipeRight();
-                    } else {
-                        onSwipeLeft();
-                    }
-                    result = true;
-                }
-
-            } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                if (diffY > 0) {
-                    onSwipeBottom();
-                } else {
-                    onSwipeTop();
-                }
-                result = true;
-            }
-
-        } catch (exception: Exception) {
-            exception.printStackTrace();
-        }
-
-        Log.d("Gesture", " onFling Confirm")
-        return result
-        //return true
-    }
-
-    fun onSwipeRight() {
-        Log.d("Gesture", " onFling: Right")
-    }
-
-    fun onSwipeLeft() {
-        Log.d("Gesture", " onFling: Left")
-    }
-
-    fun onSwipeTop() {
-        Log.d("Gesture", " onFling: Top")
-    }
-
-    fun onSwipeBottom() {
-        Log.d("Gesture", " onFling: Bottom")
-    }
-
-}
-
-
-class MyOnDoubleTapListener : GestureDetector.OnDoubleTapListener {
-
-    override fun onDoubleTap(event: MotionEvent?): Boolean {
-        Log.d("Gesture", "onDoubleTap: $event")
-        return true
-    }
-
-    override fun onDoubleTapEvent(event: MotionEvent?): Boolean {
-        Log.d("Gesture", "onDoubleTapEvent: $event")
-        return true
-    }
-
-    override fun onSingleTapConfirmed(event: MotionEvent?): Boolean {
-        Log.d("Gesture", "onSingleTapConfirmed: $event")
-        return true
-    }
-
-}
