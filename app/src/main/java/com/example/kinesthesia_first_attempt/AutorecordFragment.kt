@@ -140,35 +140,22 @@ class AutorecordFragment : Fragment() {
         u_changeInAriText()     // DEFAULT inAir文字
         //* new 下筆時的紀錄
         touchBoard.setOnTouchListener { _, _ ->
-
-            if (com.example.kinesthesia_first_attempt.buttonPressedCountsInATrial == 3 && com.example.kinesthesia_first_attempt.currentTestContext == "Pen") {
-                u_arrangeInAirData()
-            }
-
-            if (com.example.kinesthesia_first_attempt.buttonPressedCountsInATrial == 3 && com.example.kinesthesia_first_attempt.currentTestContext == "Finger") {
+            if (buttonPressedCountsInATrial == 3) {
                 u_arrangeInAirData()
             }
             u_changeInAriText()
             false
         }
-
         //* new 提筆時的紀錄
         touchBoard.setOnHoverListener { _, _ ->
 
-            if (com.example.kinesthesia_first_attempt.buttonPressedCountsInATrial == 3 && com.example.kinesthesia_first_attempt.currentTestContext == "Pen") {
-                u_arrangeInAirData()
-            }
-
-            if (com.example.kinesthesia_first_attempt.buttonPressedCountsInATrial == 3 && com.example.kinesthesia_first_attempt.currentTestContext == "Finger") {
-                heightZ = 0f
-                tipPressure = -1f
+            if (buttonPressedCountsInATrial == 3) {
                 u_arrangeInAirData()
             }
             u_changeInAriText()
             false
         }
         //* new
-
 
 
         //更新文字view
@@ -326,7 +313,7 @@ fun checkAutoTestProgress() {
 }
 
 var progressText = StringBuffer()
-var progressTextChi  = StringBuffer()
+var progressTextChi = StringBuffer()
 var wholeProgress = 0
 
 fun printProgress() {
@@ -348,58 +335,59 @@ fun printProgress() {
     progressText.append("\n")
     val stimuliList = arrayListOf<String>("VAP2AP ", "AP2AP  ", "PP2AP  ")  //7bit
     val contextList = arrayListOf<String>("Finger ", "Pen    ") // 7bit
-    val directionList = arrayListOf<String>("L_Up       ", "L_Up_Right ", "R_Up       ", "R_Up_Left  ") // 11 bit
+    val directionList =
+        arrayListOf<String>("L_Up       ", "L_Up_Right ", "R_Up       ", "R_Up_Left  ") // 11 bit
     // 放入標題，使用迴圈，避免前後出現[]
     for (layerA in 0..(stimuliList.size - 1)) {
         for (layerB in 0..(contextList.size - 1)) {
             for (layerC in 0..(directionList.size - 1)) {
 
-                var currentIndex = 8*layerA + 4*layerB + 1*layerC
+                var currentIndex = 8 * layerA + 4 * layerB + 1 * layerC
                 var checked: String = ""
-                if (currentIndex < wholeProgress ){
-                     checked = "[V]"
-                }else{
-                     checked = "[ ]"
+                if (currentIndex < wholeProgress) {
+                    checked = "[V]"
+                } else {
+                    checked = "[ ]"
                 }
 
-                var stimuliText:String =""
-                var contextText:String =""
-                var directionText :String =""
+                var stimuliText: String = ""
+                var contextText: String = ""
+                var directionText: String = ""
 
-                when (currentIndex){
-                    0 ->{
+                when (currentIndex) {
+                    0 -> {
                         stimuliText = stimuliList[randomizedStimuliOrder[layerA]]
                         contextText = contextList[randomizedContextOrder[layerB]]
                     }
-                    8 ->{
+                    8 -> {
                         stimuliText = stimuliList[randomizedStimuliOrder[layerA]]
                         contextText = contextList[randomizedContextOrder[layerB]]
                     }
-                    16->{
+                    16 -> {
                         stimuliText = stimuliList[randomizedStimuliOrder[layerA]]
                         contextText = contextList[randomizedContextOrder[layerB]]
                     }
-                    4 ->{
+                    4 -> {
                         stimuliText = "       "
                         contextText = contextList[randomizedContextOrder[layerB]]
                     }
-                    12->{
+                    12 -> {
                         stimuliText = "       "
                         contextText = contextList[randomizedContextOrder[layerB]]
                     }
-                    20->{
+                    20 -> {
                         stimuliText = "       "
                         contextText = contextList[randomizedContextOrder[layerB]]
                     }
-                    else ->{
+                    else -> {
                         stimuliText = "       "  //7bit
                         contextText = "       "  //7bit
                     }
                 }
-                 directionText = directionList[randomizedDirectionOrder[layerC]]
+                directionText = directionList[randomizedDirectionOrder[layerC]]
 
                 progressText.append("$stimuliText | $contextText | $directionText | $checked")
-                if (layerB==1) {
+                if (layerB == 1) {
                     if (layerC == 3) {
                         progressText.append("\n")
                         progressText.append("------- | ------- | ----------- | ---")
@@ -424,44 +412,44 @@ fun printProgress() {
         for (layerB in 0..(contextListChi.size - 1)) {
             for (layerC in 0..(directionListChi.size - 1)) {
 
-                var currentIndex = 8*layerA + 4*layerB + 1*layerC
+                var currentIndex = 8 * layerA + 4 * layerB + 1 * layerC
                 var checked: String = ""
-                if (currentIndex < wholeProgress ){
+                if (currentIndex < wholeProgress) {
                     checked = "［Ｖ］"
-                }else{
+                } else {
                     checked = "［　］"
                 }
 
-                var stimuliTextChi:String =""
-                var contextTextChi:String =""
-                var directionTextChi:String =""
+                var stimuliTextChi: String = ""
+                var contextTextChi: String = ""
+                var directionTextChi: String = ""
 
-                when (currentIndex){
-                    0 ->{
+                when (currentIndex) {
+                    0 -> {
                         stimuliTextChi = stimuliListChi[randomizedStimuliOrder[layerA]]
                         contextTextChi = contextListChi[randomizedContextOrder[layerB]]
                     }
-                    8 ->{
+                    8 -> {
                         stimuliTextChi = stimuliListChi[randomizedStimuliOrder[layerA]]
                         contextTextChi = contextListChi[randomizedContextOrder[layerB]]
                     }
-                    16->{
+                    16 -> {
                         stimuliTextChi = stimuliListChi[randomizedStimuliOrder[layerA]]
                         contextTextChi = contextListChi[randomizedContextOrder[layerB]]
                     }
-                    4 ->{
+                    4 -> {
                         stimuliTextChi = "　　　　"
                         contextTextChi = contextListChi[randomizedContextOrder[layerB]]
                     }
-                    12->{
+                    12 -> {
                         stimuliTextChi = "　　　　"
                         contextTextChi = contextListChi[randomizedContextOrder[layerB]]
                     }
-                    20->{
+                    20 -> {
                         stimuliTextChi = "　　　　"
                         contextTextChi = contextListChi[randomizedContextOrder[layerB]]
                     }
-                    else ->{
+                    else -> {
                         stimuliTextChi = "　　　　"
                         contextTextChi = "　　　　"
                     }
@@ -469,7 +457,7 @@ fun printProgress() {
                 directionTextChi = directionListChi[randomizedDirectionOrder[layerC]]
 
                 progressTextChi.append("$stimuliTextChi　|　$contextTextChi　|　$directionTextChi　|　$checked")
-                if (layerB==1) {
+                if (layerB == 1) {
                     if (layerC == 3) {
                         progressTextChi.append("\n")
                         progressTextChi.append("－－－－　|　－－－－　|　－－－－　|　－－－")
@@ -481,7 +469,7 @@ fun printProgress() {
     }
 
     //Log.d("Progress-Direction", "\n" +"$progressTextChi")
-    }
+}
 
 
 //設定預設的test存檔路徑，避免CRASH
@@ -558,7 +546,6 @@ fun u_saveTestOrder() {
 }  // 存檔function END
 
 
-
 //以下自動確認測驗進度
 fun auto_checkTrialLimit() {
     maxTrailDesire = MAX_FORMAL_TRIAL
@@ -603,8 +590,10 @@ fun auto_checkDirectionTested() {
         //更換情境後，重置已測驗方向。
         MaterialAlertDialogBuilder(mActivityKIN)
             .setTitle(mContextKIN.resources.getString(R.string.autoTest_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
-            .setMessage(mContextKIN.resources.getString(R.string.test_dialog_message_finished_all_direction)
-                    + "\n" + progressTextChi)
+            .setMessage(
+                mContextKIN.resources.getString(R.string.test_dialog_message_finished_all_direction)
+                        + "\n" + progressTextChi
+            )
             .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,
             .setPositiveButton(mContextKIN.resources.getString(R.string.test_dialog_next_context))
             { _, _ ->
@@ -665,7 +654,7 @@ fun auto_checkStimuliTested() {
         MaterialAlertDialogBuilder(mActivityKIN)
             .setTitle(mContextKIN.resources.getString(R.string.autoTest_dialog_title)) //Set the title on the alert dialog, use a string resource from strings.xml.et the message to show the final score,
             .setMessage(
-                mContextKIN.resources.getString(R.string.test_dialog_message_finished_all_stimuliType )
+                mContextKIN.resources.getString(R.string.test_dialog_message_finished_all_stimuliType)
                         + "\n" + progressTextChi
             ) //Set the message to show the data
             .setCancelable(false)  // alert dialog not cancelable when the back key is pressed,

@@ -776,7 +776,7 @@ fun u_outputInAirCsv(fileName: String, input: List<String>, flag: Int) {
     output.setLength(0) //clean buffer
     Toast.makeText(
         mContextKIN,
-        "{$testCondition}_InAir_Trial_$currentTrial 儲存成功",
+        "$stimuliType x $testCondition x $currentTestContext x $currentTestDirection _InAir_Trial$currentTrial 儲存成功",
         Toast.LENGTH_SHORT
     ).show()
     //Log.d("data", "outCSV Success")
@@ -976,7 +976,7 @@ fun u_outputCsv(fileName: String, input: List<String>, flag: Int) {
 
 fun u_pressButton() {
     buttonPressedCountsInATrial++      //每按一次按鈕+1
-    Log.d("X/Y/面積/長軸/短軸：inFragment", "$startX  $startY  $bb  $b1  $b2")
+    Log.d("pressButton", "$startX  $startY  $bb  $b1  $b2")
     u_recordPosition()   //儲存位置，並管理測驗流程，直接讀取全域變數
     u_changeText()       //更動text   //11/23改為global
     u_checkTime()   //計時// 11/21 改global
@@ -995,6 +995,7 @@ fun u_pressButton() {
 
 
     if (buttonPressedCountsInATrial == 4) {
+        printGestureTime()
         scoreListForDisplay = u_calculateTrialScoreP()   //計算測驗表現 (RE*2，AE*3)
         u_displayScoreInText(scoreListForDisplay, 1, Score)  //更新text內容 //11/21 更新為 global
         u_clearScoreList()
@@ -1003,15 +1004,12 @@ fun u_pressButton() {
     }
 
     if (buttonPressedCountsInATrial == 5) {
+        saveGestureTimeToCSV()
+        resetGestureTime()
 
-        //0912測試存InAir
-        if (currentTestContext == "Pen") {
-            u_saveInAirDataToCSV(inAirData) //  11/11新版，未驗證
-            //TODO: 要驗證 INAir存檔相關程式的輸出，也要嘗試改Finger測驗時，有沒辦法抓到時間&座標，用來算MT
-        }
-
-        u_clearInAir() // 11/21 //11/11新版，未驗證
-        u_addTrialsCount() // 完成一次測驗練習   //11/21
+        u_saveInAirDataToCSV(inAirData) //不論手指/筆都存
+        u_clearInAir()
+        u_addTrialsCount()
 
         when (testCondition) {
             testConditionList[0] -> {
@@ -1132,6 +1130,7 @@ fun u_checkTime() {
             //TODO: 之後要改回聲音 預設為80
             val toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 0)
             if (buttonPressedCountsInATrial == 3) {
+                onBeepTime = System.currentTimeMillis()
                 toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 200)
             } else {
             }
@@ -1149,9 +1148,9 @@ fun u_confirmSelection() {
     // val testConditionList = listOf<String>("Practice", "Formal", "Addition","Non_dominant","AutoRecord")
     when (testCondition) {
         testConditionList[0] -> {
-            Toast.makeText(mContextKIN, "開始測驗練習", Toast.LENGTH_SHORT).show()
             u_changeText()
             u_manageVisibility(0)  //顯示觸控板及記錄紐
+            Toast.makeText(mContextKIN, "開始測驗練習", Toast.LENGTH_SHORT).show()
         }
         testConditionList[1] -> {
             val stimuliChecked = u_checkStimuliInput()
@@ -1164,7 +1163,6 @@ fun u_confirmSelection() {
                         //TestingFinishedList.add(currentTestDirection)
                         u_randomThePosition()
                         u_setTargetPosition()
-
                         u_changeText()
                         u_manageVisibility(0)  //顯示觸控板及記錄紐
                         Toast.makeText(
@@ -1209,7 +1207,9 @@ fun u_checkContextInput(): Int {
     u_checkContextTested()//避免bug可以跳出
     var flag = 0
     if (currentTestContext == contextList[0]) {
-        Toast.makeText(mContextKIN, "測驗情境尚未設定", Toast.LENGTH_SHORT).show()
+        if (testCondition== testConditionList[0]){ }else{
+            Toast.makeText(mContextKIN, "測驗情境尚未設定", Toast.LENGTH_SHORT).show()
+        }
     } else {
         if (finishedContextList.contains(currentTestContext)) {
             Toast.makeText(mContextKIN, "此情境已測過", Toast.LENGTH_SHORT).show()
@@ -1224,7 +1224,9 @@ fun u_checkDirectionInput(): Int {
     u_checkDirectionTested()  //避免bug可以跳出
     var flag = 0
     if (currentTestDirection == directionList[0]) {
-        Toast.makeText(mContextKIN, "測驗方向尚未設定", Toast.LENGTH_SHORT).show()
+        if (testCondition== testConditionList[0]){ }else{
+            Toast.makeText(mContextKIN, "測驗方向尚未設定", Toast.LENGTH_SHORT).show()
+        }
     } else {
         //若有選方向 > /check condition
         if (TestingFinishedList.contains(currentTestDirection)) {
@@ -1243,7 +1245,9 @@ fun u_checkStimuliInput(): Int {
     u_checkStimuliTested() //避免bug可以跳出
     var flag = 0
     if (stimuliType == stimuliList[0]) {
-        Toast.makeText(mContextKIN, "測驗刺激尚未設定", Toast.LENGTH_SHORT).show()
+        if (testCondition== testConditionList[0]){ }else{
+            Toast.makeText(mContextKIN, "測驗刺激尚未設定", Toast.LENGTH_SHORT).show()
+        }
     } else {
         if (finishedStimuliList.contains(stimuliType)) {
             Toast.makeText(mContextKIN, "此刺激已測過", Toast.LENGTH_SHORT).show()
@@ -1935,13 +1939,6 @@ fun clearGivenPosition() {
     givenRandomTargetPositionY = 0
 }
 
-fun saveGivenPosition() {
-    //TODO: 要新增 trueGivenStartPositionX & trueGivenStartPositionY
-    //TODO: 要新增 trueGivenTargetPositionX & trueGivenTargetPositionY
-    //TODO: 注意後面所有 位置紀錄 & 檔案輸出，都要更新這四個參數
-    //TODO: 下面所有的 position 應該要新整成一個 float list
-    //TODO: 或是先另外存一個襠名相同(情境代號註記)的EXCEL
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //view 顯示管理
@@ -2108,7 +2105,7 @@ fun u_checkContextAndLaunchView(context: String) {
 
     }
 
-
+    hideViewsForVAP2AP(0)
 } //輸入currentContext
 
 fun u_manageVisibility(flag: Int) {
@@ -2163,7 +2160,7 @@ fun u_manageVisibility(flag: Int) {
         }
     }
 
-
+    u_setSquareOfTargetArea()
     hideViewsForVAP2AP(0)
 }//管理測驗相關View顯示、可觸控與否
 
@@ -2194,14 +2191,38 @@ fun u_changeText() {
 
     trialCountView.text = "測驗次數: $currentTrial / $maxTrailDesire"
 
-    // Todo: 指導語部分之後可以改到 R-string中，也記得要改成新的指導語 ( VAP2AP, AP2AP, PP2AP)
-    val instructionList = arrayListOf(
-        "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動至 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
-        "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動到 目標位置 上，" + "\n" + "確認動作停止後按下紀錄。",
-        "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動回 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
-        "受試者聽到嗶聲後將手指或握著的筆，" + "\n" + "移動到所記得的位置，" + "\n" + "確認動作停止後按下紀錄。",
-        "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動到平板外的桌面上，" + "\n" + "確認資料正確後按下Save Trial。"
-    )
+    // Todo: 指導語部分之後可以改到 R-string中，也記得要改成新的指導語 (VAP2AP, AP2AP, PP2AP)
+    var instructionList = arrayListOf("","","","","")
+    when (stimuliType){
+        "VAP2AP"->{
+            instructionList = arrayListOf(
+                "受試者睜眼將手指或握著的筆尖，" + "\n" + "移動至 預備位置 上，" + "\n" +"確認動作停止後按下紀錄。",
+                "受試者睜眼將手指或握著的筆尖，" + "\n" + "移動到 目標位置 上，" + "\n" + "確認動作停止且未超出後按下紀錄。",
+                "受試者睜眼將手指或握著的筆尖，" + "\n" + "移動回 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+                "受試者聽到嗶聲後將手指或握著的筆，" + "\n" + "移動到所記得的位置，" + "\n" + "確認動作停止後按下紀錄。",
+                "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動到平板外的桌面上，" + "\n" + "確認資料正確後按下Save Trial。"
+            )
+        }
+        "AP2AP"->{
+            instructionList = arrayListOf(
+                "受試者睜眼將手指或握著的筆尖，" + "\n" + "移動至 預備位置 上，" + "\n" + "觀察目標區域後，閉上雙眼，"+ "\n" +"確認動作停止後按下紀錄。",
+                "受試者閉眼將手指或握著的筆尖，" + "\n" + "移動到 目標區域 上，" + "\n" + "確認動作停止且未超出後按下紀錄。",
+                "受試者閉眼將手指或握著的筆尖，" + "\n" + "移動回 *預備位置* 上，" + "\n" + "確認動作停止後按下紀錄。",
+                "受試者聽到嗶聲後將手指或握著的筆，" + "\n" + "移動到所記得的位置，" + "\n" + "確認動作停止後按下紀錄。",
+                "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動到平板外的桌面上，" + "\n" + "確認資料正確後按下Save Trial。"
+            )
+        }
+        "PP2AP"->{
+            instructionList = arrayListOf(
+                "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動至 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+                "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動到 目標位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+                "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動回 預備位置 上，" + "\n" + "確認動作停止後按下紀錄。",
+                "受試者聽到嗶聲後將手指或握著的筆，" + "\n" + "移動到所記得的位置，" + "\n" + "確認動作停止後按下紀錄。",
+                "施測者將受試者的手指或握著的筆尖，" + "\n" + "移動到平板外的桌面上，" + "\n" + "確認資料正確後按下Save Trial。"
+            )
+        }
+    }
+
 
     //判斷測驗情境，並更新對應的Text
     when (condition) {
@@ -2257,6 +2278,21 @@ fun u_changeText() {
 
 
 fun hideViewsForVAP2AP(flag: Int) {
+
+    lateinit var targetView: ImageView
+    lateinit var startView: ImageView
+    lateinit var randomTarget: ImageView
+
+    lateinit var upArrow: ImageView
+    lateinit var upLeftArrow: ImageView
+    lateinit var upRightArrow: ImageView
+
+    lateinit var downArrow: ImageView
+    lateinit var downLeftArrow: ImageView
+    lateinit var downRightArrow: ImageView
+
+    lateinit var targetParams: ViewGroup.MarginLayoutParams
+    lateinit var startParams: ViewGroup.MarginLayoutParams
 
     if (stimuliType == "VAP2AP") {
         when (flag) {
@@ -2415,6 +2451,27 @@ fun u_setSquareOfTargetArea() {
     lateinit var downLeftArrow: ImageView
     lateinit var downRightArrow: ImageView
 
+    lateinit var targetView: ImageView
+    lateinit var randomTarget: ImageView
+
+    // 根據當前情境，指派測驗參數
+    when (currentTestContext) {
+        "Pen" -> {
+            targetView = penTarget
+            randomTarget = penRandomTargetView
+        }
+        "Finger" -> {
+            targetView = fingerTarget
+            randomTarget = fingerRandomTargetView
+        }
+        else -> {
+            targetView = fingerTarget
+            randomTarget = fingerRandomTargetView
+        }  //沒有選擇時，預設為手指
+    }
+
+
+
     if (stimuliType == stimuliList[2]) {
         arrowSize = 720
 
@@ -2559,6 +2616,9 @@ fun u_setSquareOfTargetArea() {
             if (stimuliType == stimuliList[2]) {
                 TargetArea.visibility = View.VISIBLE
                 TargetAreaFrame.visibility = View.VISIBLE
+                targetView.visibility = View.INVISIBLE
+                randomTarget.visibility = View.INVISIBLE
+                //target隱藏
             } else {
                 TargetArea.visibility = View.GONE
                 TargetAreaFrame.visibility = View.GONE

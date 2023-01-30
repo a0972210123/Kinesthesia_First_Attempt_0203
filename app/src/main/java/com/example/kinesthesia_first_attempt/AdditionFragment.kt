@@ -45,8 +45,8 @@ class AdditionFragment : Fragment() {
         u_setTrialLimit("1")
 
         // 進入新測驗時，先清掉，避免干擾
-       TestingFinishedList = arrayListOf<String>()
-       finishedContextList = arrayListOf<String>()
+        TestingFinishedList = arrayListOf<String>()
+        finishedContextList = arrayListOf<String>()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -120,10 +120,12 @@ class AdditionFragment : Fragment() {
 
         //11/21 manageVisibility
         selectButton = requireView().findViewById(R.id.confirm_trial) as Button
-        currentPosition = requireView().findViewById<TextView>(R.id.current_position_field)  //11/17 優化
+        currentPosition =
+            requireView().findViewById<TextView>(R.id.current_position_field)  //11/17 優化
         inAirText = requireView().findViewById<TextView>(R.id.in_air_testing) //11/17 優化
         touchBoard = requireView().findViewById(R.id.view) as TouchBoard //11/17 優化
-        Score = requireView().findViewById<TextView>(R.id.performance_current_trial_score) //11/17 優化
+        Score =
+            requireView().findViewById<TextView>(R.id.performance_current_trial_score) //11/17 優化
 
         //11/28 新增表現分數標題
         performanceTitle = requireView().findViewById<TextView>(R.id.performance_title)
@@ -142,18 +144,16 @@ class AdditionFragment : Fragment() {
         u_changeInAriText()     // DEFAULT inAir文字
         //* new 下筆時的紀錄
         touchBoard.setOnTouchListener { _, _ ->
-
-            if (com.example.kinesthesia_first_attempt.buttonPressedCountsInATrial == 3 && com.example.kinesthesia_first_attempt.currentTestContext == "Pen") {
+            if (buttonPressedCountsInATrial == 3) {
                 u_arrangeInAirData()
             }
             u_changeInAriText()
             false
         }
-
         //* new 提筆時的紀錄
         touchBoard.setOnHoverListener { _, _ ->
 
-            if (com.example.kinesthesia_first_attempt.buttonPressedCountsInATrial == 3 && com.example.kinesthesia_first_attempt.currentTestContext == "Pen") {
+            if (buttonPressedCountsInATrial == 3) {
                 u_arrangeInAirData()
             }
             u_changeInAriText()
@@ -164,7 +164,11 @@ class AdditionFragment : Fragment() {
 
         //更新文字view
         u_changeText()
-        u_displayScoreInText(com.example.kinesthesia_first_attempt.scoreListForDisplay, 0, Score)  // flag = 0  顯示預設文字
+        u_displayScoreInText(
+            com.example.kinesthesia_first_attempt.scoreListForDisplay,
+            0,
+            Score
+        )  // flag = 0  顯示預設文字
 
         // Todo: 需要新增判斷式>>>>避免叫出不必要的spinner >> TrialInputSpinner for 補測、練習  > 正式不需要
         // Todo: 需要新增一個測驗方法spinner，VAP2AP & AP2AP & PP2AP，並新增根據選擇結果的，view調整判斷式，存檔名稱調整判斷式

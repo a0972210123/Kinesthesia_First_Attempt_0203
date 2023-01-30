@@ -138,20 +138,19 @@ class PracticeFragment : Fragment() {
         u_setSquareOfTargetArea()
 
         u_changeInAriText()     // DEFAULT inAir文字
+
         //* new 下筆時的紀錄
         touchBoard.setOnTouchListener { _, _ ->
-
-            if (buttonPressedCountsInATrial == 3 && currentTestContext == "Pen") {
+            if (buttonPressedCountsInATrial == 3 ) {
                 u_arrangeInAirData()
             }
             u_changeInAriText()
             false
         }
-
         //* new 提筆時的紀錄
         touchBoard.setOnHoverListener { _, _ ->
 
-            if (buttonPressedCountsInATrial == 3 && currentTestContext == "Pen") {
+            if (buttonPressedCountsInATrial == 3 ) {
                 u_arrangeInAirData()
             }
             u_changeInAriText()
@@ -165,9 +164,7 @@ class PracticeFragment : Fragment() {
 
         u_launchTrialInputSpinner()
         u_launchContextSpinner()
-
         u_launchStimuliTypeSpinner()
-        //TODO: 新增 SPINNER
 
         u_checkContextAndLaunchView(currentTestContext)
 
