@@ -188,23 +188,18 @@ class AutorecordFragment : Fragment() {
 } //Fragment End
 
 
-//TODO: 新增 隨機測驗方向的 function，可以連續自動執行測驗
-// step 1 在進入頁面，決定 刺激/情境/方向 的隨機順序 (要counter balanced)
-// step 2 將這些順序 暫存在某個 List
-// step 3 將這些 List 顯示在對話框 並依據測驗進度 標示 [] or [V]
-// call setStimuli / setcontext / setdirection = 輸入目前的測驗參數，以啟動view
-
-// 用 confirmSelection 自動執行目前選擇的結果 > 用目前已經寫好測驗限制判斷式(checktrailLimit等等)，依序判斷目前測驗進度
-// 並在每次按下positive按鈕時，再次呼叫confirmSelection
-// >> 或許寫一個新的對話框最快，不要共用之前的判斷對話框
-
 var randomizedStimuliOrder = listOf<Int>(0, 1, 2)
 var randomizedContextOrder = listOf<Int>(0, 1)
 var randomizedDirectionOrder = listOf<Int>(0, 1, 2, 3)
 
 fun executeAutoTestList() {
-    //此函式 用於在確認進度後，輸入指定新測驗參數 開始下一輪測驗
+    //新增 隨機測驗方向的 function，可以連續自動執行測驗
+// step 1 在進入頁面，決定 刺激/情境/方向 的隨機順序 (要counter balanced)
+// step 2 將這些順序 暫存在某個 List
+// step 3 將這些 List 顯示在對話框 並依據測驗進度 標示 [] or [V]
+// call setStimuli / setcontext / setdirection = 輸入目前的測驗參數，以啟動view
 
+    //此函式 用於在確認進度後，輸入指定新測驗參數 開始下一輪測驗
     checkAutoTestProgress()  //確認完各種參數進度後 > 直接訂出目前要測的參數 > 開始正式測驗
 
     // 以下模仿 confirm selection

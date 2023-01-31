@@ -47,6 +47,18 @@
         <action
             android:id="@+id/action_testMenuFragment_to_nondominantFragment"
             app:destination="@id/nondominantFragment" />
+        <action
+            android:id="@+id/action_testMenuFragment_to_autoCalibrationFragment"
+            app:destination="@id/autoCalibrationFragment" />
+        <action
+            android:id="@+id/action_testMenuFragment_to_autoVap2apFragment"
+            app:destination="@id/autoVap2apFragment" />
+        <action
+            android:id="@+id/action_testMenuFragment_to_autoAp2apFragment"
+            app:destination="@id/autoAp2apFragment" />
+        <action
+            android:id="@+id/action_testMenuFragment_to_autoPp2apFragment"
+            app:destination="@id/autoPp2apFragment" />
     </fragment>
 
 
@@ -98,6 +110,45 @@
         android:label="NondominantFragment" >
         <action
             android:id="@+id/action_nondominantFragment_to_testMenuFragment"
+            app:destination="@id/testMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/autoCalibrationFragment"
+        android:name="com.example.kinesthesia_first_attempt.AutoCalibrationFragment"
+        android:label="fragment_auto_calibration"
+        tools:layout="@layout/fragment_auto_calibration" >
+        <action
+            android:id="@+id/action_autoCalibrationFragment_to_testMenuFragment"
+            app:destination="@id/testMenuFragment" />
+        <action
+            android:id="@+id/action_autoCalibrationFragment_to_testMenuFragment2"
+            app:destination="@id/testMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/autoAp2apFragment"
+        android:name="com.example.kinesthesia_first_attempt.AutoAp2apFragment"
+        android:label="fragment_auto_ap2ap"
+        tools:layout="@layout/fragment_auto_ap2ap" >
+        <action
+            android:id="@+id/action_autoAp2apFragment_to_testMenuFragment"
+            app:destination="@id/testMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/autoPp2apFragment"
+        android:name="com.example.kinesthesia_first_attempt.AutoPp2apFragment"
+        android:label="fragment_auto_pp2ap"
+        tools:layout="@layout/fragment_auto_pp2ap" >
+        <action
+            android:id="@+id/action_autoPp2apFragment_to_testMenuFragment"
+            app:destination="@id/testMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/autoVap2apFragment"
+        android:name="com.example.kinesthesia_first_attempt.AutoVap2apFragment"
+        android:label="fragment_auto_vap2ap"
+        tools:layout="@layout/fragment_auto_vap2ap" >
+        <action
+            android:id="@+id/action_autoVap2apFragment_to_testMenuFragment"
             app:destination="@id/testMenuFragment" />
     </fragment>
 

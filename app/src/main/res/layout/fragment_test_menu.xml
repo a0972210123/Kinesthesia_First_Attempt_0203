@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="請選擇要施測的類型"
-            android:textSize="50sp"
+            android:textSize="40sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,73 +42,121 @@
 
 
         <Button
+            android:id="@+id/auto_calibration"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginTop="@dimen/btn_margin"
+            android:layout_marginEnd="@dimen/btn_margin"
+            android:onClick="@{() -> testMenuFragment.goToAutoCalibration()}"
+            android:text="@string/auto_calibration_task"
+
+
+            android:textSize="@dimen/btn_textSize"
+            app:layout_constraintEnd_toStartOf="@+id/practice_task"
+            app:layout_constraintTop_toBottomOf="@id/task_selection_instruction" />
+
+        <Button
             android:id="@+id/practice_task"
             android:layout_width="@dimen/btn_width"
             android:layout_height="@dimen/btn_height"
-            android:layout_marginEnd="32dp"
+            android:layout_marginTop="@dimen/btn_margin"
+            android:layout_marginEnd="@dimen/btn_margin"
+
             android:onClick="@{() -> testMenuFragment.goToPractice()}"
+            android:text="@string/practice_task"
 
-            android:text="練習測驗"
-
-            android:textSize="36sp"
-            app:layout_constraintEnd_toStartOf="@+id/addition_task"
-            app:layout_constraintTop_toTopOf="@+id/formal_task" />
+            android:textSize="@dimen/btn_textSize"
+            app:layout_constraintEnd_toStartOf="@+id/formal_task"
+            app:layout_constraintTop_toBottomOf="@+id/task_selection_instruction" />
 
         <Button
             android:id="@+id/formal_task"
             android:layout_width="@dimen/btn_width"
             android:layout_height="@dimen/btn_height"
 
+            android:layout_marginTop="15dp"
             android:onClick="@{() -> testMenuFragment.goToFormal()}"
-            android:text="慣用手  正式測驗"
-            android:textSize="36sp"
-            app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toTopOf="@+id/textView2" />
-
-
-        <Button
-            android:id="@+id/addition_task"
-            android:layout_width="@dimen/btn_width"
-            android:layout_height="@dimen/btn_height"
-
-            android:onClick="@{() -> testMenuFragment.goToAddition()}"
-            android:text="慣用手  補充測驗"
-            android:textSize="36sp"
-            app:layout_constraintEnd_toStartOf="@+id/textView2"
-            app:layout_constraintTop_toTopOf="@+id/formal_task" />
-
-        <Button
-            android:id="@+id/nondominant_task"
-            android:layout_width="@dimen/btn_width"
-            android:layout_height="@dimen/btn_height"
-            android:layout_marginStart="32dp"
-
-            android:onClick="@{() -> testMenuFragment.goToNondominant()}"
-            android:text="非慣用手正式測驗"
-            android:textSize="36sp"
-            app:layout_constraintStart_toEndOf="@+id/formal_task"
-            app:layout_constraintTop_toTopOf="@+id/formal_task" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="32dp"
-            android:layout_height="@dimen/btn_height"
-            android:layout_marginTop="8dp"
+            android:text="@string/dominant_formal_task"
+            android:textSize="@dimen/btn_textSize"
             app:layout_constraintEnd_toEndOf="@+id/task_selection_instruction"
             app:layout_constraintStart_toStartOf="@+id/task_selection_instruction"
             app:layout_constraintTop_toBottomOf="@+id/task_selection_instruction" />
 
         <Button
+            android:id="@+id/addition_task"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginStart="@dimen/btn_margin"
+            android:layout_marginTop="@dimen/btn_margin"
+            android:onClick="@{() -> testMenuFragment.goToAddition()}"
+
+
+            android:text="@string/dominant_additional_task"
+            android:textSize="@dimen/btn_textSize"
+            app:layout_constraintStart_toEndOf="@+id/formal_task"
+            app:layout_constraintTop_toBottomOf="@+id/task_selection_instruction" />
+
+        <Button
+            android:id="@+id/nondominant_task"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginStart="@dimen/btn_margin"
+            android:layout_marginTop="@dimen/btn_margin"
+            android:onClick="@{() -> testMenuFragment.goToNondominant()}"
+
+
+            android:text="@string/non_dominant_formal_task"
+            android:textSize="@dimen/btn_textSize"
+            app:layout_constraintStart_toEndOf="@+id/addition_task"
+            app:layout_constraintTop_toBottomOf="@+id/task_selection_instruction" />
+
+
+        <Button
             android:id="@+id/auto_task"
             android:layout_width="@dimen/btn_width"
             android:layout_height="@dimen/btn_height"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginTop="@dimen/btn_margin"
             android:onClick="@{() -> testMenuFragment.goToAuto()}"
-            android:text="自動記錄測試"
-            android:textSize="36sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/auto_all_task"
+            android:textSize="@dimen/btn_textSize"
+            app:layout_constraintEnd_toEndOf="@+id/practice_task"
+            app:layout_constraintStart_toStartOf="@+id/auto_calibration"
+            app:layout_constraintTop_toBottomOf="@id/formal_task" />
+
+        <Button
+            android:id="@+id/auto_VAP2AP"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginStart="@dimen/btn_margin"
+            android:layout_marginTop="@dimen/btn_margin"
+            android:onClick="@{() -> testMenuFragment.goToAutoVAP2AP()}"
+            android:text="@string/auto_VAP2AP_task"
+            android:textSize="@dimen/btn_textSize"
+            app:layout_constraintStart_toEndOf="@+id/auto_task"
+            app:layout_constraintTop_toBottomOf="@id/formal_task" />
+
+        <Button
+            android:id="@+id/auto_AP2AP"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginStart="@dimen/btn_margin"
+            android:layout_marginTop="@dimen/btn_margin"
+            android:onClick="@{() -> testMenuFragment.goToAutoAP2AP()}"
+            android:text="@string/auto_AP2AP_task"
+            android:textSize="@dimen/btn_textSize"
+            app:layout_constraintStart_toEndOf="@id/auto_VAP2AP"
+            app:layout_constraintTop_toBottomOf="@id/formal_task" />
+
+        <Button
+            android:id="@+id/auto_PP2AP"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="@dimen/btn_height"
+            android:layout_marginStart="@dimen/btn_margin"
+            android:layout_marginTop="@dimen/btn_margin"
+            android:onClick="@{() -> testMenuFragment.goToAutoPP2AP()}"
+            android:text="@string/auto_PP2AP_task"
+            android:textSize="@dimen/btn_textSize"
+            app:layout_constraintStart_toEndOf="@id/auto_AP2AP"
             app:layout_constraintTop_toBottomOf="@id/formal_task" />
 
 

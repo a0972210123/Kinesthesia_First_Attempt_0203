@@ -136,13 +136,27 @@
     <string name="hint_plz_set_context">請選情境</string>
     <string name="hint_plz_set_stimuliType">請選刺激</string>
 
+
+    <string name="auto_calibration_task">校正測驗</string>
+    <string name="practice_task">測驗練習</string>
+    <string name="dominant_formal_task">慣用手　　正式測驗</string>
+    <string name="dominant_additional_task">慣用手　　補充測驗</string>
+    <string name="non_dominant_formal_task">非慣用手　正式測驗</string>
+    <string name="auto_all_task">自動測驗　ALL</string>
+    <string name="auto_VAP2AP_task">自動測驗　VAP2AP</string>
+    <string name="auto_AP2AP_task">自動測驗　AP2AP</string>
+    <string name="auto_PP2AP_task">自動測驗　PP2AP</string>
+
+
+
+
+
     <string-array name="stimuliType_list">
         <item>請選刺激</item>
         <item>VAP2AP</item>
         <item> AP2AP</item>
         <item> PP2AP</item>
     </string-array>
-
 
 
     <string-array name="direction_list">

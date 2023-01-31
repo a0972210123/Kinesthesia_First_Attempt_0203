@@ -398,7 +398,7 @@ var condition: String = ""
 //測驗選項
 //var testCondition: String = "Practice"
 val testConditionList =
-    listOf<String>("Practice", "Formal", "Addition", "Non_dominant", "AutoRecord")
+    listOf<String>("Practice", "Formal", "Addition", "Non_dominant", "AutoRecord","AutoCalibration","AutoVAP2AP","AutoAP2AP","AutoPP2AP")
 lateinit var testCondition: String  //進到各分頁後 重新宣告
 
 val practiceTrialCountList = arrayListOf<String>("8", "7", "6", "5", "4", "3", "2", "1")
@@ -3402,7 +3402,6 @@ fun u_saveDemographic() {
 // navigation
 fun u_goBackToMenu() {
     Toast.makeText(mContextKIN, "回到測驗選單", Toast.LENGTH_SHORT).show()
-    //TODO: 根據各情境，調整判斷式，才能正確回到頁面
 
     when (testCondition) {
         testConditionList[0] -> {
@@ -3424,6 +3423,24 @@ fun u_goBackToMenu() {
         testConditionList[4] -> {
             navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_autorecordFragment_to_testMenuFragment)
         }
+
+
+        testConditionList[5]-> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_autoCalibrationFragment_to_testMenuFragment)
+        }
+        testConditionList[6]-> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_autoVap2apFragment_to_testMenuFragment)
+        }
+        testConditionList[7]-> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_autoAp2apFragment_to_testMenuFragment)
+        }
+        testConditionList[8]-> {
+            navControllerKIN.navigate(com.example.kinesthesia_first_attempt.R.id.action_autoPp2apFragment_to_testMenuFragment)
+        }
+
+        //      val testConditionList =
+//            listOf<String>("Practice", "Formal", "Addition", "Non_dominant", "AutoRecord","AutoCalibration","AutoVAP2AP","AutoAP2AP","AutoPP2AP")
+//        lateinit var testCondition: String  //進到各分頁後 重新宣告
 
     }
 

@@ -13,18 +13,12 @@ import androidx.navigation.fragment.findNavController
 import com.example.kinesthesia_first_attempt.databinding.FragmentTestMenuBinding
 import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TestMenuFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TestMenuFragment : Fragment() {
 
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var viewModel: MainViewModel
     //private var binding: FragmentTestMenuBinding? = null
     private lateinit var binding: FragmentTestMenuBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +40,6 @@ class TestMenuFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
@@ -59,10 +52,6 @@ class TestMenuFragment : Fragment() {
         Log.d("lifecycle", "TestMenuFragment created!")
     }
 
-
-    companion object {
-
-    }
 
 
     fun goToPractice() {
@@ -91,12 +80,44 @@ class TestMenuFragment : Fragment() {
         findNavController().navigate(R.id.action_testMenuFragment_to_nondominantFragment)
     }
 
-
     fun goToAuto() {
         Toast.makeText(activity, "進入自動記錄", Toast.LENGTH_SHORT).show()
         //使用以下code來抓取navController，用findNavController().navigate()，並輸入"動作的ID"。也就是要執行的nav動作(要和nav_graph.xml相同
         findNavController().navigate(R.id.action_testMenuFragment_to_autorecordFragment)
     }
+
+
+
+    fun goToAutoVAP2AP() {
+        Toast.makeText(activity, "進入VAP2AP", Toast.LENGTH_SHORT).show()
+        //使用以下code來抓取navController，用findNavController().navigate()，並輸入"動作的ID"。也就是要執行的nav動作(要和nav_graph.xml相同
+        findNavController().navigate(R.id.action_testMenuFragment_to_autoVap2apFragment)
+    }
+
+    fun goToAutoAP2AP() {
+        Toast.makeText(activity, "進入AP2AP", Toast.LENGTH_SHORT).show()
+        //使用以下code來抓取navController，用findNavController().navigate()，並輸入"動作的ID"。也就是要執行的nav動作(要和nav_graph.xml相同
+        findNavController().navigate(R.id.action_testMenuFragment_to_autoAp2apFragment)
+    }
+    fun goToAutoPP2AP() {
+        Toast.makeText(activity, "進入PP2AP", Toast.LENGTH_SHORT).show()
+        //使用以下code來抓取navController，用findNavController().navigate()，並輸入"動作的ID"。也就是要執行的nav動作(要和nav_graph.xml相同
+        findNavController().navigate(R.id.action_testMenuFragment_to_autoPp2apFragment)
+    }
+    fun goToAutoCalibration() {
+        Toast.makeText(activity, "進入Calibration", Toast.LENGTH_SHORT).show()
+        //使用以下code來抓取navController，用findNavController().navigate()，並輸入"動作的ID"。也就是要執行的nav動作(要和nav_graph.xml相同
+        findNavController().navigate(R.id.action_testMenuFragment_to_autoCalibrationFragment)
+    }
+
+
+
+
+
+
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

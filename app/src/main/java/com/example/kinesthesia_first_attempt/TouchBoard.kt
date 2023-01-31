@@ -64,7 +64,7 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
                 isPenInAir = false
                 gestureFlag = 1
                 updateParams(event,defaultInAirPressure,isPenInAir,gestureFlag)
-                result = true
+                result = false
                 Log.d("gestureData", "onDown_onTouchEvent")
             }
 
@@ -72,7 +72,7 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
                 isPenInAir = false
                 gestureFlag =2
                 updateParams(event,defaultInAirPressure,isPenInAir,gestureFlag)
-                result = true
+                result = false
                 Log.d("gestureData", "onMove")
             }
 
@@ -254,7 +254,7 @@ class MyGestureDetectorListener : GestureDetector.OnGestureListener {
         //startX = e!!.x
         //startY = e!!.y
         Log.d("gestureData", "onDown_GestureDetector")
-        return true
+        return false
     }
 
     override fun onShowPress(e: MotionEvent) {
@@ -294,7 +294,7 @@ class MyGestureDetectorListener : GestureDetector.OnGestureListener {
         Log.d("gestureData", "It is a Scroll")
         //resetTime()
         //return false
-        return true
+        return false
     }
 
     override fun onLongPress(e: MotionEvent) {
