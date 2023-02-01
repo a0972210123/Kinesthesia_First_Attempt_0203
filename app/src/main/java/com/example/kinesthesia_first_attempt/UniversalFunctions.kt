@@ -1130,7 +1130,8 @@ fun u_checkTime() {
             //TODO: 之後要改回聲音 預設為80
             val toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 0)
             if (buttonPressedCountsInATrial == 3) {
-                onBeepTime = System.currentTimeMillis()
+                //onBeepTime = System.currentTimeMillis()
+                onBeepTime = SystemClock.uptimeMillis()
                 toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 200)
             } else {
             }
