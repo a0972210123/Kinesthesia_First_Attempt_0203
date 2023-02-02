@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
-import android.view.MotionEvent.actionToString
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.GestureDetectorCompat
@@ -92,7 +91,6 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
                             u_arrangeInAirData()
                         }
                     }
-
                 }
             }
             "Pen" ->{
@@ -140,7 +138,48 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
 
                 }
             }
+            else ->{
+                when(GestureFlag){
+                    0->{
+                        //onUp
+                        tipPressure = -1f
+                        heightZ = 1f
+                        if (buttonPressedCountsInATrial ==3){
+                            onUpTime = System.currentTimeMillis()
+                            u_arrangeInAirData()
+                        }
+                    }
+                    1->{
+                        //onDown
+                        tipPressure = 1f
+                        heightZ = 0f
+                        if (buttonPressedCountsInATrial ==3){
+                            onDownTime = System.currentTimeMillis()
+                            u_arrangeInAirData()
+                        }
+                    }
+                    2->{
+                        //onMove
+                        tipPressure = 0.5f
+                        heightZ = 0f
+                    }
+                    3->{
+                        //Hover & Pen
+                        //do nothing
+                    }
+                    4->{
+                        //Long Press
+                        tipPressure = 10f
+                        heightZ = -1f
+                        if (buttonPressedCountsInATrial ==3){
+                            onLongPressTime = System.currentTimeMillis()
+                            u_arrangeInAirData()
+                        }
+                    }
+                }
+            }
         }
+
         u_changeInAriText()
         Log.d("data", "X:$startX , Y:$startY, Z:$heightZ, Pressure:$tipPressure, Time:$systemTimestamp")
     }
@@ -159,6 +198,7 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
         return false
     }
 
+/*
     @SuppressLint1("ClickableViewAccessibility", "SetTextI18n")
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
@@ -167,7 +207,7 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
         b2 = event.getAxisValue(MotionEvent.AXIS_TOOL_MAJOR)
         isPenInAir = false
 
-        when (event.action) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 testOndown_ontouch = System.currentTimeMillis()
                 isPenInAir = false
@@ -185,8 +225,8 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
                 result = true //whether this is true or false, it will be triggered and update data
                 // when ACTION_MOVE return true, it blocks the gesture detector, this is not the desired result
                 // while ACTION_MOVE return true, it can still detect longpress (without scrolling)
-
                 Log.d("gestureData", "onMove")
+
             }
 
             MotionEvent.ACTION_UP -> {
@@ -199,13 +239,13 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
             }
         }
 
-
         Log.d("gestureData", "The Action is "+ checkAction(event.action))
         Log.d("gestureData", "The onTouchEvent result is $result")
 
-        when(  testGestureDetector.onTouchEvent(event)){
+        when(testGestureDetector.onTouchEvent(event)){
             true ->{
                 Log.d("gestureData11", "testGestureDetector,return true")
+                return true
             }
             false ->{
                 Log.d("gestureData11", "testGestureDetector,return false")
@@ -214,8 +254,96 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
         //return super.onTouchEvent(event)
         return result
     }
+*/
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        bb = event.getAxisValue(MotionEvent.AXIS_SIZE)
+        b1 = event.getAxisValue(MotionEvent.AXIS_TOUCH_MAJOR)
+        b2 = event.getAxisValue(MotionEvent.AXIS_TOOL_MAJOR)
+        isPenInAir = false
+
+
+        Log.d("gestureData", "The Action is "+ checkAction(event.action))
+        //Log.d("gestureData", "The onTouchEvent result is $result")
+        when(testGestureDetector.onTouchEvent(event)){
+            true ->{
+                Log.d("gestureData", "testGestureDetector,return true")
+                return true
+            }
+            false ->{
+                Log.d("gestureData", "testGestureDetector,return false")
+            }
+        }
+        //看是否要把scroll 改為false
+
+
+        when (event.actionMasked) {
+            MotionEvent.ACTION_MOVE ->{
+                if(isLongPressed){
+                    isLongPressed = false
+                    val cancel = MotionEvent.obtain(event)
+                    cancel.action = MotionEvent.ACTION_CANCEL
+                    testGestureDetector.onTouchEvent(cancel)
+                    Log.d("gestureData", "onMove & longPress")
+                    // with these code, the app can detect scroll after a long press event
+                }
+                isPenInAir = false
+                gestureFlag =2
+                updateParams(event,defaultInAirPressure,isPenInAir,gestureFlag)
+                result = true
+                //whether this is true or false, it will be triggered and update data
+                // when ACTION_MOVE return true, it blocks the gesture detector, this is not the desired result
+                // while ACTION_MOVE return true, it can still detect longpress (without scrolling)
+                Log.d("gestureData", "onMove")
+            }
+
+            MotionEvent.ACTION_UP -> {
+                isPenInAir = true
+                gestureFlag = 0
+                updateParams(event,defaultInAirPressure,isPenInAir,gestureFlag)
+                result = true
+                // when ACTION_UP return true, it blocks the gesture detector. The result is fine.
+                Log.d("gestureData", "onUp")
+            }
+
+            MotionEvent.ACTION_DOWN -> {
+                testOndown_ontouch = System.currentTimeMillis()
+                isPenInAir = false
+                gestureFlag = 1
+                updateParams(event,defaultInAirPressure,isPenInAir,gestureFlag)
+                result = true
+                //this have to be true for the app to keep recognizing gesture
+                Log.d("gestureData", "onDown_onTouchEvent")
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var testOndown_ontouch:Long = 0
 var testOndown_gesturedetector:Long = 0
@@ -226,7 +354,8 @@ var testOnLongPress:Long = 0
 // https://stackoverflow.com/questions/51704307/continue-onscroll-event-after-onlongpress
 // 1. 嘗試解 longpresss vs scroll 的衝突
 // 2. 寫自訂 longpress 用data smoothing概念
-
+var isScrolling:  Boolean  = false
+var isLongPressed: Boolean = false
 
 class MyGestureDetectorCompat : GestureDetector.OnGestureListener,GestureDetector.OnDoubleTapListener {
     //https://www.itread01.com/content/1549194854.html
@@ -237,16 +366,22 @@ class MyGestureDetectorCompat : GestureDetector.OnGestureListener,GestureDetecto
     var scrollThresholdValue_x = 0f
     var scrollThresholdValue_y = 0f
 
-    override fun onDown(e: MotionEvent?): Boolean {
+    override fun onDown(e: MotionEvent): Boolean {
         testOndown_gesturedetector = System.currentTimeMillis()
         //onDownTime = SystemClock.currentThreadTimeMillis()
-        //startX = e!!.x
-        //startY = e!!.y
+
+        var isPenInAir = false
+        var gestureFlag = 1
+        touchBoard.updateParams(e,touchBoard.defaultInAirPressure,isPenInAir,gestureFlag)
+        var result = true
+
         Log.d("gestureData", "onDown_GestureDetector")
-        return false
+        return result
         //when this is true, the app can detect long press
-        //when this is false, the app can still detect long press
+        //when this is false, the app will constantly report long press
         //but both setting cannot detected long press after large movement
+
+        // this have to be true to detect scroll
     }
 
     override fun onShowPress(e: MotionEvent) {
@@ -264,6 +399,7 @@ class MyGestureDetectorCompat : GestureDetector.OnGestureListener,GestureDetecto
         distanceX: Float,
         distanceY: Float
     ): Boolean {
+        isScrolling = true
 //        var scrollThresholdValue_x = e2!!.x - e1!!.x
 //        var scrollThresholdValue_y = e2!!.y - e1!!.y
 //        Log.d("gestureDataScroll", "onScroll: Scroll Threshold Value X=$scrollThresholdValue_x Y=$scrollThresholdValue_y")
@@ -275,10 +411,14 @@ class MyGestureDetectorCompat : GestureDetector.OnGestureListener,GestureDetecto
         // 而是單一一個touchEvent中，觸發scroll後就無法觸發longpress
 
         //TODO: 嘗試在這邊 call longpress
-        return true
+        return false // 這邊要return false 才會繼續回到 ontouch
     }
 
+
+
+
     override fun onLongPress(e: MotionEvent) {
+        isLongPressed = true
         // Android 平板 > 設定 > 協助工具/無障礙設定 > 互動與敏銳度 > 輕觸並按住的延遲時間 (暫時設定為 1秒，可以設為 0.5 1.0 1.5)
         testOnLongPress = System.currentTimeMillis()
         val interval_ontouch =  testOnLongPress - testOndown_ontouch
@@ -463,11 +603,6 @@ fun outputGestureTimeCsv(fileName: String, input: List<String>, flag: Int) {
 
 
 
-
-
-
-
-//以下無用CODE
 
 
 // Given an action int, returns a string description

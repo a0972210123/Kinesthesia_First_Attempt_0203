@@ -1,14 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".AutoCalibrationFragment">
+    tools:visibility="visible">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+        <variable
+            name="universalFunction"
+            type="com.example.kinesthesia_first_attempt.UniversalFunctionsKt" />
+
+        <variable
+            name="autoCalibrationFragment"
+            type="com.example.kinesthesia_first_attempt.AutoCalibrationFragment" />
+
+        <variable
+            name="viewModel"
+            type="com.example.kinesthesia_first_attempt.ui.main.MainViewModel" />
+
+        <variable
+            name="maxPracticeTrial"
+            type="int" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:context=".AutoCalibrationFragment">
 
-</FrameLayout>
+        <com.example.kinesthesia_first_attempt.TouchBoard
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_color"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+           />
+
+        <TextView
+            android:id="@+id/current_position_field"
+            android:layout_width="400dp"
+            android:layout_height="30dp"
+            android:text="Current Position: X=0.0, Y=0.0 "
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/in_air_testing"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:text="InAir Data Testing"
+            android:textSize="@dimen/performance_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/current_position_field" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

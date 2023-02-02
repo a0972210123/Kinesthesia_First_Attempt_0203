@@ -5,55 +5,62 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
+import com.example.kinesthesia_first_attempt.databinding.FragmentAutoCalibrationBinding
+import com.example.kinesthesia_first_attempt.ui.main.MainViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AutoCalibrationFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AutoCalibrationFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private val sharedViewModel: MainViewModel by activityViewModels()
+    lateinit var binding: FragmentAutoCalibrationBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+        val decorView = requireActivity().window.decorView
+        u_hideSystemUI(decorView) //11/11 測試
+        testCondition =
+            testConditionList[5] //  val testConditionList =   listOf<String>("Practice", "Formal", "Addition", "Non_dominant", "AutoRecord","AutoCalibration","AutoVAP2AP","AutoAP2AP","AutoPP2AP")
+        // 進入新測驗時，先清掉，避免干擾
+        TestingFinishedList = arrayListOf<String>()
+        finishedContextList = arrayListOf<String>()
+        printScreenParameters()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_auto_calibration, container, false)
+        mContextKIN = requireActivity().applicationContext
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_auto_calibration, container, false)
+        return binding.root
+
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AutoCalibrationFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AutoCalibrationFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = sharedViewModel
+            autoCalibrationFragment = this@AutoCalibrationFragment //使用listenser binding，用UI button 在xml中設定onclick
+            maxPracticeTrial = MAX_PRACTICE_TRIAL //用於更新練習次數文字
+        }
+        currentPosition =
+            requireView().findViewById<TextView>(R.id.current_position_field)
+        inAirText = requireView().findViewById<TextView>(R.id.in_air_testing)
+        touchBoard = requireView().findViewById(R.id.view) as TouchBoard
+        touchBoard.visibility = View.VISIBLE
+        touchBoard.setOnTouchListener { _, _ ->
+            u_changeInAriText()
+            false
+        }
+        //* new 提筆時的紀錄
+        touchBoard.setOnHoverListener { _, _ ->
+            u_changeInAriText()
+            false
+        }
     }
 }
