@@ -11,6 +11,9 @@ import android.widget.Toast
 import androidx.core.view.GestureDetectorCompat
 import java.io.File
 import java.io.FileOutputStream
+import kotlin.math.abs
+import kotlin.math.sqrt
+import kotlin.properties.Delegates
 import android.annotation.SuppressLint as SuppressLint1
 
 
@@ -41,6 +44,110 @@ fun printGestureTime(){
             "    Reaction Time: $reactionTime,\n" +
             "    Movement Time: $movementTime,")
 }
+
+var lastEventS :Long =0
+var lastEventX :Long =0
+var lastEventY :Long =0
+
+
+var bufferX = mutableListOf<Long>()
+var bufferY = mutableListOf<Long>()
+var bufferS = mutableListOf<Long>()
+var timeBuffer = mutableListOf<Long>()
+
+fun clearBuffer(){
+    bufferX = mutableListOf<Long>()
+    bufferY = mutableListOf<Long>()
+    bufferS = mutableListOf<Long>()
+    timeBuffer = mutableListOf<Long>()
+    lastEventX  =0
+    lastEventY =0
+    lastEventS =0
+}
+
+fun updateMoveData(event: MotionEvent){
+
+    val desireLength = 20  //this will decide how much data point will be accumulated in the buffer
+    var deltaX:Long= 0
+    var deltaY:Long= 0
+    var deltaS:Long= 0
+
+    var currentX = event.x.toLong()
+    var currentY = event.y.toLong()
+
+    deltaX = currentX - lastEventX
+    deltaY = currentY - lastEventY
+    deltaS =  sqrt((deltaX*deltaX + deltaY*deltaY).toDouble()).toLong()
+
+    lastEventX = currentX
+    lastEventY = currentY
+    lastEventS = deltaS
+
+    if (bufferS.size >= desireLength ) {
+        bufferX.removeAt(0)
+        bufferY.removeAt(0)
+        bufferS.removeAt(0)  // delete the first element in list
+    }
+    bufferX.add(deltaX)
+    bufferY.add(deltaY)
+    bufferS.add(deltaS)
+
+    Log.d("Moving Average X", "Average-X:${bufferX.average()}; BufferX:$bufferX")
+    Log.d("Moving Average Y", "Average-Y:${bufferY.average()}; BufferY:$bufferY")
+    //Log.d("Moving Average S", "Average-S:${bufferS.average()}; BufferS:$bufferS")
+
+    if (customizedLongPressDetector()){
+        touchBoard.isPenInAir = false
+        touchBoard.gestureFlag = 4
+        touchBoard.updateParams(event,touchBoard.defaultInAirPressure,touchBoard.isPenInAir,touchBoard.gestureFlag)
+    }
+}
+
+var defaultLongPressTime:Long  = 0
+var customizedLongPressTime:Long  = 0
+
+fun customizedLongPressDetector():Boolean {
+    var isLongPress: Boolean = false
+    val scrollThreshold: Double = 2.0
+
+    val xFlag = abs(bufferX.average()) <= scrollThreshold
+    val yFlag = abs(bufferY.average()) <= scrollThreshold
+    val sFlag = bufferS.average() <= scrollThreshold
+
+    if(sFlag){
+        if(xFlag && yFlag) {
+            timeBuffer.add(System.currentTimeMillis())
+            Log.d("gestureData", "Acceptable Movement")
+        }else{
+            timeBuffer = mutableListOf<Long>()
+            //Log.d("Moving Average gd", "Moving too much on X or Y")
+        }
+    }
+    else{
+        timeBuffer = mutableListOf<Long>()
+        Log.d("gestureData", "Moving too much")
+    }
+
+    if (!timeBuffer.isNullOrEmpty()){
+        var stillTime = timeBuffer[timeBuffer.size-1] - timeBuffer[0]
+        Log.d("gestureData", "(Customized Long press Still Time:$stillTime; Time Buffer:$timeBuffer")
+        if ( stillTime >= 1000 ) { // not moving much for 1 sec / 1000ms
+            customizedLongPressTime = System.currentTimeMillis()
+            isLongPress = true
+            Log.d("gestureData", "It is a Long Press (customized)")
+            //Log.d("gestureData", "Long Press comparison, Interval(C-D):${customizedLongPressTime-defaultLongPressTime} Default:$defaultLongPressTime, customized:$customizedLongPressTime")
+            //自訂long press 慢200-300ms，但可以抓到滑動後的long press
+            Toast.makeText(mContextKIN, "偵測到長按", Toast.LENGTH_SHORT).show()
+            clearBuffer()
+        } else{
+            isLongPress = false
+        }
+    }
+
+    return isLongPress
+}
+
+
 
 class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
 
@@ -298,6 +405,7 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
                 // when ACTION_MOVE return true, it blocks the gesture detector, this is not the desired result
                 // while ACTION_MOVE return true, it can still detect longpress (without scrolling)
                 Log.d("gestureData", "onMove")
+                updateMoveData(event)
             }
 
             MotionEvent.ACTION_UP -> {
@@ -324,38 +432,16 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
     }
 
 
-
-
-
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 var testOndown_ontouch:Long = 0
 var testOndown_gesturedetector:Long = 0
 var testOnLongPress:Long = 0
-
-
-//TODO: check this website
-// https://stackoverflow.com/questions/51704307/continue-onscroll-event-after-onlongpress
-// 1. 嘗試解 longpresss vs scroll 的衝突
-// 2. 寫自訂 longpress 用data smoothing概念
-var isScrolling:  Boolean  = false
-var isLongPressed: Boolean = false
+var isScrolling: Boolean  = false
+var isLongPressed: Boolean  = false
 
 class MyGestureDetectorCompat : GestureDetector.OnGestureListener,GestureDetector.OnDoubleTapListener {
     //https://www.itread01.com/content/1549194854.html
@@ -369,18 +455,15 @@ class MyGestureDetectorCompat : GestureDetector.OnGestureListener,GestureDetecto
     override fun onDown(e: MotionEvent): Boolean {
         testOndown_gesturedetector = System.currentTimeMillis()
         //onDownTime = SystemClock.currentThreadTimeMillis()
-
         var isPenInAir = false
         var gestureFlag = 1
         touchBoard.updateParams(e,touchBoard.defaultInAirPressure,isPenInAir,gestureFlag)
         var result = true
-
         Log.d("gestureData", "onDown_GestureDetector")
         return result
         //when this is true, the app can detect long press
         //when this is false, the app will constantly report long press
         //but both setting cannot detected long press after large movement
-
         // this have to be true to detect scroll
     }
 
@@ -409,8 +492,6 @@ class MyGestureDetectorCompat : GestureDetector.OnGestureListener,GestureDetecto
         //return true
         // 不論true/false都不會影響 longpress
         // 而是單一一個touchEvent中，觸發scroll後就無法觸發longpress
-
-        //TODO: 嘗試在這邊 call longpress
         return false // 這邊要return false 才會繼續回到 ontouch
     }
 
@@ -418,15 +499,15 @@ class MyGestureDetectorCompat : GestureDetector.OnGestureListener,GestureDetecto
 
 
     override fun onLongPress(e: MotionEvent) {
-        isLongPressed = true
         // Android 平板 > 設定 > 協助工具/無障礙設定 > 互動與敏銳度 > 輕觸並按住的延遲時間 (暫時設定為 1秒，可以設為 0.5 1.0 1.5)
         testOnLongPress = System.currentTimeMillis()
-        val interval_ontouch =  testOnLongPress - testOndown_ontouch
-        val interval_gesturedetector = testOnLongPress - testOndown_gesturedetector
-        Log.d("gestureData", "onLongPress Interval, From onTouch: $interval_ontouch ms,  From gesturedetector: $interval_gesturedetector ms, ")
-        testOndown_ontouch = 0
-        testOndown_gesturedetector =0
-        testOnLongPress =0
+        defaultLongPressTime = System.currentTimeMillis()
+//        val interval_ontouch =  testOnLongPress - testOndown_ontouch
+//        val interval_gesturedetector = testOnLongPress - testOndown_gesturedetector
+//        Log.d("gestureData", "onLongPress Interval, From onTouch: $interval_ontouch ms,  From gesturedetector: $interval_gesturedetector ms, ")
+//        testOndown_ontouch = 0
+//        testOndown_gesturedetector =0
+//        testOnLongPress =0
         // 以上測試發現 longpress偵測時間，目前抓出來為 987 - 996 ms 約為1SEC，onTouchListener會比gesturedetector快1-10ms
 
         ///////////////////////////////
