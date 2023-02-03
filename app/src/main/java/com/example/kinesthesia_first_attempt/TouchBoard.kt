@@ -135,7 +135,7 @@ fun customizedLongPressDetector():Boolean {
             customizedLongPressTime = System.currentTimeMillis()
             isLongPress = true
             Log.d("gestureData", "It is a Long Press (customized)")
-            //Log.d("gestureData", "Long Press comparison, Interval(C-D):${customizedLongPressTime-defaultLongPressTime} Default:$defaultLongPressTime, customized:$customizedLongPressTime")
+            Log.d("gestureData", "Long Press comparison, Interval(C-D):${customizedLongPressTime-defaultLongPressTime} Default:$defaultLongPressTime, customized:$customizedLongPressTime")
             //自訂long press 慢200-300ms，但可以抓到滑動後的long press
             Toast.makeText(mContextKIN, "偵測到長按", Toast.LENGTH_SHORT).show()
             clearBuffer()
@@ -154,10 +154,8 @@ class TouchBoard (context: Context, attrs: AttributeSet) : View(context, attrs){
     // 預計放在每一動作更新的地方
     fun updateParams(event: MotionEvent,defaultInAirPressure:Float,inAirFlag:Boolean,GestureFlag:Int){
         systemTimestamp = System.currentTimeMillis()
-        // var onLongPressTime = SystemClock.currentThreadTimeMillis()
         startX = event.x
         startY = event.y
-        //heightZ = event.getAxisValue(MotionEvent.AXIS_DISTANCE)  //Z值 (無單位 超過1cm抓不到
 
         when(currentTestContext){
             "Finger" ->{
